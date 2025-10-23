@@ -1,0 +1,69 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface User {
+  pkid: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  gender?: string;
+  phone_number?: string;
+  profile_photo?: string;
+  country?: string;
+  city?: string;
+  role: 'client' | 'provider' | 'admin';
+  admin: boolean;
+}
+
+interface AuthState {
+  accessToken: string | null;
+  refreshToken: string | null;
+  user: User | null;
+  isAuthenticated: boolean;
+}
+
+const initialState: AuthState = {
+  accessToken: null,
+  refreshToken: null,
+  user: null,
+  isAuthenticated: false,
+};
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setCredentials: (state, action: PayloadAction<{ accessToken: string; refreshToken: string; user?: User }>) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      if (action.payload.user) {
+        state.user = action.payload.user;
+      }
+      state.isAuthenticated = true;
+
+      AsyncStorage.setItem('accessToken', action.payload.accessToken);
+      AsyncStorage.setItem('refreshToken', action.payload.refreshToken);
+    },
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+    updateAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+      AsyncStorage.setItem('accessToken', action.payload);
+    },
+    logout: (state) => {
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.user = null;
+      state.isAuthenticated = false;
+
+      AsyncStorage.removeItem('accessToken');
+      AsyncStorage.removeItem('refreshToken');
+    },
+  },
+});
+
+export const { setCredentials, setUser, updateAccessToken, logout } = authSlice.actions;
+export default authSlice.reducer;

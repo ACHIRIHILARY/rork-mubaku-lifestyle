@@ -1,0 +1,132 @@
+import { api } from '../api';
+import { setCredentials, setUser, updateAccessToken } from '../authSlice';
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  access: string;
+  refresh: string;
+}
+
+interface RegisterRequest {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+}
+
+interface User {
+  pkid: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  gender?: string;
+  phone_number?: string;
+  profile_photo?: string;
+  country?: string;
+  city?: string;
+  role: 'client' | 'provider' | 'admin';
+  admin: boolean;
+}
+
+interface RefreshTokenRequest {
+  refresh: string;
+}
+
+interface RefreshTokenResponse {
+  access: string;
+}
+
+export const authApi = api.injectEndpoints({
+  endpoints: (builder) => ({
+    login: builder.mutation<LoginResponse, LoginRequest>({
+      query: (credentials) => ({
+        url: '/api/v1/auth/jwt/create/',
+        method: 'POST',
+        body: credentials,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              accessToken: data.access,
+              refreshToken: data.refresh,
+            })
+          );
+          dispatch(authApi.endpoints.getCurrentUser.initiate());
+        } catch (error) {
+          console.error('Login failed:', error);
+        }
+      },
+    }),
+
+    register: builder.mutation<User, RegisterRequest>({
+      query: (userData) => ({
+        url: '/api/v1/auth/users/',
+        method: 'POST',
+        body: userData,
+      }),
+    }),
+
+    getCurrentUser: builder.query<User, void>({
+      query: () => '/api/v1/auth/users/me/',
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUser(data));
+        } catch (error) {
+          console.error('Get current user failed:', error);
+        }
+      },
+      providesTags: ['User'],
+    }),
+
+    refreshToken: builder.mutation<RefreshTokenResponse, RefreshTokenRequest>({
+      query: (body) => ({
+        url: '/api/v1/auth/jwt/refresh/',
+        method: 'POST',
+        body,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(updateAccessToken(data.access));
+        } catch (error) {
+          console.error('Token refresh failed:', error);
+        }
+      },
+    }),
+
+    changePassword: builder.mutation<void, { current_password: string; new_password: string }>({
+      query: (body) => ({
+        url: '/api/v1/auth/users/set_password/',
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    requestPasswordReset: builder.mutation<void, { email: string }>({
+      query: (body) => ({
+        url: '/api/v1/auth/users/reset_password/',
+        method: 'POST',
+        body,
+      }),
+    }),
+  }),
+});
+
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetCurrentUserQuery,
+  useRefreshTokenMutation,
+  useChangePasswordMutation,
+  useRequestPasswordResetMutation,
+} = authApi;
