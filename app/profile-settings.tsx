@@ -1,13 +1,15 @@
 import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
-import { ArrowLeft, User, CreditCard, Globe, LogOut, ChevronRight } from 'lucide-react-native';
+import { ArrowLeft, User, CreditCard, Globe, LogOut, ChevronRight, Briefcase } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
+import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
 import { logout as logoutAction } from '@/store/authSlice';
 
 export default function ProfileSettingsScreen() {
   const { data: user, isLoading } = useGetCurrentUserQuery();
+  const { data: applicationStatus } = useGetApplicationStatusQuery();
   const dispatch = useAppDispatch();
 
   const settingsOptions = [
@@ -39,6 +41,9 @@ export default function ProfileSettingsScreen() {
       }
     }
   ];
+
+  const showProviderApplication = user?.role === 'client' && (!applicationStatus || applicationStatus.status === 'rejected' || applicationStatus.status === 'withdrawn');
+  const showApplicationStatus = applicationStatus && applicationStatus.status !== 'rejected' && applicationStatus.status !== 'withdrawn';
 
   const handleLogout = () => {
     Alert.alert(
@@ -95,8 +100,56 @@ export default function ProfileSettingsScreen() {
                 {user?.phone_number && (
                   <Text style={styles.profilePhone}>{user.phone_number}</Text>
                 )}
+                <View style={styles.roleBadge}>
+                  <Text style={styles.roleText}>{user?.role === 'provider' ? 'Provider' : 'Client'}</Text>
+                </View>
               </View>
             </View>
+          </View>
+        )}
+
+        {/* Provider Application Section */}
+        {showProviderApplication && (
+          <TouchableOpacity 
+            style={styles.providerCard}
+            onPress={() => router.push('/agent-profile-setup')}
+          >
+            <View style={styles.providerIconContainer}>
+              <Briefcase color="white" size={32} />
+            </View>
+            <View style={styles.providerInfo}>
+              <Text style={styles.providerTitle}>Become a Service Provider</Text>
+              <Text style={styles.providerDescription}>Offer your services and earn money</Text>
+            </View>
+            <ChevronRight color="white" size={24} />
+          </TouchableOpacity>
+        )}
+
+        {/* Application Status Section */}
+        {showApplicationStatus && (
+          <View style={styles.statusCard}>
+            <Text style={styles.statusTitle}>Provider Application Status</Text>
+            <View style={[
+              styles.statusBadge,
+              applicationStatus.status === 'pending' && styles.statusPending,
+              applicationStatus.status === 'approved' && styles.statusApproved,
+            ]}>
+              <Text style={styles.statusText}>
+                {applicationStatus.status === 'pending' ? 'Pending Review' : 
+                 applicationStatus.status === 'approved' ? 'Approved' : 
+                 applicationStatus.status}
+              </Text>
+            </View>
+            {applicationStatus.status === 'pending' && (
+              <Text style={styles.statusDescription}>
+                Your application is being reviewed. We'll notify you once it's approved.
+              </Text>
+            )}
+            {applicationStatus.status === 'approved' && (
+              <Text style={styles.statusDescription}>
+                Congratulations! You can now create services and accept bookings.
+              </Text>
+            )}
           </View>
         )}
 
@@ -292,5 +345,98 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#FF4444',
     marginLeft: 12,
+  },
+  roleBadge: {
+    marginTop: 8,
+    backgroundColor: '#2D1A46',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 12,
+    alignSelf: 'flex-start',
+  },
+  roleText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: 'white',
+  },
+  providerCard: {
+    backgroundColor: '#2D1A46',
+    borderRadius: 16,
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  providerIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  providerInfo: {
+    flex: 1,
+  },
+  providerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 4,
+  },
+  providerDescription: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  statusCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  statusTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginBottom: 12,
+  },
+  statusBadge: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    alignSelf: 'flex-start',
+    marginBottom: 12,
+  },
+  statusPending: {
+    backgroundColor: '#FFF3E0',
+  },
+  statusApproved: {
+    backgroundColor: '#E8F5E9',
+  },
+  statusText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  statusDescription: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 20,
   },
 });
