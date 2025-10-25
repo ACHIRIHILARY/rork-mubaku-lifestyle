@@ -46,11 +46,32 @@ export default function RegisterScreen() {
         [{ text: 'OK', onPress: () => router.replace('/login') }]
       );
     } catch (error: any) {
-      console.error('Registration error:', error);
-      const errorMessage = error?.data?.email?.[0] ||
-        error?.data?.username?.[0] ||
-        error?.data?.detail ||
-        'Registration failed. Please try again.';
+      console.error('Registration error:', JSON.stringify(error, null, 2));
+      
+      let errorMessage = 'Registration failed. Please try again.';
+      
+      if (error?.data) {
+        if (typeof error.data === 'string') {
+          errorMessage = error.data;
+        } else if (error.data.email) {
+          errorMessage = Array.isArray(error.data.email) ? error.data.email[0] : error.data.email;
+        } else if (error.data.username) {
+          errorMessage = Array.isArray(error.data.username) ? error.data.username[0] : error.data.username;
+        } else if (error.data.password) {
+          errorMessage = Array.isArray(error.data.password) ? error.data.password[0] : error.data.password;
+        } else if (error.data.detail) {
+          errorMessage = error.data.detail;
+        } else if (error.data.message) {
+          errorMessage = error.data.message;
+        } else {
+          errorMessage = JSON.stringify(error.data);
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.status) {
+        errorMessage = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
+      }
+      
       Alert.alert('Registration Failed', errorMessage);
     }
   };

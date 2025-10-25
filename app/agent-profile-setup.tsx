@@ -48,11 +48,29 @@ export default function AgentProfileSetup() {
         ]
       );
     } catch (error: any) {
-      console.error('Profile setup error:', error);
-      Alert.alert(
-        'Error',
-        error?.data?.detail || 'Failed to complete profile setup. Please try again.'
-      );
+      console.error('Profile setup error:', JSON.stringify(error, null, 2));
+      
+      let errorMessage = 'Failed to complete profile setup. Please try again.';
+      
+      if (error?.data) {
+        if (typeof error.data === 'string') {
+          errorMessage = error.data;
+        } else if (error.data.detail) {
+          errorMessage = error.data.detail;
+        } else if (error.data.message) {
+          errorMessage = error.data.message;
+        } else if (error.data.error) {
+          errorMessage = error.data.error;
+        } else {
+          errorMessage = JSON.stringify(error.data);
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.status) {
+        errorMessage = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
+      }
+      
+      Alert.alert('Error', errorMessage);
     }
   };
 

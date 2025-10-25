@@ -20,11 +20,29 @@ export default function LoginScreen() {
       await login({ email, password }).unwrap();
       router.replace('/home');
     } catch (error: any) {
-      console.error('Login error:', error);
-      Alert.alert(
-        'Login Failed',
-        error?.data?.detail || 'Invalid email or password. Please try again.'
-      );
+      console.error('Login error:', JSON.stringify(error, null, 2));
+      
+      let errorMessage = 'Invalid email or password. Please try again.';
+      
+      if (error?.data) {
+        if (typeof error.data === 'string') {
+          errorMessage = error.data;
+        } else if (error.data.detail) {
+          errorMessage = error.data.detail;
+        } else if (error.data.message) {
+          errorMessage = error.data.message;
+        } else if (error.data.error) {
+          errorMessage = error.data.error;
+        } else {
+          errorMessage = JSON.stringify(error.data);
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.status) {
+        errorMessage = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
+      }
+      
+      Alert.alert('Login Failed', errorMessage);
     }
   };
 
