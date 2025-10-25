@@ -48,7 +48,21 @@ export default function AgentProfileSetup() {
         ]
       );
     } catch (error: any) {
-      console.error('Profile setup error:', JSON.stringify(error, null, 2));
+      console.log('=== Profile Setup Error Details ===');
+      console.log('Error type:', typeof error);
+      console.log('Error keys:', Object.keys(error || {}));
+      console.log('Full error:', error);
+      
+      if (error?.data) {
+        console.log('Error data:', JSON.stringify(error.data, null, 2));
+      }
+      if (error?.status) {
+        console.log('Error status:', error.status);
+      }
+      if (error?.message) {
+        console.log('Error message:', error.message);
+      }
+      console.log('=================================');
       
       let errorMessage = 'Failed to complete profile setup. Please try again.';
       
@@ -56,18 +70,34 @@ export default function AgentProfileSetup() {
         if (typeof error.data === 'string') {
           errorMessage = error.data;
         } else if (error.data.detail) {
-          errorMessage = error.data.detail;
+          errorMessage = Array.isArray(error.data.detail) 
+            ? error.data.detail.join(', ')
+            : error.data.detail;
         } else if (error.data.message) {
           errorMessage = error.data.message;
         } else if (error.data.error) {
-          errorMessage = error.data.error;
+          errorMessage = typeof error.data.error === 'string'
+            ? error.data.error
+            : JSON.stringify(error.data.error);
+        } else if (error.data.non_field_errors) {
+          errorMessage = Array.isArray(error.data.non_field_errors)
+            ? error.data.non_field_errors.join(', ')
+            : error.data.non_field_errors;
         } else {
-          errorMessage = JSON.stringify(error.data);
+          const firstKey = Object.keys(error.data)[0];
+          if (firstKey && error.data[firstKey]) {
+            const firstError = error.data[firstKey];
+            errorMessage = Array.isArray(firstError)
+              ? `${firstKey}: ${firstError.join(', ')}`
+              : `${firstKey}: ${firstError}`;
+          } else {
+            errorMessage = JSON.stringify(error.data);
+          }
         }
       } else if (error?.message) {
         errorMessage = error.message;
       } else if (error?.status) {
-        errorMessage = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
+        errorMessage = `Error ${error.status}: ${error.statusText || 'Request failed'}`;
       }
       
       Alert.alert('Error', errorMessage);
