@@ -104,11 +104,14 @@ export const authApi = api.injectEndpoints({
       },
     }),
 
-    changePassword: builder.mutation<void, { current_password: string; new_password: string }>({
+    changePassword: builder.mutation<void, { current_password: string; new_password: string; re_new_password?: string }>({
       query: (body) => ({
         url: '/api/v1/auth/users/set_password/',
         method: 'POST',
-        body,
+        body: {
+          ...body,
+          re_new_password: body.new_password,
+        },
       }),
     }),
 

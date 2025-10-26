@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { ArrowLeft } from 'lucide-react-native';
 import { useUpdateUnifiedProfileMutation } from '@/store/services/profileApi';
 
 export default function ClientProfileSetup() {
@@ -46,13 +47,23 @@ export default function ClientProfileSetup() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <ArrowLeft color="white" size={24} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Complete Profile</Text>
+        <View style={styles.placeholder} />
+      </View>
       <KeyboardAvoidingView 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.content}>
-            <View style={styles.header}>
+            <View style={styles.titleContainer}>
               <Text style={styles.title}>Complete Your Profile</Text>
               <Text style={styles.subtitle}>Tell us a bit about yourself</Text>
             </View>
@@ -129,7 +140,26 @@ export default function ClientProfileSetup() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  header: {
     backgroundColor: '#F4A896',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'white',
+  },
+  placeholder: {
+    width: 40,
   },
   keyboardView: {
     flex: 1,
@@ -140,22 +170,21 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 24,
-    paddingVertical: 40,
+    paddingVertical: 20,
   },
-  header: {
+  titleContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 24,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#2D1A46',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: 'white',
-    opacity: 0.9,
+    color: '#666',
   },
   card: {
     backgroundColor: 'white',

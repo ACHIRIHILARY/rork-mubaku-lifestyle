@@ -1,6 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { ArrowLeft } from 'lucide-react-native';
 
 export default function RoleSelectionScreen() {
   const [selectedRole, setSelectedRole] = useState<string>('');
@@ -31,8 +32,16 @@ export default function RoleSelectionScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.back()}
+        >
+          <ArrowLeft color="white" size={24} />
+        </TouchableOpacity>
+      </View>
       <View style={styles.content}>
-        <View style={styles.header}>
+        <View style={styles.titleContainer}>
           <Text style={styles.title}>Choose Your Role</Text>
           <Text style={styles.subtitle}>How would you like to use Mubaku Lifestyle?</Text>
         </View>
@@ -84,12 +93,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F4A896',
   },
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 20,
+  },
+  backButton: {
+    padding: 8,
+    alignSelf: 'flex-start',
+  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: 20,
   },
-  header: {
+  titleContainer: {
     alignItems: 'center',
     marginBottom: 60,
   },

@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
-import { ArrowLeft, User, CreditCard, Globe, LogOut, ChevronRight, Briefcase } from 'lucide-react-native';
-import { useGetCurrentUserQuery } from '@/store/services/authApi';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
+import { ArrowLeft, User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff } from 'lucide-react-native';
+import { useGetCurrentUserQuery, useChangePasswordMutation } from '@/store/services/authApi';
 import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
 import { logout as logoutAction } from '@/store/authSlice';
@@ -10,26 +10,103 @@ import { logout as logoutAction } from '@/store/authSlice';
 export default function ProfileSettingsScreen() {
   const { data: user, isLoading } = useGetCurrentUserQuery();
   const { data: applicationStatus } = useGetApplicationStatusQuery();
+  const [changePassword] = useChangePasswordMutation();
   const dispatch = useAppDispatch();
+
+  const [passwordModalVisible, setPasswordModalVisible] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  const handleChangePassword = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all password fields');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      Alert.alert('Error', 'New passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      Alert.alert('Error', 'Password must be at least 8 characters long');
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      await changePassword({
+        current_password: currentPassword,
+        new_password: newPassword,
+      }).unwrap();
+
+      Alert.alert('Success', 'Your password has been changed successfully');
+      setPasswordModalVisible(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (error: any) {
+      console.error('Change password error:', error);
+      const errorMessage = error?.data?.detail || error?.data?.current_password?.[0] || error?.data?.new_password?.[0] || 'Failed to change password. Please try again.';
+      Alert.alert('Error', errorMessage);
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete Account',
+      'Are you sure you want to delete your account? This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            Alert.alert(
+              'Account Deletion',
+              'Account deletion is currently not available. Please contact support for assistance.',
+              [{ text: 'OK' }]
+            );
+          }
+        }
+      ]
+    );
+  };
+
+  const handleViewProfileDetails = () => {
+    if (!user) return;
+
+    const details = `Name: ${user.full_name || 'N/A'}\n` +
+                   `Email: ${user.email || 'N/A'}\n` +
+                   `Phone: ${user.phone_number || 'N/A'}\n` +
+                   `City: ${user.city || 'N/A'}\n` +
+                   `Country: ${user.country || 'N/A'}\n` +
+                   `Role: ${user.role === 'provider' ? 'Provider' : 'Client'}`;
+
+    Alert.alert('Profile Details', details);
+  };
 
   const settingsOptions = [
     {
-      id: 'profile',
-      title: 'Edit Profile',
-      description: 'Update your personal information',
+      id: 'view-profile',
+      title: 'View Profile Details',
+      description: 'See your complete profile information',
       icon: User,
-      onPress: () => {
-        // Navigate to edit profile
-      }
+      onPress: handleViewProfileDetails
     },
     {
-      id: 'payment',
-      title: 'Payment Methods',
-      description: 'Manage your payment options',
-      icon: CreditCard,
-      onPress: () => {
-        // Navigate to payment methods
-      }
+      id: 'change-password',
+      title: 'Change Password',
+      description: 'Update your account password',
+      icon: Lock,
+      onPress: () => setPasswordModalVisible(true)
     },
     {
       id: 'language',
@@ -39,6 +116,14 @@ export default function ProfileSettingsScreen() {
       onPress: () => {
         router.push('/language');
       }
+    },
+    {
+      id: 'delete-account',
+      title: 'Delete Account',
+      description: 'Permanently delete your account',
+      icon: Trash2,
+      onPress: handleDeleteAccount,
+      isDanger: true
     }
   ];
 
@@ -142,7 +227,7 @@ export default function ProfileSettingsScreen() {
             </View>
             {applicationStatus.status === 'pending' && (
               <Text style={styles.statusDescription}>
-                Your application is being reviewed. We'll notify you once it's approved.
+                Your application is being reviewed. We will notify you once it is approved.
               </Text>
             )}
             {applicationStatus.status === 'approved' && (
@@ -160,15 +245,15 @@ export default function ProfileSettingsScreen() {
             return (
               <TouchableOpacity 
                 key={option.id}
-                style={styles.settingCard}
+                style={[styles.settingCard, option.isDanger && styles.dangerCard]}
                 onPress={option.onPress}
               >
                 <View style={styles.settingLeft}>
-                  <View style={styles.settingIconContainer}>
-                    <IconComponent color="#2D1A46" size={24} />
+                  <View style={[styles.settingIconContainer, option.isDanger && styles.dangerIconContainer]}>
+                    <IconComponent color={option.isDanger ? '#FF4444' : '#2D1A46'} size={24} />
                   </View>
                   <View style={styles.settingInfo}>
-                    <Text style={styles.settingTitle}>{option.title}</Text>
+                    <Text style={[styles.settingTitle, option.isDanger && styles.dangerTitle]}>{option.title}</Text>
                     <Text style={styles.settingDescription}>{option.description}</Text>
                   </View>
                 </View>
@@ -189,6 +274,85 @@ export default function ProfileSettingsScreen() {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Change Password Modal */}
+      <Modal
+        visible={passwordModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setPasswordModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Change Password</Text>
+              <TouchableOpacity onPress={() => setPasswordModalVisible(false)}>
+                <Text style={styles.modalClose}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Current Password</Text>
+              <View style={styles.passwordInputContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  value={currentPassword}
+                  onChangeText={setCurrentPassword}
+                  secureTextEntry={!showCurrentPassword}
+                  placeholder="Enter current password"
+                />
+                <TouchableOpacity onPress={() => setShowCurrentPassword(!showCurrentPassword)}>
+                  {showCurrentPassword ? <EyeOff color="#666" size={20} /> : <Eye color="#666" size={20} />}
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>New Password</Text>
+              <View style={styles.passwordInputContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  value={newPassword}
+                  onChangeText={setNewPassword}
+                  secureTextEntry={!showNewPassword}
+                  placeholder="Enter new password"
+                />
+                <TouchableOpacity onPress={() => setShowNewPassword(!showNewPassword)}>
+                  {showNewPassword ? <EyeOff color="#666" size={20} /> : <Eye color="#666" size={20} />}
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Confirm New Password</Text>
+              <View style={styles.passwordInputContainer}>
+                <TextInput
+                  style={styles.passwordInput}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showConfirmPassword}
+                  placeholder="Confirm new password"
+                />
+                <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  {showConfirmPassword ? <EyeOff color="#666" size={20} /> : <Eye color="#666" size={20} />}
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.changePasswordButton, isChangingPassword && styles.disabledButton]}
+              onPress={handleChangePassword}
+              disabled={isChangingPassword}
+            >
+              {isChangingPassword ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.changePasswordText}>Change Password</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -438,5 +602,82 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     lineHeight: 20,
+  },
+  dangerCard: {
+    borderWidth: 1,
+    borderColor: '#FFE0E0',
+  },
+  dangerIconContainer: {
+    backgroundColor: '#FFE0E0',
+  },
+  dangerTitle: {
+    color: '#FF4444',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 400,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  modalClose: {
+    fontSize: 24,
+    color: '#666',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  inputLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2D1A46',
+    marginBottom: 8,
+  },
+  passwordInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    backgroundColor: '#F9F9F9',
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 12,
+    fontSize: 16,
+  },
+  changePasswordButton: {
+    backgroundColor: '#2D1A46',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  changePasswordText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  disabledButton: {
+    opacity: 0.6,
   },
 });
