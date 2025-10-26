@@ -1,25 +1,17 @@
 import { router } from 'expo-router';
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
-import { Search, Bell, Star, LogOut } from 'lucide-react-native';
+import { Search, Bell, Star, Settings } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
-import { useAppDispatch } from '@/store/hooks';
-import { logout } from '@/store/authSlice';
+
 
 export default function HomeScreen() {
   const { data: user, isLoading: userLoading } = useGetCurrentUserQuery();
   const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery({});
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
-  const dispatch = useAppDispatch();
-
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}`);
-  };
-
-  const handleLogout = () => {
-    dispatch(logout());
-    router.replace('/login');
   };
 
   console.log('Home screen loaded', { user, servicesCount: services?.length, categoriesCount: categories?.length });
@@ -57,7 +49,7 @@ export default function HomeScreen() {
                 style={styles.notificationButton}
                 onPress={() => router.push('/profile-settings')}
               >
-                <LogOut color="white" size={24} />
+                <Settings color="white" size={24} />
               </TouchableOpacity>
             </View>
           </View>
