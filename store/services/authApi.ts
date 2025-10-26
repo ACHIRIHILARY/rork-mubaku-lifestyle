@@ -122,6 +122,14 @@ export const authApi = api.injectEndpoints({
         body,
       }),
     }),
+
+    deleteAccount: builder.mutation<void, { current_password: string }>({
+      query: (body) => ({
+        url: '/api/v1/auth/users/me/',
+        method: 'DELETE',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -132,4 +140,5 @@ export const {
   useRefreshTokenMutation,
   useChangePasswordMutation,
   useRequestPasswordResetMutation,
+  useDeleteAccountMutation,
 } = authApi;

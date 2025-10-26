@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
-import { ArrowLeft, User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff } from 'lucide-react-native';
-import { useGetCurrentUserQuery, useChangePasswordMutation } from '@/store/services/authApi';
+import { ArrowLeft, User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Calendar } from 'lucide-react-native';
+import { useGetCurrentUserQuery, useChangePasswordMutation, useDeleteAccountMutation } from '@/store/services/authApi';
 import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
 import { logout as logoutAction } from '@/store/authSlice';
@@ -11,6 +11,7 @@ export default function ProfileSettingsScreen() {
   const { data: user, isLoading } = useGetCurrentUserQuery();
   const { data: applicationStatus } = useGetApplicationStatusQuery();
   const [changePassword] = useChangePasswordMutation();
+  const [deleteAccount] = useDeleteAccountMutation();
   const dispatch = useAppDispatch();
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -69,10 +70,36 @@ export default function ProfileSettingsScreen() {
           text: 'Delete',
           style: 'destructive',
           onPress: async () => {
-            Alert.alert(
-              'Account Deletion',
-              'Account deletion is currently not available. Please contact support for assistance.',
-              [{ text: 'OK' }]
+            Alert.prompt(
+              'Confirm Password',
+              'Please enter your current password to confirm account deletion:',
+              async (password) => {
+                if (!password) {
+                  Alert.alert('Error', 'Password is required');
+                  return;
+                }
+                try {
+                  await deleteAccount({ current_password: password }).unwrap();
+                  Alert.alert(
+                    'Success',
+                    'Your account has been deleted successfully',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => {
+                          dispatch(logoutAction());
+                          router.replace('/login');
+                        }
+                      }
+                    ]
+                  );
+                } catch (error: any) {
+                  console.error('Delete account error:', error);
+                  const errorMessage = error?.data?.current_password?.[0] || error?.data?.detail || 'Failed to delete account. Please try again.';
+                  Alert.alert('Error', errorMessage);
+                }
+              },
+              'secure-text'
             );
           }
         }
@@ -94,6 +121,13 @@ export default function ProfileSettingsScreen() {
   };
 
   const settingsOptions = [
+    {
+      id: 'my-bookings',
+      title: 'My Bookings',
+      description: 'View and manage your appointments',
+      icon: Calendar,
+      onPress: () => router.push('/my-bookings')
+    },
     {
       id: 'view-profile',
       title: 'View Profile Details',
