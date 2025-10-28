@@ -22,13 +22,16 @@ function RootLayoutNav() {
       <Stack.Screen name="role-selection" options={{ headerShown: false }} />
       <Stack.Screen name="client-profile-setup" options={{ headerShown: false }} />
       <Stack.Screen name="agent-profile-setup" options={{ headerShown: false }} />
-      <Stack.Screen name="home" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       <Stack.Screen name="service-detail" options={{ headerShown: false }} />
       <Stack.Screen name="booking/select-datetime" options={{ headerShown: false }} />
       <Stack.Screen name="booking/choose-location" options={{ headerShown: false }} />
       <Stack.Screen name="booking/summary" options={{ headerShown: false }} />
       <Stack.Screen name="booking/payment" options={{ headerShown: false }} />
       <Stack.Screen name="booking/status" options={{ headerShown: false }} />
+      <Stack.Screen name="booking/reschedule" options={{ headerShown: false }} />
+      <Stack.Screen name="my-bookings" options={{ headerShown: false }} />
+      <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="notifications" options={{ headerShown: false }} />
       <Stack.Screen name="profile-settings" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: "modal" }} />
