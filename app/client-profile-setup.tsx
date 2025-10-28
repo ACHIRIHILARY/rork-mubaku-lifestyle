@@ -32,7 +32,7 @@ export default function ClientProfileSetup() {
         [
           {
             text: 'OK',
-            onPress: () => router.replace('/home'),
+            onPress: () => router.replace('/(tabs)/home'),
           },
         ]
       );

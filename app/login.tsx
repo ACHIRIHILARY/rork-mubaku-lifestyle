@@ -18,7 +18,7 @@ export default function LoginScreen() {
 
     try {
       await login({ email, password }).unwrap();
-      router.replace('/home');
+      router.replace('/(tabs)/home');
     } catch (error: any) {
       console.error('Login error:', JSON.stringify(error, null, 2));
       
