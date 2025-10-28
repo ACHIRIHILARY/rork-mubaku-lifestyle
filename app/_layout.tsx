@@ -34,6 +34,9 @@ function RootLayoutNav() {
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="notifications" options={{ headerShown: false }} />
       <Stack.Screen name="profile-settings" options={{ headerShown: false }} />
+      <Stack.Screen name="provider-services" options={{ headerShown: false }} />
+      <Stack.Screen name="provider-services/create" options={{ headerShown: false }} />
+      <Stack.Screen name="provider-services/edit" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: "modal" }} />
     </Stack>
   );

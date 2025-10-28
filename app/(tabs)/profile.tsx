@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
-import { User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Calendar } from 'lucide-react-native';
+import { User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package } from 'lucide-react-native';
 import { useGetCurrentUserQuery, useChangePasswordMutation, useDeleteAccountMutation } from '@/store/services/authApi';
 import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
@@ -156,6 +156,7 @@ export default function ProfileSettingsScreen() {
 
   const showProviderApplication = user?.role === 'client' && (!applicationStatus || applicationStatus.status === 'rejected' || applicationStatus.status === 'withdrawn');
   const showApplicationStatus = applicationStatus && applicationStatus.status !== 'rejected' && applicationStatus.status !== 'withdrawn';
+  const isApprovedProvider = user?.role === 'provider' || (applicationStatus && applicationStatus.status === 'approved');
 
   const handleLogout = () => {
     Alert.alert(
@@ -253,6 +254,22 @@ export default function ProfileSettingsScreen() {
               </Text>
             )}
           </View>
+        )}
+
+        {isApprovedProvider && (
+          <TouchableOpacity 
+            style={styles.dashboardCard}
+            onPress={() => router.push('/provider-services' as any)}
+          >
+            <View style={styles.dashboardIconContainer}>
+              <Package color="white" size={32} />
+            </View>
+            <View style={styles.dashboardInfo}>
+              <Text style={styles.dashboardTitle}>Manage My Services</Text>
+              <Text style={styles.dashboardDescription}>Create, edit, and manage your services</Text>
+            </View>
+            <ChevronRight color="white" size={24} />
+          </TouchableOpacity>
         )}
 
         <View style={styles.settingsContainer}>
@@ -619,6 +636,44 @@ const styles = StyleSheet.create({
   },
   dangerTitle: {
     color: '#FF4444',
+  },
+  dashboardCard: {
+    backgroundColor: '#4CAF50',
+    borderRadius: 16,
+    padding: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 8,
+  },
+  dashboardIconContainer: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  dashboardInfo: {
+    flex: 1,
+  },
+  dashboardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 4,
+  },
+  dashboardDescription: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
   },
   modalOverlay: {
     flex: 1,
