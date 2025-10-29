@@ -1,18 +1,64 @@
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
-import { Search, Star } from 'lucide-react-native';
+import { Search, Star, X } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 
 
 export default function HomeScreen() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
+  
   const { data: user, isLoading: userLoading } = useGetCurrentUserQuery();
-  const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery({});
+  
+  const queryParams: { category?: string; search?: string } = {};
+  if (selectedCategory) queryParams.category = selectedCategory;
+  if (debouncedSearch) queryParams.search = debouncedSearch;
+  
+  const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery(queryParams);
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
+  
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}`);
   };
+  
+  const handleCategoryPress = (categoryId: string) => {
+    console.log('Category selected:', categoryId);
+    router.push(`/category-detail?id=${categoryId}`);
+  };
+  
+  const handleCategoryFilter = (categoryId: string) => {
+    console.log('Filtering by category:', categoryId);
+    setSelectedCategory(categoryId);
+  };
+  
+  const handleClearFilter = () => {
+    console.log('Clearing category filter');
+    setSelectedCategory(null);
+  };
+  
+  const handleClearSearch = useCallback(() => {
+    console.log('Clearing search');
+    setSearchQuery('');
+    setDebouncedSearch('');
+  }, []);
+  
+  const handleClearAll = useCallback(() => {
+    console.log('Clearing all filters');
+    setSelectedCategory(null);
+    setSearchQuery('');
+    setDebouncedSearch('');
+  }, []);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   console.log('Home screen loaded', { user, servicesCount: services?.length, categoriesCount: categories?.length });
 
@@ -47,22 +93,54 @@ export default function HomeScreen() {
               style={styles.searchInput}
               placeholder="Search services or agents..."
               placeholderTextColor="#666"
+              value={searchQuery}
+              onChangeText={setSearchQuery}
             />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={handleClearSearch}>
+                <X color="#666" size={20} />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
 
         {/* Categories */}
         {categories && categories.length > 0 && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Categories</Text>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Categories</Text>
+              {(selectedCategory || debouncedSearch) && (
+                <TouchableOpacity 
+                  style={styles.clearFilterButton}
+                  onPress={handleClearAll}
+                >
+                  <X color="#666" size={16} />
+                  <Text style={styles.clearFilterText}>Clear All</Text>
+                </TouchableOpacity>
+              )}
+            </View>
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.categoriesContainer}>
-                {categories.slice(0, 4).map((category) => (
-                  <TouchableOpacity key={category.id} style={styles.categoryCard}>
-                    <Text style={styles.categoryIcon}>💇</Text>
-                    <Text style={styles.categoryName}>{category.name}</Text>
-                  </TouchableOpacity>
-                ))}
+                {categories.map((category) => {
+                  const isSelected = selectedCategory === category.id;
+                  return (
+                    <TouchableOpacity 
+                      key={category.id} 
+                      style={[
+                        styles.categoryCard,
+                        isSelected && styles.categoryCardSelected
+                      ]}
+                      onPress={() => handleCategoryFilter(category.id)}
+                      onLongPress={() => handleCategoryPress(category.id)}
+                    >
+                      <Text style={styles.categoryIcon}>💇</Text>
+                      <Text style={[
+                        styles.categoryName,
+                        isSelected && styles.categoryNameSelected
+                      ]}>{category.name}</Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </View>
             </ScrollView>
           </View>
@@ -70,7 +148,14 @@ export default function HomeScreen() {
 
         {/* Top Services */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Available Services</Text>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>
+              {selectedCategory || debouncedSearch ? 'Search Results' : 'Available Services'}
+            </Text>
+            {servicesLoading && debouncedSearch && (
+              <ActivityIndicator size="small" color="#2D1A46" />
+            )}
+          </View>
           {services && services.length > 0 ? (
             <View style={styles.agentsContainer}>
               {services.map((service) => (
@@ -107,7 +192,20 @@ export default function HomeScreen() {
             </View>
           ) : (
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>No services available at the moment</Text>
+              <Text style={styles.emptyText}>
+                {debouncedSearch || selectedCategory 
+                  ? 'No services found matching your criteria' 
+                  : 'No services available at the moment'
+                }
+              </Text>
+              {(debouncedSearch || selectedCategory) && (
+                <TouchableOpacity 
+                  style={styles.clearAllButton}
+                  onPress={handleClearAll}
+                >
+                  <Text style={styles.clearAllButtonText}>Clear Filters</Text>
+                </TouchableOpacity>
+              )}
             </View>
           )}
         </View>
@@ -176,11 +274,30 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 20,
   },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginBottom: 16,
+  },
+  clearFilterButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F0F0F0',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    gap: 4,
+  },
+  clearFilterText: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '600',
   },
   categoriesContainer: {
     flexDirection: 'row',
@@ -191,7 +308,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     alignItems: 'center',
-    flex: 1,
+    minWidth: 100,
     marginHorizontal: 4,
     shadowColor: '#000',
     shadowOffset: {
@@ -201,6 +318,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  categoryCardSelected: {
+    backgroundColor: '#2D1A46',
+    borderColor: '#F4A896',
   },
   categoryIcon: {
     fontSize: 32,
@@ -210,6 +333,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#2D1A46',
+    textAlign: 'center',
+  },
+  categoryNameSelected: {
+    color: 'white',
   },
   agentsContainer: {
     gap: 16,
@@ -309,5 +436,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+    marginBottom: 16,
+  },
+  clearAllButton: {
+    backgroundColor: '#2D1A46',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+  },
+  clearAllButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

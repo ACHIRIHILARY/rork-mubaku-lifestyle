@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
-import { User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package } from 'lucide-react-native';
+import { User, Lock, Trash2, Globe, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package, Edit } from 'lucide-react-native';
 import { useGetCurrentUserQuery, useChangePasswordMutation, useDeleteAccountMutation } from '@/store/services/authApi';
 import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
@@ -121,6 +121,13 @@ export default function ProfileSettingsScreen() {
   };
 
   const settingsOptions = [
+    {
+      id: 'edit-profile',
+      title: 'Edit Profile',
+      description: 'Update your profile information',
+      icon: Edit,
+      onPress: () => router.push('/profile-edit' as any)
+    },
     {
       id: 'view-profile',
       title: 'View Profile Details',

@@ -1,9 +1,49 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { Bell, CreditCard, Settings } from 'lucide-react-native';
-import { mockNotifications } from '../mockData';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { Bell, CreditCard, Settings, Trash2 } from 'lucide-react-native';
+import { useGetNotificationsQuery, useMarkAsReadMutation, useDeleteNotificationMutation } from '@/store/services/notificationsApi';
 
 export default function NotificationsScreen() {
+  const { data: notifications, isLoading, error } = useGetNotificationsQuery();
+  const [markAsRead] = useMarkAsReadMutation();
+  const [deleteNotification] = useDeleteNotificationMutation();
+  
+  console.log('Notifications loaded:', { count: notifications?.length, isLoading, error });
+  
+  const handleNotificationPress = async (notificationId: string, isRead: boolean) => {
+    if (!isRead) {
+      try {
+        console.log('Marking notification as read:', notificationId);
+        await markAsRead(notificationId).unwrap();
+      } catch (err) {
+        console.error('Failed to mark notification as read:', err);
+      }
+    }
+  };
+  
+  const handleDeleteNotification = (notificationId: string, message: string) => {
+    Alert.alert(
+      'Delete Notification',
+      `Are you sure you want to delete this notification?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              console.log('Deleting notification:', notificationId);
+              await deleteNotification(notificationId).unwrap();
+            } catch (err) {
+              console.error('Failed to delete notification:', err);
+              Alert.alert('Error', 'Failed to delete notification');
+            }
+          },
+        },
+      ]
+    );
+  };
+  
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'booking':
@@ -37,7 +77,20 @@ export default function NotificationsScreen() {
       </View>
 
       <ScrollView style={styles.content}>
-        {mockNotifications.length === 0 ? (
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#2D1A46" />
+            <Text style={styles.loadingText}>Loading notifications...</Text>
+          </View>
+        ) : error ? (
+          <View style={styles.emptyContainer}>
+            <Bell color="#F44336" size={64} />
+            <Text style={styles.emptyTitle}>Error Loading Notifications</Text>
+            <Text style={styles.emptyMessage}>
+              Failed to load notifications. Please try again later.
+            </Text>
+          </View>
+        ) : !notifications || notifications.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Bell color="#ccc" size={64} />
             <Text style={styles.emptyTitle}>No Notifications</Text>
@@ -47,31 +100,43 @@ export default function NotificationsScreen() {
           </View>
         ) : (
           <View style={styles.notificationsContainer}>
-            {mockNotifications.map((notification) => {
-              const IconComponent = getNotificationIcon(notification.type);
-              const iconColor = getNotificationColor(notification.type);
+            {notifications.map((notification) => {
+              const IconComponent = getNotificationIcon(notification.notification_type);
+              const iconColor = getNotificationColor(notification.notification_type);
               
               return (
-                <TouchableOpacity 
+                <View
                   key={notification.id} 
                   style={[
                     styles.notificationCard,
-                    !notification.read && styles.unreadCard
+                    !notification.is_read && styles.unreadCard
                   ]}
                 >
+                  <TouchableOpacity
+                    style={styles.notificationTouchable}
+                    onPress={() => handleNotificationPress(notification.id, notification.is_read)}
+                  >
                   <View style={[styles.iconContainer, { backgroundColor: iconColor }]}>
                     <IconComponent color="white" size={24} />
                   </View>
                   
                   <View style={styles.notificationContent}>
+                    {notification.title && (
+                      <Text style={[
+                        styles.notificationTitle,
+                        !notification.is_read && styles.unreadTitle
+                      ]}>
+                        {notification.title}
+                      </Text>
+                    )}
                     <Text style={[
                       styles.notificationMessage,
-                      !notification.read && styles.unreadMessage
+                      !notification.is_read && styles.unreadMessage
                     ]}>
                       {notification.message}
                     </Text>
                     <Text style={styles.notificationDate}>
-                      {new Date(notification.date).toLocaleDateString('en-US', {
+                      {new Date(notification.created_at).toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric',
                         hour: '2-digit',
@@ -80,8 +145,16 @@ export default function NotificationsScreen() {
                     </Text>
                   </View>
 
-                  {!notification.read && <View style={styles.unreadDot} />}
-                </TouchableOpacity>
+                  {!notification.is_read && <View style={styles.unreadDot} />}
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() => handleDeleteNotification(notification.id, notification.message)}
+                  >
+                    <Trash2 color="#F44336" size={20} />
+                  </TouchableOpacity>
+                </View>
               );
             })}
           </View>
@@ -135,6 +208,17 @@ const styles = StyleSheet.create({
   notificationsContainer: {
     gap: 12,
   },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 100,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
   notificationCard: {
     backgroundColor: 'white',
     borderRadius: 16,
@@ -150,6 +234,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  notificationTouchable: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   unreadCard: {
     borderLeftWidth: 4,
     borderLeftColor: '#F4A896',
@@ -164,6 +253,17 @@ const styles = StyleSheet.create({
   },
   notificationContent: {
     flex: 1,
+    marginRight: 8,
+  },
+  notificationTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 4,
+  },
+  unreadTitle: {
+    color: '#2D1A46',
+    fontWeight: 'bold',
   },
   notificationMessage: {
     fontSize: 16,
@@ -184,6 +284,10 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
     backgroundColor: '#F4A896',
+    marginLeft: 8,
+  },
+  deleteButton: {
+    padding: 8,
     marginLeft: 8,
   },
 });
