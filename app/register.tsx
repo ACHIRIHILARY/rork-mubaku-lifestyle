@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useRegisterMutation } from '@/store/services/authApi';
-import { Eye, EyeOff } from 'lucide-react-native';
+import { Eye, EyeOff, AlertCircle } from 'lucide-react-native';
 
 export default function RegisterScreen() {
   const [firstName, setFirstName] = useState('');
@@ -13,25 +13,41 @@ export default function RegisterScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [register, { isLoading }] = useRegisterMutation();
+  const isSubmitting = useRef(false);
 
   const handleRegister = async () => {
+    if (isSubmitting.current || isLoading) {
+      return;
+    }
+
+    setErrorMessage('');
+
     if (!firstName || !lastName || !username || !email || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
+      setErrorMessage('Please fill in all fields');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
+      setErrorMessage('Passwords do not match');
       return;
     }
 
     if (password.length < 8) {
-      Alert.alert('Error', 'Password must be at least 8 characters long');
+      setErrorMessage('Password must be at least 8 characters long');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage('Please enter a valid email address');
       return;
     }
 
     try {
+      isSubmitting.current = true;
+      
       await register({
         username,
         email,
@@ -41,45 +57,65 @@ export default function RegisterScreen() {
       }).unwrap();
 
       Alert.alert(
-        '🎉 Registration Successful!',
+        'Registration Successful!',
         `Welcome to Mubaku Lifestyle, ${firstName}! Your account has been created successfully.\n\nYou can now login with your credentials.`,
         [
           { 
             text: 'Go to Login', 
             onPress: () => {
               router.replace('/login');
-            }
+            },
+            style: 'default'
           }
-        ]
+        ],
+        { cancelable: false }
       );
     } catch (error: any) {
       console.error('Registration error:', JSON.stringify(error, null, 2));
       
-      let errorMessage = 'Registration failed. Please try again.';
+      let message = 'Registration failed. Please try again.';
       
       if (error?.data) {
         if (typeof error.data === 'string') {
-          errorMessage = error.data;
+          message = error.data;
         } else if (error.data.email) {
-          errorMessage = Array.isArray(error.data.email) ? error.data.email[0] : error.data.email;
+          message = Array.isArray(error.data.email) ? error.data.email[0] : error.data.email;
         } else if (error.data.username) {
-          errorMessage = Array.isArray(error.data.username) ? error.data.username[0] : error.data.username;
+          message = Array.isArray(error.data.username) ? error.data.username[0] : error.data.username;
         } else if (error.data.password) {
-          errorMessage = Array.isArray(error.data.password) ? error.data.password[0] : error.data.password;
+          message = Array.isArray(error.data.password) ? error.data.password[0] : error.data.password;
+        } else if (error.data.first_name) {
+          message = Array.isArray(error.data.first_name) ? error.data.first_name[0] : error.data.first_name;
+        } else if (error.data.last_name) {
+          message = Array.isArray(error.data.last_name) ? error.data.last_name[0] : error.data.last_name;
         } else if (error.data.detail) {
-          errorMessage = error.data.detail;
+          message = error.data.detail;
         } else if (error.data.message) {
-          errorMessage = error.data.message;
+          message = error.data.message;
         } else {
-          errorMessage = JSON.stringify(error.data);
+          const keys = Object.keys(error.data);
+          if (keys.length > 0) {
+            const firstKey = keys[0];
+            const value = error.data[firstKey];
+            message = `${firstKey}: ${Array.isArray(value) ? value[0] : value}`;
+          } else {
+            message = 'Registration failed. Please check your information and try again.';
+          }
         }
       } else if (error?.message) {
-        errorMessage = error.message;
+        message = error.message;
       } else if (error?.status) {
-        errorMessage = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
+        if (error.status === 'FETCH_ERROR') {
+          message = 'Network error. Please check your internet connection and try again.';
+        } else {
+          message = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
+        }
       }
       
-      Alert.alert('Registration Failed', errorMessage);
+      setErrorMessage(message);
+      Alert.alert('Registration Failed', message);
+    } finally {
+      isSubmitting.current = false;
     }
   };
 
@@ -186,15 +222,26 @@ export default function RegisterScreen() {
                 </View>
               </View>
 
+              {errorMessage ? (
+                <View style={styles.errorContainer}>
+                  <AlertCircle size={20} color="#DC2626" />
+                  <Text style={styles.errorText}>{errorMessage}</Text>
+                </View>
+              ) : null}
+
               <TouchableOpacity 
                 style={[styles.registerButton, isLoading && styles.registerButtonDisabled]} 
                 onPress={handleRegister}
                 disabled={isLoading}
+                activeOpacity={0.7}
               >
                 {isLoading ? (
-                  <ActivityIndicator color="white" />
+                  <View style={styles.loadingContainer}>
+                    <ActivityIndicator color="white" size="small" />
+                    <Text style={[styles.registerText, { marginLeft: 12 }]}>Creating your account...</Text>
+                  </View>
                 ) : (
-                  <Text style={styles.registerText}>Register</Text>
+                  <Text style={styles.registerText}>Create Account</Text>
                 )}
               </TouchableOpacity>
 
@@ -314,5 +361,25 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     paddingHorizontal: 12,
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEE2E2',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 4,
+    gap: 8,
+  },
+  errorText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#DC2626',
+    lineHeight: 20,
+  },
+  loadingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
