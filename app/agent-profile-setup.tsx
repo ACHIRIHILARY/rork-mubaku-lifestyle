@@ -39,11 +39,11 @@ export default function AgentProfileSetup() {
       }).unwrap();
 
       Alert.alert(
-        'Application Submitted!',
-        'Your provider application has been submitted successfully. We will review it and get back to you soon.',
+        '✅ Application Submitted Successfully!',
+        `Thank you for your interest in becoming a service provider!\n\nYour application has been submitted and is under review by our team.\n\nYou will receive a notification once your application is approved. In the meantime, you can continue using Mubaku Lifestyle.`,
         [
           {
-            text: 'OK',
+            text: 'Return to Home',
             onPress: () => router.replace('/(tabs)/home'),
           },
         ]

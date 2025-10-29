@@ -18,7 +18,17 @@ export default function LoginScreen() {
 
     try {
       await login({ email, password }).unwrap();
-      router.replace('/(tabs)/home');
+      
+      Alert.alert(
+        'Welcome Back! 👋',
+        'You have successfully logged in to Mubaku Lifestyle.',
+        [
+          {
+            text: 'Continue',
+            onPress: () => router.replace('/(tabs)/home')
+          }
+        ]
+      );
     } catch (error: any) {
       console.error('Login error:', JSON.stringify(error, null, 2));
       
@@ -114,7 +124,7 @@ export default function LoginScreen() {
               style={styles.registerButton}
               onPress={() => router.push('/register')}
             >
-              <Text style={styles.registerText}>Don't have an account? Register</Text>
+              <Text style={styles.registerText}>Don&apos;t have an account? Register</Text>
             </TouchableOpacity>
           </View>
           </View>

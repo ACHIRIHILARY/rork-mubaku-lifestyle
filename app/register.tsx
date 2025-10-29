@@ -41,9 +41,16 @@ export default function RegisterScreen() {
       }).unwrap();
 
       Alert.alert(
-        'Success',
-        'Account created successfully! Please log in.',
-        [{ text: 'OK', onPress: () => router.replace('/login') }]
+        '🎉 Registration Successful!',
+        `Welcome to Mubaku Lifestyle, ${firstName}! Your account has been created successfully.\n\nYou can now login with your credentials.`,
+        [
+          { 
+            text: 'Go to Login', 
+            onPress: () => {
+              router.replace('/login');
+            }
+          }
+        ]
       );
     } catch (error: any) {
       console.error('Registration error:', JSON.stringify(error, null, 2));
