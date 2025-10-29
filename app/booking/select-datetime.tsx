@@ -1,33 +1,75 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
+import { useGetAvailableSlotsQuery } from '@/store/services/appointmentApi';
 
 export default function SelectDateTime() {
-  const { agentId } = useLocalSearchParams();
+  const { serviceId } = useLocalSearchParams<{ serviceId: string }>();
   const [selectedDate, setSelectedDate] = useState<string>('');
-  const [selectedTime, setSelectedTime] = useState<string>('');
+  const [selectedSlot, setSelectedSlot] = useState<{ start: string; end: string } | null>(null);
 
-  const dates = [
-    { id: '1', date: '2024-01-20', day: 'Today', available: true },
-    { id: '2', date: '2024-01-21', day: 'Tomorrow', available: true },
-    { id: '3', date: '2024-01-22', day: 'Mon', available: true },
-    { id: '4', date: '2024-01-23', day: 'Tue', available: false },
-    { id: '5', date: '2024-01-24', day: 'Wed', available: true },
-  ];
+  const today = new Date();
+  const endDate = new Date(today);
+  endDate.setDate(today.getDate() + 14);
 
-  const times = [
-    { id: '1', time: '9:00 AM', available: true },
-    { id: '2', time: '10:30 AM', available: true },
-    { id: '3', time: '12:00 PM', available: false },
-    { id: '4', time: '2:00 PM', available: true },
-    { id: '5', time: '3:30 PM', available: true },
-    { id: '6', time: '5:00 PM', available: true },
-  ];
+  const { data: slots, isLoading } = useGetAvailableSlotsQuery({
+    serviceId: serviceId || '',
+    startDate: today.toISOString().split('T')[0],
+    endDate: endDate.toISOString().split('T')[0],
+  }, {
+    skip: !serviceId,
+  });
+
+  const dateSlots = useMemo(() => {
+    if (!slots) return {};
+    
+    const grouped: { [date: string]: typeof slots } = {};
+    slots.forEach(slot => {
+      if (!grouped[slot.date]) {
+        grouped[slot.date] = [];
+      }
+      grouped[slot.date].push(slot);
+    });
+    return grouped;
+  }, [slots]);
+
+  const availableDates = useMemo(() => {
+    return Object.keys(dateSlots).sort();
+  }, [dateSlots]);
+
+  const timeSlotsForSelectedDate = useMemo(() => {
+    if (!selectedDate || !dateSlots[selectedDate]) return [];
+    return dateSlots[selectedDate];
+  }, [selectedDate, dateSlots]);
+
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    
+    const dateOnly = dateStr;
+    const todayStr = today.toISOString().split('T')[0];
+    const tomorrowStr = tomorrow.toISOString().split('T')[0];
+    
+    if (dateOnly === todayStr) return 'Today';
+    if (dateOnly === tomorrowStr) return 'Tomorrow';
+    
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
+  };
+
+  const formatTime = (timeStr: string) => {
+    const [hours, minutes] = timeStr.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
 
   const handleNext = () => {
-    if (selectedDate && selectedTime) {
-      router.push(`/booking/choose-location?agentId=${agentId}&date=${selectedDate}&time=${selectedTime}`);
+    if (selectedDate && selectedSlot) {
+      router.push(`/booking/choose-location?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedSlot.start}&endTime=${selectedSlot.end}`);
     }
   };
 
@@ -45,89 +87,113 @@ export default function SelectDateTime() {
       </View>
 
       <ScrollView style={styles.content}>
-        {/* Date Selection */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Calendar color="#2D1A46" size={24} />
-            <Text style={styles.sectionTitle}>Choose Date</Text>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#2D1A46" />
+            <Text style={styles.loadingText}>Loading available slots...</Text>
           </View>
-          
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
-            {dates.map((date) => (
-              <TouchableOpacity
-                key={date.id}
-                style={[
-                  styles.dateCard,
-                  selectedDate === date.date && styles.selectedDateCard,
-                  !date.available && styles.unavailableDateCard
-                ]}
-                onPress={() => date.available && setSelectedDate(date.date)}
-                disabled={!date.available}
-              >
-                <Text style={[
-                  styles.dateDay,
-                  selectedDate === date.date && styles.selectedDateText,
-                  !date.available && styles.unavailableText
-                ]}>
-                  {date.day}
-                </Text>
-                <Text style={[
-                  styles.dateNumber,
-                  selectedDate === date.date && styles.selectedDateText,
-                  !date.available && styles.unavailableText
-                ]}>
-                  {new Date(date.date).getDate()}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+        ) : availableDates.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Calendar color="#ccc" size={64} />
+            <Text style={styles.emptyTitle}>No Available Slots</Text>
+            <Text style={styles.emptyText}>This service has no available time slots at the moment.</Text>
+          </View>
+        ) : (
+          <>
+            {/* Date Selection */}
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Calendar color="#2D1A46" size={24} />
+                <Text style={styles.sectionTitle}>Choose Date</Text>
+              </View>
+              
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
+                {availableDates.map((date) => (
+                  <TouchableOpacity
+                    key={date}
+                    style={[
+                      styles.dateCard,
+                      selectedDate === date && styles.selectedDateCard,
+                    ]}
+                    onPress={() => {
+                      setSelectedDate(date);
+                      setSelectedSlot(null);
+                    }}
+                  >
+                    <Text style={[
+                      styles.dateDay,
+                      selectedDate === date && styles.selectedDateText,
+                    ]}>
+                      {formatDate(date)}
+                    </Text>
+                    <Text style={[
+                      styles.dateNumber,
+                      selectedDate === date && styles.selectedDateText,
+                    ]}>
+                      {new Date(date).getDate()}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
 
-        {/* Time Selection */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Clock color="#2D1A46" size={24} />
-            <Text style={styles.sectionTitle}>Choose Time</Text>
-          </View>
-          
-          <View style={styles.timeGrid}>
-            {times.map((time) => (
-              <TouchableOpacity
-                key={time.id}
-                style={[
-                  styles.timeCard,
-                  selectedTime === time.time && styles.selectedTimeCard,
-                  !time.available && styles.unavailableTimeCard
-                ]}
-                onPress={() => time.available && setSelectedTime(time.time)}
-                disabled={!time.available}
-              >
-                <Text style={[
-                  styles.timeText,
-                  selectedTime === time.time && styles.selectedTimeText,
-                  !time.available && styles.unavailableText
-                ]}>
-                  {time.time}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        </View>
+            {/* Time Selection */}
+            {selectedDate && (
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <Clock color="#2D1A46" size={24} />
+                  <Text style={styles.sectionTitle}>Choose Time</Text>
+                </View>
+                
+                {timeSlotsForSelectedDate.length === 0 ? (
+                  <View style={styles.emptyTimeContainer}>
+                    <Text style={styles.emptyTimeText}>No time slots available for this date</Text>
+                  </View>
+                ) : (
+                  <View style={styles.timeGrid}>
+                    {timeSlotsForSelectedDate.map((slot, index) => {
+                      const isSelected = selectedSlot?.start === slot.start_time && selectedSlot?.end === slot.end_time;
+                      return (
+                        <TouchableOpacity
+                          key={`${slot.date}-${slot.start_time}-${index}`}
+                          style={[
+                            styles.timeCard,
+                            isSelected && styles.selectedTimeCard,
+                          ]}
+                          onPress={() => setSelectedSlot({ start: slot.start_time, end: slot.end_time })}
+                        >
+                          <Text style={[
+                            styles.timeText,
+                            isSelected && styles.selectedTimeText,
+                          ]}>
+                            {formatTime(slot.start_time)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
+              </View>
+            )}
+          </>
+        )}
       </ScrollView>
 
       {/* Next Button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            (!selectedDate || !selectedTime) && styles.disabledButton
-          ]}
-          onPress={handleNext}
-          disabled={!selectedDate || !selectedTime}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
+      {!isLoading && availableDates.length > 0 && (
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              (!selectedDate || !selectedSlot) && styles.disabledButton
+            ]}
+            onPress={handleNext}
+            disabled={!selectedDate || !selectedSlot}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -215,6 +281,40 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   unavailableText: {
+    color: '#999',
+  },
+  loadingContainer: {
+    paddingVertical: 60,
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
+  emptyContainer: {
+    paddingVertical: 60,
+    alignItems: 'center',
+  },
+  emptyTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  emptyText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    paddingHorizontal: 32,
+  },
+  emptyTimeContainer: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  emptyTimeText: {
+    fontSize: 14,
     color: '#999',
   },
   timeGrid: {

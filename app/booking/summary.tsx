@@ -1,28 +1,64 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native';
-import { ArrowLeft, Calendar, Clock, MapPin, User } from 'lucide-react-native';
-import { mockAgents } from '../mockData';
+import React, { useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
+import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
 
 export default function BookingSummary() {
-  const { agentId, date, time, location } = useLocalSearchParams();
-  const agent = mockAgents.find(a => a.id === agentId);
+  const { serviceId, date, startTime, endTime } = useLocalSearchParams<{
+    serviceId: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+  }>();
 
-  if (!agent) {
+  const { data: service, isLoading } = useGetServiceByIdQuery(serviceId || '', {
+    skip: !serviceId,
+  });
+
+  const durationMinutes = useMemo(() => {
+    if (!startTime || !endTime) return 0;
+    const start = new Date(`2000-01-01T${startTime}`);
+    const end = new Date(`2000-01-01T${endTime}`);
+    return (end.getTime() - start.getTime()) / 60000;
+  }, [startTime, endTime]);
+
+  const formatTime = (timeStr: string) => {
+    if (!timeStr) return '';
+    const [hours, minutes] = timeStr.split(':');
+    const hour = parseInt(hours);
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+    return `${displayHour}:${minutes} ${ampm}`;
+  };
+
+  const handleConfirmBooking = () => {
+    if (service) {
+      router.push(
+        `/booking/payment?serviceId=${serviceId}&date=${date}&startTime=${startTime}&endTime=${endTime}&amount=${service.price}&currency=${service.currency}`
+      );
+    }
+  };
+
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Agent not found</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2D1A46" />
+        </View>
       </SafeAreaView>
     );
   }
 
-  const locationFee = location === 'home' ? 10 : 0;
-  const subtotal = agent.price;
-  const total = subtotal + locationFee;
-
-  const handleConfirmBooking = () => {
-    router.push(`/booking/payment?agentId=${agentId}&date=${date}&time=${time}&location=${location}&total=${total}`);
-  };
+  if (!service) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Service not found</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,15 +74,13 @@ export default function BookingSummary() {
       </View>
 
       <ScrollView style={styles.content}>
-        {/* Agent Info */}
+        {/* Service Info */}
         <View style={styles.card}>
-          <View style={styles.agentInfo}>
-            <Image source={{ uri: agent.image }} style={styles.agentImage} />
-            <View style={styles.agentDetails}>
-              <Text style={styles.agentName}>{agent.name}</Text>
-              <Text style={styles.agentService}>{agent.service}</Text>
-            </View>
-          </View>
+          <Text style={styles.serviceName}>{service.name}</Text>
+          <Text style={styles.categoryName}>{service.category_details?.name}</Text>
+          {service.provider_details && (
+            <Text style={styles.providerName}>Provider: {service.provider_details.full_name}</Text>
+          )}
         </View>
 
         {/* Booking Details */}
@@ -56,7 +90,7 @@ export default function BookingSummary() {
           <View style={styles.detailRow}>
             <Calendar color="#666" size={20} />
             <Text style={styles.detailText}>
-              {new Date(date as string).toLocaleDateString('en-US', { 
+              {new Date(date).toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 year: 'numeric', 
                 month: 'long', 
@@ -67,19 +101,14 @@ export default function BookingSummary() {
 
           <View style={styles.detailRow}>
             <Clock color="#666" size={20} />
-            <Text style={styles.detailText}>{time}</Text>
-          </View>
-
-          <View style={styles.detailRow}>
-            <MapPin color="#666" size={20} />
             <Text style={styles.detailText}>
-              {location === 'home' ? 'At Your Home' : 'At Salon'}
+              {formatTime(startTime)} - {formatTime(endTime)}
             </Text>
           </View>
 
           <View style={styles.detailRow}>
-            <User color="#666" size={20} />
-            <Text style={styles.detailText}>Duration: 90 minutes</Text>
+            <Clock color="#666" size={20} />
+            <Text style={styles.detailText}>Duration: {durationMinutes} minutes</Text>
           </View>
         </View>
 
@@ -89,21 +118,18 @@ export default function BookingSummary() {
           
           <View style={styles.priceRow}>
             <Text style={styles.priceLabel}>Service Fee</Text>
-            <Text style={styles.priceValue}>${subtotal}</Text>
+            <Text style={styles.priceValue}>
+              {service.currency} {service.price}
+            </Text>
           </View>
-
-          {locationFee > 0 && (
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Travel Fee</Text>
-              <Text style={styles.priceValue}>${locationFee}</Text>
-            </View>
-          )}
 
           <View style={styles.divider} />
 
           <View style={styles.priceRow}>
             <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>${total}</Text>
+            <Text style={styles.totalValue}>
+              {service.currency} {service.price}
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -164,27 +190,33 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  agentInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  agentImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    marginRight: 16,
-  },
-  agentDetails: {
-    flex: 1,
-  },
-  agentName: {
-    fontSize: 18,
+  serviceName: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#2D1A46',
     marginBottom: 4,
   },
-  agentService: {
+  categoryName: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 4,
+  },
+  providerName: {
     fontSize: 14,
+    color: '#999',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  errorText: {
+    fontSize: 16,
     color: '#666',
   },
   cardTitle: {

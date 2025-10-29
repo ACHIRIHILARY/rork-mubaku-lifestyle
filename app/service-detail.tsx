@@ -1,17 +1,53 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native';
-import { ArrowLeft, Star, MapPin, Clock } from 'lucide-react-native';
-import { mockAgents } from './mockData';
+import React, { useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { ArrowLeft, Star, Clock, DollarSign } from 'lucide-react-native';
+import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
 
 export default function ServiceDetailScreen() {
-  const { id } = useLocalSearchParams();
-  const agent = mockAgents.find(a => a.id === id);
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const serviceId = Array.isArray(id) ? id[0] : id;
 
-  if (!agent) {
+  const { data: service, isLoading, error } = useGetServiceByIdQuery(serviceId || '', {
+    skip: !serviceId,
+  });
+
+  const durationHours = useMemo(() => {
+    if (!service) return '';
+    const hours = Math.floor(service.duration_minutes / 60);
+    const minutes = service.duration_minutes % 60;
+    if (hours > 0 && minutes > 0) {
+      return `${hours}h ${minutes}min`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else {
+      return `${minutes}min`;
+    }
+  }, [service]);
+
+  if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
-        <Text>Agent not found</Text>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2D1A46" />
+          <Text style={styles.loadingText}>Loading service...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (error || !service) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Service not found</Text>
+          <TouchableOpacity 
+            style={styles.backToHomeButton}
+            onPress={() => router.back()}
+          >
+            <Text style={styles.backToHomeButtonText}>Go Back</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     );
   }
@@ -31,23 +67,27 @@ export default function ServiceDetailScreen() {
           <View style={styles.placeholder} />
         </View>
 
-        {/* Agent Image */}
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: agent.image }} style={styles.agentImage} />
-        </View>
-
-        {/* Agent Info */}
+        {/* Service Info */}
         <View style={styles.content}>
-          <View style={styles.agentHeader}>
-            <Text style={styles.agentName}>{agent.name}</Text>
-            <View style={styles.ratingContainer}>
-              <Star color="#FFD700" size={20} fill="#FFD700" />
-              <Text style={styles.rating}>{agent.rating}</Text>
-            </View>
+          <View style={styles.serviceHeader}>
+            <Text style={styles.serviceName}>{service.name}</Text>
+            {service.rating !== undefined && service.rating > 0 && (
+              <View style={styles.ratingContainer}>
+                <Star color="#FFD700" size={20} fill="#FFD700" />
+                <Text style={styles.rating}>{service.rating.toFixed(1)}</Text>
+              </View>
+            )}
           </View>
 
-          <Text style={styles.service}>{agent.service}</Text>
-          <Text style={styles.experience}>{agent.experience} experience</Text>
+          {service.category_details && (
+            <Text style={styles.category}>{service.category_details.name}</Text>
+          )}
+          {service.provider_details && (
+            <Text style={styles.providerName}>By {service.provider_details.full_name || 'Provider'}</Text>
+          )}
+          {service.total_bookings !== undefined && service.total_bookings > 0 && (
+            <Text style={styles.bookingsCount}>{service.total_bookings} bookings</Text>
+          )}
 
           {/* Service Details Card */}
           <View style={styles.detailsCard}>
@@ -55,49 +95,54 @@ export default function ServiceDetailScreen() {
             
             <View style={styles.detailRow}>
               <Clock color="#666" size={20} />
-              <Text style={styles.detailText}>Duration: 90 minutes</Text>
+              <Text style={styles.detailText}>Duration: {durationHours}</Text>
             </View>
 
             <View style={styles.detailRow}>
-              <MapPin color="#666" size={20} />
-              <Text style={styles.detailText}>Available at home or salon</Text>
+              <DollarSign color="#666" size={20} />
+              <Text style={styles.detailText}>Price: {service.currency} {service.price}</Text>
             </View>
 
-            <View style={styles.priceContainer}>
-              <Text style={styles.priceLabel}>Starting from</Text>
-              <Text style={styles.price}>${agent.price}</Text>
+            <View style={styles.statusRow}>
+              <View style={[styles.statusDot, { backgroundColor: service.is_active ? '#4CAF50' : '#F44336' }]} />
+              <Text style={styles.statusText}>{service.is_active ? 'Available' : 'Currently Unavailable'}</Text>
             </View>
           </View>
 
           {/* Description */}
-          <View style={styles.descriptionCard}>
-            <Text style={styles.cardTitle}>About</Text>
-            <Text style={styles.description}>{agent.description}</Text>
-          </View>
-
-          {/* Specialties */}
-          <View style={styles.specialtiesCard}>
-            <Text style={styles.cardTitle}>Specialties</Text>
-            <View style={styles.specialtiesContainer}>
-              {agent.specialty.map((specialty, index) => (
-                <View key={index} style={styles.specialtyTag}>
-                  <Text style={styles.specialtyText}>{specialty}</Text>
-                </View>
-              ))}
+          {service.description && (
+            <View style={styles.descriptionCard}>
+              <Text style={styles.cardTitle}>Description</Text>
+              <Text style={styles.description}>{service.description}</Text>
             </View>
-          </View>
+          )}
+
+          {/* Provider Info */}
+          {service.provider_details && (
+            <View style={styles.providerCard}>
+              <Text style={styles.cardTitle}>Provider Information</Text>
+              <Text style={styles.providerInfo}>
+                {service.provider_details.full_name || 'Provider'}
+              </Text>
+              {service.provider_details.email && (
+                <Text style={styles.providerContact}>{service.provider_details.email}</Text>
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
 
       {/* Book Button */}
-      <View style={styles.bookingContainer}>
-        <TouchableOpacity 
-          style={styles.bookButton}
-          onPress={() => router.push(`/booking/select-datetime?agentId=${agent.id}`)}
-        >
-          <Text style={styles.bookButtonText}>Book Service</Text>
-        </TouchableOpacity>
-      </View>
+      {service.is_active && (
+        <View style={styles.bookingContainer}>
+          <TouchableOpacity 
+            style={styles.bookButton}
+            onPress={() => router.push(`/booking/select-datetime?serviceId=${service.id}`)}
+          >
+            <Text style={styles.bookButtonText}>Book Service</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -126,31 +171,21 @@ const styles = StyleSheet.create({
   placeholder: {
     width: 40,
   },
-  imageContainer: {
-    alignItems: 'center',
-    marginTop: -50,
-    marginBottom: 20,
-  },
-  agentImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 4,
-    borderColor: 'white',
-  },
   content: {
     paddingHorizontal: 24,
   },
-  agentHeader: {
+  serviceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
   },
-  agentName: {
+  serviceName: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#2D1A46',
+    flex: 1,
+    marginRight: 12,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -162,12 +197,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
   },
-  service: {
+  category: {
     fontSize: 18,
     color: '#666',
     marginBottom: 4,
   },
-  experience: {
+  providerName: {
+    fontSize: 16,
+    color: '#2D1A46',
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  bookingsCount: {
     fontSize: 14,
     color: '#999',
     marginBottom: 24,
@@ -239,7 +280,7 @@ const styles = StyleSheet.create({
     color: '#666',
     lineHeight: 24,
   },
-  specialtiesCard: {
+  providerCard: {
     backgroundColor: 'white',
     borderRadius: 16,
     padding: 20,
@@ -253,21 +294,62 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  specialtiesContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
+  providerInfo: {
+    fontSize: 16,
+    color: '#2D1A46',
+    fontWeight: '600',
+    marginBottom: 4,
   },
-  specialtyTag: {
-    backgroundColor: '#F4A896',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  specialtyText: {
-    color: 'white',
+  providerContact: {
     fontSize: 14,
-    fontWeight: '500',
+    color: '#666',
+  },
+  statusRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 12,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 8,
+  },
+  statusText: {
+    fontSize: 14,
+    color: '#666',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#666',
+    marginBottom: 16,
+  },
+  backToHomeButton: {
+    backgroundColor: '#2D1A46',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  backToHomeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
   bookingContainer: {
     position: 'absolute',

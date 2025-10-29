@@ -1,13 +1,14 @@
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl, TextInput } from 'react-native';
-import { Plus, Edit, Trash2, DollarSign, Clock, BarChart3, ArrowLeft } from 'lucide-react-native';
-import { useGetMyServicesQuery, useDeleteServiceMutation, useGetMyServiceStatsQuery } from '@/store/services/servicesApi';
+import { Plus, Edit, Trash2, DollarSign, Clock, BarChart3, ArrowLeft, Star, Power } from 'lucide-react-native';
+import { useGetMyServicesQuery, useDeleteServiceMutation, useGetMyServiceStatsQuery, useUpdateServiceMutation } from '@/store/services/servicesApi';
 
 export default function ProviderServicesScreen() {
   const { data: services, isLoading: servicesLoading, refetch, isFetching } = useGetMyServicesQuery();
   const { data: stats } = useGetMyServiceStatsQuery();
   const [deleteService] = useDeleteServiceMutation();
+  const [updateService] = useUpdateServiceMutation();
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleDeleteService = (serviceId: string, serviceName: string) => {
@@ -35,6 +36,20 @@ export default function ProviderServicesScreen() {
     );
   };
 
+  const handleToggleStatus = async (serviceId: string, currentStatus: boolean) => {
+    try {
+      await updateService({ 
+        serviceId, 
+        data: { is_active: !currentStatus } 
+      }).unwrap();
+      refetch();
+    } catch (error: any) {
+      console.error('Toggle status error:', error);
+      const errorMessage = error?.data?.detail || error?.data?.message || 'Failed to update service status';
+      Alert.alert('Error', errorMessage);
+    }
+  };
+
   const filteredServices = services?.filter(service => 
     service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     service.description?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -59,22 +74,38 @@ export default function ProviderServicesScreen() {
       />
       
       {stats && (
-        <View style={styles.statsContainer}>
-          <View style={styles.statCard}>
-            <BarChart3 color="#2D1A46" size={24} />
-            <Text style={styles.statValue}>{stats.total_services}</Text>
-            <Text style={styles.statLabel}>Total Services</Text>
+        <View style={styles.statsWrapper}>
+          <View style={styles.statsRow}>
+            <View style={styles.statCard}>
+              <BarChart3 color="#2D1A46" size={20} />
+              <Text style={styles.statValue}>{stats.total_services}</Text>
+              <Text style={styles.statLabel}>Services</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Power color="#4CAF50" size={20} />
+              <Text style={styles.statValue}>{stats.active_services}</Text>
+              <Text style={styles.statLabel}>Active</Text>
+            </View>
           </View>
-          <View style={styles.statCard}>
-            <Clock color="#F4A896" size={24} />
-            <Text style={styles.statValue}>{stats.total_bookings}</Text>
-            <Text style={styles.statLabel}>Bookings</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.statCard}>
+              <Clock color="#F4A896" size={20} />
+              <Text style={styles.statValue}>{stats.total_bookings}</Text>
+              <Text style={styles.statLabel}>Bookings</Text>
+            </View>
+            <View style={styles.statCard}>
+              <DollarSign color="#4CAF50" size={20} />
+              <Text style={styles.statValue}>${stats.total_revenue.toFixed(2)}</Text>
+              <Text style={styles.statLabel}>Revenue</Text>
+            </View>
           </View>
-          <View style={styles.statCard}>
-            <DollarSign color="#4CAF50" size={24} />
-            <Text style={styles.statValue}>{stats.total_revenue}</Text>
-            <Text style={styles.statLabel}>Revenue</Text>
-          </View>
+          {stats.average_rating > 0 && (
+            <View style={styles.ratingCard}>
+              <Star color="#FFD700" size={20} fill="#FFD700" />
+              <Text style={styles.statValue}>{stats.average_rating.toFixed(1)}</Text>
+              <Text style={styles.statLabel}>Avg Rating</Text>
+            </View>
+          )}
         </View>
       )}
 
@@ -175,19 +206,27 @@ export default function ProviderServicesScreen() {
 
                 <View style={styles.serviceActions}>
                   <TouchableOpacity
+                    style={styles.toggleButton}
+                    onPress={() => handleToggleStatus(service.id, service.is_active)}
+                  >
+                    <Power color={service.is_active ? '#4CAF50' : '#999'} size={18} />
+                    <Text style={[styles.toggleButtonText, { color: service.is_active ? '#4CAF50' : '#999' }]}>
+                      {service.is_active ? 'Active' : 'Inactive'}
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
                     style={styles.editButton}
                     onPress={() => router.push(`/provider-services/edit?id=${service.id}`)}
                   >
                     <Edit color="#2D1A46" size={18} />
-                    <Text style={styles.editButtonText}>Edit</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity
                     style={styles.deleteButton}
                     onPress={() => handleDeleteService(service.id, service.name)}
                   >
-                    <Trash2 color="white" size={18} />
-                    <Text style={styles.deleteButtonText}>Delete</Text>
+                    <Trash2 color="#FF4444" size={18} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -208,17 +247,20 @@ const styles = StyleSheet.create({
     padding: 8,
     marginLeft: 8,
   },
-  statsContainer: {
-    flexDirection: 'row',
+  statsWrapper: {
     paddingHorizontal: 16,
     paddingVertical: 16,
+    gap: 12,
+  },
+  statsRow: {
+    flexDirection: 'row',
     gap: 12,
   },
   statCard: {
     flex: 1,
     backgroundColor: 'white',
     borderRadius: 12,
-    padding: 16,
+    padding: 12,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -229,16 +271,33 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  ratingCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
   statValue: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginTop: 8,
+    marginTop: 4,
   },
   statLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#666',
-    marginTop: 4,
+    marginTop: 2,
     textAlign: 'center',
   },
   header: {
@@ -389,39 +448,43 @@ const styles = StyleSheet.create({
   },
   serviceActions: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 8,
     paddingTop: 12,
     borderTopWidth: 1,
     borderTopColor: '#E5E5E5',
+  },
+  toggleButton: {
+    flex: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: '#F5F5F5',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+  },
+  toggleButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
   },
   editButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingVertical: 10,
+    borderRadius: 10,
     backgroundColor: '#F5F5F5',
-  },
-  editButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2D1A46',
   },
   deleteButton: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    paddingVertical: 12,
-    borderRadius: 12,
-    backgroundColor: '#FF4444',
-  },
-  deleteButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: 'white',
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: '#FFF5F5',
   },
 });

@@ -5,7 +5,14 @@ import { ArrowLeft, CreditCard, Smartphone } from 'lucide-react-native';
 import { useCreateAppointmentMutation, useConfirmPaymentMutation } from '@/store/services/appointmentApi';
 
 export default function PaymentScreen() {
-  const { agentId, date, time, location, total } = useLocalSearchParams();
+  const { serviceId, date, startTime, endTime, amount, currency } = useLocalSearchParams<{
+    serviceId: string;
+    date: string;
+    startTime: string;
+    endTime: string;
+    amount: string;
+    currency: string;
+  }>();
   const [paymentMethod, setPaymentMethod] = useState<string>('');
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -45,15 +52,15 @@ export default function PaymentScreen() {
     }
 
     try {
-      const dateTime = `${date}T${time}:00`;
-      const endDateTime = new Date(new Date(dateTime).getTime() + 90 * 60000).toISOString();
+      const scheduledFor = `${date}T${startTime}`;
+      const scheduledUntil = `${date}T${endTime}`;
 
       const appointment = await createAppointment({
-        service_id: agentId as string,
-        scheduled_for: dateTime,
-        scheduled_until: endDateTime,
-        amount: parseFloat(total as string),
-        currency: 'XAF',
+        service_id: serviceId,
+        scheduled_for: scheduledFor,
+        scheduled_until: scheduledUntil,
+        amount: parseFloat(amount),
+        currency: currency || 'USD',
       }).unwrap();
 
       await confirmPayment(appointment.id).unwrap();
@@ -200,7 +207,7 @@ export default function PaymentScreen() {
             
             <View style={styles.card}>
               <Text style={styles.mobileMoneyText}>
-                You will receive a prompt on your phone to complete the payment of ${total}
+                You will receive a prompt on your phone to complete the payment of {currency} {amount}
               </Text>
             </View>
           </View>
@@ -210,7 +217,7 @@ export default function PaymentScreen() {
         <View style={styles.totalCard}>
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Total Amount</Text>
-            <Text style={styles.totalAmount}>${total}</Text>
+            <Text style={styles.totalAmount}>{currency} {amount}</Text>
           </View>
         </View>
       </ScrollView>
@@ -228,7 +235,7 @@ export default function PaymentScreen() {
           {isLoading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text style={styles.payButtonText}>Pay ${total}</Text>
+            <Text style={styles.payButtonText}>Pay {currency} {amount}</Text>
           )}
         </TouchableOpacity>
       </View>
