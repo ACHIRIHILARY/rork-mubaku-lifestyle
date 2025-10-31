@@ -9,6 +9,7 @@ import { store } from "@/store/store";
 import { trpc, trpcClient } from "@/lib/trpc";
 import { initializeAuth } from "@/store/authSlice";
 import { authApi } from "@/store/services/authApi";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -70,13 +71,15 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <SafeAreaProvider>
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
-          <QueryClientProvider client={queryClient}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <RootLayoutNav />
-            </GestureHandlerRootView>
-          </QueryClientProvider>
-        </trpc.Provider>
+        <LanguageProvider>
+          <trpc.Provider client={trpcClient} queryClient={queryClient}>
+            <QueryClientProvider client={queryClient}>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <RootLayoutNav />
+              </GestureHandlerRootView>
+            </QueryClientProvider>
+          </trpc.Provider>
+        </LanguageProvider>
       </SafeAreaProvider>
     </Provider>
   );

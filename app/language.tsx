@@ -1,44 +1,140 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Globe } from 'lucide-react-native';
+
+const LANGUAGE_STORAGE_KEY = '@mubaku_language';
+
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
+  nativeName: string;
+}
+
+const LANGUAGES: Language[] = [
+  { code: 'en', name: 'English', flag: '🇺🇸', nativeName: 'English' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷', nativeName: 'Français' },
+  { code: 'es', name: 'Spanish', flag: '🇪🇸', nativeName: 'Español' },
+  { code: 'de', name: 'German', flag: '🇩🇪', nativeName: 'Deutsch' },
+  { code: 'ar', name: 'Arabic', flag: '🇸🇦', nativeName: 'العربية' },
+];
 
 export default function LanguageScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const languages = [
-    { code: 'en', name: 'English', flag: '🇺🇸' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  ];
+  useEffect(() => {
+    loadSavedLanguage();
+  }, []);
 
-  const handleContinue = () => {
-    if (selectedLanguage) {
-      router.push('/login');
+  const loadSavedLanguage = async () => {
+    try {
+      const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
+      if (savedLanguage) {
+        console.log('Loaded saved language:', savedLanguage);
+        setSelectedLanguage(savedLanguage);
+        setTimeout(() => {
+          router.replace('/login');
+        }, 500);
+      } else {
+        setSelectedLanguage('en');
+      }
+    } catch (error) {
+      console.error('Error loading language:', error);
+      setSelectedLanguage('en');
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const saveLanguage = async (languageCode: string): Promise<boolean> => {
+    try {
+      await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, languageCode);
+      console.log('Language saved:', languageCode);
+      return true;
+    } catch (error) {
+      console.error('Error saving language:', error);
+      Alert.alert('Error', 'Failed to save language preference. Please try again.');
+      return false;
+    }
+  };
+
+  const handleLanguageSelect = async (languageCode: string) => {
+    setSelectedLanguage(languageCode);
+  };
+
+  const handleContinue = async () => {
+    if (!selectedLanguage) {
+      Alert.alert('Language Required', 'Please select a language to continue.');
+      return;
+    }
+
+    setIsSaving(true);
+    const saved = await saveLanguage(selectedLanguage);
+    setIsSaving(false);
+
+    if (saved) {
+      router.replace('/login');
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="white" />
+          <Text style={styles.loadingText}>Loading...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
+        <View style={styles.iconContainer}>
+          <Globe size={64} color="white" />
+        </View>
+        
         <Text style={styles.title}>Choose Your Language</Text>
-        <Text style={styles.subtitle}>Select your preferred language to continue</Text>
+        <Text style={styles.subtitle}>Select your preferred language to get started</Text>
 
         <View style={styles.languageContainer}>
-          {languages.map((language) => (
+          {LANGUAGES.map((language) => (
             <TouchableOpacity
               key={language.code}
               style={[
                 styles.languageCard,
                 selectedLanguage === language.code && styles.selectedCard
               ]}
-              onPress={() => setSelectedLanguage(language.code)}
+              onPress={() => handleLanguageSelect(language.code)}
+              activeOpacity={0.7}
             >
-              <Text style={styles.flag}>{language.flag}</Text>
-              <Text style={[
-                styles.languageName,
-                selectedLanguage === language.code && styles.selectedText
-              ]}>
-                {language.name}
-              </Text>
+              <View style={styles.languageContent}>
+                <Text style={styles.flag}>{language.flag}</Text>
+                <View style={styles.languageTextContainer}>
+                  <Text style={[
+                    styles.languageName,
+                    selectedLanguage === language.code && styles.selectedText
+                  ]}>
+                    {language.name}
+                  </Text>
+                  <Text style={[
+                    styles.nativeName,
+                    selectedLanguage === language.code && styles.selectedNativeText
+                  ]}>
+                    {language.nativeName}
+                  </Text>
+                </View>
+              </View>
+              {selectedLanguage === language.code && (
+                <View style={styles.checkmark}>
+                  <Text style={styles.checkmarkText}>✓</Text>
+                </View>
+              )}
             </TouchableOpacity>
           ))}
         </View>
@@ -46,12 +142,20 @@ export default function LanguageScreen() {
         <TouchableOpacity
           style={[
             styles.continueButton,
-            !selectedLanguage && styles.disabledButton
+            (!selectedLanguage || isSaving) && styles.disabledButton
           ]}
           onPress={handleContinue}
-          disabled={!selectedLanguage}
+          disabled={!selectedLanguage || isSaving}
+          activeOpacity={0.8}
         >
-          <Text style={styles.continueText}>Continue</Text>
+          {isSaving ? (
+            <View style={styles.buttonContent}>
+              <ActivityIndicator size="small" color="white" />
+              <Text style={styles.continueText}>Saving...</Text>
+            </View>
+          ) : (
+            <Text style={styles.continueText}>Continue</Text>
+          )}
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -63,10 +167,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F4A896',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 16,
+  },
+  loadingText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500',
+  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: 40,
+  },
+  iconContainer: {
+    alignItems: 'center',
+    marginBottom: 24,
   },
   title: {
     fontSize: 28,
@@ -92,6 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -100,9 +220,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   selectedCard: {
     backgroundColor: '#2D1A46',
+    borderColor: '#F4A896',
+  },
+  languageContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  languageTextContainer: {
+    flex: 1,
   },
   flag: {
     fontSize: 24,
@@ -112,9 +243,32 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#2D1A46',
+    marginBottom: 2,
+  },
+  nativeName: {
+    fontSize: 14,
+    color: '#666',
+    fontWeight: '400',
   },
   selectedText: {
     color: 'white',
+  },
+  selectedNativeText: {
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  checkmark: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#F4A896',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 12,
+  },
+  checkmarkText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   continueButton: {
     backgroundColor: '#2D1A46',
@@ -130,4 +284,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
 });
+
+export { LANGUAGE_STORAGE_KEY, LANGUAGES };
