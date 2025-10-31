@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Globe } from 'lucide-react-native';
+import { Globe, Check, ChevronDown } from 'lucide-react-native';
 import { useAppSelector } from '@/store/hooks';
 import { useUpdateUnifiedProfileMutation } from '@/store/services/profileApi';
 
@@ -21,12 +21,23 @@ const LANGUAGES: Language[] = [
   { code: 'es', name: 'Spanish', flag: '🇪🇸', nativeName: 'Español' },
   { code: 'de', name: 'German', flag: '🇩🇪', nativeName: 'Deutsch' },
   { code: 'ar', name: 'Arabic', flag: '🇸🇦', nativeName: 'العربية' },
+  { code: 'zh', name: 'Chinese', flag: '🇨🇳', nativeName: '中文' },
+  { code: 'ja', name: 'Japanese', flag: '🇯🇵', nativeName: '日本語' },
+  { code: 'ko', name: 'Korean', flag: '🇰🇷', nativeName: '한국어' },
+  { code: 'pt', name: 'Portuguese', flag: '🇵🇹', nativeName: 'Português' },
+  { code: 'ru', name: 'Russian', flag: '🇷🇺', nativeName: 'Русский' },
+  { code: 'it', name: 'Italian', flag: '🇮🇹', nativeName: 'Italiano' },
+  { code: 'nl', name: 'Dutch', flag: '🇳🇱', nativeName: 'Nederlands' },
+  { code: 'pl', name: 'Polish', flag: '🇵🇱', nativeName: 'Polski' },
+  { code: 'tr', name: 'Turkish', flag: '🇹🇷', nativeName: 'Türkçe' },
+  { code: 'hi', name: 'Hindi', flag: '🇮🇳', nativeName: 'हिन्दी' },
 ];
 
 export default function LanguageScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const user = useAppSelector(state => state.auth.user);
   const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
   const [updateProfile] = useUpdateUnifiedProfileMutation();
@@ -119,72 +130,119 @@ export default function LanguageScreen() {
     );
   }
 
+  const selectedLangObj = LANGUAGES.find(lang => lang.code === selectedLanguage);
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
-        <View style={styles.iconContainer}>
-          <Globe size={64} color="white" />
-        </View>
-        
-        <Text style={styles.title}>Choose Your Language</Text>
-        <Text style={styles.subtitle}>Select your preferred language to get started</Text>
+      <ScrollView 
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.content}>
+          <View style={styles.iconContainer}>
+            <View style={styles.iconCircle}>
+              <Globe size={48} color="#2D1A46" strokeWidth={1.5} />
+            </View>
+          </View>
+          
+          <Text style={styles.title}>Choose Your Language</Text>
+          <Text style={styles.subtitle}>Select your preferred language to continue</Text>
 
-        <View style={styles.languageContainer}>
-          {LANGUAGES.map((language) => (
+          <View style={styles.dropdownContainer}>
+            <Text style={styles.dropdownLabel}>Language</Text>
             <TouchableOpacity
-              key={language.code}
-              style={[
-                styles.languageCard,
-                selectedLanguage === language.code && styles.selectedCard
-              ]}
-              onPress={() => handleLanguageSelect(language.code)}
+              style={styles.dropdownButton}
+              onPress={() => setIsDropdownOpen(!isDropdownOpen)}
               activeOpacity={0.7}
             >
-              <View style={styles.languageContent}>
-                <Text style={styles.flag}>{language.flag}</Text>
-                <View style={styles.languageTextContainer}>
-                  <Text style={[
-                    styles.languageName,
-                    selectedLanguage === language.code && styles.selectedText
-                  ]}>
-                    {language.name}
-                  </Text>
-                  <Text style={[
-                    styles.nativeName,
-                    selectedLanguage === language.code && styles.selectedNativeText
-                  ]}>
-                    {language.nativeName}
-                  </Text>
-                </View>
+              <View style={styles.dropdownButtonContent}>
+                {selectedLangObj ? (
+                  <>
+                    <Text style={styles.dropdownFlag}>{selectedLangObj.flag}</Text>
+                    <View style={styles.dropdownTextContainer}>
+                      <Text style={styles.dropdownText}>{selectedLangObj.name}</Text>
+                      <Text style={styles.dropdownNativeText}>{selectedLangObj.nativeName}</Text>
+                    </View>
+                  </>
+                ) : (
+                  <Text style={styles.dropdownPlaceholder}>Select a language</Text>
+                )}
               </View>
-              {selectedLanguage === language.code && (
-                <View style={styles.checkmark}>
-                  <Text style={styles.checkmarkText}>✓</Text>
-                </View>
-              )}
+              <ChevronDown 
+                size={24} 
+                color="#666" 
+                style={[styles.chevron, isDropdownOpen && styles.chevronOpen]}
+              />
             </TouchableOpacity>
-          ))}
-        </View>
 
-        <TouchableOpacity
-          style={[
-            styles.continueButton,
-            (!selectedLanguage || isSaving) && styles.disabledButton
-          ]}
-          onPress={handleContinue}
-          disabled={!selectedLanguage || isSaving}
-          activeOpacity={0.8}
-        >
-          {isSaving ? (
-            <View style={styles.buttonContent}>
-              <ActivityIndicator size="small" color="white" />
-              <Text style={styles.continueText}>Saving...</Text>
-            </View>
-          ) : (
-            <Text style={styles.continueText}>Continue</Text>
-          )}
-        </TouchableOpacity>
-      </View>
+            {isDropdownOpen && (
+              <View style={styles.dropdownMenu}>
+                <ScrollView 
+                  style={styles.dropdownScroll}
+                  nestedScrollEnabled={true}
+                  showsVerticalScrollIndicator={true}
+                  persistentScrollbar={true}
+                >
+                  {LANGUAGES.map((language, index) => (
+                    <TouchableOpacity
+                      key={language.code}
+                      style={[
+                        styles.dropdownItem,
+                        selectedLanguage === language.code && styles.dropdownItemSelected,
+                        index === LANGUAGES.length - 1 && styles.dropdownItemLast,
+                      ]}
+                      onPress={() => {
+                        handleLanguageSelect(language.code);
+                        setIsDropdownOpen(false);
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={styles.dropdownItemFlag}>{language.flag}</Text>
+                      <View style={styles.dropdownItemTextContainer}>
+                        <Text style={[
+                          styles.dropdownItemName,
+                          selectedLanguage === language.code && styles.dropdownItemNameSelected
+                        ]}>
+                          {language.name}
+                        </Text>
+                        <Text style={[
+                          styles.dropdownItemNative,
+                          selectedLanguage === language.code && styles.dropdownItemNativeSelected
+                        ]}>
+                          {language.nativeName}
+                        </Text>
+                      </View>
+                      {selectedLanguage === language.code && (
+                        <Check size={20} color="#F4A896" strokeWidth={3} />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            )}
+          </View>
+
+          <TouchableOpacity
+            style={[
+              styles.continueButton,
+              (!selectedLanguage || isSaving) && styles.disabledButton
+            ]}
+            onPress={handleContinue}
+            disabled={!selectedLanguage || isSaving}
+            activeOpacity={0.8}
+          >
+            {isSaving ? (
+              <View style={styles.buttonContent}>
+                <ActivityIndicator size="small" color="white" />
+                <Text style={styles.continueText}>Saving...</Text>
+              </View>
+            ) : (
+              <Text style={styles.continueText}>Continue</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -192,7 +250,13 @@ export default function LanguageScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4A896',
+    backgroundColor: '#FFFFFF',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   loadingContainer: {
     flex: 1,
@@ -201,41 +265,60 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   loadingText: {
-    color: 'white',
+    color: '#2D1A46',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '500' as const,
   },
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 40,
+    paddingTop: 60,
+    paddingBottom: 40,
   },
   iconContainer: {
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 32,
+  },
+  iconCircle: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    backgroundColor: '#F4F5F7',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E8EAED',
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: 'white',
+    fontSize: 32,
+    fontWeight: '700' as const,
+    color: '#2D1A46',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   subtitle: {
     fontSize: 16,
-    color: 'white',
+    color: '#6B7280',
     textAlign: 'center',
-    marginBottom: 60,
-    opacity: 0.9,
+    marginBottom: 48,
+    lineHeight: 24,
   },
-  languageContainer: {
-    gap: 16,
-    marginBottom: 60,
+  dropdownContainer: {
+    marginBottom: 40,
   },
-  languageCard: {
-    backgroundColor: 'white',
-    padding: 20,
+  dropdownLabel: {
+    fontSize: 14,
+    fontWeight: '600' as const,
+    color: '#374151',
+    marginBottom: 8,
+    paddingLeft: 4,
+  },
+  dropdownButton: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
     borderRadius: 16,
+    padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -244,72 +327,120 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  selectedCard: {
-    backgroundColor: '#2D1A46',
-    borderColor: '#F4A896',
-  },
-  languageContent: {
+  dropdownButtonContent: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
-  languageTextContainer: {
+  dropdownFlag: {
+    fontSize: 32,
+    marginRight: 12,
+  },
+  dropdownTextContainer: {
     flex: 1,
   },
-  flag: {
-    fontSize: 24,
-    marginRight: 16,
-  },
-  languageName: {
+  dropdownText: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#2D1A46',
+    fontWeight: '600' as const,
+    color: '#1F2937',
     marginBottom: 2,
   },
-  nativeName: {
+  dropdownNativeText: {
     fontSize: 14,
-    color: '#666',
-    fontWeight: '400',
+    color: '#6B7280',
   },
-  selectedText: {
-    color: 'white',
-  },
-  selectedNativeText: {
-    color: 'rgba(255, 255, 255, 0.8)',
-  },
-  checkmark: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#F4A896',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 12,
-  },
-  checkmarkText: {
-    color: 'white',
+  dropdownPlaceholder: {
     fontSize: 16,
-    fontWeight: 'bold',
+    color: '#9CA3AF',
+  },
+  chevron: {
+    marginLeft: 8,
+  },
+  chevronOpen: {
+    transform: [{ rotate: '180deg' }],
+  },
+  dropdownMenu: {
+    marginTop: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+    maxHeight: 400,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
+    elevation: 8,
+    overflow: 'hidden',
+  },
+  dropdownScroll: {
+    maxHeight: 400,
+  },
+  dropdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  dropdownItemLast: {
+    borderBottomWidth: 0,
+  },
+  dropdownItemSelected: {
+    backgroundColor: '#FEF3F2',
+  },
+  dropdownItemFlag: {
+    fontSize: 28,
+    marginRight: 12,
+  },
+  dropdownItemTextContainer: {
+    flex: 1,
+  },
+  dropdownItemName: {
+    fontSize: 16,
+    fontWeight: '600' as const,
+    color: '#1F2937',
+    marginBottom: 2,
+  },
+  dropdownItemNameSelected: {
+    color: '#F4A896',
+  },
+  dropdownItemNative: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  dropdownItemNativeSelected: {
+    color: '#F4A896',
   },
   continueButton: {
     backgroundColor: '#2D1A46',
-    paddingVertical: 16,
-    borderRadius: 12,
+    paddingVertical: 18,
+    borderRadius: 16,
     alignItems: 'center',
+    shadowColor: '#2D1A46',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
   },
   disabledButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#D1D5DB',
+    shadowOpacity: 0,
   },
   continueText: {
     color: 'white',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700' as const,
   },
   buttonContent: {
     flexDirection: 'row',
