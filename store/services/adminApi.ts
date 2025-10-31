@@ -61,15 +61,6 @@ export const adminApi = api.injectEndpoints({
       providesTags: ['User'],
     }),
 
-    verifyProvider: builder.mutation<void, string>({
-      query: (userId) => ({
-        url: `/api/v1/users/${userId}/verify-provider/`,
-        method: 'POST',
-        body: {},
-      }),
-      invalidatesTags: ['User'],
-    }),
-
     updateUserRole: builder.mutation<User, { userId: string; role: 'client' | 'provider' | 'admin' }>({
       query: ({ userId, role }) => ({
         url: `/api/v1/users/${userId}/update-role/`,
@@ -137,7 +128,6 @@ export const adminApi = api.injectEndpoints({
 
 export const {
   useListApplicationsQuery,
-  useVerifyProviderMutation,
   useUpdateUserRoleMutation,
   useDeclineProviderMutation,
   useCreateCategoryMutation,

@@ -15,9 +15,9 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import {
   useListApplicationsQuery,
-  useVerifyProviderMutation,
   useDeclineProviderMutation,
 } from '@/store/services/adminApi';
+import { useVerifyProviderMutation } from '@/store/services/profileApi';
 import {
   CheckCircle,
   XCircle,
