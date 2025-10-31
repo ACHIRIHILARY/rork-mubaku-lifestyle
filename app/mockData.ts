@@ -145,3 +145,7 @@ export const categories = [
     color: 'bg-purple-light'
   }
 ];
+
+export default function MockDataPlaceholder() {
+  return null;
+}
