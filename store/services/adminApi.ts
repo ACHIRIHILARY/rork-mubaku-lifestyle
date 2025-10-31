@@ -55,7 +55,6 @@ interface UpdateUserRequest {
 }
 
 export const adminApi = api.injectEndpoints({
-  overrideExisting: true,
   endpoints: (builder) => ({
     listApplications: builder.query<ProviderApplication[], void>({
       query: () => '/api/v1/users/applications/',
