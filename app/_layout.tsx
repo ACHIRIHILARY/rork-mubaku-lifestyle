@@ -3,9 +3,12 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import { store } from "@/store/store";
 import { trpc, trpcClient } from "@/lib/trpc";
+import { initializeAuth } from "@/store/authSlice";
+import { authApi } from "@/store/services/authApi";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,18 +47,37 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   useEffect(() => {
-    SplashScreen.hideAsync();
+    const initAuth = async () => {
+      try {
+        const result = await store.dispatch(initializeAuth()).unwrap();
+        
+        if (result) {
+          console.log('Auth tokens loaded from storage, fetching user data...');
+          store.dispatch(authApi.endpoints.getCurrentUser.initiate());
+        } else {
+          console.log('No stored auth tokens found');
+        }
+      } catch (error) {
+        console.error('Failed to initialize auth:', error);
+      } finally {
+        SplashScreen.hideAsync();
+      }
+    };
+
+    initAuth();
   }, []);
 
   return (
     <Provider store={store}>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <RootLayoutNav />
-          </GestureHandlerRootView>
-        </QueryClientProvider>
-      </trpc.Provider>
+      <SafeAreaProvider>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <RootLayoutNav />
+            </GestureHandlerRootView>
+          </QueryClientProvider>
+        </trpc.Provider>
+      </SafeAreaProvider>
     </Provider>
   );
 }

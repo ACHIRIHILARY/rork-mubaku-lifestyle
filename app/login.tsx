@@ -1,15 +1,56 @@
 import { router } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { useLoginMutation } from '@/store/services/authApi';
 import { Eye, EyeOff } from 'lucide-react-native';
-import { store } from '@/store/store';
+import { useAppSelector } from '@/store/hooks';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [waitingForUser, setWaitingForUser] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
+  const user = useAppSelector(state => state.auth.user);
+  const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
+  const redirectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (waitingForUser && user && isAuthenticated) {
+      console.log('User data loaded after login:', JSON.stringify(user, null, 2));
+      
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+
+      const isAdmin = user.role === 'admin' || user.admin === true;
+      const destination = isAdmin ? '/(tabs)/admin' : '/(tabs)/home';
+      
+      console.log(`Redirecting ${isAdmin ? 'admin' : 'non-admin'} user to: ${destination}`);
+      
+      Alert.alert(
+        'Welcome Back! 👋',
+        `You have successfully logged in to Mubaku Lifestyle.${isAdmin ? ' Redirecting to admin dashboard...' : ''}`,
+        [
+          {
+            text: 'Continue',
+            onPress: () => {
+              setWaitingForUser(false);
+              router.replace(destination);
+            }
+          }
+        ]
+      );
+    }
+  }, [waitingForUser, user, isAuthenticated]);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -19,45 +60,49 @@ export default function LoginScreen() {
 
     try {
       await login({ email, password }).unwrap();
+      console.log('Login successful, waiting for user data...');
       
-      setTimeout(() => {
-        const state = store.getState();
-        const currentUser = state.auth.user;
-        const isAdmin = currentUser?.role === 'admin' || currentUser?.admin === true;
-        const destination = isAdmin ? '/(tabs)/admin' : '/(tabs)/home';
-        
-        Alert.alert(
-          'Welcome Back! 👋',
-          'You have successfully logged in to Mubaku Lifestyle.',
-          [
-            {
-              text: 'Continue',
-              onPress: () => router.replace(destination)
-            }
-          ]
-        );
-      }, 1000);
-    } catch (error: any) {
+      setWaitingForUser(true);
+      
+      redirectTimeoutRef.current = setTimeout(() => {
+        console.warn('User data fetch timeout, redirecting to home as fallback');
+        setWaitingForUser(false);
+        router.replace('/(tabs)/home');
+      }, 5000);
+    } catch (error: unknown) {
+      setWaitingForUser(false);
+      
+      if (redirectTimeoutRef.current) {
+        clearTimeout(redirectTimeoutRef.current);
+      }
+      
       console.error('Login error:', JSON.stringify(error, null, 2));
       
       let errorMessage = 'Invalid email or password. Please try again.';
       
-      if (error?.data) {
-        if (typeof error.data === 'string') {
-          errorMessage = error.data;
-        } else if (error.data.detail) {
-          errorMessage = error.data.detail;
-        } else if (error.data.message) {
-          errorMessage = error.data.message;
-        } else if (error.data.error) {
-          errorMessage = error.data.error;
-        } else {
-          errorMessage = JSON.stringify(error.data);
+      if (error && typeof error === 'object') {
+        const err = error as { data?: unknown; message?: string; status?: number; statusText?: string };
+        
+        if (err.data) {
+          if (typeof err.data === 'string') {
+            errorMessage = err.data;
+          } else if (typeof err.data === 'object' && err.data !== null) {
+            const data = err.data as { detail?: string; message?: string; error?: string };
+            if (data.detail) {
+              errorMessage = data.detail;
+            } else if (data.message) {
+              errorMessage = data.message;
+            } else if (data.error) {
+              errorMessage = data.error;
+            } else {
+              errorMessage = JSON.stringify(err.data);
+            }
+          }
+        } else if (err.message) {
+          errorMessage = err.message;
+        } else if (err.status) {
+          errorMessage = `Error: ${err.status} - ${err.statusText || 'Request failed'}`;
         }
-      } else if (error?.message) {
-        errorMessage = error.message;
-      } else if (error?.status) {
-        errorMessage = `Error: ${error.status} - ${error.statusText || 'Request failed'}`;
       }
       
       Alert.alert('Login Failed', errorMessage);
@@ -117,12 +162,17 @@ export default function LoginScreen() {
             </View>
 
             <TouchableOpacity 
-              style={[styles.loginButton, isLoading && styles.loginButtonDisabled]} 
+              style={[styles.loginButton, (isLoading || waitingForUser) && styles.loginButtonDisabled]} 
               onPress={handleLogin}
-              disabled={isLoading}
+              disabled={isLoading || waitingForUser}
             >
-              {isLoading ? (
-                <ActivityIndicator color="white" />
+              {(isLoading || waitingForUser) ? (
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                  <ActivityIndicator color="white" />
+                  <Text style={styles.loginText}>
+                    {isLoading ? 'Logging in...' : 'Loading...'}
+                  </Text>
+                </View>
               ) : (
                 <Text style={styles.loginText}>Login</Text>
               )}

@@ -9,6 +9,18 @@ export default function TabLayout() {
   const insets = useSafeAreaInsets();
   const isAdmin = useIsAdmin();
   
+  const tabBarHeight = Platform.select({
+    ios: 50 + insets.bottom,
+    android: Math.max(60, 60 + insets.bottom),
+    default: 60,
+  });
+
+  const tabBarPaddingBottom = Platform.select({
+    ios: Math.max(insets.bottom, 0),
+    android: Math.max(insets.bottom, 8),
+    default: 8,
+  });
+  
   return (
     <Tabs
       screenOptions={{
@@ -19,13 +31,22 @@ export default function TabLayout() {
           backgroundColor: 'white',
           borderTopWidth: 1,
           borderTopColor: '#E5E5E5',
-          height: Platform.OS === 'ios' ? 50 + insets.bottom : 60 + insets.bottom,
-          paddingBottom: Platform.OS === 'ios' ? insets.bottom : Math.max(insets.bottom, 8),
+          height: tabBarHeight,
+          paddingBottom: tabBarPaddingBottom,
           paddingTop: 8,
+          elevation: 8,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: -2,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 3,
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
+          marginBottom: Platform.OS === 'android' ? 4 : 0,
         },
         tabBarItemStyle: {
           paddingVertical: 4,
