@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { useLoginMutation } from '@/store/services/authApi';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { store } from '@/store/store';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -19,16 +20,23 @@ export default function LoginScreen() {
     try {
       await login({ email, password }).unwrap();
       
-      Alert.alert(
-        'Welcome Back! 👋',
-        'You have successfully logged in to Mubaku Lifestyle.',
-        [
-          {
-            text: 'Continue',
-            onPress: () => router.replace('/(tabs)/home')
-          }
-        ]
-      );
+      setTimeout(() => {
+        const state = store.getState();
+        const currentUser = state.auth.user;
+        const isAdmin = currentUser?.role === 'admin' || currentUser?.admin === true;
+        const destination = isAdmin ? '/(tabs)/admin' : '/(tabs)/home';
+        
+        Alert.alert(
+          'Welcome Back! 👋',
+          'You have successfully logged in to Mubaku Lifestyle.',
+          [
+            {
+              text: 'Continue',
+              onPress: () => router.replace(destination)
+            }
+          ]
+        );
+      }, 1000);
     } catch (error: any) {
       console.error('Login error:', JSON.stringify(error, null, 2));
       

@@ -19,13 +19,16 @@ export default function TabLayout() {
           backgroundColor: 'white',
           borderTopWidth: 1,
           borderTopColor: '#E5E5E5',
-          height: Platform.OS === 'ios' ? 50 + insets.bottom : 60,
-          paddingBottom: Platform.OS === 'ios' ? insets.bottom : 8,
+          height: Platform.OS === 'ios' ? 50 + insets.bottom : 60 + insets.bottom,
+          paddingBottom: Platform.OS === 'ios' ? insets.bottom : Math.max(insets.bottom, 8),
           paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: '600',
+        },
+        tabBarItemStyle: {
+          paddingVertical: 4,
         },
       }}
     >
