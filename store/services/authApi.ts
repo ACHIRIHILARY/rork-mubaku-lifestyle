@@ -33,6 +33,7 @@ interface User {
   city?: string;
   role: 'client' | 'provider' | 'admin';
   admin: boolean;
+  language?: string;
 }
 
 interface RefreshTokenRequest {

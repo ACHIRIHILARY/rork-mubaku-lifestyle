@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LANGUAGE_STORAGE_KEY, LANGUAGES } from '@/app/language';
+import { useAppSelector } from '@/store/hooks';
 
 interface LanguageContextType {
   currentLanguage: string;
@@ -18,10 +19,19 @@ interface LanguageProviderProps {
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en');
   const [isLoading, setIsLoading] = useState(true);
+  const user = useAppSelector(state => state.auth.user);
 
   useEffect(() => {
     loadLanguage();
   }, []);
+
+  useEffect(() => {
+    if (user?.language && user.language !== currentLanguage) {
+      console.log('Syncing language from user profile:', user.language);
+      setCurrentLanguage(user.language);
+      AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, user.language);
+    }
+  }, [user?.language]);
 
   const loadLanguage = async () => {
     try {

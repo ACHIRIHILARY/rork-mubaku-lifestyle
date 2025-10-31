@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Globe } from 'lucide-react-native';
+import { useAppSelector } from '@/store/hooks';
+import { useUpdateUnifiedProfileMutation } from '@/store/services/profileApi';
 
 const LANGUAGE_STORAGE_KEY = '@mubaku_language';
 
@@ -25,6 +27,9 @@ export default function LanguageScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const user = useAppSelector(state => state.auth.user);
+  const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
+  const [updateProfile] = useUpdateUnifiedProfileMutation();
 
   useEffect(() => {
     loadSavedLanguage();
@@ -33,14 +38,14 @@ export default function LanguageScreen() {
   const loadSavedLanguage = async () => {
     try {
       const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
-      if (savedLanguage) {
+      if (savedLanguage && !isAuthenticated) {
         console.log('Loaded saved language:', savedLanguage);
         setSelectedLanguage(savedLanguage);
         setTimeout(() => {
           router.replace('/login');
         }, 500);
       } else {
-        setSelectedLanguage('en');
+        setSelectedLanguage(savedLanguage || user?.language || 'en');
       }
     } catch (error) {
       console.error('Error loading language:', error);
@@ -74,10 +79,32 @@ export default function LanguageScreen() {
 
     setIsSaving(true);
     const saved = await saveLanguage(selectedLanguage);
-    setIsSaving(false);
 
     if (saved) {
-      router.replace('/login');
+      if (isAuthenticated && user) {
+        try {
+          await updateProfile({ language: selectedLanguage }).unwrap();
+          console.log('Language updated in user profile:', selectedLanguage);
+          Alert.alert('Success', 'Language preference updated successfully', [
+            {
+              text: 'OK',
+              onPress: () => {
+                setIsSaving(false);
+                router.back();
+              }
+            }
+          ]);
+        } catch (error) {
+          console.error('Failed to update language in profile:', error);
+          setIsSaving(false);
+          Alert.alert('Warning', 'Language saved locally but failed to sync with server.');
+        }
+      } else {
+        setIsSaving(false);
+        router.replace('/login');
+      }
+    } else {
+      setIsSaving(false);
     }
   };
 

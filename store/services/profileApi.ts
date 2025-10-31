@@ -20,6 +20,7 @@ interface Profile {
   role: 'client' | 'provider' | 'admin';
   is_verified_provider?: boolean;
   provider_application_status?: string;
+  language?: string;
 }
 
 interface UnifiedProfile {
@@ -39,6 +40,7 @@ interface UnifiedProfile {
   role: 'client' | 'provider' | 'admin';
   is_verified_provider: boolean;
   provider_application_status?: string;
+  language?: string;
 }
 
 interface UpdateProfileRequest {
@@ -49,6 +51,7 @@ interface UpdateProfileRequest {
   country?: string;
   city?: string;
   address?: string;
+  language?: string;
 }
 
 interface ProviderApplicationRequest {

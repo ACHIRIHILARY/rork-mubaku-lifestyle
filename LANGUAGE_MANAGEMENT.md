@@ -1,73 +1,144 @@
-# Language Management System - Implementation Guide
+# Language Management Implementation
 
 ## Overview
 
-The Mubaku Lifestyle app now includes a complete language management system that allows users to select and persist their preferred language across app sessions. This implementation provides a solid foundation for future internationalization (i18n) support.
+This document describes the complete language management system implemented in the Mubaku Lifestyle mobile app. The system provides:
 
-## Features Implemented
-
-### 1. **Language Selection Screen** (`app/language.tsx`)
-- Beautiful UI with flag emojis for each language
-- Support for 5 languages:
-  - English (EN) 🇺🇸
-  - Français (FR) 🇫🇷
-  - Español (ES) 🇪🇸
-  - Deutsch (DE) 🇩🇪
-  - العربية (AR) 🇸🇦
-- Auto-skip feature: If language is already selected, automatically redirects to login
-- Loading states with proper feedback
-- Persistent storage using AsyncStorage
-- Native language names displayed alongside English names
-- Visual selection feedback with checkmarks
-- Disabled state while saving
-
-### 2. **Language Context Provider** (`contexts/LanguageContext.tsx`)
-- Global state management for current language
-- Automatic loading of saved language preference on app start
-- Methods for changing language app-wide
-- Helper function to get language name from code
-- Optimized with `useMemo` to prevent unnecessary re-renders
-
-### 3. **Profile Integration** (`app/(tabs)/profile.tsx`)
-- Language preference displayed with current language name
-- Flag emoji badge showing selected language
-- Quick access to change language from profile settings
-- Real-time updates when language changes
+✅ **Local language storage** for immediate availability
+✅ **Backend synchronization** with user profile for cross-device consistency
+✅ **Conditional navigation** based on authentication status
+✅ **Profile settings integration** for easy language changes
+✅ **Automatic sync** between local storage and user profile
 
 ## Architecture
 
+### 1. Data Flow
+
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     App Root (_layout.tsx)                   │
-│                                                               │
-│  ┌─────────────────��──────────────────────────────────────┐ │
-│  │           LanguageProvider (Context)                    │ │
-│  │                                                          │ │
-│  │  • Loads language from AsyncStorage on mount            │ │
-│  │  • Provides currentLanguage state                       │ │
-│  │  • Provides setLanguage function                        │ │
-│  │  • Provides getLanguageName helper                      │ │
-│  │                                                          │ │
-│  │  ┌─────────────────────────────────────────────────┐   │ │
-│  │  │          All App Screens                         │   │ │
-│  │  │                                                  │   │ │
-│  │  │  • Access via useLanguage() hook                │   │ │
-│  │  │  • Can change language anywhere                 │   │ │
-│  │  │  • Changes persist automatically                │   │ │
-│  │  └─────────────────────────────────────────────────┘   │ │
-│  └────────────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────────┘
+User Selection → AsyncStorage → User Profile API → AuthSlice → LanguageContext
 ```
 
-## Storage
+**Flow Details:**
+1. User selects language on `/language` screen
+2. Language saved to AsyncStorage (local persistence)
+3. If authenticated: API call updates user profile
+4. AuthSlice receives updated user data with language
+5. LanguageContext syncs with user profile language
+6. Components access language via `useLanguage()` hook
 
-- **Storage Key**: `@mubaku_language`
-- **Storage Method**: AsyncStorage (React Native's recommended persistent storage)
-- **Data Format**: Simple language code string (e.g., "en", "fr", "es")
+### 2. Files Modified/Created
 
-## How to Use in Your Code
+#### Type Definitions Updated:
+- **`store/authSlice.ts`**: Added `language?: string` to User interface
+- **`store/services/authApi.ts`**: Added `language?: string` to User interface
+- **`store/services/profileApi.ts`**: Added `language?: string` to Profile, UnifiedProfile, and UpdateProfileRequest interfaces
 
-### 1. Access Current Language
+#### Language Screen Enhanced:
+- **`app/language.tsx`**:
+  - Added authentication checks
+  - Integrated with profile update API
+  - Conditional navigation (onboarding vs settings)
+  - Syncs with user profile when authenticated
+
+#### Context Updated:
+- **`contexts/LanguageContext.tsx`**:
+  - Added `useAppSelector` to access Redux user state
+  - Automatic sync when user profile language changes
+  - Maintains consistency between local storage and profile
+
+#### Profile Integration:
+- **`app/(tabs)/profile.tsx`**: Already includes language option that navigates to `/language` screen
+
+## How It Works
+
+### For Unauthenticated Users (Onboarding):
+
+```typescript
+// Language screen behavior
+1. User opens app for first time
+2. Sees language selection screen
+3. Selects language (e.g., French)
+4. Language saved to AsyncStorage: '@mubaku_language' = 'fr'
+5. Navigates to /login
+```
+
+### For Authenticated Users (Settings):
+
+```typescript
+// Profile settings → Language
+1. User opens Profile tab
+2. Taps "Language Preference" option
+3. Navigates to /language screen
+4. Selects new language (e.g., Spanish)
+5. Language saved to AsyncStorage: '@mubaku_language' = 'es'
+6. API call: PATCH /api/v1/users/me/unified/ with { language: 'es' }
+7. User profile updated in database
+8. AuthSlice receives updated user data
+9. LanguageContext syncs with new language
+10. Success alert shown, navigates back to profile
+```
+
+### On App Launch:
+
+```typescript
+// Auto-loading user language
+1. App initializes auth from AsyncStorage tokens
+2. If tokens exist, fetches current user
+3. User data includes language field
+4. LanguageContext syncs with user.language
+5. AsyncStorage updated to match profile
+```
+
+## API Integration
+
+### Backend Requirements:
+
+The backend API should support a `language` field in the user/profile model:
+
+```python
+# Example Django model (adjust based on your backend)
+class User(models.Model):
+    # ... existing fields
+    language = models.CharField(
+        max_length=5, 
+        choices=[
+            ('en', 'English'),
+            ('fr', 'Français'),
+            ('es', 'Español'),
+            ('de', 'Deutsch'),
+            ('ar', 'العربية'),
+        ],
+        default='en',
+        blank=True
+    )
+```
+
+### API Endpoints Used:
+
+1. **Get User Profile**: `GET /api/v1/auth/users/me/`
+   - Returns user data including `language` field
+   
+2. **Update User Profile**: `PATCH /api/v1/users/me/unified/`
+   - Request body: `{ language: 'fr' }`
+   - Updates user's language preference
+
+## Supported Languages
+
+The app currently supports 5 languages:
+
+| Code | Name      | Native Name | Flag |
+|------|-----------|-------------|------|
+| en   | English   | English     | 🇺🇸   |
+| fr   | Français  | Français    | 🇫🇷   |
+| es   | Spanish   | Español     | 🇪🇸   |
+| de   | German    | Deutsch     | 🇩🇪   |
+| ar   | Arabic    | العربية     | 🇸🇦   |
+
+To add more languages, update the `LANGUAGES` array in `app/language.tsx`.
+
+## Usage in Components
+
+### Access Current Language:
 
 ```typescript
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -75,89 +146,81 @@ import { useLanguage } from '@/contexts/LanguageContext';
 function MyComponent() {
   const { currentLanguage, getLanguageName } = useLanguage();
   
-  console.log(currentLanguage); // "en"
-  console.log(getLanguageName(currentLanguage)); // "English"
-  
-  return <Text>Current Language: {getLanguageName(currentLanguage)}</Text>;
+  return <Text>Current: {getLanguageName(currentLanguage)}</Text>;
 }
 ```
 
-### 2. Change Language Programmatically
+### Change Language Programmatically:
 
 ```typescript
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Alert } from 'react-native';
 
-function LanguageSwitcher() {
+function LanguageToggle() {
   const { setLanguage } = useLanguage();
   
-  const handleChangeLanguage = async (languageCode: string) => {
+  const handleChange = async () => {
     try {
-      await setLanguage(languageCode);
-      Alert.alert('Success', 'Language changed successfully');
+      await setLanguage('fr');
+      console.log('Language changed to French');
     } catch (error) {
-      Alert.alert('Error', 'Failed to change language');
+      console.error('Failed to change language:', error);
     }
   };
   
-  return (
-    <Button 
-      title="Switch to French" 
-      onPress={() => handleChangeLanguage('fr')} 
-    />
-  );
+  return <Button onPress={handleChange} title="Switch to French" />;
 }
 ```
 
-### 3. Add New Languages
+## Preventing Logout Issues
 
-To add more languages, edit `app/language.tsx`:
+### Problem Previously:
+The language screen always navigated to `/login`, interrupting authenticated sessions.
 
+### Solution Implemented:
 ```typescript
-const LANGUAGES: Language[] = [
-  { code: 'en', name: 'English', flag: '🇺🇸', nativeName: 'English' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷', nativeName: 'Français' },
-  // Add your new language here:
-  { code: 'pt', name: 'Portuguese', flag: '🇵🇹', nativeName: 'Português' },
-];
+// Conditional navigation based on auth status
+const handleContinue = async () => {
+  if (isAuthenticated && user) {
+    // Update profile and go back
+    await updateProfile({ language: selectedLanguage });
+    router.back();
+  } else {
+    // Onboarding flow continues to login
+    router.replace('/login');
+  }
+};
 ```
 
-## Integration with i18n Libraries (Future Enhancement)
+## Future Enhancements
 
-This system is designed to work seamlessly with internationalization libraries. When you're ready to add translations:
+### 1. Add i18n Library (Recommended):
 
-### Recommended: `react-i18next`
-
-1. Install dependencies:
+Install `react-i18next`:
 ```bash
-bun install i18next react-i18next
+npm install react-i18next i18next
 ```
 
-2. Create translation files:
+Create translation files:
 ```typescript
 // locales/en.json
 {
-  "welcome": "Welcome to Mubaku Lifestyle",
+  "welcome": "Welcome",
   "login": "Login",
   "register": "Register"
 }
 
 // locales/fr.json
 {
-  "welcome": "Bienvenue à Mubaku Lifestyle",
+  "welcome": "Bienvenue",
   "login": "Connexion",
   "register": "S'inscrire"
 }
 ```
 
-3. Initialize i18next with your language context:
+Configure i18next:
 ```typescript
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { useLanguage } from '@/contexts/LanguageContext';
-
-// In your Language Provider or _layout.tsx
-const { currentLanguage } = useLanguage();
 
 i18n
   .use(initReactI18next)
@@ -165,152 +228,110 @@ i18n
     resources: {
       en: { translation: require('./locales/en.json') },
       fr: { translation: require('./locales/fr.json') },
-      // ... other languages
     },
-    lng: currentLanguage,
+    lng: 'en',
     fallbackLng: 'en',
     interpolation: {
-      escapeValue: false
-    }
+      escapeValue: false,
+    },
   });
+
+export default i18n;
 ```
 
-4. Use in components:
+Use in components:
 ```typescript
 import { useTranslation } from 'react-i18next';
 
-function Welcome() {
+function LoginScreen() {
   const { t } = useTranslation();
+  
   return <Text>{t('welcome')}</Text>;
 }
 ```
 
-5. Sync with language changes:
+### 2. RTL Support for Arabic:
+
 ```typescript
-import { useEffect } from 'react';
-import { useLanguage } from '@/contexts/LanguageContext';
-import i18n from 'i18next';
+import { I18nManager } from 'react-native';
 
-function LanguageSync() {
-  const { currentLanguage } = useLanguage();
-  
-  useEffect(() => {
-    i18n.changeLanguage(currentLanguage);
-  }, [currentLanguage]);
-  
-  return null;
-}
-```
-
-## User Flow
-
-1. **First App Launch**:
-   - User sees language selection screen
-   - Selects preferred language (defaults to English)
-   - Language is saved to AsyncStorage
-   - Navigates to login screen
-
-2. **Subsequent Launches**:
-   - App loads saved language from AsyncStorage
-   - Automatically applies the saved language
-   - Auto-redirects to login (skips language selection)
-
-3. **Changing Language Later**:
-   - Navigate to Profile → Language Preference
-   - Select new language
-   - Change is saved immediately
-   - App UI updates in real-time
-
-## Testing Checklist
-
-- [x] Language persists across app restarts
-- [x] Changing language updates profile display
-- [x] Auto-skip works when language is already set
-- [x] Loading states display properly
-- [x] Error handling for AsyncStorage failures
-- [x] All 5 languages are selectable
-- [x] Flag emojis display correctly
-- [x] Checkmark shows on selected language
-- [x] Continue button is disabled until selection is made
-- [x] Language context is available throughout the app
-
-## API Considerations
-
-Currently, the language selection is client-side only. If your backend API supports localized content:
-
-1. **Send language in API headers**:
-```typescript
-// In your API client configuration
-headers: {
-  'Accept-Language': currentLanguage,
-}
-```
-
-2. **Include language in user profile**:
-```typescript
-// Update user profile with preferred language
-const updateLanguagePreference = async (languageCode: string) => {
-  await apiClient.patch('/api/v1/users/me/', {
-    preferred_language: languageCode
-  });
+const setRTL = (isRTL: boolean) => {
+  I18nManager.forceRTL(isRTL);
+  // Requires app restart
 };
 ```
 
-3. **Sync with backend on change**:
-```typescript
-const { setLanguage } = useLanguage();
-const [updateProfile] = useUpdateProfileMutation();
+### 3. Device Language Detection:
 
-const handleLanguageChange = async (code: string) => {
-  await setLanguage(code);
-  await updateProfile({ preferred_language: code });
-};
+```typescript
+import * as Localization from 'expo-localization';
+
+const deviceLanguage = Localization.locale.split('-')[0]; // 'en', 'fr', etc.
 ```
 
-## Troubleshooting
+## Testing
 
-### Language not persisting
-- Check AsyncStorage permissions
-- Verify storage key is consistent
-- Check console logs for storage errors
+### Test Scenarios:
 
-### Language context undefined
-- Ensure LanguageProvider wraps your app in _layout.tsx
-- Verify you're using useLanguage() hook inside a component
+1. **First-time user (Onboarding)**:
+   - Select language → should navigate to login
+   - Language should persist after login
 
-### Flags not displaying
-- This is likely a font/emoji support issue on the device
-- Consider using image assets instead of emoji flags for production
+2. **Authenticated user (Settings)**:
+   - Change language → should update profile
+   - Should show success message
+   - Should navigate back to profile
+   - Should sync across devices after re-login
 
-## Future Enhancements
+3. **Profile sync**:
+   - Login on Device A, change language
+   - Login on Device B
+   - Should see language from profile
 
-1. **RTL Support**: Add right-to-left layout support for Arabic
-2. **Dynamic Content**: Fetch localized content from API
-3. **Translation Management**: Use a translation management system (e.g., Lokalise, Phrase)
-4. **Pluralization**: Handle plural forms correctly for each language
-5. **Date/Time Formatting**: Locale-aware date and time formatting
-6. **Number Formatting**: Currency and number formatting per locale
-7. **Language-specific Fonts**: Load custom fonts for better language support
+4. **Error handling**:
+   - Network failure during profile update
+   - Should save locally with warning message
 
-## Files Modified/Created
+## Console Logs for Debugging
 
-### Created
-- `app/language.tsx` - Language selection screen
-- `contexts/LanguageContext.tsx` - Global language state management
-- `LANGUAGE_MANAGEMENT.md` - This documentation
+The implementation includes extensive logging:
 
-### Modified
-- `app/_layout.tsx` - Added LanguageProvider wrapper
-- `app/(tabs)/profile.tsx` - Added language preference display with flag badge
+```typescript
+console.log('Loaded saved language:', savedLanguage);
+console.log('Language saved:', languageCode);
+console.log('Language updated in user profile:', selectedLanguage);
+console.log('Syncing language from user profile:', user.language);
+```
+
+Monitor these logs to debug language sync issues.
+
+## Common Issues & Solutions
+
+### Issue: Language resets on app restart
+**Solution**: Check that AsyncStorage is properly persisting. Verify `LANGUAGE_STORAGE_KEY` is consistent.
+
+### Issue: Language doesn't sync to profile
+**Solution**: Ensure backend has `language` field in user model and serializer includes it.
+
+### Issue: User gets "logged out" when changing language
+**Solution**: This is now fixed. The screen checks authentication status before navigating.
+
+### Issue: LanguageContext doesn't update after profile change
+**Solution**: Implemented `useEffect` to watch `user?.language` changes and sync automatically.
 
 ## Summary
 
-The language management system is now fully functional and provides:
-- ✅ Persistent language selection
-- ✅ Global state management
-- ✅ Beautiful, intuitive UI
-- ✅ Easy integration for future i18n support
-- ✅ Profile integration with visual indicators
-- ✅ Foundation for multi-language app
+The language management system is now fully integrated with:
+- ✅ Local persistence via AsyncStorage
+- ✅ Backend synchronization via profile API
+- ✅ Context-based state management
+- ✅ Profile settings UI
+- ✅ Conditional navigation for onboarding vs settings
+- ✅ Automatic sync between storage and profile
 
-This implementation follows React Native and Expo best practices and is production-ready!
+**What's NOT implemented yet**:
+- ❌ Actual translations (i18n library)
+- ❌ RTL layout support for Arabic
+- ❌ Device language detection
+
+These can be added as future enhancements when translation files are ready.
