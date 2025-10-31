@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Globe, Check, ChevronDown } from 'lucide-react-native';
 import { useAppSelector } from '@/store/hooks';
 import { useUpdateUnifiedProfileMutation } from '@/store/services/profileApi';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const LANGUAGE_STORAGE_KEY = '@mubaku_language';
 
@@ -41,6 +42,7 @@ export default function LanguageScreen() {
   const user = useAppSelector(state => state.auth.user);
   const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
   const [updateProfile] = useUpdateUnifiedProfileMutation();
+  const { setLanguage: setContextLanguage } = useLanguage();
 
   useEffect(() => {
     loadSavedLanguage();
@@ -80,6 +82,8 @@ export default function LanguageScreen() {
 
   const handleLanguageSelect = async (languageCode: string) => {
     setSelectedLanguage(languageCode);
+    await setContextLanguage(languageCode);
+    console.log('Language context updated to:', languageCode);
   };
 
   const handleContinue = async () => {
@@ -92,23 +96,23 @@ export default function LanguageScreen() {
     const saved = await saveLanguage(selectedLanguage);
 
     if (saved) {
+      await setContextLanguage(selectedLanguage);
+      
       if (isAuthenticated && user) {
         try {
           await updateProfile({ language: selectedLanguage }).unwrap();
           console.log('Language updated in user profile:', selectedLanguage);
+          setIsSaving(false);
           Alert.alert('Success', 'Language preference updated successfully', [
             {
               text: 'OK',
-              onPress: () => {
-                setIsSaving(false);
-                router.back();
-              }
+              onPress: () => router.back()
             }
           ]);
         } catch (error) {
           console.error('Failed to update language in profile:', error);
           setIsSaving(false);
-          Alert.alert('Warning', 'Language saved locally but failed to sync with server.');
+          Alert.alert('Warning', 'Language saved locally but failed to sync with server. Changes will apply on your device.');
         }
       } else {
         setIsSaving(false);
