@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Globe, Check, ChevronDown } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '@/store/hooks';
 import { useUpdateUnifiedProfileMutation } from '@/store/services/profileApi';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -35,6 +36,7 @@ const LANGUAGES: Language[] = [
 ];
 
 export default function LanguageScreen() {
+  const { t } = useTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -88,7 +90,7 @@ export default function LanguageScreen() {
 
   const handleContinue = async () => {
     if (!selectedLanguage) {
-      Alert.alert('Language Required', 'Please select a language to continue.');
+      Alert.alert(t('language.errorTitle'), t('language.errorMessage'));
       return;
     }
 
@@ -103,7 +105,7 @@ export default function LanguageScreen() {
           await updateProfile({ language: selectedLanguage }).unwrap();
           console.log('Language updated in user profile:', selectedLanguage);
           setIsSaving(false);
-          Alert.alert('Success', 'Language preference updated successfully', [
+          Alert.alert(t('language.successTitle'), t('language.successMessage'), [
             {
               text: 'OK',
               onPress: () => router.back()
@@ -112,7 +114,7 @@ export default function LanguageScreen() {
         } catch (error) {
           console.error('Failed to update language in profile:', error);
           setIsSaving(false);
-          Alert.alert('Warning', 'Language saved locally but failed to sync with server. Changes will apply on your device.');
+          Alert.alert(t('language.warningTitle'), t('language.warningMessage'));
         }
       } else {
         setIsSaving(false);
@@ -128,7 +130,7 @@ export default function LanguageScreen() {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="white" />
-          <Text style={styles.loadingText}>Loading...</Text>
+          <Text style={styles.loadingText}>{t('common.loading')}</Text>
         </View>
       </SafeAreaView>
     );
@@ -150,11 +152,11 @@ export default function LanguageScreen() {
             </View>
           </View>
           
-          <Text style={styles.title}>Choose Your Language</Text>
-          <Text style={styles.subtitle}>Select your preferred language to continue</Text>
+          <Text style={styles.title}>{t('language.title')}</Text>
+          <Text style={styles.subtitle}>{t('language.subtitle')}</Text>
 
           <View style={styles.dropdownContainer}>
-            <Text style={styles.dropdownLabel}>Language</Text>
+            <Text style={styles.dropdownLabel}>{t('language.label')}</Text>
             <TouchableOpacity
               style={styles.dropdownButton}
               onPress={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -170,7 +172,7 @@ export default function LanguageScreen() {
                     </View>
                   </>
                 ) : (
-                  <Text style={styles.dropdownPlaceholder}>Select a language</Text>
+                  <Text style={styles.dropdownPlaceholder}>{t('language.selectPlaceholder')}</Text>
                 )}
               </View>
               <ChevronDown 
@@ -239,10 +241,10 @@ export default function LanguageScreen() {
             {isSaving ? (
               <View style={styles.buttonContent}>
                 <ActivityIndicator size="small" color="white" />
-                <Text style={styles.continueText}>Saving...</Text>
+                <Text style={styles.continueText}>{t('language.saving')}</Text>
               </View>
             ) : (
-              <Text style={styles.continueText}>Continue</Text>
+              <Text style={styles.continueText}>{t('common.continue')}</Text>
             )}
           </TouchableOpacity>
         </View>

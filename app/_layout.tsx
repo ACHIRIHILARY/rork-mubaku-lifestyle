@@ -10,6 +10,7 @@ import { trpc, trpcClient } from "@/lib/trpc";
 import { initializeAuth } from "@/store/authSlice";
 import { authApi } from "@/store/services/authApi";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import '@/i18n/config';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

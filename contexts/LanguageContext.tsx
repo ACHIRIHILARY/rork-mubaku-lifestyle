@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import i18n from '@/i18n/config';
 import { LANGUAGE_STORAGE_KEY, LANGUAGES } from '@/app/language';
 import { useAppSelector } from '@/store/hooks';
 
@@ -48,6 +49,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
   const setLanguage = async (languageCode: string) => {
     try {
+      await i18n.changeLanguage(languageCode);
       await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, languageCode);
       setCurrentLanguage(languageCode);
       console.log('Language changed to:', languageCode);
