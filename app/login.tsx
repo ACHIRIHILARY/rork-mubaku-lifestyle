@@ -4,8 +4,10 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Keyb
 import { useLoginMutation } from '@/store/services/authApi';
 import { Eye, EyeOff } from 'lucide-react-native';
 import { useAppSelector } from '@/store/hooks';
+import { useTranslation } from 'react-i18next';
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -29,11 +31,11 @@ export default function LoginScreen() {
       console.log(`Redirecting ${isAdmin ? 'admin' : 'non-admin'} user to: ${destination}`);
       
       Alert.alert(
-        'Welcome Back! 👋',
-        `You have successfully logged in to Mubaku Lifestyle.${isAdmin ? ' Redirecting to admin dashboard...' : ''}`,
+        t('auth.loginSuccess'),
+        `${t('auth.loginSuccessMessage')}${isAdmin ? t('auth.loginSuccessAdmin') : ''}`,
         [
           {
-            text: 'Continue',
+            text: t('common.continue'),
             onPress: () => {
               setWaitingForUser(false);
               router.replace(destination);
@@ -54,7 +56,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password');
+      Alert.alert(t('common.error'), t('auth.enterBothFields'));
       return;
     }
 
@@ -78,7 +80,7 @@ export default function LoginScreen() {
       
       console.error('Login error:', JSON.stringify(error, null, 2));
       
-      let errorMessage = 'Invalid email or password. Please try again.';
+      let errorMessage = t('auth.loginErrorMessage');
       
       if (error && typeof error === 'object') {
         const err = error as { data?: unknown; message?: string; status?: number; statusText?: string };
@@ -105,7 +107,7 @@ export default function LoginScreen() {
         }
       }
       
-      Alert.alert('Login Failed', errorMessage);
+      Alert.alert(t('auth.loginError'), errorMessage);
     }
   };
 
@@ -121,31 +123,31 @@ export default function LoginScreen() {
         >
           <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Sign in to your account</Text>
+            <Text style={styles.title}>{t('auth.welcomeBack')}</Text>
+            <Text style={styles.subtitle}>{t('auth.signInToAccount')}</Text>
           </View>
 
           <View style={styles.card}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t('auth.email')}</Text>
               <TextInput
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
-                placeholder="Enter your email"
+                placeholder={t('auth.enterEmail')}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{t('auth.password')}</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   value={password}
                   onChangeText={setPassword}
-                  placeholder="Enter your password"
+                  placeholder={t('auth.enterPassword')}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity 
@@ -170,11 +172,11 @@ export default function LoginScreen() {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   <ActivityIndicator color="white" />
                   <Text style={styles.loginText}>
-                    {isLoading ? 'Logging in...' : 'Loading...'}
+                    {isLoading ? t('auth.loggingIn') : t('common.loading')}
                   </Text>
                 </View>
               ) : (
-                <Text style={styles.loginText}>Login</Text>
+                <Text style={styles.loginText}>{t('auth.login')}</Text>
               )}
             </TouchableOpacity>
 
@@ -182,7 +184,7 @@ export default function LoginScreen() {
               style={styles.registerButton}
               onPress={() => router.push('/register')}
             >
-              <Text style={styles.registerText}>Don&apos;t have an account? Register</Text>
+              <Text style={styles.registerText}>{t('auth.dontHaveAccountRegister')}</Text>
             </TouchableOpacity>
           </View>
           </View>

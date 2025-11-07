@@ -27,6 +27,13 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, []);
 
   useEffect(() => {
+    if (currentLanguage) {
+      i18n.changeLanguage(currentLanguage);
+      console.log('Language changed in context to:', currentLanguage);
+    }
+  }, [currentLanguage]);
+
+  useEffect(() => {
     if (user?.language && user.language !== currentLanguage) {
       console.log('Syncing language from user profile:', user.language);
       setCurrentLanguage(user.language);
@@ -39,6 +46,12 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
       const savedLanguage = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY);
       if (savedLanguage) {
         setCurrentLanguage(savedLanguage);
+        await i18n.changeLanguage(savedLanguage);
+        console.log('Loaded language from storage:', savedLanguage);
+      } else {
+        const defaultLang = 'en';
+        setCurrentLanguage(defaultLang);
+        await i18n.changeLanguage(defaultLang);
       }
     } catch (error) {
       console.error('Error loading language:', error);
