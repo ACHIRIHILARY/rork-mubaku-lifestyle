@@ -4,10 +4,10 @@
 
 ### URL Duplication Issue - RESOLVED
 **Problem:** API calls were duplicating `/api/v1` in the URL path
-- Before: `https://mubaku-backend.onrender.com/api/v1/api/v1/auth/jwt/create/`
-- After: `https://mubaku-backend.onrender.com/api/v1/auth/jwt/create/`
+- Before: `https://mubakulifestyle.com/api/v1/api/v1/auth/jwt/create/`
+- After: `https://mubakulifestyle.com/api/v1/auth/jwt/create/`
 
-**Solution:** Updated base URL in `store/api.ts` to `https://mubaku-backend.onrender.com` (without `/api/v1`)
+**Solution:** Updated base URL in `store/api.ts` to `https://mubakulifestyle.com` (without `/api/v1`)
 
 ### Role Naming Issue - RESOLVED
 **Problem:** Backend uses `provider` role, frontend was using `agent`
@@ -17,7 +17,7 @@
 
 ## API Base URL
 ```
-Production: https://mubaku-backend.onrender.com
+Production: https://mubakulifestyle.com
 API Version: /api/v1
 ```
 

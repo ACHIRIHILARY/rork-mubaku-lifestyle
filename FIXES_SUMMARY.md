@@ -5,16 +5,15 @@
 ### 1. **URL Duplication Bug** (404 Error)
 **Problem:** 
 - API calls were getting `404 Not Found` errors
-- URL was: `https://mubaku-backend.onrender.com/api/v1/api/v1/auth/jwt/create/`
-- The `/api/v1` was duplicated
+- URL was duplicating `/api/v1` in the path
 
 **Root Cause:**
-- Base URL in `store/api.ts` was set to `https://mubaku-backend.onrender.com/api/v1`
-- Endpoint paths in API services also included `/api/v1`
+- Base URL included `/api/v1`
+- Endpoint paths also included `/api/v1`
 - This caused duplication when combined
 
 **Solution:**
-- Changed base URL to `https://mubaku-backend.onrender.com` (removed `/api/v1`)
+- Changed base URL to `https://mubakulifestyle.com` (without `/api/v1`)
 - Kept full paths in all endpoint definitions (e.g., `/api/v1/auth/jwt/create/`)
 
 **Files Changed:**

@@ -1,6 +1,6 @@
 # Redux State Management Documentation
 
-This app uses **Redux Toolkit** with **RTK Query** for state management and API integration with your Django backend hosted on Render.
+This app uses **Redux Toolkit** with **RTK Query** for state management and API integration with your Django backend hosted on Google Cloud.
 
 ## Architecture
 
@@ -22,10 +22,10 @@ store/
 ### Backend URL
 Set your backend URL in the environment variable:
 ```bash
-EXPO_PUBLIC_API_URL=https://your-backend.onrender.com
+EXPO_PUBLIC_API_URL=https://mubakulifestyle.com
 ```
 
-If not set, it defaults to `https://your-backend.onrender.com`. Update this in `store/api.ts`.
+If not set, it defaults to `https://mubakulifestyle.com` (configured in `store/api.ts`).
 
 ### Token Management
 - **Access tokens** are automatically added to API requests via `prepareHeaders` in `api.ts`
@@ -196,7 +196,7 @@ try {
 
 ## Next Steps
 
-1. **Set Backend URL**: Update `EXPO_PUBLIC_API_URL` environment variable with your actual Render backend URL
+1. **Backend URL Configured**: Already set to `https://mubakulifestyle.com`
 2. **Test Authentication**: Try logging in with real credentials from your backend
 3. **Add Services Endpoints**: Your backend needs endpoints for listing services/agents (not in current API docs)
 4. **Image Uploads**: Implement profile photo uploads using multipart/form-data

@@ -76,22 +76,22 @@ Login error:
 ## 🔗 API Endpoints Being Called
 
 ### On Login:
-1. `POST https://mubaku-backend.onrender.com/api/v1/auth/jwt/create/`
+1. `POST https://mubakulifestyle.com/api/v1/auth/jwt/create/`
    - Body: `{ email, password }`
    - Response: `{ access, refresh }`
 
-2. `GET https://mubaku-backend.onrender.com/api/v1/auth/users/me/`
+2. `GET https://mubakulifestyle.com/api/v1/auth/users/me/`
    - Headers: `Authorization: Bearer {access_token}`
    - Response: User object
 
 ### On Home Screen Load:
-1. `GET https://mubaku-backend.onrender.com/api/v1/auth/users/me/`
+1. `GET https://mubakulifestyle.com/api/v1/auth/users/me/`
    - Get current user data
 
-2. `GET https://mubaku-backend.onrender.com/api/v1/services/`
+2. `GET https://mubakulifestyle.com/api/v1/services/`
    - Get all services
 
-3. `GET https://mubaku-backend.onrender.com/api/v1/services/categories/`
+3. `GET https://mubakulifestyle.com/api/v1/services/categories/`
    - Get all categories
 
 ---
@@ -105,7 +105,7 @@ Login error:
 
 **Solution:**
 - ✅ This has been fixed
-- Base URL is now: `https://mubaku-backend.onrender.com`
+- Base URL is now: `https://mubakulifestyle.com`
 - All endpoints include full path: `/api/v1/...`
 
 ### Issue 2: Network Request Failed
@@ -119,7 +119,7 @@ Login error:
 3. CORS issues (Web only)
 
 **Solutions:**
-- Check if backend is up: Visit `https://mubaku-backend.onrender.com/api/v1/` in browser
+- Check if backend is up: Visit `https://mubakulifestyle.com/api/v1/` in browser
 - Check internet connection
 - For web: Ensure backend has CORS enabled
 
@@ -206,7 +206,7 @@ Role: admin
 
 ### Get JWT Token
 ```http
-POST https://mubaku-backend.onrender.com/api/v1/auth/jwt/create/
+POST https://mubakulifestyle.com/api/v1/auth/jwt/create/
 Content-Type: application/json
 
 {
@@ -217,19 +217,19 @@ Content-Type: application/json
 
 ### Get Current User
 ```http
-GET https://mubaku-backend.onrender.com/api/v1/auth/users/me/
+GET https://mubakulifestyle.com/api/v1/auth/users/me/
 Authorization: Bearer {your_access_token}
 ```
 
 ### Get All Services
 ```http
-GET https://mubaku-backend.onrender.com/api/v1/services/
+GET https://mubakulifestyle.com/api/v1/services/
 Authorization: Bearer {your_access_token}
 ```
 
 ### Create Service (Provider only)
 ```http
-POST https://mubaku-backend.onrender.com/api/v1/services/create/
+POST https://mubakulifestyle.com/api/v1/services/create/
 Authorization: Bearer {your_access_token}
 Content-Type: application/json
 

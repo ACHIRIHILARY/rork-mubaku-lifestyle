@@ -1,7 +1,7 @@
 # Mubaku Lifestyle Mobile App - Implementation Status
 
 ## Overview
-This is a comprehensive mobile application for the Mubaku Lifestyle platform, built with React Native (Expo SDK 53) and fully integrated with the backend API at `https://mubaku-backend.onrender.com/api/v1`.
+This is a comprehensive mobile application for the Mubaku Lifestyle platform, built with React Native (Expo SDK 54) and fully integrated with the backend API at `https://mubakulifestyle.com/api/v1`.
 
 ## ✅ Completed Features
 
