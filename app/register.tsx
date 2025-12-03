@@ -48,6 +48,15 @@ export default function RegisterScreen() {
     try {
       isSubmitting.current = true;
       
+      console.log('Starting registration...');
+      console.log('Registration data:', {
+        username,
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        password: '***'
+      });
+      
       await register({
         username,
         email,
@@ -72,6 +81,8 @@ export default function RegisterScreen() {
       );
     } catch (error: any) {
       console.error('Registration error:', JSON.stringify(error, null, 2));
+      console.error('Error status:', error?.status);
+      console.error('Error data:', error?.data);
       
       let message = 'Registration failed. Please try again.';
       
