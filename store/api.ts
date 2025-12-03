@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery, FetchArgs, BaseQueryApi } from '@reduxjs/too
 import type { RootState } from './store';
 import { updateAccessToken, logout } from './authSlice';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://mubaku-backend.onrender.com';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://mubakulifestyle.com';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,

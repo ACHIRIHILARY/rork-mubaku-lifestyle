@@ -13,8 +13,7 @@ interface User {
   profile_photo?: string;
   country?: string;
   city?: string;
-  role: 'client' | 'provider' | 'admin';
-  admin: boolean;
+  role: 'client' | 'provider';
   language?: string;
 }
 

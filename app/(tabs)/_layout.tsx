@@ -1,13 +1,11 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-import { Home, Calendar, Bell, User, Shield } from 'lucide-react-native';
+import { Home, Calendar, Bell, User } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useIsAdmin } from '@/hooks/useAdminGuard';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
-  const isAdmin = useIsAdmin();
   
   const tabBarHeight = Platform.select({
     ios: 50 + insets.bottom,
@@ -79,14 +77,6 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="admin"
-        options={{
-          title: 'Admin',
-          tabBarIcon: ({ color, size }) => <Shield color={color} size={size} />,
-          href: isAdmin ? '/admin' : null,
         }}
       />
     </Tabs>

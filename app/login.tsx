@@ -15,7 +15,7 @@ export default function LoginScreen() {
   const [login, { isLoading }] = useLoginMutation();
   const user = useAppSelector(state => state.auth.user);
   const isAuthenticated = useAppSelector(state => state.auth.isAuthenticated);
-  const redirectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (waitingForUser && user && isAuthenticated) {
@@ -25,14 +25,13 @@ export default function LoginScreen() {
         clearTimeout(redirectTimeoutRef.current);
       }
 
-      const isAdmin = user.role === 'admin' || user.admin === true;
-      const destination = isAdmin ? '/(tabs)/admin' : '/(tabs)/home';
+      const destination = '/(tabs)/home';
       
-      console.log(`Redirecting ${isAdmin ? 'admin' : 'non-admin'} user to: ${destination}`);
+      console.log('Redirecting user to:', destination);
       
       Alert.alert(
         t('auth.loginSuccess'),
-        `${t('auth.loginSuccessMessage')}${isAdmin ? t('auth.loginSuccessAdmin') : ''}`,
+        t('auth.loginSuccessMessage'),
         [
           {
             text: t('common.continue'),
