@@ -131,6 +131,11 @@ export const profileApi = api.injectEndpoints({
         'User',
       ],
     }),
+
+    getApprovedProviders: builder.query<UnifiedProfile[], void>({
+      query: () => '/api/v1/users/approved-providers/',
+      providesTags: ['Profile'],
+    }),
   }),
 });
 
@@ -144,4 +149,5 @@ export const {
   useGetApplicationStatusQuery,
   useWithdrawApplicationMutation,
   useVerifyProviderMutation,
+  useGetApprovedProvidersQuery,
 } = profileApi;

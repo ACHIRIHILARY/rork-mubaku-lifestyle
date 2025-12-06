@@ -1,9 +1,10 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
-import { Search, Star, X } from 'lucide-react-native';
+import { Search, Star, X, User } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
+import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useTranslation } from 'react-i18next';
 
 
@@ -21,9 +22,15 @@ export default function HomeScreen() {
   
   const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery(queryParams);
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
+  const { data: providers, isLoading: providersLoading } = useGetApprovedProvidersQuery();
   
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}`);
+  };
+
+  const handleProviderPress = (providerId: number) => {
+    console.log('Provider selected:', providerId);
+    router.push(`/profile-settings?userId=${providerId}`);
   };
   
   const handleCategoryPress = (categoryId: string) => {
@@ -34,11 +41,6 @@ export default function HomeScreen() {
   const handleCategoryFilter = (categoryId: string) => {
     console.log('Filtering by category:', categoryId);
     setSelectedCategory(categoryId);
-  };
-  
-  const handleClearFilter = () => {
-    console.log('Clearing category filter');
-    setSelectedCategory(null);
   };
   
   const handleClearSearch = useCallback(() => {
@@ -62,9 +64,14 @@ export default function HomeScreen() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  console.log('Home screen loaded', { user, servicesCount: services?.length, categoriesCount: categories?.length });
+  console.log('Home screen loaded', { 
+    user, 
+    servicesCount: services?.length, 
+    categoriesCount: categories?.length,
+    providersCount: providers?.length 
+  });
 
-  const isLoading = userLoading || servicesLoading || categoriesLoading;
+  const isLoading = userLoading || servicesLoading || categoriesLoading || providersLoading;
 
   if (isLoading) {
     return (
@@ -145,6 +152,45 @@ export default function HomeScreen() {
                 })}
               </View>
             </ScrollView>
+          </View>
+        )}
+
+        {/* Approved Providers */}
+        {providers && providers.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>{t('home.approvedProviders')}</Text>
+            </View>
+            <View style={styles.providersContainer}>
+              {providers.map((provider) => (
+                <TouchableOpacity 
+                  key={provider.pkid} 
+                  style={styles.providerCard}
+                  onPress={() => handleProviderPress(provider.pkid)}
+                >
+                  <View style={styles.providerImagePlaceholder}>
+                    <User color="white" size={32} />
+                  </View>
+                  <View style={styles.providerInfo}>
+                    <Text style={styles.providerName}>{provider.full_name}</Text>
+                    {provider.about_me && (
+                      <Text style={styles.providerAbout} numberOfLines={2}>
+                        {provider.about_me}
+                      </Text>
+                    )}
+                    {provider.city && (
+                      <Text style={styles.providerLocation}>📍 {provider.city}</Text>
+                    )}
+                  </View>
+                  <TouchableOpacity 
+                    style={styles.viewProfileButton}
+                    onPress={() => handleProviderPress(provider.pkid)}
+                  >
+                    <Text style={styles.viewProfileButtonText}>{t('home.viewProfile')}</Text>
+                  </TouchableOpacity>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         )}
 
@@ -339,6 +385,62 @@ const styles = StyleSheet.create({
   },
   categoryNameSelected: {
     color: 'white',
+  },
+  providersContainer: {
+    gap: 16,
+  },
+  providerCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  providerImagePlaceholder: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#2D1A46',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  providerInfo: {
+    flex: 1,
+  },
+  providerName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginBottom: 4,
+  },
+  providerAbout: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 6,
+  },
+  providerLocation: {
+    fontSize: 12,
+    color: '#888',
+  },
+  viewProfileButton: {
+    backgroundColor: '#F4A896',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  viewProfileButtonText: {
+    color: 'white',
+    fontSize: 13,
+    fontWeight: '600',
   },
   agentsContainer: {
     gap: 16,

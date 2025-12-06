@@ -75,7 +75,9 @@
     "clearAll": "Tout effacer",
     "clearFilters": "Effacer les filtres",
     "noServicesFound": "Aucun service trouvé correspondant à vos critères",
-    "noServicesAvailable": "Aucun service disponible pour le moment"
+    "noServicesAvailable": "Aucun service disponible pour le moment",
+    "approvedProviders": "Prestataires approuvés",
+    "viewProfile": "Voir le profil"
   },
   "profile": {
     "title": "Profil",
