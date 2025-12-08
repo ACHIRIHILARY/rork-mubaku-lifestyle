@@ -47,7 +47,7 @@ export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: '/api/v1/auth/jwt/create/',
+        url: '/api/v1/auth/jwt/create/1',
         method: 'POST',
         body: credentials,
       }),

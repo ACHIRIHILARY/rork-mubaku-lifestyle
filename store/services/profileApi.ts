@@ -133,7 +133,10 @@ export const profileApi = api.injectEndpoints({
     }),
 
     getApprovedProviders: builder.query<UnifiedProfile[], void>({
-      query: () => '/api/v1/users/approved-providers/',
+      query: () => ({
+        url: '/api/v1/users/',
+        params: { role: 'provider', is_verified: 'true' }
+      }),
       providesTags: ['Profile'],
     }),
   }),

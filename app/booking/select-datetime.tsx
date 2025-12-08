@@ -69,7 +69,7 @@ export default function SelectDateTime() {
 
   const handleNext = () => {
     if (selectedDate && selectedSlot) {
-      router.push(`/booking/choose-location?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedSlot.start}&endTime=${selectedSlot.end}`);
+      router.push(`/booking/summary?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedSlot.start}&endTime=${selectedSlot.end}`);
     }
   };
 

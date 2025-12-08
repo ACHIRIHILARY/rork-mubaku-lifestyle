@@ -1,10 +1,14 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { CheckCircle, Clock, Star } from 'lucide-react-native';
+import { useGetAppointmentDetailQuery } from '@/store/services/appointmentApi';
 
 export default function BookingStatus() {
-  const { agentId, date, time, location, total } = useLocalSearchParams();
+  const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
+  const { data: appointment, isLoading } = useGetAppointmentDetailQuery(appointmentId || '', {
+    skip: !appointmentId,
+  });
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState('');
 
@@ -15,8 +19,18 @@ export default function BookingStatus() {
   ];
 
   const handleSubmitReview = () => {
-    // Mock review submission
-    router.push('/home');
+    console.log('Review submitted:', { rating, review, appointmentId });
+    router.push('/(tabs)/home');
+  };
+
+  const formatTime = (dateStr: string) => {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours > 12 ? hours - 12 : hours === 0 ? 12 : hours;
+    return `${displayHours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
   };
 
   const renderStars = () => {
@@ -34,6 +48,33 @@ export default function BookingStatus() {
     ));
   };
 
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#2D1A46" />
+          <Text style={styles.loadingText}>Loading appointment details...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!appointment) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>Appointment not found</Text>
+          <TouchableOpacity 
+            style={styles.homeButton}
+            onPress={() => router.push('/(tabs)/home')}
+          >
+            <Text style={styles.homeButtonText}>Back to Home</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.content}>
@@ -49,25 +90,38 @@ export default function BookingStatus() {
         {/* Booking Details */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Booking Details</Text>
+          {appointment.service && (
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Service:</Text>
+              <Text style={styles.detailValue}>{appointment.service.name}</Text>
+            </View>
+          )}
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Date:</Text>
             <Text style={styles.detailValue}>
-              {new Date(date as string).toLocaleDateString()}
+              {new Date(appointment.scheduled_for).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
             </Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Time:</Text>
-            <Text style={styles.detailValue}>{time}</Text>
+            <Text style={styles.detailValue}>
+              {formatTime(appointment.scheduled_for)} - {formatTime(appointment.scheduled_until)}
+            </Text>
           </View>
           <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Location:</Text>
-            <Text style={styles.detailValue}>
-              {location === 'home' ? 'At Your Home' : 'At Salon'}
+            <Text style={styles.detailLabel}>Status:</Text>
+            <Text style={[styles.detailValue, styles.statusText]}>
+              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
             </Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Total Paid:</Text>
-            <Text style={styles.detailValue}>${total}</Text>
+            <Text style={styles.detailValue}>{appointment.currency} {appointment.amount}</Text>
           </View>
         </View>
 
@@ -145,7 +199,7 @@ export default function BookingStatus() {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.homeButton}
-          onPress={() => router.push('/home')}
+          onPress={() => router.push('/(tabs)/home')}
         >
           <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>
@@ -316,5 +370,29 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#666',
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#666',
+    marginBottom: 24,
+  },
+  statusText: {
+    textTransform: 'capitalize',
   },
 });
