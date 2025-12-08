@@ -55,10 +55,18 @@ interface UpdateProfileRequest {
 }
 
 interface ProviderApplicationRequest {
-  specialty?: string;
-  experience?: string;
-  certifications?: string;
-  reason?: string;
+  business_name?: string;
+  business_address?: string;
+  description?: string;
+  service_categories?: string[];
+  years_of_experience?: number;
+  certifications?: string[];
+  portfolio_urls?: string[];
+  availability_schedule?: string;
+  base_price?: number;
+  emergency_contact?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 export const profileApi = api.injectEndpoints({

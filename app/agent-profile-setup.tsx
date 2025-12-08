@@ -1,41 +1,56 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator, Modal } from 'react-native';
+import { ArrowLeft, ChevronDown } from 'lucide-react-native';
 import { useApplyForProviderMutation, useUpdateUnifiedProfileMutation } from '@/store/services/profileApi';
+import { useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 
 export default function AgentProfileSetup() {
   const [businessName, setBusinessName] = useState('');
-  const [specialty, setSpecialty] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [experience, setExperience] = useState('');
   const [certifications, setCertifications] = useState('');
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('Cameroon');
   const [aboutMe, setAboutMe] = useState('');
+  const [basePrice, setBasePrice] = useState('');
+  const [availability, setAvailability] = useState('');
+  const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   
+  const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
   const [applyForProvider, { isLoading: isApplying }] = useApplyForProviderMutation();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateUnifiedProfileMutation();
 
   const handleSaveProfile = async () => {
-    if (!businessName || !specialty || !experience || !phone || !city) {
-      Alert.alert('Error', 'Please fill in all required fields');
+    if (!businessName || selectedCategories.length === 0 || !experience || !phone || !city || !basePrice || !availability) {
+      Alert.alert('Error', 'Please fill in all required fields including category, price, and availability');
       return;
     }
+
+    const categoryNames = categories?.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(', ') || '';
 
     try {
       await updateProfile({
         phone_number: phone,
         city,
         country,
-        about_me: aboutMe || `${businessName} - ${specialty} specialist with ${experience} years of experience.`,
+        about_me: aboutMe || `${businessName} - ${categoryNames} specialist with ${experience} years of experience.`,
       }).unwrap();
 
       await applyForProvider({
-        specialty,
-        experience,
-        certifications: certifications || 'None provided',
-        reason: `I would like to offer ${specialty} services through Mubaku Lifestyle platform.`,
+        business_name: businessName,
+        business_address: `${city}, ${country}`,
+        description: aboutMe || `${businessName} - ${categoryNames} specialist with ${experience} years of experience.`,
+        service_categories: selectedCategories,
+        years_of_experience: parseInt(experience) || 0,
+        certifications: certifications ? [certifications] : [],
+        portfolio_urls: [],
+        availability_schedule: availability,
+        base_price: parseFloat(basePrice) || 0,
+        emergency_contact: phone,
+        latitude: 0,
+        longitude: 0,
       }).unwrap();
 
       Alert.alert(
@@ -142,13 +157,18 @@ export default function AgentProfileSetup() {
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Specialty *</Text>
-                <TextInput
-                  style={styles.input}
-                  value={specialty}
-                  onChangeText={setSpecialty}
-                  placeholder="e.g., Hair Styling, Makeup, Nails"
-                />
+                <Text style={styles.label}>Service Categories *</Text>
+                <TouchableOpacity
+                  style={styles.pickerButton}
+                  onPress={() => setShowCategoryPicker(true)}
+                >
+                  <Text style={[styles.pickerText, selectedCategories.length === 0 && styles.pickerPlaceholder]}>
+                    {selectedCategories.length > 0
+                      ? categories?.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(', ')
+                      : 'Select service categories'}
+                  </Text>
+                  <ChevronDown color="#666" size={20} />
+                </TouchableOpacity>
               </View>
 
               <View style={styles.inputContainer}>
@@ -206,6 +226,29 @@ export default function AgentProfileSetup() {
               </View>
 
               <View style={styles.inputContainer}>
+                <Text style={styles.label}>Base Price (XAF) *</Text>
+                <TextInput
+                  style={styles.input}
+                  value={basePrice}
+                  onChangeText={setBasePrice}
+                  placeholder="e.g., 10000"
+                  keyboardType="numeric"
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Availability Schedule *</Text>
+                <TextInput
+                  style={[styles.input, styles.textArea]}
+                  value={availability}
+                  onChangeText={setAvailability}
+                  placeholder="e.g., Monday-Friday: 9:00 AM - 6:00 PM"
+                  multiline
+                  numberOfLines={3}
+                />
+              </View>
+
+              <View style={styles.inputContainer}>
                 <Text style={styles.label}>About Me (Optional)</Text>
                 <TextInput
                   style={[styles.input, styles.textArea]}
@@ -238,6 +281,51 @@ export default function AgentProfileSetup() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Modal
+        visible={showCategoryPicker}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setShowCategoryPicker(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Select Categories</Text>
+              <TouchableOpacity onPress={() => setShowCategoryPicker(false)}>
+                <Text style={styles.modalDone}>Done</Text>
+              </TouchableOpacity>
+            </View>
+            <ScrollView style={styles.categoriesList}>
+              {categoriesLoading ? (
+                <ActivityIndicator size="large" color="#2D1A46" />
+              ) : (
+                categories?.map((category) => {
+                  const isSelected = selectedCategories.includes(category.id);
+                  return (
+                    <TouchableOpacity
+                      key={category.id}
+                      style={styles.categoryOption}
+                      onPress={() => {
+                        if (isSelected) {
+                          setSelectedCategories(prev => prev.filter(id => id !== category.id));
+                        } else {
+                          setSelectedCategories(prev => [...prev, category.id]);
+                        }
+                      }}
+                    >
+                      <View style={[styles.checkbox, isSelected && styles.checkboxSelected]}>
+                        {isSelected && <Text style={styles.checkmark}>✓</Text>}
+                      </View>
+                      <Text style={styles.categoryOptionText}>{category.name}</Text>
+                    </TouchableOpacity>
+                  );
+                })
+              )}
+            </ScrollView>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -352,5 +440,85 @@ const styles = StyleSheet.create({
     color: '#E65100',
     textAlign: 'center',
     lineHeight: 20,
+  },
+  pickerButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#F9F9F9',
+  },
+  pickerText: {
+    fontSize: 16,
+    color: '#333',
+    flex: 1,
+  },
+  pickerPlaceholder: {
+    color: '#999',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '70%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  modalDone: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#F4A896',
+  },
+  categoriesList: {
+    padding: 20,
+  },
+  categoryOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkboxSelected: {
+    backgroundColor: '#2D1A46',
+  },
+  checkmark: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  categoryOptionText: {
+    fontSize: 16,
+    color: '#333',
   },
 });

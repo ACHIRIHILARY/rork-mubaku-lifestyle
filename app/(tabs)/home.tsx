@@ -181,6 +181,9 @@ export default function HomeScreen() {
                     {provider.city && (
                       <Text style={styles.providerLocation}>📍 {provider.city}</Text>
                     )}
+                    {provider.phone_number && (
+                      <Text style={styles.providerContact}>📞 {provider.phone_number}</Text>
+                    )}
                   </View>
                   <TouchableOpacity 
                     style={styles.viewProfileButton}
@@ -430,6 +433,12 @@ const styles = StyleSheet.create({
   providerLocation: {
     fontSize: 12,
     color: '#888',
+    marginTop: 4,
+  },
+  providerContact: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 2,
   },
   viewProfileButton: {
     backgroundColor: '#F4A896',
