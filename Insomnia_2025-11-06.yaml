@@ -1,0 +1,1494 @@
+type: collection.insomnia.rest/5.0
+name: Mubaku API
+meta:
+  id: wrk_eb9010fab1d54bdcaa8179617154e4f6
+  created: 1757928162491
+  modified: 1757928162490
+  description: ""
+collection:
+  - name: Authenitcation
+    meta:
+      id: fld_226ff9c69c174c7bbf85ccdf9adac803
+      created: 1757928200899
+      modified: 1759350307170
+      sortKey: -1759306344116
+      description: ""
+    children:
+      - url: "https://mubaku.com/api/v1/auth/jwt/create/1"
+        name: Login User
+        meta:
+          id: req_3fc5c28814214189ac99f6bc6d898d07
+          created: 1757928321096
+          modified: 1761693246279
+          isPrivate: false
+          description: ""
+          sortKey: -1757928321096
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "admin@mail.com",
+            	"password": "admin"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.5.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/auth/users/me/"
+        name: Get my Account
+        meta:
+          id: req_c09edc1f8fde4fb7b9efba58187dfca8
+          created: 1758024395386
+          modified: 1759826017973
+          isPrivate: false
+          description: ""
+          sortKey: -1758024395387
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.5.0
+          - name: Accept-Language
+            value: fr
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/auth/users/1/"
+        name: Get User Account [ID]
+        meta:
+          id: req_f1c590cec2344e8fb09e761f07d4d1a8
+          created: 1758025547609
+          modified: 1758929188450
+          isPrivate: false
+          description: ""
+          sortKey: -1758019753857
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.5.0
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/auth/users/"
+        name: Register User
+        meta:
+          id: req_112c2fc390964f78aab97a492fc0ccab
+          created: 1759825781851
+          modified: 1759825924468
+          isPrivate: false
+          description: ""
+          sortKey: -1757741193978
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "user1@mail.com",
+            	"username": "user1",
+            	"first_name": "abang",
+            	"last_name": "abong",
+            	"password": "admin"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.5.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Profile Managment
+    meta:
+      id: fld_871e7843824c4920a2da4800a5eca26b
+      created: 1759306344016
+      modified: 1759306344016
+      sortKey: -1759306344016
+      description: ""
+    children:
+      - url: "https://mubaku.com/api/v1/users/me/"
+        name: GET current profile
+        meta:
+          id: req_e868e75deec94300931cf452cddf0903
+          created: 1759306424585
+          modified: 1759306656727
+          isPrivate: false
+          description: ""
+          sortKey: -1759306424586
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/users/me/data/"
+        name: GET current user data
+        meta:
+          id: req_25295e388faf4ed1b69d4cf6c4b7be92
+          created: 1759306723473
+          modified: 1759306763642
+          isPrivate: false
+          description: ""
+          sortKey: -1759245203319.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/users/07597d20-db57-44fe-9863-43c99d522504/update-role/"
+        name: UPDATE user role
+        meta:
+          id: req_c15bad3435234df3bf02fd9352507cfc
+          created: 1759306792827
+          modified: 1759339985250
+          isPrivate: false
+          description: ""
+          sortKey: -1759214592686.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"role": "admin"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/users/07597d20-db57-44fe-9863-43c99d522504/update/"
+        name: UPDATE user profile
+        meta:
+          id: req_af6823e022ad4c348a0f3aeb87ecb0e5
+          created: 1759340208763
+          modified: 1759343815823
+          isPrivate: false
+          description: ""
+          sortKey: -1759199287369.625
+        method: PATCH
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: profile_photo
+              value: ""
+              id: pair_26f7172d20414ba9aaa76c9a64ac940d
+              type: file
+              fileName: /home/electron/Pictures/Screenshots/Screenshot from 2025-09-16
+                13-42-21.png
+            - id: pair_e74b4943072b420797ba6606142dbbaf
+              name: city
+              value: Yaounde
+              description: ""
+              disabled: false
+            - id: pair_324f5739e7c049f2b7f4a27e1ec6ede1
+              name: gender
+              value: Male
+              description: ""
+              disabled: false
+            - id: pair_2b85a3f67a3648a3b2b12f888432fd73
+              name: phone_number
+              value: "+237670181442"
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/users/me/unified/"
+        name: GET current user unified
+        meta:
+          id: req_9e9de973078a42789ce40525d2029cc2
+          created: 1759340249471
+          modified: 1759340261993
+          isPrivate: false
+          description: ""
+          sortKey: -1759229898002.875
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/users/07597d20-db57-44fe-9863-43c99d522504/"
+        name: GET Profile By ID
+        meta:
+          id: req_0ba3c829ce5045d2a054d90b1a5fc580
+          created: 1759340583486
+          modified: 1759345334099
+          isPrivate: false
+          description: ""
+          sortKey: -1759222245344.5625
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Accept-Language
+            value: fr
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/users/07597d20-db57-44fe-9863-43c99d522504/verify-provider/"
+        name: Verify Provider Account
+        meta:
+          id: req_f3e1bbbf5d86448a889e965b4c135567
+          created: 1759341475000
+          modified: 1759344501950
+          isPrivate: false
+          description: ""
+          sortKey: -1759199287269.625
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"role": "provider"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/users/apply-provider/"
+        name: Apply for provider account
+        meta:
+          id: req_a112f1f046304ad4b7d7c4f2879e85c4
+          created: 1759343927228
+          modified: 1760975541702
+          isPrivate: false
+          description: ""
+          sortKey: -1759191634661.3125
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "business_name": "Tech Solutions Africa",
+              "business_address": "789 Tech Hub, Silicon Street, Yaoundé, Centre Region, Cameroon",
+              "description": "Comprehensive IT services including website development, mobile app development, network setup, and IT consulting. We help businesses establish strong online presence and optimize their digital operations.",
+              
+              "service_categories": [
+                "web_development",
+                "mobile_apps",
+                "it_consulting",
+                "network_setup"
+              ],
+              
+              "years_of_experience": 7,
+              
+              "certifications": [
+                "Microsoft Certified Solutions Expert",
+                "AWS Certified Solutions Architect",
+                "Google Mobile Web Specialist"
+              ],
+              
+              "portfolio_urls": [
+                "https://github.com/techsolutionsafrica",
+                "https://techsolutionsafrica.com/portfolio",
+                "https://linkedin.com/company/techsolutionsafrica"
+              ],
+              
+              "availability_schedule": "Monday-Friday: 9:00 AM - 6:00 PM, Remote support: 24/7 for existing clients",
+              
+              "emergency_contact": "+237 6XX XXX XXX (for critical system failures)",
+              
+              "latitude": 3.848032,
+              "longitude": 11.502075
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/users/withdraw-application/"
+        name: Withdraw Provider Application
+        meta:
+          id: req_38d4925a09ac436f9a9b3ac577007592
+          created: 1759344668123
+          modified: 1761693206118
+          isPrivate: false
+          description: ""
+          sortKey: -1759187808357.1562
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/users/07597d20-db57-44fe-9863-43c99d522504/unverify-provider/"
+        name: UnVerify Provider Account
+        meta:
+          id: req_2898424d99bf4ff5b5df7393d6e9d9e2
+          created: 1762032610752
+          modified: 1762032630747
+          isPrivate: false
+          description: ""
+          sortKey: -1759195460965.4688
+        method: POST
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Categories and Services
+    meta:
+      id: fld_69a2c58ce13a401bac5951ac27077752
+      created: 1759350261018
+      modified: 1759713501197
+      sortKey: -1759134080064.75
+      description: ""
+    children:
+      - url: "https://mubaku.com/api/v1/services/categories/create/"
+        name: Create Category [Admin]
+        meta:
+          id: req_dde90d95057541b4962bdc161e36eaa0
+          created: 1759350321860
+          modified: 1759351441544
+          isPrivate: false
+          description: ""
+          sortKey: -1759350321860
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: name
+              value: Hair Dressing
+              id: pair_f99a2532193043898b9d9f8a9fc66313
+            - id: pair_b2c45d93267246e7bbcb67c1c2229a89
+              name: description
+              value: Professional home cleaning and maintenance services
+              description: ""
+              disabled: false
+            - id: pair_c191043c98df4e25a4e1b8f763dde509
+              name: image_url
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: /home/electron/Pictures/Screenshots/Screenshot from 2025-09-16
+                13-42-21.png
+            - id: pair_9217f870946e4d3b83092075ae1a2ab2
+              name: is_active
+              value: "true"
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/services/categories/336f0b7c-49f0-455e-9ed0-6a5711e60dfa/update/"
+        name: Update Category
+        meta:
+          id: req_9d1f110825764996b6b1ee8509051978
+          created: 1759350977366
+          modified: 1759351091084
+          isPrivate: false
+          description: ""
+          sortKey: -1759328373223
+        method: PUT
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: name
+              value: Barbing Updated
+              id: pair_f99a2532193043898b9d9f8a9fc66313
+            - id: pair_b2c45d93267246e7bbcb67c1c2229a89
+              name: description
+              value: Professional home cleaning and maintenance services
+              description: ""
+              disabled: false
+            - id: pair_c191043c98df4e25a4e1b8f763dde509
+              name: image_url
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: /home/electron/Pictures/Screenshots/Screenshot from 2025-09-16
+                13-42-21.png
+            - id: pair_9217f870946e4d3b83092075ae1a2ab2
+              name: is_active
+              value: "true"
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/create/"
+        name: Create Service [Provider Only]
+        meta:
+          id: req_2eb6b68168694e79b6462d2430a72ece
+          created: 1759351139858
+          modified: 1759352224551
+          isPrivate: false
+          description: ""
+          sortKey: -1759328373123
+        method: POST
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "name": "Professional Hair Styling",
+              "description": "Expert hair cutting, styling, and treatment services for all hair types. Using premium hair care products.",
+              "category": 3,
+              "duration_minutes": 40,
+              "price": 12000.00,
+              "currency": "XAF",
+              "is_active": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/1eb0e769-9f79-4919-8d46-a8113d548f32/update/"
+        meta:
+          id: req_091ce78f88634cb09ae52535a982126c
+          created: 1759351882046
+          modified: 1759352002846
+          isPrivate: false
+          description: ""
+          sortKey: -1759317398854.5
+        method: PUT
+        body:
+          mimeType: application/json
+          text: >-
+            {
+              "name": "Premium Deep Home Cleaning",
+              "description": "Enhanced deep cleaning service with premium eco-friendly products. Includes sanitization and odor elimination.",
+              "category": 4,
+              "duration_minutes": 35,
+              "price": 35000.00,
+              "currency": "XAF",
+              "is_active": true
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/1eb0e769-9f79-4919-8d46-a8113d548f32/update/"
+        name: Partial Update Service [Provider Only]
+        meta:
+          id: req_0714f763e39f4cd89c2d63cc039e3966
+          created: 1759351959961
+          modified: 1759352072661
+          isPrivate: false
+          description: ""
+          sortKey: -1759311911720.25
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "price": 30000.00
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/"
+        name: Get all services
+        meta:
+          id: req_5f8ab72c07a44614be92068898d1b78e
+          created: 1759352281105
+          modified: 1759352521565
+          isPrivate: false
+          description: ""
+          sortKey: -1759309168153.125
+        method: GET
+        parameters:
+          - id: pair_91ac6aa5563142378f99fa196ab49915
+            name: category
+            value: "1"
+            description: ""
+            disabled: true
+          - id: pair_20f098a1987442a48ba6fbd3942f5966
+            name: provider
+            value: "2"
+            description: ""
+            disabled: true
+          - id: pair_549d4ed784734c1c82dc899df995bb43
+            name: max_prim
+            value: "3000"
+            description: ""
+            disabled: true
+          - id: pair_7e544fd31a4a4c5cb5b85e978a122063
+            name: search
+            value: cleaning
+            description: ""
+            disabled: true
+          - id: pair_b09f02bcef1641899dd5561b908cc681
+            name: verified_only
+            value: "true"
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/services/categories/d4182d88-5a6b-4cbb-a67c-05838cd36877/services"
+        name: Get Services By Cateogry
+        meta:
+          id: req_0f429f94cb2f4262816b10e89a6af06a
+          created: 1759352557980
+          modified: 1759352596639
+          isPrivate: false
+          description: ""
+          sortKey: -1759307796369.5625
+        method: GET
+        parameters:
+          - id: pair_91ac6aa5563142378f99fa196ab49915
+            name: category
+            value: "1"
+            description: ""
+            disabled: true
+          - id: pair_20f098a1987442a48ba6fbd3942f5966
+            name: provider
+            value: "2"
+            description: ""
+            disabled: true
+          - id: pair_549d4ed784734c1c82dc899df995bb43
+            name: max_prim
+            value: "3000"
+            description: ""
+            disabled: true
+          - id: pair_7e544fd31a4a4c5cb5b85e978a122063
+            name: search
+            value: cleaning
+            description: ""
+            disabled: true
+          - id: pair_b09f02bcef1641899dd5561b908cc681
+            name: verified_only
+            value: "true"
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/provider/110fc8d0-e63a-499d-8f58-61262da6fa19"
+        name: Get Services By Provider
+        meta:
+          id: req_26b222c2e859490185954957e24d1954
+          created: 1759352615605
+          modified: 1759352789131
+          isPrivate: false
+          description: ""
+          sortKey: -1759307110477.7812
+        method: GET
+        parameters:
+          - id: pair_91ac6aa5563142378f99fa196ab49915
+            name: category
+            value: "1"
+            description: ""
+            disabled: true
+          - id: pair_20f098a1987442a48ba6fbd3942f5966
+            name: provider
+            value: "2"
+            description: ""
+            disabled: true
+          - id: pair_549d4ed784734c1c82dc899df995bb43
+            name: max_prim
+            value: "3000"
+            description: ""
+            disabled: true
+          - id: pair_7e544fd31a4a4c5cb5b85e978a122063
+            name: search
+            value: cleaning
+            description: ""
+            disabled: true
+          - id: pair_b09f02bcef1641899dd5561b908cc681
+            name: verified_only
+            value: "true"
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/my-services"
+        name: Get all logged in provider services
+        meta:
+          id: req_7f0b91a1d6e8406e87a87ab050931f2c
+          created: 1759353079085
+          modified: 1759353105913
+          isPrivate: false
+          description: ""
+          sortKey: -1759306767531.8906
+        method: GET
+        parameters:
+          - id: pair_91ac6aa5563142378f99fa196ab49915
+            name: category
+            value: "1"
+            description: ""
+            disabled: true
+          - id: pair_20f098a1987442a48ba6fbd3942f5966
+            name: provider
+            value: "2"
+            description: ""
+            disabled: true
+          - id: pair_549d4ed784734c1c82dc899df995bb43
+            name: max_prim
+            value: "3000"
+            description: ""
+            disabled: true
+          - id: pair_7e544fd31a4a4c5cb5b85e978a122063
+            name: search
+            value: cleaning
+            description: ""
+            disabled: true
+          - id: pair_b09f02bcef1641899dd5561b908cc681
+            name: verified_only
+            value: "true"
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/my-stats"
+        name: Get stats for provider services for logged in provider
+        meta:
+          id: req_2dcd9440632c4f91afbb8099f3a437ac
+          created: 1759353127165
+          modified: 1759353180463
+          isPrivate: false
+          description: ""
+          sortKey: -1759306596058.9453
+        method: GET
+        parameters:
+          - id: pair_91ac6aa5563142378f99fa196ab49915
+            name: category
+            value: "1"
+            description: ""
+            disabled: true
+          - id: pair_20f098a1987442a48ba6fbd3942f5966
+            name: provider
+            value: "2"
+            description: ""
+            disabled: true
+          - id: pair_549d4ed784734c1c82dc899df995bb43
+            name: max_prim
+            value: "3000"
+            description: ""
+            disabled: true
+          - id: pair_7e544fd31a4a4c5cb5b85e978a122063
+            name: search
+            value: cleaning
+            description: ""
+            disabled: true
+          - id: pair_b09f02bcef1641899dd5561b908cc681
+            name: verified_only
+            value: "true"
+            description: ""
+            disabled: true
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/categories"
+        name: Get All Categories
+        meta:
+          id: req_71226aa1c05043c1b4f028ce9ebc8e6a
+          created: 1759353266520
+          modified: 1759353322703
+          isPrivate: false
+          description: ""
+          sortKey: -1759328373173
+        method: GET
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: name
+              value: Barbing Updated
+              id: pair_f99a2532193043898b9d9f8a9fc66313
+            - id: pair_b2c45d93267246e7bbcb67c1c2229a89
+              name: description
+              value: Professional home cleaning and maintenance services
+              description: ""
+              disabled: false
+            - id: pair_c191043c98df4e25a4e1b8f763dde509
+              name: image_url
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: /home/electron/Pictures/Screenshots/Screenshot from 2025-09-16
+                13-42-21.png
+            - id: pair_9217f870946e4d3b83092075ae1a2ab2
+              name: is_active
+              value: "true"
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/services/categories/336f0b7c-49f0-455e-9ed0-6a5711e60dfa"
+        name: Get Category Details
+        meta:
+          id: req_0c8f5198c3e24d63a8421bb087c6db71
+          created: 1759353301180
+          modified: 1759353341161
+          isPrivate: false
+          description: ""
+          sortKey: -1759328373148
+        method: GET
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: name
+              value: Barbing Updated
+              id: pair_f99a2532193043898b9d9f8a9fc66313
+            - id: pair_b2c45d93267246e7bbcb67c1c2229a89
+              name: description
+              value: Professional home cleaning and maintenance services
+              description: ""
+              disabled: false
+            - id: pair_c191043c98df4e25a4e1b8f763dde509
+              name: image_url
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: /home/electron/Pictures/Screenshots/Screenshot from 2025-09-16
+                13-42-21.png
+            - id: pair_9217f870946e4d3b83092075ae1a2ab2
+              name: is_active
+              value: "true"
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/services/8334bfca-ebaf-4f32-aa03-8a00c809128b"
+        name: Get Service Details
+        meta:
+          id: req_71314f2b94ef49babf7de80ccd36c01d
+          created: 1759353378056
+          modified: 1759353860155
+          isPrivate: false
+          description: ""
+          sortKey: -1759310539936.6875
+        method: GET
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "price": 30000.00
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+          - name: Accept-Language
+            value: fr
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Appointments Managment
+    meta:
+      id: fld_5bbb9cb4577448e999e367712bce4728
+      created: 1759713446380
+      modified: 1759713486559
+      sortKey: -1758961816113.5
+      description: ""
+    children:
+      - url: "https://mubaku.com/api/v1/appointments/availability/"
+        name: Set Provider Availability
+        meta:
+          id: req_41644958ebeb40bcaae2beeee5fab9b0
+          created: 1759714296915
+          modified: 1759714731741
+          isPrivate: false
+          description: ""
+          sortKey: -1759714296915
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "day_of_week": 0,
+              "start_time": "09:00:00",
+              "end_time": "17:00:00"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments/availability/"
+        name: Get Provider Availability
+        meta:
+          id: req_7fe84f4d086647d6a55ba730def654f7
+          created: 1759714440086
+          modified: 1759714440086
+          isPrivate: false
+          description: ""
+          sortKey: -1759532309387.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/appointments/availability/4c3d3ffb-3eeb-45b6-831e-3885868d0bd4/"
+        name: Delete Provider Availability
+        meta:
+          id: req_4b2c0bcc806444458b9a3a3688fefc92
+          created: 1759715140819
+          modified: 1759715192331
+          isPrivate: false
+          description: ""
+          sortKey: -1759441315623.75
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments/availability/exceptions"
+        name: Get Provider Availability Execeptions
+        meta:
+          id: req_987d1cf706c64465b2fb68aaa0001ef2
+          created: 1759715265842
+          modified: 1759715273536
+          isPrivate: false
+          description: ""
+          sortKey: -1759486812505.625
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments/availability/exceptions/"
+        name: Set Provider Availability Exception
+        meta:
+          id: req_9d2c0c8cbb134323bf27a54f8abbd0cf
+          created: 1759715319085
+          modified: 1759715476974
+          isPrivate: false
+          description: ""
+          sortKey: -1759623303151.25
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "exception_date": "2024-12-24",
+              "exception_type": "modified_hours",
+              "start_time": "10:00:00",
+              "end_time": "14:00:00",
+              "reason": "Christmas Eve - Short Day"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments//services/{service_id}/slots/"
+        name: "Get Slots "
+        meta:
+          id: req_8dd86a4a088643a88a39389b8858834f
+          created: 1759715887373
+          modified: 1759715963156
+          isPrivate: false
+          description: ""
+          sortKey: -1759577806269.375
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "{{ _.access_token }}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments/"
+        meta:
+          id: req_7a5476f39385446ea4d6aab1c6732669
+          created: 1759715984537
+          modified: 1759829617720
+          isPrivate: false
+          description: ""
+          sortKey: -1759600554710.3125
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "service_id": "8334bfca-ebaf-4f32-aa03-8a00c809128b",
+              "scheduled_for": "2025-01-15T09:30:00",
+              "scheduled_until": "2025-01-15T10:00:00",
+              "amount": 15000.00,
+              "currency": "XAF"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments/my"
+        meta:
+          id: req_e5a9bee669b9486c887ff79517c58d4c
+          created: 1759826398736
+          modified: 1759826420721
+          isPrivate: false
+          description: ""
+          sortKey: -1759589180489.8438
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "https://mubaku.com/api/v1/appointments/5546e543-7f43-47f8-aeac-d118d26f0812"
+        name: Get Appointment Detail
+        meta:
+          id: req_559eb25af59a456bbebbef64c836eb50
+          created: 1759826453365
+          modified: 1759826476422
+          isPrivate: false
+          description: ""
+          sortKey: -1759583493379.6094
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/appointments/providers/110fc8d0-e63a-499d-8f58-61262da6fa19/calend\
+          ar/2025/1/"
+        name: Get Provider Calendar View
+        meta:
+          id: req_5c9a96f4772d4ebb91e878ba0a7df260
+          created: 1759826533822
+          modified: 1759827462693
+          isPrivate: false
+          description: ""
+          sortKey: -1759580649824.4922
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/appointments/5546e543-7f43-47f8-aeac-d118d26f0812/confirm-payment/"
+        name: Confirm Appointment Payment
+        meta:
+          id: req_a64d28a8996c4cf6935ab3fc9ea886ce
+          created: 1759830573180
+          modified: 1759830642868
+          isPrivate: false
+          description: ""
+          sortKey: -1759594867600.0781
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "service_id": "8334bfca-ebaf-4f32-aa03-8a00c809128b",
+              "scheduled_for": "2025-01-15T09:30:00",
+              "scheduled_until": "2025-01-15T10:00:00",
+              "amount": 15000.00,
+              "currency": "XAF"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/appointments/5546e543-7f43-47f8-aeac-d118d26f0812/cancel/"
+        name: "Cancel Appointment "
+        meta:
+          id: req_8d9f0792d2464d53accc73b9c6d5f503
+          created: 1759830679519
+          modified: 1759830728138
+          isPrivate: false
+          description: ""
+          sortKey: -1759592024044.961
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "reason": "Client emergency"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/appointments/5546e543-7f43-47f8-aeac-d118d26f0812/reschedule/"
+        name: "Reschedule Appointment "
+        meta:
+          id: req_3e51c1e334674fccb712107976b5b803
+          created: 1759830770105
+          modified: 1759830817554
+          isPrivate: false
+          description: ""
+          sortKey: -1759590602267.4023
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "scheduled_for": "2025-01-16T10:00:00",
+              "scheduled_until": "2025-01-16T10:30:00"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_route
+          }}/appointments/providers/110fc8d0-e63a-499d-8f58-61262da6fa19/calend\
+          ar/2025/1/15"
+        name: Get Provider Day Availability
+        meta:
+          id: req_57510267c22643f5a698e1eda0607ef8
+          created: 1759830869327
+          modified: 1759830885113
+          isPrivate: false
+          description: ""
+          sortKey: -1759579228046.9336
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          type: bearer
+          token: "token"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_c2ec09cd1615b0e8ce62b0c55807720d10d8dab1
+    created: 1757928162514
+    modified: 1757928162514
+environments:
+  name: Mubaka Env
+  meta:
+    id: env_c2ec09cd1615b0e8ce62b0c55807720d10d8dab1
+    created: 1757928162503
+    modified: 1761693269303
+    isPrivate: false
+  data:
+    base_route: localhost/api/v1
+    access_token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYyNTU3MjUxLCJpYXQiOjE3NjE2OTMyNTEsImp0aSI6IjU4MjlkYmZmMzRjMDQ2ZjdhNzkwZWEwNGIyNWM4YTU5IiwidXNlcl9pZCI6IjA3NTk3ZDIwLWRiNTctNDRmZS05ODYzLTQzYzk5ZDUyMjUwNCJ9.r-WsauNbv1pUbFvfBoph8sRfFXWA3B0EQHwtsaEnQKs
+    access_token_client: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzYwNjg5OTU4LCJpYXQiOjE3NTk4MjU5NTgsImp0aSI6IjI5MTQyMmYyZTJkODRjNjQ5YzJmMzFkZjI1NzcyYmMyIiwidXNlcl9pZCI6ImYzMDllZjNkLTE2YmUtNDBiZC1iZTllLTg2N2FlNWU0ZmMzNSJ9.jeISiv2eQBougTKFYfhkdjuzYEHEYreTh6VNCWFfYqM
