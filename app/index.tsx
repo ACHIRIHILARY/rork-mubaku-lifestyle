@@ -1,9 +1,7 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function SplashScreen() {
   useEffect(() => {
@@ -31,7 +29,7 @@ export default function SplashScreen() {
         
         <TouchableOpacity 
           style={styles.getStartedButton}
-          onPress={() => router.push('/language')}
+          onPress={() => router.push('/login')}
         >
           <Text style={styles.getStartedText}>Get Started</Text>
         </TouchableOpacity>

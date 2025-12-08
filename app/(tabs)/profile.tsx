@@ -1,13 +1,12 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
-import { User, Lock, Trash2, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package, Edit, Languages } from 'lucide-react-native';
+import { User, Lock, Trash2, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package, Edit } from 'lucide-react-native';
 import { useGetCurrentUserQuery, useChangePasswordMutation, useDeleteAccountMutation } from '@/store/services/authApi';
 import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
 import { logout as logoutAction } from '@/store/authSlice';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { LANGUAGES } from '@/app/language';
+
 
 export default function ProfileSettingsScreen() {
   const { data: user, isLoading } = useGetCurrentUserQuery();
@@ -15,7 +14,7 @@ export default function ProfileSettingsScreen() {
   const [changePassword] = useChangePasswordMutation();
   const [deleteAccount] = useDeleteAccountMutation();
   const dispatch = useAppDispatch();
-  const { currentLanguage, getLanguageName } = useLanguage();
+
 
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
@@ -145,16 +144,7 @@ export default function ProfileSettingsScreen() {
       icon: Lock,
       onPress: () => setPasswordModalVisible(true)
     },
-    {
-      id: 'language',
-      title: 'Language Preference',
-      description: `Current: ${getLanguageName(currentLanguage)}`,
-      icon: Languages,
-      onPress: () => {
-        router.push('/language');
-      },
-      badge: LANGUAGES.find(lang => lang.code === currentLanguage)?.flag || '🌐'
-    },
+
     {
       id: 'delete-account',
       title: 'Delete Account',
@@ -301,12 +291,7 @@ export default function ProfileSettingsScreen() {
                     <Text style={styles.settingDescription}>{option.description}</Text>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  {'badge' in option && option.badge && (
-                    <Text style={styles.settingBadge}>{option.badge}</Text>
-                  )}
-                  <ChevronRight color="#ccc" size={20} />
-                </View>
+                <ChevronRight color="#ccc" size={20} />
               </TouchableOpacity>
             );
           })}

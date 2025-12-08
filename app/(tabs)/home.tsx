@@ -5,11 +5,11 @@ import { Search, Star, X, User } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
-import { useTranslation } from 'react-i18next';
+
 
 
 export default function HomeScreen() {
-  const { t } = useTranslation();
+
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
@@ -90,8 +90,8 @@ export default function HomeScreen() {
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <View>
-              <Text style={styles.greeting}>{t('home.greeting')}, {user?.first_name || t('home.guest')}!</Text>
-              <Text style={styles.subGreeting}>{t('home.findPerfectLook')}</Text>
+              <Text style={styles.greeting}>Hello, {user?.first_name || 'Guest'}!</Text>
+              <Text style={styles.subGreeting}>Find your perfect look</Text>
             </View>
           </View>
 
@@ -100,7 +100,7 @@ export default function HomeScreen() {
             <Search color="#666" size={20} />
             <TextInput
               style={styles.searchInput}
-              placeholder={t('home.searchPlaceholder')}
+              placeholder="Search services..."
               placeholderTextColor="#666"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -117,14 +117,14 @@ export default function HomeScreen() {
         {categories && categories.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{t('home.categories')}</Text>
+              <Text style={styles.sectionTitle}>Categories</Text>
               {(selectedCategory || debouncedSearch) && (
                 <TouchableOpacity 
                   style={styles.clearFilterButton}
                   onPress={handleClearAll}
                 >
                   <X color="#666" size={16} />
-                  <Text style={styles.clearFilterText}>{t('home.clearAll')}</Text>
+                  <Text style={styles.clearFilterText}>Clear All</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -159,7 +159,7 @@ export default function HomeScreen() {
         {providers && providers.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{t('home.approvedProviders')}</Text>
+              <Text style={styles.sectionTitle}>Approved Providers</Text>
             </View>
             <View style={styles.providersContainer}>
               {providers.map((provider) => (
@@ -186,7 +186,7 @@ export default function HomeScreen() {
                     style={styles.viewProfileButton}
                     onPress={() => handleProviderPress(provider.pkid)}
                   >
-                    <Text style={styles.viewProfileButtonText}>{t('home.viewProfile')}</Text>
+                    <Text style={styles.viewProfileButtonText}>View Profile</Text>
                   </TouchableOpacity>
                 </TouchableOpacity>
               ))}
@@ -198,7 +198,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>
-              {selectedCategory || debouncedSearch ? t('home.searchResults') : t('home.availableServices')}
+              {selectedCategory || debouncedSearch ? 'Search Results' : 'Available Services'}
             </Text>
             {servicesLoading && debouncedSearch && (
               <ActivityIndicator size="small" color="#2D1A46" />
@@ -226,13 +226,13 @@ export default function HomeScreen() {
                       <Text style={styles.price}>{service.price} {service.currency}</Text>
                     </View>
                     <View style={styles.durationContainer}>
-                      <Text style={styles.duration}>{service.duration_minutes} {t('home.min')}</Text>
+                      <Text style={styles.duration}>{service.duration_minutes} min</Text>
                     </View>
                     <TouchableOpacity 
                       style={styles.bookButton}
                       onPress={() => handleServicePress(service.id)}
                     >
-                      <Text style={styles.bookButtonText}>{t('home.bookNow')}</Text>
+                      <Text style={styles.bookButtonText}>Book Now</Text>
                     </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
@@ -242,8 +242,8 @@ export default function HomeScreen() {
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>
                 {debouncedSearch || selectedCategory 
-                  ? t('home.noServicesFound') 
-                  : t('home.noServicesAvailable')
+                  ? 'No services found matching your criteria' 
+                  : 'No services available at this time'
                 }
               </Text>
               {(debouncedSearch || selectedCategory) && (
@@ -251,7 +251,7 @@ export default function HomeScreen() {
                   style={styles.clearAllButton}
                   onPress={handleClearAll}
                 >
-                  <Text style={styles.clearAllButtonText}>{t('home.clearFilters')}</Text>
+                  <Text style={styles.clearAllButtonText}>Clear Filters</Text>
                 </TouchableOpacity>
               )}
             </View>

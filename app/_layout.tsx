@@ -9,8 +9,7 @@ import { store } from "@/store/store";
 import { trpc, trpcClient } from "@/lib/trpc";
 import { initializeAuth } from "@/store/authSlice";
 import { authApi } from "@/store/services/authApi";
-import { LanguageProvider } from "@/contexts/LanguageContext";
-import '@/i18n/config';
+
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -21,7 +20,7 @@ function RootLayoutNav() {
   return (
     <Stack screenOptions={{ headerBackTitle: "Back" }}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="language" options={{ headerShown: false }} />
+
       <Stack.Screen name="login" options={{ headerShown: false }} />
       <Stack.Screen name="register" options={{ headerShown: false }} />
       <Stack.Screen name="role-selection" options={{ headerShown: false }} />
@@ -72,15 +71,13 @@ export default function RootLayout() {
   return (
     <Provider store={store}>
       <SafeAreaProvider>
-        <LanguageProvider>
-          <trpc.Provider client={trpcClient} queryClient={queryClient}>
-            <QueryClientProvider client={queryClient}>
-              <GestureHandlerRootView style={{ flex: 1 }}>
-                <RootLayoutNav />
-              </GestureHandlerRootView>
-            </QueryClientProvider>
-          </trpc.Provider>
-        </LanguageProvider>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <RootLayoutNav />
+            </GestureHandlerRootView>
+          </QueryClientProvider>
+        </trpc.Provider>
       </SafeAreaProvider>
     </Provider>
   );
