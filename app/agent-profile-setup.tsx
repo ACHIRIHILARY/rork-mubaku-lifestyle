@@ -14,7 +14,6 @@ export default function AgentProfileSetup() {
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('Cameroon');
   const [aboutMe, setAboutMe] = useState('');
-  const [basePrice, setBasePrice] = useState('');
   const [availability, setAvailability] = useState('');
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   
@@ -23,8 +22,8 @@ export default function AgentProfileSetup() {
   const [updateProfile, { isLoading: isUpdating }] = useUpdateUnifiedProfileMutation();
 
   const handleSaveProfile = async () => {
-    if (!businessName || selectedCategories.length === 0 || !experience || !phone || !city || !basePrice || !availability) {
-      Alert.alert('Error', 'Please fill in all required fields including category, price, and availability');
+    if (!businessName || selectedCategories.length === 0 || !experience || !phone || !city || !availability) {
+      Alert.alert('Error', 'Please fill in all required fields including category and availability');
       return;
     }
 
@@ -44,10 +43,9 @@ export default function AgentProfileSetup() {
         description: aboutMe || `${businessName} - ${categoryNames} specialist with ${experience} years of experience.`,
         service_categories: selectedCategories,
         years_of_experience: parseInt(experience) || 0,
-        certifications: certifications ? [certifications] : [],
+        certifications: certifications ? certifications.split(',').map(c => c.trim()).filter(Boolean) : [],
         portfolio_urls: [],
         availability_schedule: availability,
-        base_price: parseFloat(basePrice) || 0,
         emergency_contact: phone,
         latitude: 0,
         longitude: 0,
@@ -188,10 +186,11 @@ export default function AgentProfileSetup() {
                   style={styles.input}
                   value={certifications}
                   onChangeText={setCertifications}
-                  placeholder="e.g., Professional Makeup Artist Certificate"
+                  placeholder="Separate multiple certifications with commas"
                   multiline
                   numberOfLines={2}
                 />
+                <Text style={styles.helperText}>Example: Certificate A, License B, Award C</Text>
               </View>
 
               <View style={styles.inputContainer}>
@@ -222,17 +221,6 @@ export default function AgentProfileSetup() {
                   value={country}
                   onChangeText={setCountry}
                   placeholder="Enter your country"
-                />
-              </View>
-
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Base Price (XAF) *</Text>
-                <TextInput
-                  style={styles.input}
-                  value={basePrice}
-                  onChangeText={setBasePrice}
-                  placeholder="e.g., 10000"
-                  keyboardType="numeric"
                 />
               </View>
 
@@ -520,5 +508,11 @@ const styles = StyleSheet.create({
   categoryOptionText: {
     fontSize: 16,
     color: '#333',
+  },
+  helperText: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 4,
+    fontStyle: 'italic' as const,
   },
 });
