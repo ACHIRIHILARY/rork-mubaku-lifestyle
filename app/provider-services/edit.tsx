@@ -10,10 +10,18 @@ export default function EditServiceScreen() {
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
   const [updateService, { isLoading }] = useUpdateServiceMutation();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    category: number | null;
+    duration_minutes: string;
+    price: string;
+    currency: string;
+    is_active: boolean;
+  }>({
     name: '',
     description: '',
-    category: '',
+    category: null,
     duration_minutes: '',
     price: '',
     currency: 'XAF',
@@ -63,7 +71,7 @@ export default function EditServiceScreen() {
         data: {
           name: formData.name.trim(),
           description: formData.description.trim() || undefined,
-          category: formData.category,
+          category: formData.category!,
           duration_minutes: parseInt(formData.duration_minutes),
           price: parseFloat(formData.price),
           currency: formData.currency,

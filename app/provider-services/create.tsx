@@ -2,17 +2,23 @@ import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
-import { useCreateServiceMutation } from '@/store/services/servicesApi';
-import { useGetAllCategoriesQuery } from '@/store/services/servicesApi';
+import { useCreateServiceMutation, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 
 export default function CreateServiceScreen() {
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
   const [createService, { isLoading }] = useCreateServiceMutation();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    category: number | null;
+    duration_minutes: string;
+    price: string;
+    currency: string;
+  }>({
     name: '',
     description: '',
-    category: '',
+    category: null,
     duration_minutes: '',
     price: '',
     currency: 'XAF',
@@ -40,10 +46,11 @@ export default function CreateServiceScreen() {
       await createService({
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
-        category: formData.category,
+        category: formData.category!,
         duration_minutes: parseInt(formData.duration_minutes),
         price: parseFloat(formData.price),
         currency: formData.currency,
+        is_active: true,
       }).unwrap();
 
       Alert.alert('Success', 'Service created successfully', [

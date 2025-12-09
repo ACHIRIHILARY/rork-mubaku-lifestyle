@@ -10,14 +10,14 @@ import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 
 export default function HomeScreen() {
 
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
   
   const { data: user, isLoading: userLoading } = useGetCurrentUserQuery();
   
   const queryParams: { category?: string; search?: string } = {};
-  if (selectedCategory) queryParams.category = selectedCategory;
+  if (selectedCategory) queryParams.category = selectedCategory.toString();
   if (debouncedSearch) queryParams.search = debouncedSearch;
   
   const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery(queryParams);
@@ -33,12 +33,12 @@ export default function HomeScreen() {
     router.push(`/profile-settings?userId=${providerId}`);
   };
   
-  const handleCategoryPress = (categoryId: string) => {
+  const handleCategoryPress = (categoryId: number) => {
     console.log('Category selected:', categoryId);
     router.push(`/category-detail?id=${categoryId}`);
   };
   
-  const handleCategoryFilter = (categoryId: string) => {
+  const handleCategoryFilter = (categoryId: number) => {
     console.log('Filtering by category:', categoryId);
     setSelectedCategory(categoryId);
   };

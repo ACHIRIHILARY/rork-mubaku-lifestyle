@@ -1,7 +1,7 @@
 import { api } from '../api';
 
 interface ServiceCategory {
-  id: string;
+  id: number;
   name: string;
   description?: string;
   icon?: string;
@@ -13,7 +13,7 @@ interface ServiceCategory {
 interface Service {
   id: string;
   provider: string;
-  category: string;
+  category: number;
   name: string;
   description?: string;
   duration_minutes: number;
@@ -29,16 +29,17 @@ interface Service {
 }
 
 interface CreateServiceRequest {
-  category: string;
+  category: number;
   name: string;
   description?: string;
   duration_minutes: number;
   price: number;
   currency: string;
+  is_active: boolean;
 }
 
 interface UpdateServiceRequest {
-  category?: string;
+  category?: number;
   name?: string;
   description?: string;
   duration_minutes?: number;
@@ -57,10 +58,10 @@ interface ServiceStats {
 
 export const servicesApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllServices: builder.query<Service[], { category?: string; provider?: string; search?: string }>({
+    getAllServices: builder.query<Service[], { category?: string; provider?: string; search?: string; verified_only?: boolean }>({
       query: (params) => ({
-        url: '/api/v1/services/',
-        params,
+        url: '/services/',
+        params: { ...params, verified_only: params?.verified_only !== false },
       }),
       providesTags: (result) =>
         result
@@ -72,12 +73,12 @@ export const servicesApi = api.injectEndpoints({
     }),
 
     getServiceById: builder.query<Service, string>({
-      query: (serviceId) => `/api/v1/services/${serviceId}/`,
+      query: (serviceId) => `/services/${serviceId}/`,
       providesTags: (result, error, serviceId) => [{ type: 'Service', id: serviceId }],
     }),
 
     getMyServices: builder.query<Service[], void>({
-      query: () => '/api/v1/services/my-services/',
+      query: () => '/services/my-services/',
       providesTags: (result) =>
         result
           ? [
@@ -88,7 +89,7 @@ export const servicesApi = api.injectEndpoints({
     }),
 
     getProviderServices: builder.query<Service[], string>({
-      query: (providerId) => `/api/v1/services/provider/${providerId}/`,
+      query: (providerId) => `/services/provider/${providerId}/`,
       providesTags: (result, error, providerId) => [
         { type: 'Service', id: `provider-${providerId}` },
       ],
@@ -96,7 +97,7 @@ export const servicesApi = api.injectEndpoints({
 
     createService: builder.mutation<Service, CreateServiceRequest>({
       query: (data) => ({
-        url: '/api/v1/services/create/',
+        url: '/services/create/',
         method: 'POST',
         body: data,
       }),
@@ -105,7 +106,7 @@ export const servicesApi = api.injectEndpoints({
 
     updateService: builder.mutation<Service, { serviceId: string; data: UpdateServiceRequest }>({
       query: ({ serviceId, data }) => ({
-        url: `/api/v1/services/${serviceId}/update/`,
+        url: `/services/${serviceId}/update/`,
         method: 'PUT',
         body: data,
       }),
@@ -117,7 +118,7 @@ export const servicesApi = api.injectEndpoints({
 
     deleteService: builder.mutation<void, string>({
       query: (serviceId) => ({
-        url: `/api/v1/services/${serviceId}/delete/`,
+        url: `/services/${serviceId}/delete/`,
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, serviceId) => [
@@ -127,24 +128,24 @@ export const servicesApi = api.injectEndpoints({
     }),
 
     getMyServiceStats: builder.query<ServiceStats, void>({
-      query: () => '/api/v1/services/my-stats/',
+      query: () => '/services/my-stats/',
       providesTags: ['Service'],
     }),
 
     getAllCategories: builder.query<ServiceCategory[], void>({
-      query: () => '/api/v1/services/categories/',
+      query: () => '/services/categories/',
       providesTags: ['Service'],
     }),
 
     getCategoryById: builder.query<ServiceCategory, string>({
-      query: (categoryId) => `/api/v1/services/categories/${categoryId}/`,
+      query: (categoryId) => `/services/categories/${categoryId}/`,
       providesTags: (result, error, categoryId) => [
         { type: 'Service', id: `category-${categoryId}` },
       ],
     }),
 
     getCategoryServices: builder.query<Service[], string>({
-      query: (categoryId) => `/api/v1/services/categories/${categoryId}/services/`,
+      query: (categoryId) => `/services/categories/${categoryId}/services/`,
       providesTags: (result, error, categoryId) => [
         { type: 'Service', id: `category-${categoryId}-services` },
       ],
