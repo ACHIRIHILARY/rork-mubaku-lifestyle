@@ -6,15 +6,6 @@ import { useCreateServiceMutation, useGetAllCategoriesQuery } from '@/store/serv
 
 export default function CreateServiceScreen() {
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
-  
-  React.useEffect(() => {
-    if (categories) {
-      console.log('Categories loaded:', JSON.stringify(categories, null, 2));
-      categories.forEach(cat => {
-        console.log(`Category ${cat.name}: id=${cat.id}, type=${typeof cat.id}`);
-      });
-    }
-  }, [categories]);
   const [createService, { isLoading }] = useCreateServiceMutation();
 
   const [formData, setFormData] = useState<{
@@ -32,6 +23,19 @@ export default function CreateServiceScreen() {
     price: '',
     currency: 'XAF',
   });
+  
+  React.useEffect(() => {
+    if (categories) {
+      console.log('Categories loaded:', JSON.stringify(categories, null, 2));
+      categories.forEach(cat => {
+        console.log(`Category ${cat.name}: id=${cat.id}, type=${typeof cat.id}`);
+      });
+    }
+  }, [categories]);
+  
+  React.useEffect(() => {
+    console.log('Selected category:', formData.category, 'Type:', typeof formData.category);
+  }, [formData.category]);
 
   const handleSubmit = async () => {
     if (!formData.name.trim()) {
@@ -52,12 +56,17 @@ export default function CreateServiceScreen() {
     }
 
     try {
-      const categoryId = typeof formData.category === 'string' ? parseInt(formData.category) : formData.category!;
+      const categoryId = typeof formData.category === 'string' ? parseInt(formData.category, 10) : formData.category!;
       
-      if (!categories?.find(c => c.id === categoryId)) {
+      const normalizedCategories = categories?.map(c => ({
+        ...c,
+        id: typeof c.id === 'string' ? parseInt(c.id, 10) : c.id
+      }));
+      
+      if (!normalizedCategories?.find(c => c.id === categoryId)) {
         console.error('Invalid category ID:', categoryId);
-        console.error('Available categories:', JSON.stringify(categories, null, 2));
-        Alert.alert('Error', `Invalid category selected. Please choose a valid category. Available categories: ${categories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
+        console.error('Available categories:', JSON.stringify(normalizedCategories, null, 2));
+        Alert.alert('Error', `Invalid category selected. Please choose a valid category. Available categories: ${normalizedCategories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
         return;
       }
       
@@ -65,14 +74,14 @@ export default function CreateServiceScreen() {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
         category: categoryId,
-        duration_minutes: parseInt(formData.duration_minutes),
+        duration_minutes: parseInt(formData.duration_minutes, 10),
         price: parseFloat(formData.price),
         currency: formData.currency,
         is_active: true,
       };
       console.log('Creating service with payload:', JSON.stringify(payload, null, 2));
       console.log('Category type:', typeof payload.category, 'Value:', payload.category);
-      console.log('Available categories:', categories?.map(c => ({ id: c.id, name: c.name })));
+      console.log('Available categories:', normalizedCategories?.map(c => ({ id: c.id, name: c.name })));
       await createService(payload).unwrap();
 
       Alert.alert('Success', 'Service created successfully', [
@@ -157,27 +166,32 @@ export default function CreateServiceScreen() {
               <ActivityIndicator color="#2D1A46" />
             ) : (
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
-                {categories?.map((category) => (
-                  <TouchableOpacity
-                    key={category.id}
-                    style={[
-                      styles.categoryChip,
-                      formData.category === (typeof category.id === 'string' ? parseInt(category.id) : category.id) && styles.categoryChipActive
-                    ]}
-                    onPress={() => {
-                      const categoryId = typeof category.id === 'string' ? parseInt(category.id) : category.id;
-                      console.log('Selected category:', category.name, 'ID:', categoryId, 'Type:', typeof categoryId);
-                      setFormData({ ...formData, category: categoryId });
-                    }}
-                  >
-                    <Text style={[
-                      styles.categoryChipText,
-                      formData.category === (typeof category.id === 'string' ? parseInt(category.id) : category.id) && styles.categoryChipTextActive
-                    ]}>
-                      {category.name}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
+                {categories?.map((category) => {
+                  const categoryId = typeof category.id === 'string' ? parseInt(category.id, 10) : category.id;
+                  const isSelected = formData.category === categoryId;
+                  
+                  return (
+                    <TouchableOpacity
+                      key={category.id}
+                      style={[
+                        styles.categoryChip,
+                        isSelected && styles.categoryChipActive
+                      ]}
+                      onPress={() => {
+                        console.log('Selected category:', category.name, 'ID:', categoryId, 'Type:', typeof categoryId);
+                        setFormData((prev) => ({ ...prev, category: categoryId }));
+                      }}
+                      activeOpacity={0.7}
+                    >
+                      <Text style={[
+                        styles.categoryChipText,
+                        isSelected && styles.categoryChipTextActive
+                      ]}>
+                        {category.name}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
               </ScrollView>
             )}
           </View>
