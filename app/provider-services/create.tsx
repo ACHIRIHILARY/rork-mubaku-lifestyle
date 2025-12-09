@@ -56,14 +56,16 @@ export default function CreateServiceScreen() {
     }
 
     try {
-      if (!formData.category) {
-        Alert.alert('Error', 'Please select a category');
+      const categoryId = Number(formData.category);
+      
+      if (!categoryId || isNaN(categoryId)) {
+        Alert.alert('Error', 'Please select a valid category');
         return;
       }
       
-      const categoryExists = categories?.find(c => c.id === formData.category);
+      const categoryExists = categories?.find(c => c.id === categoryId);
       if (!categoryExists) {
-        console.error('Invalid category ID:', formData.category);
+        console.error('Invalid category ID:', categoryId);
         console.error('Available categories:', JSON.stringify(categories, null, 2));
         Alert.alert('Error', `Invalid category selected. Available categories: ${categories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
         return;
@@ -72,7 +74,7 @@ export default function CreateServiceScreen() {
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
-        category: Number(formData.category),
+        category: categoryId,
         duration_minutes: parseInt(formData.duration_minutes, 10),
         price: parseFloat(formData.price),
         currency: formData.currency,
