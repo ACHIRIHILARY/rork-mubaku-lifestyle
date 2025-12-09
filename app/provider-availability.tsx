@@ -621,7 +621,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 12,
   },
   exceptionDate: {
     fontSize: 16,
