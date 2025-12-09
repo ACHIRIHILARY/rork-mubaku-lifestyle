@@ -58,7 +58,7 @@ interface ProviderApplicationRequest {
   business_name?: string;
   business_address?: string;
   description?: string;
-  service_categories?: string[];
+  service_categories?: number[];
   years_of_experience?: number;
   certifications?: string[];
   portfolio_urls?: string[];

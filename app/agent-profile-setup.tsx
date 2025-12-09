@@ -7,7 +7,7 @@ import { useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 
 export default function AgentProfileSetup() {
   const [businessName, setBusinessName] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
   const [experience, setExperience] = useState('');
   const [certifications, setCertifications] = useState('');
   const [phone, setPhone] = useState('');
