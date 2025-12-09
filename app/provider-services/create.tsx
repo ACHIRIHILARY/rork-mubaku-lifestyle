@@ -56,24 +56,23 @@ export default function CreateServiceScreen() {
     }
 
     try {
-      const categoryId = typeof formData.category === 'string' ? parseInt(formData.category, 10) : formData.category!;
+      if (!formData.category) {
+        Alert.alert('Error', 'Please select a category');
+        return;
+      }
       
-      const normalizedCategories = categories?.map(c => ({
-        ...c,
-        id: typeof c.id === 'string' ? parseInt(c.id, 10) : c.id
-      }));
-      
-      if (!normalizedCategories?.find(c => c.id === categoryId)) {
-        console.error('Invalid category ID:', categoryId);
-        console.error('Available categories:', JSON.stringify(normalizedCategories, null, 2));
-        Alert.alert('Error', `Invalid category selected. Please choose a valid category. Available categories: ${normalizedCategories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
+      const categoryExists = categories?.find(c => c.id === formData.category);
+      if (!categoryExists) {
+        console.error('Invalid category ID:', formData.category);
+        console.error('Available categories:', JSON.stringify(categories, null, 2));
+        Alert.alert('Error', `Invalid category selected. Available categories: ${categories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
         return;
       }
       
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
-        category: categoryId,
+        category: formData.category,
         duration_minutes: parseInt(formData.duration_minutes, 10),
         price: parseFloat(formData.price),
         currency: formData.currency,
@@ -81,7 +80,7 @@ export default function CreateServiceScreen() {
       };
       console.log('Creating service with payload:', JSON.stringify(payload, null, 2));
       console.log('Category type:', typeof payload.category, 'Value:', payload.category);
-      console.log('Available categories:', normalizedCategories?.map(c => ({ id: c.id, name: c.name })));
+      console.log('Available categories:', categories?.map(c => ({ id: c.id, name: c.name })));
       await createService(payload).unwrap();
 
       Alert.alert('Success', 'Service created successfully', [
@@ -167,8 +166,7 @@ export default function CreateServiceScreen() {
             ) : (
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
                 {categories?.map((category) => {
-                  const categoryId = typeof category.id === 'string' ? parseInt(category.id, 10) : category.id;
-                  const isSelected = formData.category === categoryId;
+                  const isSelected = formData.category === category.id;
                   
                   return (
                     <TouchableOpacity
@@ -178,8 +176,8 @@ export default function CreateServiceScreen() {
                         isSelected && styles.categoryChipActive
                       ]}
                       onPress={() => {
-                        console.log('Selected category:', category.name, 'ID:', categoryId, 'Type:', typeof categoryId);
-                        setFormData((prev) => ({ ...prev, category: categoryId }));
+                        console.log('Selected category:', category.name, 'ID:', category.id, 'Type:', typeof category.id);
+                        setFormData((prev) => ({ ...prev, category: category.id }));
                       }}
                       activeOpacity={0.7}
                     >
