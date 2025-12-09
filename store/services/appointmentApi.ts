@@ -60,6 +60,7 @@ interface DayAvailability {
 }
 
 export const appointmentApi = api.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAvailableSlots: builder.query<TimeSlot[], { serviceId: string; startDate: string; endDate: string }>({
       query: ({ serviceId, startDate, endDate }) => ({

@@ -57,6 +57,7 @@ interface ServiceStats {
 }
 
 export const servicesApi = api.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAllServices: builder.query<Service[], { category?: string; provider?: string; search?: string; verified_only?: boolean }>({
       query: (params) => ({

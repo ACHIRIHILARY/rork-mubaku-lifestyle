@@ -19,6 +19,7 @@ interface GetNotificationsParams {
 }
 
 export const notificationsApi = api.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getNotifications: builder.query<Notification[], GetNotificationsParams | void>({
       query: (params = {}) => ({

@@ -70,6 +70,7 @@ interface ProviderApplicationRequest {
 }
 
 export const profileApi = api.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getProfile: builder.query<Profile, string>({
       query: (id) => `/users/${id}/`,

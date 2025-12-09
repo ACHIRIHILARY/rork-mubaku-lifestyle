@@ -44,6 +44,7 @@ interface RefreshTokenResponse {
 }
 
 export const authApi = api.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
