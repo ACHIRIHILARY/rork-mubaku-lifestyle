@@ -78,24 +78,24 @@ export default function ProviderServicesScreen() {
           <View style={styles.statsRow}>
             <View style={styles.statCard}>
               <BarChart3 color="#2D1A46" size={20} />
-              <Text style={styles.statValue}>{stats.total_services}</Text>
+              <Text style={styles.statValue}>{stats.total_services || 0}</Text>
               <Text style={styles.statLabel}>Services</Text>
             </View>
             <View style={styles.statCard}>
               <Power color="#4CAF50" size={20} />
-              <Text style={styles.statValue}>{stats.active_services}</Text>
+              <Text style={styles.statValue}>{stats.active_services || 0}</Text>
               <Text style={styles.statLabel}>Active</Text>
             </View>
           </View>
           <View style={styles.statsRow}>
             <View style={styles.statCard}>
               <Clock color="#F4A896" size={20} />
-              <Text style={styles.statValue}>{stats.total_bookings}</Text>
+              <Text style={styles.statValue}>{stats.total_bookings || 0}</Text>
               <Text style={styles.statLabel}>Bookings</Text>
             </View>
             <View style={styles.statCard}>
               <DollarSign color="#4CAF50" size={20} />
-              <Text style={styles.statValue}>XAF {typeof stats.total_revenue === 'number' ? stats.total_revenue.toFixed(2) : '0.00'}</Text>
+              <Text style={styles.statValue}>{`XAF ${typeof stats.total_revenue === 'number' ? stats.total_revenue.toFixed(2) : '0.00'}`}</Text>
               <Text style={styles.statLabel}>Revenue</Text>
             </View>
           </View>
@@ -186,16 +186,16 @@ export default function ProviderServicesScreen() {
                 <View style={styles.serviceDetails}>
                   <View style={styles.detailRow}>
                     <Clock color="#666" size={16} />
-                    <Text style={styles.detailText}>{service.duration_minutes} min</Text>
+                    <Text style={styles.detailText}>{`${service.duration_minutes} min`}</Text>
                   </View>
                   <View style={styles.detailRow}>
                     <DollarSign color="#666" size={16} />
-                    <Text style={styles.detailText}>{service.price} {service.currency}</Text>
+                    <Text style={styles.detailText}>{`${service.price} ${service.currency}`}</Text>
                   </View>
                   {service.total_bookings !== undefined && (
                     <View style={styles.detailRow}>
                       <BarChart3 color="#666" size={16} />
-                      <Text style={styles.detailText}>{service.total_bookings} bookings</Text>
+                      <Text style={styles.detailText}>{`${service.total_bookings} bookings`}</Text>
                     </View>
                   )}
                 </View>

@@ -53,6 +53,14 @@ export default function CreateServiceScreen() {
 
     try {
       const categoryId = typeof formData.category === 'string' ? parseInt(formData.category) : formData.category!;
+      
+      if (!categories?.find(c => c.id === categoryId)) {
+        console.error('Invalid category ID:', categoryId);
+        console.error('Available categories:', JSON.stringify(categories, null, 2));
+        Alert.alert('Error', `Invalid category selected. Please choose a valid category. Available categories: ${categories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
+        return;
+      }
+      
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
@@ -64,6 +72,7 @@ export default function CreateServiceScreen() {
       };
       console.log('Creating service with payload:', JSON.stringify(payload, null, 2));
       console.log('Category type:', typeof payload.category, 'Value:', payload.category);
+      console.log('Available categories:', categories?.map(c => ({ id: c.id, name: c.name })));
       await createService(payload).unwrap();
 
       Alert.alert('Success', 'Service created successfully', [
