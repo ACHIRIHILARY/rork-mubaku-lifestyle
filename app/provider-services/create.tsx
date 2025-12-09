@@ -6,6 +6,15 @@ import { useCreateServiceMutation, useGetAllCategoriesQuery } from '@/store/serv
 
 export default function CreateServiceScreen() {
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
+  
+  React.useEffect(() => {
+    if (categories) {
+      console.log('Categories loaded:', JSON.stringify(categories, null, 2));
+      categories.forEach(cat => {
+        console.log(`Category ${cat.name}: id=${cat.id}, type=${typeof cat.id}`);
+      });
+    }
+  }, [categories]);
   const [createService, { isLoading }] = useCreateServiceMutation();
 
   const [formData, setFormData] = useState<{
@@ -43,15 +52,19 @@ export default function CreateServiceScreen() {
     }
 
     try {
-      await createService({
+      const categoryId = typeof formData.category === 'string' ? parseInt(formData.category) : formData.category!;
+      const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
-        category: formData.category!,
+        category: categoryId,
         duration_minutes: parseInt(formData.duration_minutes),
         price: parseFloat(formData.price),
         currency: formData.currency,
         is_active: true,
-      }).unwrap();
+      };
+      console.log('Creating service with payload:', JSON.stringify(payload, null, 2));
+      console.log('Category type:', typeof payload.category, 'Value:', payload.category);
+      await createService(payload).unwrap();
 
       Alert.alert('Success', 'Service created successfully', [
         { text: 'OK', onPress: () => router.back() }
@@ -140,13 +153,17 @@ export default function CreateServiceScreen() {
                     key={category.id}
                     style={[
                       styles.categoryChip,
-                      formData.category === category.id && styles.categoryChipActive
+                      formData.category === (typeof category.id === 'string' ? parseInt(category.id) : category.id) && styles.categoryChipActive
                     ]}
-                    onPress={() => setFormData({ ...formData, category: category.id })}
+                    onPress={() => {
+                      const categoryId = typeof category.id === 'string' ? parseInt(category.id) : category.id;
+                      console.log('Selected category:', category.name, 'ID:', categoryId, 'Type:', typeof categoryId);
+                      setFormData({ ...formData, category: categoryId });
+                    }}
                   >
                     <Text style={[
                       styles.categoryChipText,
-                      formData.category === category.id && styles.categoryChipTextActive
+                      formData.category === (typeof category.id === 'string' ? parseInt(category.id) : category.id) && styles.categoryChipTextActive
                     ]}>
                       {category.name}
                     </Text>
