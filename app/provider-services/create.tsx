@@ -57,8 +57,29 @@ export default function CreateServiceScreen() {
         { text: 'OK', onPress: () => router.back() }
       ]);
     } catch (error: any) {
-      console.error('Create service error:', error);
-      const errorMessage = error?.data?.detail || error?.data?.message || 'Failed to create service';
+      console.error('Create service error:', JSON.stringify(error, null, 2));
+      console.error('Error data:', error?.data);
+      console.error('Error status:', error?.status);
+      
+      let errorMessage = 'Failed to create service';
+      
+      if (error?.data) {
+        if (typeof error.data === 'string') {
+          errorMessage = error.data;
+        } else if (error.data.detail) {
+          errorMessage = error.data.detail;
+        } else if (error.data.message) {
+          errorMessage = error.data.message;
+        } else if (typeof error.data === 'object') {
+          const errorFields = Object.entries(error.data)
+            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+            .join('\n');
+          if (errorFields) {
+            errorMessage = errorFields;
+          }
+        }
+      }
+      
       Alert.alert('Error', errorMessage);
     }
   };

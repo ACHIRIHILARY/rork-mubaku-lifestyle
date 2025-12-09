@@ -95,14 +95,14 @@ export default function ProviderServicesScreen() {
             </View>
             <View style={styles.statCard}>
               <DollarSign color="#4CAF50" size={20} />
-              <Text style={styles.statValue}>${(stats.total_revenue || 0).toFixed(2)}</Text>
+              <Text style={styles.statValue}>${typeof stats.total_revenue === 'number' ? stats.total_revenue.toFixed(2) : '0.00'}</Text>
               <Text style={styles.statLabel}>Revenue</Text>
             </View>
           </View>
           {stats.average_rating > 0 && (
             <View style={styles.ratingCard}>
               <Star color="#FFD700" size={20} fill="#FFD700" />
-              <Text style={styles.statValue}>{(stats.average_rating || 0).toFixed(1)}</Text>
+              <Text style={styles.statValue}>{typeof stats.average_rating === 'number' ? stats.average_rating.toFixed(1) : '0.0'}</Text>
               <Text style={styles.statLabel}>Avg Rating</Text>
             </View>
           )}
@@ -190,16 +190,12 @@ export default function ProviderServicesScreen() {
                   </View>
                   <View style={styles.detailRow}>
                     <DollarSign color="#666" size={16} />
-                    <Text style={styles.detailText}>
-                      {service.price} {service.currency}
-                    </Text>
+                    <Text style={styles.detailText}>{service.price} {service.currency}</Text>
                   </View>
                   {service.total_bookings !== undefined && (
                     <View style={styles.detailRow}>
                       <BarChart3 color="#666" size={16} />
-                      <Text style={styles.detailText}>
-                        {service.total_bookings} bookings
-                      </Text>
+                      <Text style={styles.detailText}>{service.total_bookings} bookings</Text>
                     </View>
                   )}
                 </View>
