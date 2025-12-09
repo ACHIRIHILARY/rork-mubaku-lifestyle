@@ -95,9 +95,7 @@ export default function ProviderServicesScreen() {
             </View>
             <View style={styles.statCard}>
               <DollarSign color="#4CAF50" size={20} />
-              <Text style={styles.statValue}>
-                {typeof stats.total_revenue === 'number' ? `XAF ${stats.total_revenue.toFixed(2)}` : 'XAF 0.00'}
-              </Text>
+              <Text style={styles.statValue}>{typeof stats.total_revenue === 'number' ? `XAF ${stats.total_revenue.toFixed(2)}` : 'XAF 0.00'}</Text>
               <Text style={styles.statLabel}>Revenue</Text>
             </View>
           </View>

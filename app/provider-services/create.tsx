@@ -56,17 +56,28 @@ export default function CreateServiceScreen() {
     }
 
     try {
-      const categoryId = Number(formData.category);
+      if (!formData.category) {
+        Alert.alert('Error', 'Please select a category');
+        return;
+      }
       
-      if (!categoryId || isNaN(categoryId)) {
+      const categoryId = typeof formData.category === 'number' 
+        ? formData.category 
+        : parseInt(String(formData.category), 10);
+      
+      if (isNaN(categoryId)) {
         Alert.alert('Error', 'Please select a valid category');
         return;
       }
       
-      const categoryExists = categories?.find(c => c.id === categoryId);
+      const categoryExists = categories?.find(c => {
+        const catId = typeof c.id === 'number' ? c.id : parseInt(String(c.id), 10);
+        return catId === categoryId;
+      });
+      
       if (!categoryExists) {
-        console.error('Invalid category ID:', categoryId);
-        console.error('Available categories:', JSON.stringify(categories, null, 2));
+        console.error('Invalid category ID:', categoryId, 'Type:', typeof categoryId);
+        console.error('Available categories:', JSON.stringify(categories?.map(c => ({ id: c.id, idType: typeof c.id, name: c.name })), null, 2));
         Alert.alert('Error', `Invalid category selected. Available categories: ${categories?.map(c => `${c.name} (ID: ${c.id})`).join(', ')}`);
         return;
       }
@@ -178,8 +189,11 @@ export default function CreateServiceScreen() {
                         isSelected && styles.categoryChipActive
                       ]}
                       onPress={() => {
-                        console.log('Selected category:', category.name, 'ID:', category.id, 'Type:', typeof category.id);
-                        setFormData((prev) => ({ ...prev, category: category.id }));
+                        const categoryId = typeof category.id === 'number' 
+                          ? category.id 
+                          : parseInt(String(category.id), 10);
+                        console.log('Selected category:', category.name, 'ID:', categoryId, 'Original ID:', category.id, 'Type:', typeof category.id, 'Parsed Type:', typeof categoryId);
+                        setFormData((prev) => ({ ...prev, category: categoryId }));
                       }}
                       activeOpacity={0.7}
                     >
