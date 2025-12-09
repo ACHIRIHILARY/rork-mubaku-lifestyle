@@ -5,25 +5,35 @@ import { ArrowLeft, Calendar, Clock, Plus, AlertCircle } from 'lucide-react-nati
 import { 
   useGetProviderAvailabilityQuery, 
   useSetProviderAvailabilityMutation,
+  useUpdateProviderAvailabilityMutation,
+  useDeleteProviderAvailabilityMutation,
   useGetAvailabilityExceptionsQuery,
-  useCreateAvailabilityExceptionMutation
+  useCreateAvailabilityExceptionMutation,
+  useDeleteAvailabilityExceptionMutation
 } from '@/store/services/appointmentApi';
 
 const DAYS_OF_WEEK = [
-  { value: 0, label: 'Monday' },
-  { value: 1, label: 'Tuesday' },
-  { value: 2, label: 'Wednesday' },
-  { value: 3, label: 'Thursday' },
-  { value: 4, label: 'Friday' },
-  { value: 5, label: 'Saturday' },
-  { value: 6, label: 'Sunday' },
+  { value: 0, label: 'Sunday' },
+  { value: 1, label: 'Monday' },
+  { value: 2, label: 'Tuesday' },
+  { value: 3, label: 'Wednesday' },
+  { value: 4, label: 'Thursday' },
+  { value: 5, label: 'Friday' },
+  { value: 6, label: 'Saturday' },
 ];
 
 export default function ProviderAvailabilityScreen() {
   const { data: availability, isLoading, refetch } = useGetProviderAvailabilityQuery();
   const { data: exceptions, refetch: refetchExceptions } = useGetAvailabilityExceptionsQuery();
   const [setAvailability] = useSetProviderAvailabilityMutation();
+  const [updateAvailability] = useUpdateProviderAvailabilityMutation();
+  const [deleteAvailability] = useDeleteProviderAvailabilityMutation();
   const [createException] = useCreateAvailabilityExceptionMutation();
+  const [deleteException] = useDeleteAvailabilityExceptionMutation();
+
+  const [editingDay, setEditingDay] = useState<number | null>(null);
+  const [editStartTime, setEditStartTime] = useState('');
+  const [editEndTime, setEditEndTime] = useState('');
 
   const [showExceptionForm, setShowExceptionForm] = useState(false);
   const [exceptionDate, setExceptionDate] = useState('');
@@ -32,19 +42,58 @@ export default function ProviderAvailabilityScreen() {
   const [exceptionEndTime, setExceptionEndTime] = useState('');
   const [exceptionReason, setExceptionReason] = useState('');
 
-  const handleToggleDay = async (dayOfWeek: number, isAvailable: boolean) => {
+  const handleToggleDay = async (dayOfWeek: number, availabilityId: string | undefined, isAvailable: boolean) => {
     try {
-      await setAvailability({
-        day_of_week: dayOfWeek,
-        start_time: '09:00:00',
-        end_time: '17:00:00',
-        is_available: !isAvailable,
-      }).unwrap();
+      if (isAvailable && availabilityId) {
+        await deleteAvailability(availabilityId).unwrap();
+      } else {
+        await setAvailability({
+          day_of_week: dayOfWeek,
+          start_time: '09:00:00',
+          end_time: '17:00:00',
+          is_available: true,
+        }).unwrap();
+      }
       refetch();
     } catch (error: any) {
       console.error('Toggle availability error:', error);
       Alert.alert('Error', error?.data?.detail || 'Failed to update availability');
     }
+  };
+
+  const handleEditDay = (dayOfWeek: number, startTime: string, endTime: string) => {
+    setEditingDay(dayOfWeek);
+    setEditStartTime(startTime.slice(0, 5));
+    setEditEndTime(endTime.slice(0, 5));
+  };
+
+  const handleSaveTime = async (availabilityId: string) => {
+    if (!editStartTime || !editEndTime) {
+      Alert.alert('Error', 'Please enter both start and end times');
+      return;
+    }
+
+    try {
+      await updateAvailability({
+        id: availabilityId,
+        start_time: editStartTime + ':00',
+        end_time: editEndTime + ':00',
+      }).unwrap();
+      setEditingDay(null);
+      setEditStartTime('');
+      setEditEndTime('');
+      refetch();
+      Alert.alert('Success', 'Time updated successfully');
+    } catch (error: any) {
+      console.error('Update time error:', error);
+      Alert.alert('Error', error?.data?.detail || 'Failed to update time');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingDay(null);
+    setEditStartTime('');
+    setEditEndTime('');
   };
 
   const handleCreateException = async () => {
@@ -78,6 +127,30 @@ export default function ProviderAvailabilityScreen() {
       console.error('Create exception error:', error);
       Alert.alert('Error', error?.data?.detail || 'Failed to create exception');
     }
+  };
+
+  const handleDeleteException = async (exceptionId: string) => {
+    Alert.alert(
+      'Delete Exception',
+      'Are you sure you want to delete this exception?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteException(exceptionId).unwrap();
+              refetchExceptions();
+              Alert.alert('Success', 'Exception deleted successfully');
+            } catch (error: any) {
+              console.error('Delete exception error:', error);
+              Alert.alert('Error', error?.data?.detail || 'Failed to delete exception');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const getAvailabilityForDay = (dayOfWeek: number) => {
@@ -119,6 +192,7 @@ export default function ProviderAvailabilityScreen() {
               {DAYS_OF_WEEK.map((day) => {
                 const dayAvailability = getAvailabilityForDay(day.value);
                 const isAvailable = dayAvailability?.is_available || false;
+                const isEditing = editingDay === day.value;
 
                 return (
                   <View key={day.value} style={styles.dayCard}>
@@ -126,7 +200,7 @@ export default function ProviderAvailabilityScreen() {
                       <Text style={styles.dayLabel}>{day.label}</Text>
                       <Switch
                         value={isAvailable}
-                        onValueChange={() => handleToggleDay(day.value, isAvailable)}
+                        onValueChange={() => handleToggleDay(day.value, dayAvailability?.id, isAvailable)}
                         trackColor={{ false: '#E5E5E5', true: '#F4A896' }}
                         thumbColor={isAvailable ? '#2D1A46' : '#f4f3f4'}
                       />
@@ -134,12 +208,58 @@ export default function ProviderAvailabilityScreen() {
 
                     {isAvailable && dayAvailability && (
                       <View style={styles.hoursContainer}>
-                        <View style={styles.timeRow}>
-                          <Clock color="#666" size={16} />
-                          <Text style={styles.timeText}>
-                            {dayAvailability.start_time.slice(0, 5)} - {dayAvailability.end_time.slice(0, 5)}
-                          </Text>
-                        </View>
+                        {isEditing ? (
+                          <View style={styles.editTimeForm}>
+                            <View style={styles.timeInputRow}>
+                              <View style={styles.timeInputWrapper}>
+                                <Text style={styles.timeInputLabel}>Start</Text>
+                                <TextInput
+                                  style={styles.timeInput}
+                                  value={editStartTime}
+                                  onChangeText={setEditStartTime}
+                                  placeholder="09:00"
+                                  placeholderTextColor="#999"
+                                />
+                              </View>
+                              <Text style={styles.timeSeparator}>-</Text>
+                              <View style={styles.timeInputWrapper}>
+                                <Text style={styles.timeInputLabel}>End</Text>
+                                <TextInput
+                                  style={styles.timeInput}
+                                  value={editEndTime}
+                                  onChangeText={setEditEndTime}
+                                  placeholder="17:00"
+                                  placeholderTextColor="#999"
+                                />
+                              </View>
+                            </View>
+                            <View style={styles.editActions}>
+                              <TouchableOpacity
+                                style={styles.editCancelButton}
+                                onPress={handleCancelEdit}
+                              >
+                                <Text style={styles.editCancelText}>Cancel</Text>
+                              </TouchableOpacity>
+                              <TouchableOpacity
+                                style={styles.editSaveButton}
+                                onPress={() => handleSaveTime(dayAvailability.id)}
+                              >
+                                <Text style={styles.editSaveText}>Save</Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        ) : (
+                          <TouchableOpacity
+                            style={styles.timeRow}
+                            onPress={() => handleEditDay(day.value, dayAvailability.start_time, dayAvailability.end_time)}
+                          >
+                            <Clock color="#666" size={16} />
+                            <Text style={styles.timeText}>
+                              {dayAvailability.start_time.slice(0, 5)} - {dayAvailability.end_time.slice(0, 5)}
+                            </Text>
+                            <Text style={styles.editHint}>(Tap to edit)</Text>
+                          </TouchableOpacity>
+                        )}
                       </View>
                     )}
                   </View>
@@ -263,9 +383,17 @@ export default function ProviderAvailabilityScreen() {
                 <View style={styles.exceptionsList}>
                   {exceptions.map((exception) => (
                     <View key={exception.id} style={styles.exceptionCard}>
-                      <View style={styles.exceptionHeader}>
-                        <Calendar color="#2D1A46" size={20} />
-                        <Text style={styles.exceptionDate}>{exception.exception_date}</Text>
+                      <View style={styles.exceptionTopRow}>
+                        <View style={styles.exceptionHeader}>
+                          <Calendar color="#2D1A46" size={20} />
+                          <Text style={styles.exceptionDate}>{exception.exception_date}</Text>
+                        </View>
+                        <TouchableOpacity
+                          style={styles.deleteExceptionButton}
+                          onPress={() => exception.id && handleDeleteException(exception.id)}
+                        >
+                          <Text style={styles.deleteExceptionText}>Delete</Text>
+                        </TouchableOpacity>
                       </View>
                       <View style={styles.exceptionDetails}>
                         <View style={[
@@ -533,4 +661,89 @@ const styles = StyleSheet.create({
     color: '#999',
     marginTop: 12,
   },
+  editTimeForm: {
+    gap: 12,
+  },
+  timeInputRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  timeInputWrapper: {
+    flex: 1,
+  },
+  timeInputLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666',
+    marginBottom: 4,
+  },
+  timeInput: {
+    backgroundColor: '#F5F5F5',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 14,
+    color: '#333',
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+  },
+  timeSeparator: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#666',
+    marginTop: 16,
+  },
+  editActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  editCancelButton: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 6,
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+  },
+  editCancelText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+  },
+  editSaveButton: {
+    flex: 1,
+    paddingVertical: 8,
+    borderRadius: 6,
+    backgroundColor: '#2D1A46',
+    alignItems: 'center',
+  },
+  editSaveText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
+  },
+  editHint: {
+    fontSize: 12,
+    color: '#999',
+    fontStyle: 'italic',
+    marginLeft: 8,
+  },
+  exceptionTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  deleteExceptionButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+    backgroundColor: '#FFEBEE',
+  },
+  deleteExceptionText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#F44336',
+  },
 });
+

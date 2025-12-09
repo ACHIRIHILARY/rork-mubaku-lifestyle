@@ -150,6 +150,23 @@ export const appointmentApi = api.injectEndpoints({
       invalidatesTags: ['Availability'],
     }),
 
+    updateProviderAvailability: builder.mutation<Availability, { id: string } & Partial<Omit<Availability, 'id' | 'provider' | 'day_of_week_display'>>>({
+      query: ({ id, ...data }) => ({
+        url: `/appointments/availability/${id}/`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    deleteProviderAvailability: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/appointments/availability/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
     getAvailabilityExceptions: builder.query<AvailabilityException[], void>({
       query: () => '/appointments/availability/exceptions/',
       providesTags: ['Availability'],
@@ -160,6 +177,14 @@ export const appointmentApi = api.injectEndpoints({
         url: '/appointments/availability/exceptions/',
         method: 'POST',
         body: data,
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    deleteAvailabilityException: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/appointments/availability/exceptions/${id}/`,
+        method: 'DELETE',
       }),
       invalidatesTags: ['Availability'],
     }),
@@ -191,8 +216,11 @@ export const {
   useRescheduleAppointmentMutation,
   useGetProviderAvailabilityQuery,
   useSetProviderAvailabilityMutation,
+  useUpdateProviderAvailabilityMutation,
+  useDeleteProviderAvailabilityMutation,
   useGetAvailabilityExceptionsQuery,
   useCreateAvailabilityExceptionMutation,
+  useDeleteAvailabilityExceptionMutation,
   useGetMonthlyCalendarQuery,
   useGetDailyDetailsQuery,
 } = appointmentApi;
