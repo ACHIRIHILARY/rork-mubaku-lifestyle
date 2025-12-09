@@ -1,11 +1,14 @@
 import { api } from '../api';
 
 interface ServiceCategory {
-  id: number;
+  id: string;
+  pkid: number;
   name: string;
   description?: string;
   icon?: string;
+  image_url?: string;
   is_active: boolean;
+  service_count?: number;
   created_at: string;
   updated_at: string;
 }

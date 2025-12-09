@@ -203,13 +203,13 @@ export default function EditServiceScreen() {
                     key={category.id}
                     style={[
                       styles.categoryChip,
-                      formData.category === category.id && styles.categoryChipActive
+                      formData.category === category.pkid && styles.categoryChipActive
                     ]}
-                    onPress={() => setFormData({ ...formData, category: category.id })}
+                    onPress={() => setFormData({ ...formData, category: category.pkid })}
                   >
                     <Text style={[
                       styles.categoryChipText,
-                      formData.category === category.id && styles.categoryChipTextActive
+                      formData.category === category.pkid && styles.categoryChipTextActive
                     ]}>
                       {category.name}
                     </Text>

@@ -27,7 +27,7 @@ export default function AgentProfileSetup() {
       return;
     }
 
-    const categoryNames = categories?.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(', ') || '';
+    const categoryNames = categories?.filter(c => selectedCategories.includes(c.pkid)).map(c => c.name).join(', ') || '';
 
     try {
       await updateProfile({
@@ -162,7 +162,7 @@ export default function AgentProfileSetup() {
                 >
                   <Text style={[styles.pickerText, selectedCategories.length === 0 && styles.pickerPlaceholder]}>
                     {selectedCategories.length > 0
-                      ? categories?.filter(c => selectedCategories.includes(c.id)).map(c => c.name).join(', ')
+                      ? categories?.filter(c => selectedCategories.includes(c.pkid)).map(c => c.name).join(', ')
                       : 'Select service categories'}
                   </Text>
                   <ChevronDown color="#666" size={20} />
@@ -289,16 +289,16 @@ export default function AgentProfileSetup() {
                 <ActivityIndicator size="large" color="#2D1A46" />
               ) : (
                 categories?.map((category) => {
-                  const isSelected = selectedCategories.includes(category.id);
+                  const isSelected = selectedCategories.includes(category.pkid);
                   return (
                     <TouchableOpacity
                       key={category.id}
                       style={styles.categoryOption}
                       onPress={() => {
                         if (isSelected) {
-                          setSelectedCategories(prev => prev.filter(id => id !== category.id));
+                          setSelectedCategories(prev => prev.filter(id => id !== category.pkid));
                         } else {
-                          setSelectedCategories(prev => [...prev, category.id]);
+                          setSelectedCategories(prev => [...prev, category.pkid]);
                         }
                       }}
                     >

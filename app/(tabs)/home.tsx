@@ -38,9 +38,9 @@ export default function HomeScreen() {
     router.push(`/category-detail?id=${categoryId}`);
   };
   
-  const handleCategoryFilter = (categoryId: number) => {
-    console.log('Filtering by category:', categoryId);
-    setSelectedCategory(categoryId);
+  const handleCategoryFilter = (categoryPkid: number) => {
+    console.log('Filtering by category pkid:', categoryPkid);
+    setSelectedCategory(categoryPkid);
   };
   
   const handleClearSearch = useCallback(() => {
@@ -131,7 +131,7 @@ export default function HomeScreen() {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.categoriesContainer}>
                 {categories.map((category) => {
-                  const isSelected = selectedCategory === category.id;
+                  const isSelected = selectedCategory === category.pkid;
                   return (
                     <TouchableOpacity 
                       key={category.id} 
@@ -139,8 +139,8 @@ export default function HomeScreen() {
                         styles.categoryCard,
                         isSelected && styles.categoryCardSelected
                       ]}
-                      onPress={() => handleCategoryFilter(category.id)}
-                      onLongPress={() => handleCategoryPress(category.id)}
+                      onPress={() => handleCategoryFilter(category.pkid)}
+                      onLongPress={() => handleCategoryPress(category.pkid)}
                     >
                       <Text style={styles.categoryIcon}>💇</Text>
                       <Text style={[
