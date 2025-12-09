@@ -72,7 +72,7 @@ export default function CreateServiceScreen() {
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
-        category: formData.category,
+        category: Number(formData.category),
         duration_minutes: parseInt(formData.duration_minutes, 10),
         price: parseFloat(formData.price),
         currency: formData.currency,

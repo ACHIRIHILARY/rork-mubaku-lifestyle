@@ -186,16 +186,16 @@ export default function ProviderServicesScreen() {
                 <View style={styles.serviceDetails}>
                   <View style={styles.detailRow}>
                     <Clock color="#666" size={16} />
-                    <Text style={styles.detailText}>{`${service.duration_minutes} min`}</Text>
+                    <Text style={styles.detailText}>{service.duration_minutes} min</Text>
                   </View>
                   <View style={styles.detailRow}>
                     <DollarSign color="#666" size={16} />
-                    <Text style={styles.detailText}>{`${service.price} ${service.currency}`}</Text>
+                    <Text style={styles.detailText}>{service.price} {service.currency}</Text>
                   </View>
                   {service.total_bookings !== undefined && (
                     <View style={styles.detailRow}>
                       <BarChart3 color="#666" size={16} />
-                      <Text style={styles.detailText}>{`${service.total_bookings} bookings`}</Text>
+                      <Text style={styles.detailText}>{service.total_bookings} bookings</Text>
                     </View>
                   )}
                 </View>
