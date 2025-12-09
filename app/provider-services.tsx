@@ -95,14 +95,14 @@ export default function ProviderServicesScreen() {
             </View>
             <View style={styles.statCard}>
               <DollarSign color="#4CAF50" size={20} />
-              <Text style={styles.statValue}>${stats.total_revenue.toFixed(2)}</Text>
+              <Text style={styles.statValue}>${(stats.total_revenue || 0).toFixed(2)}</Text>
               <Text style={styles.statLabel}>Revenue</Text>
             </View>
           </View>
           {stats.average_rating > 0 && (
             <View style={styles.ratingCard}>
               <Star color="#FFD700" size={20} fill="#FFD700" />
-              <Text style={styles.statValue}>{stats.average_rating.toFixed(1)}</Text>
+              <Text style={styles.statValue}>{(stats.average_rating || 0).toFixed(1)}</Text>
               <Text style={styles.statLabel}>Avg Rating</Text>
             </View>
           )}
