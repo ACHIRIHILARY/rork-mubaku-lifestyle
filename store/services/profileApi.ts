@@ -72,23 +72,23 @@ interface ProviderApplicationRequest {
 export const profileApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query<Profile, string>({
-      query: (id) => `/api/v1/users/${id}/`,
+      query: (id) => `/users/${id}/`,
       providesTags: (result, error, id) => [{ type: 'Profile', id }],
     }),
 
     getMyProfile: builder.query<UnifiedProfile, void>({
-      query: () => '/api/v1/users/me/',
+      query: () => '/users/me/',
       providesTags: ['User', 'Profile'],
     }),
 
     getUnifiedProfile: builder.query<UnifiedProfile, void>({
-      query: () => '/api/v1/users/me/unified/',
+      query: () => '/users/me/unified/',
       providesTags: ['User', 'Profile'],
     }),
 
     updateProfile: builder.mutation<Profile, { id: string; data: UpdateProfileRequest }>({
       query: ({ id, data }) => ({
-        url: `/api/v1/users/${id}/update/`,
+        url: `/users/${id}/update/`,
         method: 'PATCH',
         body: data,
       }),
@@ -100,7 +100,7 @@ export const profileApi = api.injectEndpoints({
 
     updateUnifiedProfile: builder.mutation<UnifiedProfile, UpdateProfileRequest>({
       query: (data) => ({
-        url: '/api/v1/users/me/unified/',
+        url: '/users/me/unified/',
         method: 'PATCH',
         body: data,
       }),
@@ -109,7 +109,7 @@ export const profileApi = api.injectEndpoints({
 
     applyForProvider: builder.mutation<any, ProviderApplicationRequest>({
       query: (data) => ({
-        url: '/api/v1/users/apply-provider/',
+        url: '/users/apply-provider/',
         method: 'POST',
         body: data,
       }),
@@ -117,13 +117,13 @@ export const profileApi = api.injectEndpoints({
     }),
 
     getApplicationStatus: builder.query<any, void>({
-      query: () => '/api/v1/users/application-status/',
+      query: () => '/users/application-status/',
       providesTags: ['User'],
     }),
 
     withdrawApplication: builder.mutation<void, void>({
       query: () => ({
-        url: '/api/v1/users/withdraw-application/',
+        url: '/users/withdraw-application/',
         method: 'POST',
       }),
       invalidatesTags: ['User', 'Profile'],
@@ -131,7 +131,7 @@ export const profileApi = api.injectEndpoints({
 
     verifyProvider: builder.mutation<any, string>({
       query: (id) => ({
-        url: `/api/v1/users/${id}/verify-provider/`,
+        url: `/users/${id}/verify-provider/`,
         method: 'POST',
       }),
       invalidatesTags: (result, error, id) => [
@@ -142,7 +142,7 @@ export const profileApi = api.injectEndpoints({
 
     getApprovedProviders: builder.query<UnifiedProfile[], void>({
       query: () => ({
-        url: '/api/v1/users/',
+        url: '/users/',
         params: { role: 'provider', is_verified: 'true' }
       }),
       providesTags: ['Profile'],

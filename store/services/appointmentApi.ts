@@ -63,7 +63,7 @@ export const appointmentApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAvailableSlots: builder.query<TimeSlot[], { serviceId: string; startDate: string; endDate: string }>({
       query: ({ serviceId, startDate, endDate }) => ({
-        url: `/api/v1/appointments/services/${serviceId}/slots/`,
+        url: `/appointments/services/${serviceId}/slots/`,
         params: { start_date: startDate, end_date: endDate },
       }),
       providesTags: (result, error, { serviceId }) => [
@@ -73,7 +73,7 @@ export const appointmentApi = api.injectEndpoints({
 
     createAppointment: builder.mutation<Appointment, CreateAppointmentRequest>({
       query: (data) => ({
-        url: '/api/v1/appointments/',
+        url: '/appointments/',
         method: 'POST',
         body: data,
       }),
@@ -82,7 +82,7 @@ export const appointmentApi = api.injectEndpoints({
 
     confirmPayment: builder.mutation<Appointment, string>({
       query: (appointmentId) => ({
-        url: `/api/v1/appointments/${appointmentId}/confirm-payment/`,
+        url: `/appointments/${appointmentId}/confirm-payment/`,
         method: 'POST',
       }),
       invalidatesTags: (result, error, appointmentId) => [
@@ -93,7 +93,7 @@ export const appointmentApi = api.injectEndpoints({
 
     getMyAppointments: builder.query<Appointment[], { status?: string }>({
       query: ({ status }) => ({
-        url: '/api/v1/appointments/my/',
+        url: '/appointments/my/',
         params: status ? { status } : {},
       }),
       providesTags: (result) =>
@@ -106,13 +106,13 @@ export const appointmentApi = api.injectEndpoints({
     }),
 
     getAppointmentDetail: builder.query<Appointment, string>({
-      query: (appointmentId) => `/api/v1/appointments/${appointmentId}/`,
+      query: (appointmentId) => `/appointments/${appointmentId}/`,
       providesTags: (result, error, appointmentId) => [{ type: 'Appointment', id: appointmentId }],
     }),
 
     cancelAppointment: builder.mutation<Appointment, { appointmentId: string; reason: string }>({
       query: ({ appointmentId, reason }) => ({
-        url: `/api/v1/appointments/${appointmentId}/cancel/`,
+        url: `/appointments/${appointmentId}/cancel/`,
         method: 'POST',
         body: { reason },
       }),
@@ -124,7 +124,7 @@ export const appointmentApi = api.injectEndpoints({
 
     rescheduleAppointment: builder.mutation<Appointment, { appointmentId: string } & RescheduleRequest>({
       query: ({ appointmentId, ...data }) => ({
-        url: `/api/v1/appointments/${appointmentId}/reschedule/`,
+        url: `/appointments/${appointmentId}/reschedule/`,
         method: 'POST',
         body: data,
       }),
@@ -136,13 +136,13 @@ export const appointmentApi = api.injectEndpoints({
     }),
 
     getProviderAvailability: builder.query<Availability[], void>({
-      query: () => '/api/v1/appointments/availability/',
+      query: () => '/appointments/availability/',
       providesTags: ['Availability'],
     }),
 
     setProviderAvailability: builder.mutation<Availability, Omit<Availability, 'id' | 'provider' | 'day_of_week_display'>>({
       query: (data) => ({
-        url: '/api/v1/appointments/availability/',
+        url: '/appointments/availability/',
         method: 'POST',
         body: data,
       }),
@@ -150,13 +150,13 @@ export const appointmentApi = api.injectEndpoints({
     }),
 
     getAvailabilityExceptions: builder.query<AvailabilityException[], void>({
-      query: () => '/api/v1/appointments/availability/exceptions/',
+      query: () => '/appointments/availability/exceptions/',
       providesTags: ['Availability'],
     }),
 
     createAvailabilityException: builder.mutation<AvailabilityException, Omit<AvailabilityException, 'id'>>({
       query: (data) => ({
-        url: '/api/v1/appointments/availability/exceptions/',
+        url: '/appointments/availability/exceptions/',
         method: 'POST',
         body: data,
       }),
@@ -164,7 +164,7 @@ export const appointmentApi = api.injectEndpoints({
     }),
 
     getMonthlyCalendar: builder.query<DayAvailability[], { providerId: string; year: number; month: number }>({
-      query: ({ providerId, year, month }) => `/api/v1/appointments/providers/${providerId}/calendar/${year}/${month}/`,
+      query: ({ providerId, year, month }) => `/appointments/providers/${providerId}/calendar/${year}/${month}/`,
       providesTags: (result, error, { providerId }) => [
         { type: 'Availability', id: providerId },
       ],
@@ -172,7 +172,7 @@ export const appointmentApi = api.injectEndpoints({
 
     getDailyDetails: builder.query<any, { providerId: string; year: number; month: number; day: number }>({
       query: ({ providerId, year, month, day }) => 
-        `/api/v1/appointments/providers/${providerId}/calendar/${year}/${month}/${day}/`,
+        `/appointments/providers/${providerId}/calendar/${year}/${month}/${day}/`,
       providesTags: (result, error, { providerId }) => [
         { type: 'Availability', id: `${providerId}-daily` },
       ],

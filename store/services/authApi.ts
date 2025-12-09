@@ -47,7 +47,7 @@ export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: '/api/v1/auth/jwt/create/',
+        url: '/auth/jwt/create/',
         method: 'POST',
         body: credentials,
       }),
@@ -69,14 +69,14 @@ export const authApi = api.injectEndpoints({
 
     register: builder.mutation<User, RegisterRequest>({
       query: (userData) => ({
-        url: '/api/v1/auth/users/',
+        url: '/auth/users/',
         method: 'POST',
         body: userData,
       }),
     }),
 
     getCurrentUser: builder.query<User, void>({
-      query: () => '/api/v1/auth/users/me/',
+      query: () => '/auth/users/me/',
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
@@ -90,7 +90,7 @@ export const authApi = api.injectEndpoints({
 
     refreshToken: builder.mutation<RefreshTokenResponse, RefreshTokenRequest>({
       query: (body) => ({
-        url: '/api/v1/auth/jwt/refresh/',
+        url: '/auth/jwt/refresh/',
         method: 'POST',
         body,
       }),
@@ -106,7 +106,7 @@ export const authApi = api.injectEndpoints({
 
     changePassword: builder.mutation<void, { current_password: string; new_password: string; re_new_password?: string }>({
       query: (body) => ({
-        url: '/api/v1/auth/users/set_password/',
+        url: '/auth/users/set_password/',
         method: 'POST',
         body: {
           ...body,
@@ -117,7 +117,7 @@ export const authApi = api.injectEndpoints({
 
     requestPasswordReset: builder.mutation<void, { email: string }>({
       query: (body) => ({
-        url: '/api/v1/auth/users/reset_password/',
+        url: '/auth/users/reset_password/',
         method: 'POST',
         body,
       }),
@@ -125,7 +125,7 @@ export const authApi = api.injectEndpoints({
 
     deleteAccount: builder.mutation<void, { current_password: string }>({
       query: (body) => ({
-        url: '/api/v1/auth/users/me/',
+        url: '/auth/users/me/',
         method: 'DELETE',
         body,
       }),
