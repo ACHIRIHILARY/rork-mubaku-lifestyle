@@ -18,6 +18,7 @@ export default function PaymentScreen() {
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
   const [cardName, setCardName] = useState('');
+  const [mobileMoneyNumber, setMobileMoneyNumber] = useState('');
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
   const [confirmPayment, { isLoading: isConfirming }] = useConfirmPaymentMutation();
 
@@ -51,6 +52,13 @@ export default function PaymentScreen() {
       }
     }
 
+    if (paymentMethod === 'mobile') {
+      if (!mobileMoneyNumber) {
+        Alert.alert('Error', 'Please enter your mobile money number');
+        return;
+      }
+    }
+
     try {
       const scheduledFor = `${date}T${startTime}`;
       const scheduledUntil = `${date}T${endTime}`;
@@ -65,9 +73,13 @@ export default function PaymentScreen() {
 
       await confirmPayment(appointment.id).unwrap();
 
+      const successMessage = paymentMethod === 'mobile'
+        ? `You will receive a prompt on your phone ${mobileMoneyNumber} to complete the payment. Your booking has been confirmed!`
+        : 'Your booking has been confirmed!';
+
       Alert.alert(
         'Success',
-        'Your booking has been confirmed!',
+        successMessage,
         [
           {
             text: 'OK',
@@ -206,8 +218,18 @@ export default function PaymentScreen() {
             <Text style={styles.sectionTitle}>Mobile Money</Text>
             
             <View style={styles.card}>
-              <Text style={styles.mobileMoneyText}>
-                You will receive a prompt on your phone to complete the payment of {currency} {amount}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Mobile Money Number</Text>
+                <TextInput
+                  style={styles.input}
+                  value={mobileMoneyNumber}
+                  onChangeText={setMobileMoneyNumber}
+                  placeholder="e.g., 237699123456"
+                  keyboardType="phone-pad"
+                />
+              </View>
+              <Text style={styles.mobileMoneyInfoText}>
+                You will receive a prompt on this number to complete the payment of {currency} {amount}
               </Text>
             </View>
           </View>
@@ -373,11 +395,11 @@ const styles = StyleSheet.create({
   halfWidth: {
     flex: 1,
   },
-  mobileMoneyText: {
-    fontSize: 16,
+  mobileMoneyInfoText: {
+    fontSize: 14,
     color: '#666',
-    textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 20,
+    marginTop: 8,
   },
   totalCard: {
     backgroundColor: 'white',
