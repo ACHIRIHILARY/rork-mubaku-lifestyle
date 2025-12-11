@@ -226,7 +226,7 @@ export default function HomeScreen() {
                         <Star color="#FFD700" size={16} fill="#FFD700" />
                         <Text style={styles.rating}>{service.rating || '5.0'}</Text>
                       </View>
-                      <Text style={styles.price}>{service.price} {service.currency}</Text>
+                      <Text style={styles.price}>{Math.floor(Number(service.price))} {service.currency}</Text>
                     </View>
                     <View style={styles.durationContainer}>
                       <Text style={styles.duration}>{service.duration_minutes} min</Text>
