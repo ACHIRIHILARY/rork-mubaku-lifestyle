@@ -88,10 +88,29 @@ export default function PaymentScreen() {
         ]
       );
     } catch (error: any) {
-      console.error('Booking error:', error);
+      console.error('Booking error:', JSON.stringify(error, null, 2));
+      
+      let errorMessage = 'Unable to create booking. Please try again.';
+      
+      if (error?.data) {
+        if (typeof error.data === 'string') {
+          errorMessage = error.data;
+        } else if (error.data.detail) {
+          errorMessage = error.data.detail;
+        } else if (error.data.error) {
+          errorMessage = error.data.error;
+        } else {
+          errorMessage = JSON.stringify(error.data);
+        }
+      } else if (error?.message) {
+        errorMessage = error.message;
+      } else if (error?.status) {
+        errorMessage = `Error: ${error.status}`;
+      }
+      
       Alert.alert(
         'Booking Failed',
-        error?.data?.detail || 'Unable to create booking. Please try again.'
+        errorMessage
       );
     }
   };
