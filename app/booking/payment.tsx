@@ -448,7 +448,7 @@ export default function PaymentScreen() {
                 <Text style={styles.totalCardTitle}>Payment Summary</Text>
               </View>
             </View>
-          <View style={styles.totalRow}>
+            <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Service Price</Text>
             <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
           </View>

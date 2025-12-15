@@ -220,6 +220,9 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.agentInfo}>
                     <Text style={styles.agentName}>{service.name}</Text>
+                    {service.provider_details?.city && (
+                      <Text style={styles.serviceLocation}>{service.provider_details.city}</Text>
+                    )}
                     <Text style={styles.agentService}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.agentMeta}>
                       <View style={styles.ratingContainer}>
@@ -540,6 +543,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666',
     fontStyle: 'italic',
+  },
+  serviceLocation: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginBottom: 4,
   },
   emptyContainer: {
     padding: 32,
