@@ -25,8 +25,8 @@ export default function PaymentScreen() {
   const isLoading = isCreating || isInitiating;
 
   React.useEffect(() => {
-    console.log('[Payment] Payment methods data:', paymentMethodsData);
-    console.log('[Payment] Payment methods error:', methodsError);
+    console.log('[Payment] Payment methods data:', JSON.stringify(paymentMethodsData, null, 2));
+    console.log('[Payment] Payment methods error:', JSON.stringify(methodsError, null, 2));
     console.log('[Payment] Is loading methods:', isLoadingMethods);
   }, [paymentMethodsData, methodsError, isLoadingMethods]);
 
@@ -276,14 +276,12 @@ export default function PaymentScreen() {
             <ActivityIndicator size="large" color="#2D1A46" />
             <Text style={styles.loadingText}>Loading payment methods...</Text>
           </View>
-        ) : methodsError || !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
+        ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
           <View style={styles.errorContainer}>
             <AlertCircle color="#EF4444" size={48} />
             <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
             <Text style={styles.errorMessage}>
-              {methodsError 
-                ? `Error: ${JSON.stringify(methodsError)}`
-                : 'Unable to load payment methods. Please try again.'}
+              Unable to load payment methods. Please check your connection and try again.
             </Text>
             <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
               <Text style={styles.retryButtonText}>Retry</Text>

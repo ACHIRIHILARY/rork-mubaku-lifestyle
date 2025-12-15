@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
-import { Search, Star, X, User } from 'lucide-react-native';
+import { Search, Star, X, User, MapPin } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
@@ -221,7 +221,10 @@ export default function HomeScreen() {
                   <View style={styles.agentInfo}>
                     <Text style={styles.agentName}>{service.name}</Text>
                     {service.provider_details?.city && (
-                      <Text style={styles.serviceLocation}>{service.provider_details.city}</Text>
+                      <View style={styles.locationRow}>
+                        <MapPin color="#F4A896" size={14} />
+                        <Text style={styles.serviceLocation}>{service.provider_details.city}</Text>
+                      </View>
                     )}
                     <Text style={styles.agentService}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.agentMeta}>
@@ -544,11 +547,16 @@ const styles = StyleSheet.create({
     color: '#666',
     fontStyle: 'italic',
   },
+  locationRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 4,
+  },
   serviceLocation: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#2D1A46',
-    marginBottom: 4,
   },
   emptyContainer: {
     padding: 32,
