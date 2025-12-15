@@ -29,19 +29,8 @@ export default function LoginScreen() {
       
       console.log('Redirecting user to:', destination);
       
-      Alert.alert(
-        'Login Successful',
-        'You have successfully logged in.',
-        [
-          {
-            text: 'Continue',
-            onPress: () => {
-              setWaitingForUser(false);
-              router.replace(destination);
-            }
-          }
-        ]
-      );
+      setWaitingForUser(false);
+      router.replace(destination);
     }
   }, [waitingForUser, user, isAuthenticated]);
 
