@@ -69,23 +69,24 @@ export default function BookingSummary() {
         >
           <ArrowLeft color="white" size={24} />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Booking Summary</Text>
+        <Text style={styles.headerTitle}>Review Your Booking</Text>
         <View style={styles.placeholder} />
       </View>
 
       <ScrollView style={styles.content}>
         {/* Service Info */}
         <View style={styles.card}>
+          <Text style={styles.cardTitle}>Service</Text>
           <Text style={styles.serviceName}>{service.name}</Text>
           <Text style={styles.categoryName}>{service.category_details?.name}</Text>
           {service.provider_details && (
-            <Text style={styles.providerName}>Provider: {service.provider_details.full_name}</Text>
+            <Text style={styles.providerName}>By {service.provider_details.full_name}</Text>
           )}
         </View>
 
         {/* Booking Details */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Booking Details</Text>
+          <Text style={styles.cardTitle}>Date & Time</Text>
           
           <View style={styles.detailRow}>
             <Calendar color="#666" size={20} />
@@ -106,31 +107,23 @@ export default function BookingSummary() {
             </Text>
           </View>
 
-          <View style={styles.detailRow}>
-            <Clock color="#666" size={20} />
-            <Text style={styles.detailText}>Duration: {durationMinutes} minutes</Text>
-          </View>
+          {durationMinutes > 0 && (
+            <View style={styles.detailRow}>
+              <Clock color="#666" size={20} />
+              <Text style={styles.detailText}>{durationMinutes} minutes</Text>
+            </View>
+          )}
         </View>
 
-        {/* Price Breakdown */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Price Breakdown</Text>
-          
-          <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>Service Fee</Text>
-            <Text style={styles.priceValue}>
-              {service.currency} {service.price}
+        {/* Price */}
+        <View style={styles.priceCard}>
+          <View style={styles.priceHeader}>
+            <Text style={styles.priceHeaderLabel}>Total Price</Text>
+            <Text style={styles.priceHeaderValue}>
+              {service.currency} {Number(service.price).toFixed(0)}
             </Text>
           </View>
-
-          <View style={styles.divider} />
-
-          <View style={styles.priceRow}>
-            <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>
-              {service.currency} {service.price}
-            </Text>
-          </View>
+          <Text style={styles.priceNote}>Payment processing fee will be added at checkout</Text>
         </View>
       </ScrollView>
 
@@ -140,7 +133,7 @@ export default function BookingSummary() {
           style={styles.confirmButton}
           onPress={handleConfirmBooking}
         >
-          <Text style={styles.confirmButtonText}>Confirm Booking</Text>
+          <Text style={styles.confirmButtonText}>Continue to Payment</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -191,19 +184,20 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   serviceName: {
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 18,
+    fontWeight: '600',
     color: '#2D1A46',
     marginBottom: 4,
   },
   categoryName: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 4,
+    fontSize: 14,
+    color: '#999',
+    marginBottom: 8,
   },
   providerName: {
     fontSize: 14,
-    color: '#999',
+    color: '#666',
+    fontWeight: '500',
   },
   loadingContainer: {
     flex: 1,
@@ -220,10 +214,12 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2D1A46',
-    marginBottom: 16,
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#999',
+    marginBottom: 12,
+    textTransform: 'uppercase' as const,
+    letterSpacing: 0.5,
   },
   detailRow: {
     flexDirection: 'row',
@@ -235,35 +231,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
   },
-  priceRow: {
+  priceCard: {
+    backgroundColor: '#2D1A46',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  priceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 8,
   },
-  priceLabel: {
+  priceHeaderLabel: {
     fontSize: 16,
-    color: '#666',
+    color: 'rgba(255, 255, 255, 0.8)',
   },
-  priceValue: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2D1A46',
-  },
-  divider: {
-    height: 1,
-    backgroundColor: '#E5E5E5',
-    marginVertical: 12,
-  },
-  totalLabel: {
-    fontSize: 18,
+  priceHeaderValue: {
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#2D1A46',
+    color: 'white',
   },
-  totalValue: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2D1A46',
+  priceNote: {
+    fontSize: 12,
+    color: 'rgba(255, 255, 255, 0.6)',
   },
   buttonContainer: {
     paddingHorizontal: 24,
@@ -273,7 +272,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#E5E5E5',
   },
   confirmButton: {
-    backgroundColor: '#2D1A46',
+    backgroundColor: '#F4A896',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',

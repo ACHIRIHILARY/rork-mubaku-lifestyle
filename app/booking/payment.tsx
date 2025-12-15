@@ -132,7 +132,8 @@ export default function PaymentScreen() {
         ) : (
           <>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Choose Payment Method</Text>
+              <Text style={styles.sectionTitle}>Select Your Payment Method</Text>
+              <Text style={styles.sectionSubtitle}>Choose how you&apos;d like to pay</Text>
               
               <View style={styles.methodsContainer}>
                 {paymentMethodsData?.methods.map((method) => (
@@ -168,7 +169,7 @@ export default function PaymentScreen() {
                           styles.methodDescription,
                           paymentMethod === method.method_code && styles.selectedMethodDescription
                         ]}>
-                          {method.metadata.instructions}
+                          Quick & secure mobile payment
                         </Text>
                       </View>
                     </View>
@@ -179,7 +180,8 @@ export default function PaymentScreen() {
 
             {paymentMethod && selectedMethodData && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Payment Details</Text>
+                <Text style={styles.sectionTitle}>Enter Your Phone Number</Text>
+                <Text style={styles.sectionSubtitle}>You&apos;ll receive a prompt to complete payment</Text>
                 
                 <View style={styles.card}>
                   <View style={styles.inputContainer}>
@@ -200,17 +202,17 @@ export default function PaymentScreen() {
                   
                   <View style={styles.infoBox}>
                     <Text style={styles.infoText}>
-                      {selectedMethodData.metadata.instructions}
+                      💡 A payment prompt will be sent to your phone. Complete it to confirm your booking.
                     </Text>
                     <Text style={styles.processingTime}>
-                      Processing time: {selectedMethodData.metadata.estimated_processing_time}
+                      ⏱️ Usually takes {selectedMethodData.metadata.estimated_processing_time}
                     </Text>
                   </View>
 
                   <View style={styles.feesContainer}>
-                    <Text style={styles.feesLabel}>Transaction Fee:</Text>
+                    <Text style={styles.feesLabel}>Processing Fee:</Text>
                     <Text style={styles.feesValue}>
-                      {selectedMethodData.fees.rate}% ({selectedMethodData.fees.description})
+                      {selectedMethodData.fees.rate}%
                     </Text>
                   </View>
                 </View>
@@ -221,22 +223,22 @@ export default function PaymentScreen() {
 
         <View style={styles.totalCard}>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Service Amount</Text>
-            <Text style={styles.totalAmount}>{currency} {amount}</Text>
+            <Text style={styles.totalLabel}>Service Price</Text>
+            <Text style={styles.totalAmount}>{currency} {parseFloat(amount).toFixed(0)}</Text>
           </View>
           {selectedMethodData && (
             <>
               <View style={styles.totalRow}>
-                <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
+                <Text style={styles.feeLabel}>Processing Fee ({selectedMethodData.fees.rate}%)</Text>
                 <Text style={styles.feeAmount}>
-                  {currency} {(parseFloat(amount) * selectedMethodData.fees.rate / 100).toFixed(2)}
+                  {currency} {(parseFloat(amount) * selectedMethodData.fees.rate / 100).toFixed(0)}
                 </Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.totalRow}>
-                <Text style={styles.totalLabel}>Total Amount</Text>
+                <Text style={styles.totalLabel}>Total to Pay</Text>
                 <Text style={styles.totalAmount}>
-                  {currency} {(parseFloat(amount) * (1 + selectedMethodData.fees.rate / 100)).toFixed(2)}
+                  {currency} {(parseFloat(amount) * (1 + selectedMethodData.fees.rate / 100)).toFixed(0)}
                 </Text>
               </View>
             </>
@@ -256,8 +258,10 @@ export default function PaymentScreen() {
         >
           {isLoading ? (
             <ActivityIndicator color="white" />
+          ) : selectedMethodData ? (
+            <Text style={styles.payButtonText}>Pay {currency} {(parseFloat(amount) * (1 + selectedMethodData.fees.rate / 100)).toFixed(0)}</Text>
           ) : (
-            <Text style={styles.payButtonText}>Pay {currency} {amount}</Text>
+            <Text style={styles.payButtonText}>Continue</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -301,6 +305,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2D1A46',
+    marginBottom: 8,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: '#666',
     marginBottom: 16,
   },
   methodsContainer: {

@@ -104,13 +104,13 @@ export default function PaymentStatusScreen() {
   const getStatusTitle = (status: PaymentStatus) => {
     switch (status) {
       case 'completed':
-        return 'Payment Successful!';
+        return 'Booking Confirmed!';
       case 'failed':
-        return 'Payment Failed';
+        return 'Payment Not Completed';
       case 'pending':
-        return 'Awaiting Authorization';
+        return 'Waiting for Approval';
       case 'processing':
-        return 'Processing Payment';
+        return 'Processing...';
       default:
         return 'Payment Status';
     }
@@ -120,23 +120,23 @@ export default function PaymentStatusScreen() {
     if (!payment) return 'Loading payment information...';
 
     if (payment.status === 'pending') {
-      return `Please check your phone ${phoneNumber} and authorize the payment. This may take up to 2 minutes.`;
+      return `Check your phone (${phoneNumber}) for a payment prompt. Dial the code shown to approve the payment.`;
     }
 
     if (payment.status === 'processing') {
-      return 'Your payment is being processed. Please wait...';
+      return 'Processing your payment... Almost done!';
     }
 
     if (payment.status === 'completed') {
-      return `Your payment of ${payment.amount.currency} ${payment.amount.total} has been successfully processed. The funds are held in escrow until service completion.`;
+      return `Payment successful! ${payment.amount.currency} ${Math.round(payment.amount.total)} has been paid. Your booking is confirmed.`;
     }
 
     if (payment.status === 'failed') {
-      const failureMessage = payment.failure_details?.message || 'Payment authorization failed';
-      return failureMessage;
+      const failureMessage = payment.failure_details?.message || 'Payment was not completed';
+      return failureMessage + '. You can try again with the same or different payment method.';
     }
 
-    return payment.instructions?.message || 'Processing your payment...';
+    return payment.instructions?.message || 'Setting up your payment...';
   };
 
   const handleRetry = async () => {
@@ -226,7 +226,7 @@ export default function PaymentStatusScreen() {
             <View style={styles.detailRow}>
               <Text style={styles.detailLabel}>Amount Paid</Text>
               <Text style={styles.detailValue}>
-                {payment.amount.currency} {payment.amount.total}
+                {payment.amount.currency} {Math.round(payment.amount.total)}
               </Text>
             </View>
           </View>
@@ -236,7 +236,7 @@ export default function PaymentStatusScreen() {
           <View style={styles.errorCard}>
             <Text style={styles.errorCode}>Error Code: {payment.failure_details.code}</Text>
             {payment.failure_details.retry_allowed && (
-              <Text style={styles.retryHint}>You can try again with a different method</Text>
+              <Text style={styles.retryHint}>You can try again with the same or a different payment method</Text>
             )}
           </View>
         )}
@@ -249,7 +249,7 @@ export default function PaymentStatusScreen() {
               style={styles.primaryButton}
               onPress={handleViewAppointment}
             >
-              <Text style={styles.primaryButtonText}>View Booking</Text>
+              <Text style={styles.primaryButtonText}>View My Booking</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.secondaryButton}
@@ -278,7 +278,7 @@ export default function PaymentStatusScreen() {
         )}
 
         {isProcessing && (
-          <Text style={styles.waitingText}>Please do not close this screen</Text>
+          <Text style={styles.waitingText}>Please wait... Do not close this screen</Text>
         )}
       </View>
     </SafeAreaView>
