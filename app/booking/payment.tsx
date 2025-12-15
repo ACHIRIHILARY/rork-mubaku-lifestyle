@@ -24,7 +24,7 @@ export default function PaymentScreen() {
 
   const isLoading = isCreating || isInitiating;
 
-  const selectedMethodData = paymentMethodsData?.methods.find(
+  const selectedMethodData = paymentMethodsData?.methods?.find(
     (m) => m.method_code === paymentMethod
   );
 
@@ -274,7 +274,7 @@ export default function PaymentScreen() {
               <Text style={styles.sectionSubtitle}>Choose how you&apos;d like to pay</Text>
               
               <View style={styles.methodsContainer}>
-                {paymentMethodsData?.methods.map((method) => (
+                {paymentMethodsData?.methods?.map((method) => (
                   <TouchableOpacity
                     key={method.method_code}
                     style={[
