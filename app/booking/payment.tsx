@@ -24,9 +24,12 @@ export default function PaymentScreen() {
 
   const isLoading = isCreating || isInitiating;
 
-  const selectedMethodData = paymentMethodsData?.methods?.find(
-    (m) => m.method_code === paymentMethod
-  );
+  const selectedMethodData = React.useMemo(() => {
+    if (!paymentMethodsData?.methods || !Array.isArray(paymentMethodsData.methods)) {
+      return null;
+    }
+    return paymentMethodsData.methods.find((m) => m.method_code === paymentMethod) || null;
+  }, [paymentMethodsData, paymentMethod]);
 
   const validatePhoneNumber = (phone: string): boolean => {
     if (!selectedMethodData) return false;
@@ -261,17 +264,47 @@ export default function PaymentScreen() {
         <View style={styles.placeholder} />
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {isLoadingMethods ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#2D1A46" />
             <Text style={styles.loadingText}>Loading payment methods...</Text>
           </View>
+        ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
+          <View style={styles.errorContainer}>
+            <AlertCircle color="#EF4444" size={48} />
+            <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
+            <Text style={styles.errorMessage}>Unable to load payment methods. Please try again.</Text>
+            <TouchableOpacity style={styles.retryButton} onPress={() => router.back()}>
+              <Text style={styles.retryButtonText}>Go Back</Text>
+            </TouchableOpacity>
+          </View>
         ) : (
           <>
+            <View style={styles.stepIndicator}>
+              <View style={[styles.stepBadge, styles.stepBadgeActive]}>
+                <Text style={styles.stepNumber}>1</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.stepBadge, paymentMethod ? styles.stepBadgeActive : styles.stepBadgeInactive]}>
+                <Text style={[styles.stepNumber, !paymentMethod && styles.stepNumberInactive]}>2</Text>
+              </View>
+              <View style={styles.stepLine} />
+              <View style={[styles.stepBadge, styles.stepBadgeInactive]}>
+                <Text style={[styles.stepNumber, styles.stepNumberInactive]}>3</Text>
+              </View>
+            </View>
+
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Select Your Payment Method</Text>
-              <Text style={styles.sectionSubtitle}>Choose how you&apos;d like to pay</Text>
+              <View style={styles.sectionHeader}>
+                <View style={styles.stepNumberCircle}>
+                  <Text style={styles.stepNumberText}>1</Text>
+                </View>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.sectionTitle}>Choose Payment Method</Text>
+                  <Text style={styles.sectionSubtitle}>Select MTN or Orange Money</Text>
+                </View>
+              </View>
               
               <View style={styles.methodsContainer}>
                 {paymentMethodsData?.methods?.map((method) => (
@@ -307,9 +340,20 @@ export default function PaymentScreen() {
                           styles.methodDescription,
                           paymentMethod === method.method_code && styles.selectedMethodDescription
                         ]}>
-                          Quick & secure mobile payment
+                          Mobile money payment
+                        </Text>
+                        <Text style={[
+                          styles.methodLimits,
+                          paymentMethod === method.method_code && styles.selectedMethodDescription
+                        ]}>
+                          Limit: {method.limits.currency} {Math.round(method.limits.min_amount)} - {Math.round(method.limits.max_amount)}
                         </Text>
                       </View>
+                      {paymentMethod === method.method_code && (
+                        <View style={styles.selectedCheckmark}>
+                          <Text style={styles.checkmarkText}>✓</Text>
+                        </View>
+                      )}
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -318,8 +362,15 @@ export default function PaymentScreen() {
 
             {paymentMethod && selectedMethodData && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Enter Your Phone Number</Text>
-                <Text style={styles.sectionSubtitle}>You&apos;ll receive a prompt to complete payment</Text>
+                <View style={styles.sectionHeader}>
+                  <View style={styles.stepNumberCircle}>
+                    <Text style={styles.stepNumberText}>2</Text>
+                  </View>
+                  <View style={styles.sectionTitleContainer}>
+                    <Text style={styles.sectionTitle}>Enter Your Mobile Number</Text>
+                    <Text style={styles.sectionSubtitle}>Enter the {selectedMethodData.display_name} number for payment</Text>
+                  </View>
+                </View>
                 
                 <View style={styles.card}>
                   <View style={styles.inputContainer}>
@@ -340,7 +391,7 @@ export default function PaymentScreen() {
                       textContentType="telephoneNumber"
                     />
                     {phoneError ? (
-                      <View style={styles.errorContainer}>
+                      <View style={styles.inputErrorContainer}>
                         <AlertCircle size={16} color="#EF4444" />
                         <Text style={styles.errorText}>{phoneError}</Text>
                       </View>
@@ -355,7 +406,7 @@ export default function PaymentScreen() {
                     <View style={styles.infoRow}>
                       <Info size={20} color="#2D1A46" />
                       <Text style={styles.infoText}>
-                        You will receive a prompt on {phoneNumber || 'your phone'}. Dial the code to authorize payment.
+                        You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber || '(your number)'}</Text>. Enter your PIN to authorize the payment.
                       </Text>
                     </View>
                     <Text style={styles.processingTime}>
@@ -387,8 +438,16 @@ export default function PaymentScreen() {
           </>
         )}
 
-        <View style={styles.totalCard}>
-          <Text style={styles.totalCardTitle}>Payment Summary</Text>
+        {!isLoadingMethods && paymentMethodsData?.methods && (
+          <View style={styles.totalCard}>
+            <View style={styles.sectionHeader}>
+              <View style={styles.stepNumberCircle}>
+                <Text style={styles.stepNumberText}>3</Text>
+              </View>
+              <View style={styles.sectionTitleContainer}>
+                <Text style={styles.totalCardTitle}>Payment Summary</Text>
+              </View>
+            </View>
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Service Price</Text>
             <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
@@ -413,7 +472,8 @@ export default function PaymentScreen() {
               </Text>
             </>
           )}
-        </View>
+          </View>
+        )}
       </ScrollView>
 
       {/* Pay Button */}
@@ -478,15 +538,100 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   sectionSubtitle: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#666',
+  },
+  stepIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 32,
+    paddingHorizontal: 40,
+  },
+  stepBadge: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  stepBadgeActive: {
+    backgroundColor: '#2D1A46',
+  },
+  stepBadgeInactive: {
+    backgroundColor: '#E5E5E5',
+  },
+  stepNumber: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  stepLine: {
+    flex: 1,
+    height: 2,
+    backgroundColor: '#E5E5E5',
+    marginHorizontal: 8,
+  },
+  stepNumberCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#2D1A46',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  stepNumberText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  stepNumberInactive: {
+    color: '#999',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 16,
+  },
+  sectionTitleContainer: {
+    flex: 1,
   },
   methodsContainer: {
     gap: 12,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  errorTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  errorMessage: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  retryButton: {
+    backgroundColor: '#2D1A46',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
   methodCard: {
     backgroundColor: 'white',
@@ -535,6 +680,24 @@ const styles = StyleSheet.create({
   methodDescription: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 4,
+  },
+  methodLimits: {
+    fontSize: 12,
+    color: '#999',
+  },
+  selectedCheckmark: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkmarkText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   selectedMethodDescription: {
     color: 'rgba(255, 255, 255, 0.8)',
@@ -574,7 +737,7 @@ const styles = StyleSheet.create({
     borderColor: '#EF4444',
     borderWidth: 2,
   },
-  errorContainer: {
+  inputErrorContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 4,
@@ -614,6 +777,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2D1A46',
     lineHeight: 20,
+  },
+  phoneHighlight: {
+    fontWeight: 'bold',
+    color: '#F4A896',
   },
   processingTime: {
     fontSize: 12,
@@ -680,10 +847,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   totalCardTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginBottom: 16,
   },
   grandTotalLabel: {
     fontSize: 18,
