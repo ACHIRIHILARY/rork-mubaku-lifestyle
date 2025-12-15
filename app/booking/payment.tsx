@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator } from 'react-native';
-import { ArrowLeft, Smartphone } from 'lucide-react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, Platform } from 'react-native';
+import { ArrowLeft, Smartphone, Info, AlertCircle } from 'lucide-react-native';
 import { useCreateAppointmentMutation } from '@/store/services/appointmentApi';
 import { useGetPaymentMethodsQuery, useInitiatePaymentMutation } from '@/store/services/paymentApi';
 
@@ -16,6 +16,8 @@ export default function PaymentScreen() {
   }>();
   const [paymentMethod, setPaymentMethod] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneError, setPhoneError] = useState('');
+  const [agreementAccepted, setAgreementAccepted] = useState(false);
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
   const [initiatePayment, { isLoading: isInitiating }] = useInitiatePaymentMutation();
   const { data: paymentMethodsData, isLoading: isLoadingMethods } = useGetPaymentMethodsQuery();
@@ -32,27 +34,82 @@ export default function PaymentScreen() {
     return regex.test(phone);
   };
 
+  const handlePhoneChange = (text: string) => {
+    const formatted = text.replace(/\D/g, '');
+    setPhoneNumber(formatted);
+    setPhoneError('');
+    
+    if (formatted.length > 0 && selectedMethodData) {
+      if (!validatePhoneNumber(formatted)) {
+        setPhoneError('Invalid format. Use: ' + selectedMethodData.configuration.example);
+      }
+    }
+  };
+
+  const calculateTotalAmount = (): number => {
+    if (!selectedMethodData) return parseFloat(amount);
+    const serviceAmount = parseFloat(amount);
+    const gatewayFee = serviceAmount * (selectedMethodData.fees.rate / 100);
+    return serviceAmount + gatewayFee;
+  };
+
+  const calculateGatewayFee = (): number => {
+    if (!selectedMethodData) return 0;
+    return parseFloat(amount) * (selectedMethodData.fees.rate / 100);
+  };
+
   const handlePayment = async () => {
     if (!paymentMethod) {
-      Alert.alert('Error', 'Please select a payment method');
+      Alert.alert('Select Payment Method', 'Please choose how you want to pay');
       return;
     }
 
-    if (!phoneNumber) {
-      Alert.alert('Error', `Please enter your ${selectedMethodData?.configuration.service_number_label || 'phone number'}`);
+    if (!phoneNumber.trim()) {
+      Alert.alert(
+        'Phone Number Required',
+        `Please enter your ${selectedMethodData?.configuration.service_number_label || 'phone number'}`
+      );
       return;
     }
 
     if (!validatePhoneNumber(phoneNumber)) {
       Alert.alert(
         'Invalid Phone Number',
-        selectedMethodData?.configuration.service_number_hint || 'Please enter a valid phone number'
+        `${selectedMethodData?.configuration.service_number_hint || 'Please enter a valid phone number'}\n\nExample: ${selectedMethodData?.configuration.example}`
+      );
+      return;
+    }
+
+    if (!agreementAccepted) {
+      Alert.alert(
+        'Accept Terms',
+        'Please accept the payment terms to continue'
+      );
+      return;
+    }
+
+    const totalAmount = calculateTotalAmount();
+    const minAmount = selectedMethodData?.limits?.min_amount || 100;
+    const maxAmount = selectedMethodData?.limits?.max_amount || 1000000;
+
+    if (totalAmount < minAmount) {
+      Alert.alert(
+        'Amount Too Low',
+        `Minimum payment amount is ${currency} ${minAmount}`
+      );
+      return;
+    }
+
+    if (totalAmount > maxAmount) {
+      Alert.alert(
+        'Amount Too High',
+        `Maximum payment amount is ${currency} ${maxAmount}. Please contact support for large transactions.`
       );
       return;
     }
 
     try {
-      console.log('Creating appointment...');
+      console.log('[Payment] Creating appointment...');
       const scheduledFor = `${date}T${startTime}`;
       const scheduledUntil = `${date}T${endTime}`;
 
@@ -64,49 +121,130 @@ export default function PaymentScreen() {
         currency: currency || 'XAF',
       }).unwrap();
 
-      console.log('Appointment created:', appointment.id);
-      console.log('Initiating payment...');
+      console.log('[Payment] Appointment created:', appointment.id);
+      console.log('[Payment] Initiating payment...');
 
+      const deviceInfo = `${Platform.OS}/${Platform.Version}`;
+      
       const paymentResponse = await initiatePayment({
         appointment_id: appointment.id,
         payment_method: paymentMethod,
         customer_phone: phoneNumber,
+        metadata: {
+          device_info: deviceInfo,
+        },
       }).unwrap();
 
-      console.log('Payment initiated:', paymentResponse.payment.frontend_token);
+      console.log('[Payment] Payment initiated successfully');
+      console.log('[Payment] Frontend token:', paymentResponse.payment.frontend_token.substring(0, 8) + '...');
 
       router.push(
-        `/booking/payment-status?frontendToken=${paymentResponse.payment.frontend_token}&phoneNumber=${phoneNumber}` as any
+        `/booking/payment-status?frontendToken=${paymentResponse.payment.frontend_token}&phoneNumber=${phoneNumber}&amount=${Math.round(totalAmount)}&currency=${currency}` as any
       );
     } catch (error: any) {
-      console.error('Payment error:', JSON.stringify(error, null, 2));
+      console.error('[Payment] Error:', error?.status || 'Unknown');
       
+      let errorTitle = 'Payment Failed';
       let errorMessage = 'Unable to process payment. Please try again.';
+      let suggestions: string[] = [];
       
-      if (error?.data) {
-        if (typeof error.data === 'string') {
-          errorMessage = error.data;
-        } else if (error.data.error) {
-          if (typeof error.data.error === 'string') {
-            errorMessage = error.data.error;
-          } else if (error.data.error.message) {
-            errorMessage = error.data.error.message;
+      if (error?.data?.error) {
+        const errorData = error.data.error;
+        
+        if (errorData.code) {
+          switch (errorData.code) {
+            case 'INVALID_PHONE_FORMAT':
+              errorTitle = 'Invalid Phone Number';
+              errorMessage = errorData.message || 'Phone number format is incorrect';
+              suggestions = errorData.suggestions || [
+                `Use format: ${selectedMethodData?.configuration.example}`,
+                'Include country code 237',
+              ];
+              break;
+            
+            case 'INSUFFICIENT_FUNDS':
+              errorTitle = 'Insufficient Funds';
+              errorMessage = 'Your account balance is too low';
+              suggestions = [
+                'Add funds to your mobile money account',
+                'Try a different payment method',
+              ];
+              break;
+            
+            case 'GATEWAY_TIMEOUT':
+              errorTitle = 'Connection Issue';
+              errorMessage = 'Unable to reach payment gateway';
+              suggestions = [
+                'Check your internet connection',
+                'Try again in 30 seconds',
+              ];
+              break;
+            
+            case 'DUPLICATE_TRANSACTION':
+              errorTitle = 'Duplicate Payment';
+              errorMessage = 'This payment may already be processing';
+              suggestions = [
+                'Check your bookings',
+                'Wait a few moments before retrying',
+              ];
+              break;
+            
+            case 'DAILY_LIMIT_EXCEEDED':
+              errorTitle = 'Daily Limit Reached';
+              errorMessage = 'You have reached your daily transaction limit';
+              suggestions = [
+                'Try again tomorrow',
+                'Contact your mobile money provider',
+              ];
+              break;
+            
+            case 'PAYMENT_INITIATION_FAILED':
+              errorTitle = 'Payment Setup Failed';
+              errorMessage = errorData.message || 'Could not start payment process';
+              suggestions = [
+                'Try a different payment method',
+                'Check if your phone number is active',
+              ];
+              break;
+            
+            default:
+              errorMessage = errorData.message || errorMessage;
+              suggestions = errorData.suggestions || [];
           }
-        } else if (error.data.detail) {
-          errorMessage = error.data.detail;
-        } else {
-          errorMessage = JSON.stringify(error.data);
+        } else if (typeof errorData === 'string') {
+          errorMessage = errorData;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
         }
+      } else if (error?.data?.detail) {
+        errorMessage = error.data.detail;
       } else if (error?.message) {
         errorMessage = error.message;
-      } else if (error?.status) {
-        errorMessage = `Error: ${error.status}`;
+      } else if (error?.status === 401) {
+        errorTitle = 'Session Expired';
+        errorMessage = 'Please log in again';
+      } else if (error?.status === 403) {
+        errorTitle = 'Not Authorized';
+        errorMessage = 'You do not have permission to make this payment';
+      } else if (error?.status === 409) {
+        errorTitle = 'Payment Already Exists';
+        errorMessage = 'A payment for this booking already exists';
+        suggestions = ['Check your bookings', 'Contact support if you need help'];
+      } else if (error?.status === 422) {
+        errorTitle = 'Payment Method Unavailable';
+        errorMessage = 'This payment method is currently unavailable';
+        suggestions = ['Try a different payment method'];
+      } else if (error?.status >= 500) {
+        errorTitle = 'Server Error';
+        errorMessage = 'Our servers are experiencing issues';
+        suggestions = ['Please try again in a few minutes'];
       }
       
-      Alert.alert(
-        'Payment Failed',
-        errorMessage
-      );
+      const fullMessage = suggestions.length > 0 
+        ? `${errorMessage}\n\n${suggestions.join('\n')}` 
+        : errorMessage;
+      
+      Alert.alert(errorTitle, fullMessage);
     }
   };
 
@@ -189,31 +327,59 @@ export default function PaymentScreen() {
                       {selectedMethodData.configuration.service_number_label}
                     </Text>
                     <TextInput
-                      style={styles.input}
+                      style={[
+                        styles.input,
+                        phoneError ? styles.inputError : null
+                      ]}
                       value={phoneNumber}
-                      onChangeText={setPhoneNumber}
+                      onChangeText={handlePhoneChange}
                       placeholder={selectedMethodData.configuration.example}
                       keyboardType="phone-pad"
+                      maxLength={12}
+                      autoComplete="tel"
+                      textContentType="telephoneNumber"
                     />
-                    <Text style={styles.hint}>
-                      {selectedMethodData.configuration.service_number_hint}
-                    </Text>
+                    {phoneError ? (
+                      <View style={styles.errorContainer}>
+                        <AlertCircle size={16} color="#EF4444" />
+                        <Text style={styles.errorText}>{phoneError}</Text>
+                      </View>
+                    ) : (
+                      <Text style={styles.hint}>
+                        {selectedMethodData.configuration.service_number_hint}
+                      </Text>
+                    )}
                   </View>
                   
                   <View style={styles.infoBox}>
-                    <Text style={styles.infoText}>
-                      💡 A payment prompt will be sent to your phone. Complete it to confirm your booking.
-                    </Text>
+                    <View style={styles.infoRow}>
+                      <Info size={20} color="#2D1A46" />
+                      <Text style={styles.infoText}>
+                        You will receive a prompt on {phoneNumber || 'your phone'}. Dial the code to authorize payment.
+                      </Text>
+                    </View>
                     <Text style={styles.processingTime}>
                       ⏱️ Usually takes {selectedMethodData.metadata.estimated_processing_time}
                     </Text>
                   </View>
 
-                  <View style={styles.feesContainer}>
-                    <Text style={styles.feesLabel}>Processing Fee:</Text>
-                    <Text style={styles.feesValue}>
-                      {selectedMethodData.fees.rate}%
-                    </Text>
+                  <View style={styles.agreementContainer}>
+                    <TouchableOpacity 
+                      style={styles.checkbox}
+                      onPress={() => setAgreementAccepted(!agreementAccepted)}
+                    >
+                      <View style={[
+                        styles.checkboxBox,
+                        agreementAccepted && styles.checkboxBoxChecked
+                      ]}>
+                        {agreementAccepted && (
+                          <Text style={styles.checkmark}>✓</Text>
+                        )}
+                      </View>
+                      <Text style={styles.checkboxLabel}>
+                        I understand that payment will be held securely until service completion
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -222,25 +388,29 @@ export default function PaymentScreen() {
         )}
 
         <View style={styles.totalCard}>
+          <Text style={styles.totalCardTitle}>Payment Summary</Text>
           <View style={styles.totalRow}>
             <Text style={styles.totalLabel}>Service Price</Text>
-            <Text style={styles.totalAmount}>{currency} {parseFloat(amount).toFixed(0)}</Text>
+            <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
           </View>
           {selectedMethodData && (
             <>
               <View style={styles.totalRow}>
-                <Text style={styles.feeLabel}>Processing Fee ({selectedMethodData.fees.rate}%)</Text>
+                <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
                 <Text style={styles.feeAmount}>
-                  {currency} {(parseFloat(amount) * selectedMethodData.fees.rate / 100).toFixed(0)}
+                  {currency} {Math.round(calculateGatewayFee())}
                 </Text>
               </View>
               <View style={styles.divider} />
               <View style={styles.totalRow}>
-                <Text style={styles.totalLabel}>Total to Pay</Text>
-                <Text style={styles.totalAmount}>
-                  {currency} {(parseFloat(amount) * (1 + selectedMethodData.fees.rate / 100)).toFixed(0)}
+                <Text style={styles.grandTotalLabel}>Total Amount</Text>
+                <Text style={styles.grandTotalAmount}>
+                  {currency} {Math.round(calculateTotalAmount())}
                 </Text>
               </View>
+              <Text style={styles.escrowNote}>
+                💰 Funds held securely in escrow until service completed
+              </Text>
             </>
           )}
         </View>
@@ -257,11 +427,14 @@ export default function PaymentScreen() {
           disabled={!paymentMethod || isLoading}
         >
           {isLoading ? (
-            <ActivityIndicator color="white" />
+            <View style={styles.loadingButtonContent}>
+              <ActivityIndicator color="white" />
+              <Text style={styles.payButtonText}>Processing...</Text>
+            </View>
           ) : selectedMethodData ? (
-            <Text style={styles.payButtonText}>Pay {currency} {(parseFloat(amount) * (1 + selectedMethodData.fees.rate / 100)).toFixed(0)}</Text>
+            <Text style={styles.payButtonText}>Pay {currency} {Math.round(calculateTotalAmount())}</Text>
           ) : (
-            <Text style={styles.payButtonText}>Continue</Text>
+            <Text style={styles.payButtonText}>Select Payment Method</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -397,6 +570,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#F9F9F9',
   },
+  inputError: {
+    borderColor: '#EF4444',
+    borderWidth: 2,
+  },
+  errorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    gap: 4,
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#EF4444',
+  },
   loadingContainer: {
     paddingVertical: 40,
     alignItems: 'center',
@@ -413,11 +600,17 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     backgroundColor: '#F0F9FF',
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 12,
+    padding: 16,
+    borderRadius: 12,
+    marginTop: 16,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginBottom: 8,
   },
   infoText: {
+    flex: 1,
     fontSize: 14,
     color: '#2D1A46',
     lineHeight: 20,
@@ -427,22 +620,36 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 8,
   },
-  feesContainer: {
+  agreementContainer: {
+    marginTop: 16,
+  },
+  checkbox: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: 12,
-    marginTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: '#E5E5E5',
+    alignItems: 'flex-start',
   },
-  feesLabel: {
-    fontSize: 14,
-    color: '#666',
+  checkboxBox: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  feesValue: {
+  checkboxBoxChecked: {
+    backgroundColor: '#2D1A46',
+  },
+  checkmark: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  checkboxLabel: {
+    flex: 1,
     fontSize: 14,
     color: '#2D1A46',
-    fontWeight: '600',
+    lineHeight: 20,
   },
   feeLabel: {
     fontSize: 14,
@@ -471,6 +678,33 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  totalCardTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginBottom: 16,
+  },
+  grandTotalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  grandTotalAmount: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  escrowNote: {
+    fontSize: 12,
+    color: '#10B981',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  loadingButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   totalRow: {
     flexDirection: 'row',
