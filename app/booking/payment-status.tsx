@@ -235,14 +235,14 @@ export default function PaymentStatusScreen() {
 
   const handleViewBooking = () => {
     if (payment?.appointment?.id) {
-      router.replace(`/booking/status?appointmentId=${payment.appointment.id}`);
+      router.replace(`/booking/status?appointmentId=${payment.appointment.id}` as any);
     } else {
-      router.replace('/(tabs)/my-bookings');
+      router.replace('/(tabs)/my-bookings' as any);
     }
   };
 
   const handleGoHome = () => {
-    router.replace('/(tabs)/home');
+    router.replace('/(tabs)' as any);
   };
 
   const handleContactSupport = () => {

@@ -25,17 +25,17 @@ export default function HomeScreen() {
   const { data: providers, isLoading: providersLoading } = useGetApprovedProvidersQuery();
   
   const handleServicePress = (serviceId: string) => {
-    router.push(`/service-detail?id=${serviceId}`);
+    router.push(`/service-detail?id=${serviceId}` as any);
   };
 
   const handleProviderPress = (providerId: number) => {
     console.log('Provider selected:', providerId);
-    router.push(`/profile-settings?userId=${providerId}`);
+    router.push(`/profile-settings?userId=${providerId}` as any);
   };
   
   const handleCategoryPress = (categoryId: number) => {
     console.log('Category selected:', categoryId);
-    router.push(`/category-detail?id=${categoryId}`);
+    router.push(`/category-detail?id=${categoryId}` as any);
   };
   
   const handleCategoryFilter = (categoryPkid: number) => {

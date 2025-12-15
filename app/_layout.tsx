@@ -33,14 +33,19 @@ function RootLayoutNav() {
       <Stack.Screen name="booking/summary" options={{ headerShown: false }} />
       <Stack.Screen name="booking/payment" options={{ headerShown: false }} />
       <Stack.Screen name="booking/status" options={{ headerShown: false }} />
+      <Stack.Screen name="booking/payment-status" options={{ headerShown: false }} />
       <Stack.Screen name="booking/reschedule" options={{ headerShown: false }} />
       <Stack.Screen name="my-bookings" options={{ headerShown: false }} />
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="notifications" options={{ headerShown: false }} />
       <Stack.Screen name="profile-settings" options={{ headerShown: false }} />
+      <Stack.Screen name="profile-edit" options={{ headerShown: false }} />
       <Stack.Screen name="provider-services" options={{ headerShown: false }} />
       <Stack.Screen name="provider-services/create" options={{ headerShown: false }} />
       <Stack.Screen name="provider-services/edit" options={{ headerShown: false }} />
+      <Stack.Screen name="provider-availability" options={{ headerShown: false }} />
+      <Stack.Screen name="category-detail" options={{ headerShown: false }} />
+      <Stack.Screen name="application-status" options={{ headerShown: false }} />
       <Stack.Screen name="modal" options={{ presentation: "modal" }} />
     </Stack>
   );

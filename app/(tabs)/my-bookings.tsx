@@ -53,7 +53,7 @@ export default function MyBookingsScreen() {
   };
 
   const handleReschedule = (appointmentId: string) => {
-    router.push(`/booking/reschedule?appointmentId=${appointmentId}`);
+    router.push(`/booking/reschedule?appointmentId=${appointmentId}` as any);
   };
 
   const getStatusColor = (status: string) => {

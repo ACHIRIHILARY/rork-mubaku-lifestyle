@@ -29,7 +29,7 @@ export default function SplashScreen() {
         
         <TouchableOpacity 
           style={styles.getStartedButton}
-          onPress={() => router.push('/login')}
+          onPress={() => router.push('/login' as any)}
         >
           <Text style={styles.getStartedText}>Get Started</Text>
         </TouchableOpacity>
