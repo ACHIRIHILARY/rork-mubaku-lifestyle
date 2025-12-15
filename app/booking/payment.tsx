@@ -20,9 +20,15 @@ export default function PaymentScreen() {
   const [agreementAccepted, setAgreementAccepted] = useState(false);
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
   const [initiatePayment, { isLoading: isInitiating }] = useInitiatePaymentMutation();
-  const { data: paymentMethodsData, isLoading: isLoadingMethods } = useGetPaymentMethodsQuery();
+  const { data: paymentMethodsData, isLoading: isLoadingMethods, error: methodsError, refetch } = useGetPaymentMethodsQuery();
 
   const isLoading = isCreating || isInitiating;
+
+  React.useEffect(() => {
+    console.log('[Payment] Payment methods data:', paymentMethodsData);
+    console.log('[Payment] Payment methods error:', methodsError);
+    console.log('[Payment] Is loading methods:', isLoadingMethods);
+  }, [paymentMethodsData, methodsError, isLoadingMethods]);
 
   const selectedMethodData = React.useMemo(() => {
     if (!paymentMethodsData?.methods || !Array.isArray(paymentMethodsData.methods)) {
@@ -270,12 +276,19 @@ export default function PaymentScreen() {
             <ActivityIndicator size="large" color="#2D1A46" />
             <Text style={styles.loadingText}>Loading payment methods...</Text>
           </View>
-        ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
+        ) : methodsError || !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
           <View style={styles.errorContainer}>
             <AlertCircle color="#EF4444" size={48} />
             <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
-            <Text style={styles.errorMessage}>Unable to load payment methods. Please try again.</Text>
-            <TouchableOpacity style={styles.retryButton} onPress={() => router.back()}>
+            <Text style={styles.errorMessage}>
+              {methodsError 
+                ? `Error: ${JSON.stringify(methodsError)}`
+                : 'Unable to load payment methods. Please try again.'}
+            </Text>
+            <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+              <Text style={styles.retryButtonText}>Retry</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.retryButton, { marginTop: 12, backgroundColor: '#666' }]} onPress={() => router.back()}>
               <Text style={styles.retryButtonText}>Go Back</Text>
             </TouchableOpacity>
           </View>
