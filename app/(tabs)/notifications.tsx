@@ -95,7 +95,7 @@ export default function NotificationsScreen() {
             <Bell color="#ccc" size={64} />
             <Text style={styles.emptyTitle}>No Notifications</Text>
             <Text style={styles.emptyMessage}>
-              You'll see your notifications here when you have them
+              You&apos;ll see your notifications here when you have them
             </Text>
           </View>
         ) : (

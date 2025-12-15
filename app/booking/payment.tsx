@@ -1,8 +1,9 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator } from 'react-native';
-import { ArrowLeft, CreditCard, Smartphone } from 'lucide-react-native';
-import { useCreateAppointmentMutation, useConfirmPaymentMutation } from '@/store/services/appointmentApi';
+import { ArrowLeft, Smartphone } from 'lucide-react-native';
+import { useCreateAppointmentMutation } from '@/store/services/appointmentApi';
+import { useGetPaymentMethodsQuery, useInitiatePaymentMutation } from '@/store/services/paymentApi';
 
 export default function PaymentScreen() {
   const { serviceId, date, startTime, endTime, amount, currency } = useLocalSearchParams<{
@@ -14,30 +15,22 @@ export default function PaymentScreen() {
     currency: string;
   }>();
   const [paymentMethod, setPaymentMethod] = useState<string>('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [cardName, setCardName] = useState('');
-  const [mobileMoneyNumber, setMobileMoneyNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
-  const [confirmPayment, { isLoading: isConfirming }] = useConfirmPaymentMutation();
+  const [initiatePayment, { isLoading: isInitiating }] = useInitiatePaymentMutation();
+  const { data: paymentMethodsData, isLoading: isLoadingMethods } = useGetPaymentMethodsQuery();
 
-  const isLoading = isCreating || isConfirming;
+  const isLoading = isCreating || isInitiating;
 
-  const paymentMethods = [
-    {
-      id: 'card',
-      title: 'Credit/Debit Card',
-      icon: CreditCard,
-      description: 'Pay with your card'
-    },
-    {
-      id: 'mobile',
-      title: 'Mobile Money',
-      icon: Smartphone,
-      description: 'Pay with mobile money'
-    }
-  ];
+  const selectedMethodData = paymentMethodsData?.methods.find(
+    (m) => m.method_code === paymentMethod
+  );
+
+  const validatePhoneNumber = (phone: string): boolean => {
+    if (!selectedMethodData) return false;
+    const regex = new RegExp(selectedMethodData.configuration.validation_regex);
+    return regex.test(phone);
+  };
 
   const handlePayment = async () => {
     if (!paymentMethod) {
@@ -45,21 +38,21 @@ export default function PaymentScreen() {
       return;
     }
 
-    if (paymentMethod === 'card') {
-      if (!cardNumber || !expiryDate || !cvv || !cardName) {
-        Alert.alert('Error', 'Please fill in all card details');
-        return;
-      }
+    if (!phoneNumber) {
+      Alert.alert('Error', `Please enter your ${selectedMethodData?.configuration.service_number_label || 'phone number'}`);
+      return;
     }
 
-    if (paymentMethod === 'mobile') {
-      if (!mobileMoneyNumber) {
-        Alert.alert('Error', 'Please enter your mobile money number');
-        return;
-      }
+    if (!validatePhoneNumber(phoneNumber)) {
+      Alert.alert(
+        'Invalid Phone Number',
+        selectedMethodData?.configuration.service_number_hint || 'Please enter a valid phone number'
+      );
+      return;
     }
 
     try {
+      console.log('Creating appointment...');
       const scheduledFor = `${date}T${startTime}`;
       const scheduledUntil = `${date}T${endTime}`;
 
@@ -68,37 +61,39 @@ export default function PaymentScreen() {
         scheduled_for: scheduledFor,
         scheduled_until: scheduledUntil,
         amount: parseFloat(amount),
-        currency: currency || 'USD',
+        currency: currency || 'XAF',
       }).unwrap();
 
-      await confirmPayment(appointment.id).unwrap();
+      console.log('Appointment created:', appointment.id);
+      console.log('Initiating payment...');
 
-      const successMessage = paymentMethod === 'mobile'
-        ? `You will receive a prompt on your phone ${mobileMoneyNumber} to complete the payment. Your booking has been confirmed!`
-        : 'Your booking has been confirmed!';
+      const paymentResponse = await initiatePayment({
+        appointment_id: appointment.id,
+        payment_method: paymentMethod,
+        customer_phone: phoneNumber,
+      }).unwrap();
 
-      Alert.alert(
-        'Success',
-        successMessage,
-        [
-          {
-            text: 'OK',
-            onPress: () => router.push(`/booking/status?appointmentId=${appointment.id}`)
-          }
-        ]
+      console.log('Payment initiated:', paymentResponse.payment.frontend_token);
+
+      router.push(
+        `/booking/payment-status?frontendToken=${paymentResponse.payment.frontend_token}&phoneNumber=${phoneNumber}` as any
       );
     } catch (error: any) {
-      console.error('Booking error:', JSON.stringify(error, null, 2));
+      console.error('Payment error:', JSON.stringify(error, null, 2));
       
-      let errorMessage = 'Unable to create booking. Please try again.';
+      let errorMessage = 'Unable to process payment. Please try again.';
       
       if (error?.data) {
         if (typeof error.data === 'string') {
           errorMessage = error.data;
+        } else if (error.data.error) {
+          if (typeof error.data.error === 'string') {
+            errorMessage = error.data.error;
+          } else if (error.data.error.message) {
+            errorMessage = error.data.error.message;
+          }
         } else if (error.data.detail) {
           errorMessage = error.data.detail;
-        } else if (error.data.error) {
-          errorMessage = error.data.error;
         } else {
           errorMessage = JSON.stringify(error.data);
         }
@@ -109,7 +104,7 @@ export default function PaymentScreen() {
       }
       
       Alert.alert(
-        'Booking Failed',
+        'Payment Failed',
         errorMessage
       );
     }
@@ -129,137 +124,123 @@ export default function PaymentScreen() {
       </View>
 
       <ScrollView style={styles.content}>
-        {/* Payment Methods */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Choose Payment Method</Text>
-          
-          <View style={styles.methodsContainer}>
-            {paymentMethods.map((method) => {
-              const IconComponent = method.icon;
-              return (
-                <TouchableOpacity
-                  key={method.id}
-                  style={[
-                    styles.methodCard,
-                    paymentMethod === method.id && styles.selectedMethodCard
-                  ]}
-                  onPress={() => setPaymentMethod(method.id)}
-                >
-                  <View style={styles.methodHeader}>
-                    <View style={[
-                      styles.methodIconContainer,
-                      paymentMethod === method.id && styles.selectedMethodIcon
-                    ]}>
-                      <IconComponent 
-                        color={paymentMethod === method.id ? 'white' : '#2D1A46'} 
-                        size={24} 
-                      />
-                    </View>
-                    <View style={styles.methodInfo}>
-                      <Text style={[
-                        styles.methodTitle,
-                        paymentMethod === method.id && styles.selectedMethodText
+        {isLoadingMethods ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#2D1A46" />
+            <Text style={styles.loadingText}>Loading payment methods...</Text>
+          </View>
+        ) : (
+          <>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>Choose Payment Method</Text>
+              
+              <View style={styles.methodsContainer}>
+                {paymentMethodsData?.methods.map((method) => (
+                  <TouchableOpacity
+                    key={method.method_code}
+                    style={[
+                      styles.methodCard,
+                      paymentMethod === method.method_code && styles.selectedMethodCard
+                    ]}
+                    onPress={() => {
+                      setPaymentMethod(method.method_code);
+                      setPhoneNumber('');
+                    }}
+                  >
+                    <View style={styles.methodHeader}>
+                      <View style={[
+                        styles.methodIconContainer,
+                        paymentMethod === method.method_code && styles.selectedMethodIcon
                       ]}>
-                        {method.title}
-                      </Text>
-                      <Text style={[
-                        styles.methodDescription,
-                        paymentMethod === method.id && styles.selectedMethodDescription
-                      ]}>
-                        {method.description}
-                      </Text>
+                        <Smartphone 
+                          color={paymentMethod === method.method_code ? 'white' : '#2D1A46'} 
+                          size={24} 
+                        />
+                      </View>
+                      <View style={styles.methodInfo}>
+                        <Text style={[
+                          styles.methodTitle,
+                          paymentMethod === method.method_code && styles.selectedMethodText
+                        ]}>
+                          {method.display_name}
+                        </Text>
+                        <Text style={[
+                          styles.methodDescription,
+                          paymentMethod === method.method_code && styles.selectedMethodDescription
+                        ]}>
+                          {method.metadata.instructions}
+                        </Text>
+                      </View>
                     </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+
+            {paymentMethod && selectedMethodData && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Payment Details</Text>
+                
+                <View style={styles.card}>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.label}>
+                      {selectedMethodData.configuration.service_number_label}
+                    </Text>
+                    <TextInput
+                      style={styles.input}
+                      value={phoneNumber}
+                      onChangeText={setPhoneNumber}
+                      placeholder={selectedMethodData.configuration.example}
+                      keyboardType="phone-pad"
+                    />
+                    <Text style={styles.hint}>
+                      {selectedMethodData.configuration.service_number_hint}
+                    </Text>
                   </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
+                  
+                  <View style={styles.infoBox}>
+                    <Text style={styles.infoText}>
+                      {selectedMethodData.metadata.instructions}
+                    </Text>
+                    <Text style={styles.processingTime}>
+                      Processing time: {selectedMethodData.metadata.estimated_processing_time}
+                    </Text>
+                  </View>
 
-        {/* Card Details */}
-        {paymentMethod === 'card' && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Card Details</Text>
-            
-            <View style={styles.card}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Card Number</Text>
-                <TextInput
-                  style={styles.input}
-                  value={cardNumber}
-                  onChangeText={setCardNumber}
-                  placeholder="1234 5678 9012 3456"
-                  keyboardType="numeric"
-                />
-              </View>
-
-              <View style={styles.row}>
-                <View style={[styles.inputContainer, styles.halfWidth]}>
-                  <Text style={styles.label}>Expiry Date</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={expiryDate}
-                    onChangeText={setExpiryDate}
-                    placeholder="MM/YY"
-                    keyboardType="numeric"
-                  />
-                </View>
-
-                <View style={[styles.inputContainer, styles.halfWidth]}>
-                  <Text style={styles.label}>CVV</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={cvv}
-                    onChangeText={setCvv}
-                    placeholder="123"
-                    keyboardType="numeric"
-                    secureTextEntry
-                  />
+                  <View style={styles.feesContainer}>
+                    <Text style={styles.feesLabel}>Transaction Fee:</Text>
+                    <Text style={styles.feesValue}>
+                      {selectedMethodData.fees.rate}% ({selectedMethodData.fees.description})
+                    </Text>
+                  </View>
                 </View>
               </View>
-
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Cardholder Name</Text>
-                <TextInput
-                  style={styles.input}
-                  value={cardName}
-                  onChangeText={setCardName}
-                  placeholder="John Doe"
-                />
-              </View>
-            </View>
-          </View>
+            )}
+          </>
         )}
 
-        {/* Mobile Money */}
-        {paymentMethod === 'mobile' && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Mobile Money</Text>
-            
-            <View style={styles.card}>
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>Mobile Money Number</Text>
-                <TextInput
-                  style={styles.input}
-                  value={mobileMoneyNumber}
-                  onChangeText={setMobileMoneyNumber}
-                  placeholder="e.g., 237699123456"
-                  keyboardType="phone-pad"
-                />
-              </View>
-              <Text style={styles.mobileMoneyInfoText}>
-                You will receive a prompt on this number to complete the payment of {currency} {amount}
-              </Text>
-            </View>
-          </View>
-        )}
-
-        {/* Total */}
         <View style={styles.totalCard}>
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Total Amount</Text>
+            <Text style={styles.totalLabel}>Service Amount</Text>
             <Text style={styles.totalAmount}>{currency} {amount}</Text>
           </View>
+          {selectedMethodData && (
+            <>
+              <View style={styles.totalRow}>
+                <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
+                <Text style={styles.feeAmount}>
+                  {currency} {(parseFloat(amount) * selectedMethodData.fees.rate / 100).toFixed(2)}
+                </Text>
+              </View>
+              <View style={styles.divider} />
+              <View style={styles.totalRow}>
+                <Text style={styles.totalLabel}>Total Amount</Text>
+                <Text style={styles.totalAmount}>
+                  {currency} {(parseFloat(amount) * (1 + selectedMethodData.fees.rate / 100)).toFixed(2)}
+                </Text>
+              </View>
+            </>
+          )}
         </View>
       </ScrollView>
 
@@ -407,18 +388,66 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#F9F9F9',
   },
-  row: {
+  loadingContainer: {
+    paddingVertical: 40,
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#666',
+  },
+  hint: {
+    fontSize: 12,
+    color: '#999',
+    marginTop: 4,
+  },
+  infoBox: {
+    backgroundColor: '#F0F9FF',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 12,
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#2D1A46',
+    lineHeight: 20,
+  },
+  processingTime: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 8,
+  },
+  feesContainer: {
     flexDirection: 'row',
-    gap: 12,
+    justifyContent: 'space-between',
+    paddingTop: 12,
+    marginTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
   },
-  halfWidth: {
-    flex: 1,
-  },
-  mobileMoneyInfoText: {
+  feesLabel: {
     fontSize: 14,
     color: '#666',
-    lineHeight: 20,
-    marginTop: 8,
+  },
+  feesValue: {
+    fontSize: 14,
+    color: '#2D1A46',
+    fontWeight: '600',
+  },
+  feeLabel: {
+    fontSize: 14,
+    color: '#666',
+  },
+  feeAmount: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#E5E5E5',
+    marginVertical: 12,
   },
   totalCard: {
     backgroundColor: 'white',
