@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, Platform } from 'react-native';
 import { ArrowLeft, Smartphone, Info, AlertCircle } from 'lucide-react-native';
 import { useCreateAppointmentMutation } from '@/store/services/appointmentApi';
@@ -18,6 +18,7 @@ export default function PaymentScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [agreementAccepted, setAgreementAccepted] = useState(false);
+  const payButtonRef = useRef<any>(null);
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
   const [initiatePayment, { isLoading: isInitiating }] = useInitiatePaymentMutation();
   const { data: paymentMethodsData, isLoading: isLoadingMethods, error: methodsError, refetch } = useGetPaymentMethodsQuery();
@@ -490,12 +491,14 @@ export default function PaymentScreen() {
       {/* Pay Button */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity
+          ref={payButtonRef}
           style={[
             styles.payButton,
             (!paymentMethod || isLoading) && styles.disabledButton
           ]}
           onPress={handlePayment}
           disabled={!paymentMethod || isLoading}
+          accessible={!isLoading}
         >
           {isLoading ? (
             <View style={styles.loadingButtonContent}>

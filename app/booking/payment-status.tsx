@@ -421,25 +421,25 @@ export default function PaymentStatusScreen() {
 
       <View style={styles.buttonContainer}>
         {isCompleted && (
-          <>
-            <TouchableOpacity style={styles.primaryButton} onPress={handleViewBooking}>
+          <View accessible={false}>
+            <TouchableOpacity style={styles.primaryButton} onPress={handleViewBooking} accessible={true}>
               <Text style={styles.primaryButtonText}>View My Booking</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome}>
+            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
               <Text style={styles.secondaryButtonText}>Back to Home</Text>
             </TouchableOpacity>
-          </>
+          </View>
         )}
 
         {isFailed && (
-          <>
-            <TouchableOpacity style={styles.primaryButton} onPress={handleRetry}>
+          <View accessible={false}>
+            <TouchableOpacity style={styles.primaryButton} onPress={handleRetry} accessible={true}>
               <Text style={styles.primaryButtonText}>Try Again</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome}>
+            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
               <Text style={styles.secondaryButtonText}>Back to Home</Text>
             </TouchableOpacity>
-          </>
+          </View>
         )}
 
         {isProcessing && !hasExpired && (
