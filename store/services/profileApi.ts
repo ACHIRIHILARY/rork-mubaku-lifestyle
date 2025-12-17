@@ -41,6 +41,9 @@ interface UnifiedProfile {
   is_verified_provider: boolean;
   provider_application_status?: string;
   language?: string;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
 }
 
 interface UpdateProfileRequest {
@@ -52,6 +55,9 @@ interface UpdateProfileRequest {
   city?: string;
   address?: string;
   language?: string;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
 }
 
 interface ProviderApplicationRequest {
