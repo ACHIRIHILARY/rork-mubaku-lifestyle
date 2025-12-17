@@ -1,7 +1,7 @@
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl, TextInput } from 'react-native';
-import { Plus, Edit, Trash2, DollarSign, Clock, BarChart3, ArrowLeft, Star, Power, MapPin } from 'lucide-react-native';
+import { Plus, Edit, Trash2, DollarSign, Clock, BarChart3, ArrowLeft, Star, Power, MapPin, Navigation } from 'lucide-react-native';
 import { useGetMyServicesQuery, useDeleteServiceMutation, useGetMyServiceStatsQuery, useUpdateServiceMutation } from '@/store/services/servicesApi';
 
 export default function ProviderServicesScreen() {
@@ -214,6 +214,16 @@ export default function ProviderServicesScreen() {
                     </View>
                   )}
                 </View>
+
+                {hasLocation && (
+                  <TouchableOpacity
+                    style={styles.viewLocationButton}
+                    onPress={() => router.push(`/view-location?latitude=${service.latitude}&longitude=${service.longitude}&locationName=${encodeURIComponent(service.location || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+                  >
+                    <Navigation color="#2D1A46" size={16} />
+                    <Text style={styles.viewLocationButtonText}>View Location</Text>
+                  </TouchableOpacity>
+                )}
 
                 <View style={styles.serviceActions}>
                   <TouchableOpacity
@@ -517,5 +527,23 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: '#FF4444',
+  },
+  viewLocationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#FFF5F3',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#F4A896',
+  },
+  viewLocationButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2D1A46',
   },
 });

@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
-import { ArrowLeft, Star, Clock, DollarSign } from 'lucide-react-native';
+import { ArrowLeft, Star, Clock, DollarSign, MapPin } from 'lucide-react-native';
 import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
 
 export default function ServiceDetailScreen() {
@@ -114,6 +114,23 @@ export default function ServiceDetailScreen() {
             <View style={styles.descriptionCard}>
               <Text style={styles.cardTitle}>Description</Text>
               <Text style={styles.description}>{service.description}</Text>
+            </View>
+          )}
+
+          {/* Location */}
+          {((service.latitude && service.longitude) || (service.provider_details?.latitude && service.provider_details?.longitude)) && (
+            <View style={styles.locationCard}>
+              <Text style={styles.cardTitle}>Location</Text>
+              <Text style={styles.locationText}>
+                {service.location || service.provider_details?.location || service.provider_details?.city || 'Service Location'}
+              </Text>
+              <TouchableOpacity 
+                style={styles.viewLocationButton}
+                onPress={() => router.push(`/view-location?latitude=${service.latitude || service.provider_details?.latitude}&longitude=${service.longitude || service.provider_details?.longitude}&locationName=${encodeURIComponent(service.location || service.provider_details?.location || service.provider_details?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+              >
+                <MapPin color="white" size={18} />
+                <Text style={styles.viewLocationButtonText}>View on Map</Text>
+              </TouchableOpacity>
             </View>
           )}
 
@@ -279,6 +296,39 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     lineHeight: 24,
+  },
+  locationCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  locationText: {
+    fontSize: 16,
+    color: '#666',
+    marginBottom: 16,
+  },
+  viewLocationButton: {
+    backgroundColor: '#2D1A46',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    borderRadius: 10,
+  },
+  viewLocationButtonText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: '600',
   },
   providerCard: {
     backgroundColor: 'white',

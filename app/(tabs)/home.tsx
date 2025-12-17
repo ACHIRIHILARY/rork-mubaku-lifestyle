@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Linking, Platform, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Search, Star, X, User, MapPin } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
@@ -56,33 +56,13 @@ export default function HomeScreen() {
     setDebouncedSearch('');
   }, []);
 
-  const handleLocationPress = useCallback((latitude?: number, longitude?: number, locationName?: string) => {
+  const handleLocationPress = useCallback((latitude?: number, longitude?: number, locationName?: string, serviceName?: string) => {
     if (!latitude || !longitude) {
       Alert.alert('Location Not Available', 'This service provider has not set their location yet.');
       return;
     }
 
-    const label = encodeURIComponent(locationName || 'Service Location');
-    const url = Platform.select({
-      ios: `maps:0,0?q=${label}@${latitude},${longitude}`,
-      android: `geo:0,0?q=${latitude},${longitude}(${label})`,
-      web: `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`,
-    });
-
-    if (url) {
-      Linking.canOpenURL(url)
-        .then((supported) => {
-          if (supported) {
-            Linking.openURL(url);
-          } else {
-            const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-            Linking.openURL(fallbackUrl);
-          }
-        })
-        .catch(() => {
-          Alert.alert('Error', 'Unable to open maps');
-        });
-    }
+    router.push(`/view-location?latitude=${latitude}&longitude=${longitude}&locationName=${encodeURIComponent(locationName || 'Service Location')}&serviceName=${encodeURIComponent(serviceName || '')}` as any);
   }, []);
   
   useEffect(() => {
@@ -249,20 +229,28 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.agentInfo}>
                     <Text style={styles.agentName}>{service.name}</Text>
-                    <TouchableOpacity 
-                      style={styles.locationRow}
-                      onPress={() => handleLocationPress(
-                        service.provider_details?.latitude,
-                        service.provider_details?.longitude,
-                        service.provider_details?.location || service.provider_details?.city
-                      )}
-                      activeOpacity={0.7}
-                    >
-                      <MapPin color="#F4A896" size={16} />
-                      <Text style={styles.serviceLocation}>
-                        {service.provider_details?.location || service.provider_details?.city || 'Location not set'}
-                      </Text>
-                    </TouchableOpacity>
+                    {(service.latitude && service.longitude) || (service.provider_details?.latitude && service.provider_details?.longitude) ? (
+                      <TouchableOpacity 
+                        style={styles.locationRow}
+                        onPress={() => handleLocationPress(
+                          service.latitude || service.provider_details?.latitude,
+                          service.longitude || service.provider_details?.longitude,
+                          service.location || service.provider_details?.location || service.provider_details?.city,
+                          service.name
+                        )}
+                        activeOpacity={0.7}
+                      >
+                        <MapPin color="#F4A896" size={16} />
+                        <Text style={styles.serviceLocation}>
+                          {service.location || service.provider_details?.location || service.provider_details?.city || 'View Location'}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <View style={styles.locationRowDisabled}>
+                        <MapPin color="#CCC" size={16} />
+                        <Text style={styles.serviceLocationDisabled}>Location not set</Text>
+                      </View>
+                    )}
                     <Text style={styles.agentService}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.agentMeta}>
                       <View style={styles.ratingContainer}>
@@ -599,6 +587,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#2D1A46',
+  },
+  locationRowDisabled: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 6,
+    backgroundColor: '#F5F5F5',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
+  },
+  serviceLocationDisabled: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#999',
   },
   emptyContainer: {
     padding: 32,
