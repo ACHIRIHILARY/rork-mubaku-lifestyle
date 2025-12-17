@@ -220,12 +220,12 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.agentInfo}>
                     <Text style={styles.agentName}>{service.name}</Text>
-                    {service.provider_details?.city && (
-                      <View style={styles.locationRow}>
-                        <MapPin color="#F4A896" size={14} />
-                        <Text style={styles.serviceLocation}>{service.provider_details.city}</Text>
-                      </View>
-                    )}
+                    <View style={styles.locationRow}>
+                      <MapPin color="#F4A896" size={16} />
+                      <Text style={styles.serviceLocation}>
+                        {service.provider_details?.city || service.provider_details?.location || 'Location not set'}
+                      </Text>
+                    </View>
                     <Text style={styles.agentService}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.agentMeta}>
                       <View style={styles.ratingContainer}>
@@ -550,11 +550,16 @@ const styles = StyleSheet.create({
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    marginBottom: 4,
+    gap: 6,
+    marginBottom: 6,
+    backgroundColor: '#FFF5F3',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    alignSelf: 'flex-start',
   },
   serviceLocation: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     color: '#2D1A46',
   },
