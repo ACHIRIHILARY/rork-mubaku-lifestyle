@@ -89,12 +89,30 @@ export default function CreateServiceScreen() {
         location: formData.location.trim() || undefined,
       };
       console.log('Creating service with payload:', JSON.stringify(payload, null, 2));
-      console.log('Category pkid:', payload.category, 'Type:', typeof payload.category);
-      await createService(payload).unwrap();
+      console.log('Location data:', {
+        latitude: payload.latitude,
+        longitude: payload.longitude,
+        location: payload.location,
+        hasLocation: !!(payload.latitude && payload.longitude)
+      });
+      
+      const result = await createService(payload).unwrap();
+      console.log('Service created, response:', JSON.stringify(result, null, 2));
+      console.log('Response location data:', {
+        latitude: result.latitude,
+        longitude: result.longitude,
+        location: result.location
+      });
 
-      Alert.alert('Success', 'Service created successfully', [
-        { text: 'OK', onPress: () => router.back() }
-      ]);
+      if (result.latitude && result.longitude) {
+        Alert.alert('Success', 'Service created successfully with location!', [
+          { text: 'OK', onPress: () => router.back() }
+        ]);
+      } else {
+        Alert.alert('Success', 'Service created, but location was not saved. Please edit the service to add location.', [
+          { text: 'OK', onPress: () => router.back() }
+        ]);
+      }
     } catch (error: any) {
       console.error('Create service error:', JSON.stringify(error, null, 2));
       console.error('Error data:', error?.data);

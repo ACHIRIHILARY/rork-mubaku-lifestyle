@@ -36,6 +36,14 @@ export default function EditServiceScreen() {
 
   useEffect(() => {
     if (service) {
+      console.log('Service loaded for editing:', JSON.stringify(service, null, 2));
+      console.log('Service location fields:', {
+        latitude: service.latitude,
+        longitude: service.longitude,
+        location: service.location,
+        hasLocation: !!(service.latitude && service.longitude)
+      });
+      
       setFormData({
         name: service.name,
         description: service.description || '',
@@ -75,21 +83,38 @@ export default function EditServiceScreen() {
     }
 
     try {
-      await updateService({
+      const payload = {
+        name: formData.name.trim(),
+        description: formData.description.trim() || undefined,
+        category: formData.category!,
+        duration_minutes: parseInt(formData.duration_minutes),
+        price: parseFloat(formData.price),
+        currency: formData.currency,
+        is_active: formData.is_active,
+        latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
+        longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
+        location: formData.location.trim() || undefined,
+      };
+      
+      console.log('Updating service with payload:', JSON.stringify(payload, null, 2));
+      console.log('Location data being sent:', {
+        latitude: payload.latitude,
+        longitude: payload.longitude,
+        location: payload.location,
+        hasLocation: !!(payload.latitude && payload.longitude)
+      });
+      
+      const result = await updateService({
         serviceId: id,
-        data: {
-          name: formData.name.trim(),
-          description: formData.description.trim() || undefined,
-          category: formData.category!,
-          duration_minutes: parseInt(formData.duration_minutes),
-          price: parseFloat(formData.price),
-          currency: formData.currency,
-          is_active: formData.is_active,
-          latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
-          longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
-          location: formData.location.trim() || undefined,
-        },
+        data: payload,
       }).unwrap();
+      
+      console.log('Service updated, response:', JSON.stringify(result, null, 2));
+      console.log('Response location data:', {
+        latitude: result.latitude,
+        longitude: result.longitude,
+        location: result.location
+      });
 
       Alert.alert('Success', 'Service updated successfully', [
         { text: 'OK', onPress: () => router.back() }
