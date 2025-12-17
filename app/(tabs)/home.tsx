@@ -14,15 +14,15 @@ export default function HomeScreen() {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
   
-  const { data: user, isLoading: userLoading } = useGetCurrentUserQuery();
+  const { data: user } = useGetCurrentUserQuery();
   
   const queryParams: { category?: string; search?: string } = {};
   if (selectedCategory) queryParams.category = selectedCategory.toString();
   if (debouncedSearch) queryParams.search = debouncedSearch;
   
   const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery(queryParams);
-  const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
-  const { data: providers, isLoading: providersLoading } = useGetApprovedProvidersQuery();
+  const { data: categories } = useGetAllCategoriesQuery();
+  const { data: providers } = useGetApprovedProvidersQuery();
   
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}` as any);
@@ -80,17 +80,7 @@ export default function HomeScreen() {
     providersCount: providers?.length 
   });
 
-  const isLoading = userLoading || servicesLoading || categoriesLoading || providersLoading;
 
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#2D1A46" />
-        </View>
-      </SafeAreaView>
-    );
-  }
 
   return (
     <SafeAreaView style={styles.container}>
