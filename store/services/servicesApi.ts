@@ -23,6 +23,9 @@ interface Service {
   price: number;
   currency: string;
   is_active: boolean;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
   created_at: string;
   updated_at: string;
   provider_details?: any;
@@ -39,6 +42,9 @@ interface CreateServiceRequest {
   price: number;
   currency: string;
   is_active: boolean;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
 }
 
 interface UpdateServiceRequest {
@@ -49,6 +55,9 @@ interface UpdateServiceRequest {
   price?: number;
   currency?: string;
   is_active?: boolean;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
 }
 
 interface ServiceStats {
