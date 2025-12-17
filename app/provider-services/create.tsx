@@ -1,6 +1,6 @@
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { useCreateServiceMutation, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 
@@ -15,6 +15,9 @@ export default function CreateServiceScreen() {
     duration_minutes: string;
     price: string;
     currency: string;
+    latitude: string;
+    longitude: string;
+    location: string;
   }>({
     name: '',
     description: '',
@@ -22,6 +25,9 @@ export default function CreateServiceScreen() {
     duration_minutes: '',
     price: '',
     currency: 'XAF',
+    latitude: '',
+    longitude: '',
+    location: '',
   });
   
   React.useEffect(() => {
@@ -78,6 +84,9 @@ export default function CreateServiceScreen() {
         price: parseFloat(formData.price),
         currency: formData.currency,
         is_active: true,
+        latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
+        longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
+        location: formData.location.trim() || undefined,
       };
       console.log('Creating service with payload:', JSON.stringify(payload, null, 2));
       console.log('Category pkid:', payload.category, 'Type:', typeof payload.category);
@@ -115,7 +124,11 @@ export default function CreateServiceScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    >
       <Stack.Screen 
         options={{
           headerShown: true,
@@ -226,6 +239,48 @@ export default function CreateServiceScreen() {
               </View>
             </View>
           </View>
+
+          <View style={styles.locationSection}>
+            <Text style={styles.sectionTitle}>📍 Service Location (Optional)</Text>
+            <Text style={styles.helperText}>Add location so clients can find you easily</Text>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Location Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="e.g., Downtown Salon, Douala"
+                placeholderTextColor="#999"
+                value={formData.location}
+                onChangeText={(text) => setFormData({ ...formData, location: text })}
+              />
+            </View>
+
+            <View style={styles.row}>
+              <View style={[styles.inputGroup, { flex: 1 }]}>
+                <Text style={styles.label}>Latitude</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="e.g., 4.0511"
+                  placeholderTextColor="#999"
+                  value={formData.latitude}
+                  onChangeText={(text) => setFormData({ ...formData, latitude: text.replace(/[^0-9.-]/g, '') })}
+                  keyboardType="decimal-pad"
+                />
+              </View>
+
+              <View style={[styles.inputGroup, { flex: 1 }]}>
+                <Text style={styles.label}>Longitude</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="e.g., 9.7679"
+                  placeholderTextColor="#999"
+                  value={formData.longitude}
+                  onChangeText={(text) => setFormData({ ...formData, longitude: text.replace(/[^0-9.-]/g, '') })}
+                  keyboardType="decimal-pad"
+                />
+              </View>
+            </View>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -240,7 +295,7 @@ export default function CreateServiceScreen() {
           )}
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -348,5 +403,22 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.6,
+  },
+  locationSection: {
+    marginTop: 24,
+    paddingTop: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2D1A46',
+    marginBottom: 4,
+  },
+  helperText: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 16,
   },
 });

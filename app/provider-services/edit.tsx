@@ -1,6 +1,6 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, Switch } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, Switch, KeyboardAvoidingView, Platform } from 'react-native';
 import { ArrowLeft } from 'lucide-react-native';
 import { useUpdateServiceMutation, useGetServiceByIdQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 
@@ -18,6 +18,9 @@ export default function EditServiceScreen() {
     price: string;
     currency: string;
     is_active: boolean;
+    latitude: string;
+    longitude: string;
+    location: string;
   }>({
     name: '',
     description: '',
@@ -26,6 +29,9 @@ export default function EditServiceScreen() {
     price: '',
     currency: 'XAF',
     is_active: true,
+    latitude: '',
+    longitude: '',
+    location: '',
   });
 
   useEffect(() => {
@@ -38,6 +44,9 @@ export default function EditServiceScreen() {
         price: service.price.toString(),
         currency: service.currency,
         is_active: service.is_active,
+        latitude: service.latitude?.toString() || '',
+        longitude: service.longitude?.toString() || '',
+        location: service.location || '',
       });
     }
   }, [service]);
@@ -76,6 +85,9 @@ export default function EditServiceScreen() {
           price: parseFloat(formData.price),
           currency: formData.currency,
           is_active: formData.is_active,
+          latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
+          longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
+          location: formData.location.trim() || undefined,
         },
       }).unwrap();
 
@@ -133,7 +145,11 @@ export default function EditServiceScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+    >
       <Stack.Screen 
         options={{
           headerShown: true,
@@ -251,6 +267,48 @@ export default function EditServiceScreen() {
               </View>
             </View>
           </View>
+
+          <View style={styles.locationSection}>
+            <Text style={styles.sectionTitle}>📍 Service Location (Optional)</Text>
+            <Text style={styles.helperText}>Add location so clients can find you easily</Text>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Location Name</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="e.g., Downtown Salon, Douala"
+                placeholderTextColor="#999"
+                value={formData.location}
+                onChangeText={(text) => setFormData({ ...formData, location: text })}
+              />
+            </View>
+
+            <View style={styles.row}>
+              <View style={[styles.inputGroup, { flex: 1 }]}>
+                <Text style={styles.label}>Latitude</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="e.g., 4.0511"
+                  placeholderTextColor="#999"
+                  value={formData.latitude}
+                  onChangeText={(text) => setFormData({ ...formData, latitude: text.replace(/[^0-9.-]/g, '') })}
+                  keyboardType="decimal-pad"
+                />
+              </View>
+
+              <View style={[styles.inputGroup, { flex: 1 }]}>
+                <Text style={styles.label}>Longitude</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="e.g., 9.7679"
+                  placeholderTextColor="#999"
+                  value={formData.longitude}
+                  onChangeText={(text) => setFormData({ ...formData, longitude: text.replace(/[^0-9.-]/g, '') })}
+                  keyboardType="decimal-pad"
+                />
+              </View>
+            </View>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -265,7 +323,7 @@ export default function EditServiceScreen() {
           )}
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -328,7 +386,6 @@ const styles = StyleSheet.create({
   helperText: {
     fontSize: 14,
     color: '#666',
-    marginTop: 4,
   },
   input: {
     backgroundColor: 'white',
@@ -410,5 +467,17 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.6,
+  },
+  locationSection: {
+    marginTop: 24,
+    paddingTop: 24,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2D1A46',
+    marginBottom: 4,
   },
 });

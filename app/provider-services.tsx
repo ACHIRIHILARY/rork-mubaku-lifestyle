@@ -1,7 +1,7 @@
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl, TextInput } from 'react-native';
-import { Plus, Edit, Trash2, DollarSign, Clock, BarChart3, ArrowLeft, Star, Power } from 'lucide-react-native';
+import { Plus, Edit, Trash2, DollarSign, Clock, BarChart3, ArrowLeft, Star, Power, MapPin } from 'lucide-react-native';
 import { useGetMyServicesQuery, useDeleteServiceMutation, useGetMyServiceStatsQuery, useUpdateServiceMutation } from '@/store/services/servicesApi';
 
 export default function ProviderServicesScreen() {
@@ -160,8 +160,19 @@ export default function ProviderServicesScreen() {
           </View>
         ) : (
           <View style={styles.servicesContainer}>
-            {filteredServices.map((service) => (
-              <View key={service.id} style={styles.serviceCard}>
+            {filteredServices.map((service) => {
+              const hasLocation = !!(service.latitude && service.longitude);
+              return (
+              <View key={service.id} style={[
+                styles.serviceCard,
+                !hasLocation && styles.serviceCardNoLocation
+              ]}>
+                {!hasLocation && (
+                  <View style={styles.locationWarning}>
+                    <MapPin color="#FF4444" size={14} />
+                    <Text style={styles.locationWarningText}>No location set</Text>
+                  </View>
+                )}
                 <View style={styles.serviceHeader}>
                   <View style={styles.serviceInfo}>
                     <Text style={styles.serviceName}>{service.name}</Text>
@@ -230,7 +241,8 @@ export default function ProviderServicesScreen() {
                   </TouchableOpacity>
                 </View>
               </View>
-            ))}
+            );
+            })}
           </View>
         )}
       </ScrollView>
@@ -486,5 +498,24 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10,
     backgroundColor: '#FFF5F5',
+  },
+  serviceCardNoLocation: {
+    borderWidth: 2,
+    borderColor: '#FF4444',
+  },
+  locationWarning: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#FFF5F5',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  locationWarningText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#FF4444',
   },
 });
