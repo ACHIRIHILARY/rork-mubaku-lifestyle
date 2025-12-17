@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Linking, Platform, Alert } from 'react-native';
 import { Search, Star, X, User, MapPin } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
@@ -54,6 +54,35 @@ export default function HomeScreen() {
     setSelectedCategory(null);
     setSearchQuery('');
     setDebouncedSearch('');
+  }, []);
+
+  const handleLocationPress = useCallback((latitude?: number, longitude?: number, locationName?: string) => {
+    if (!latitude || !longitude) {
+      Alert.alert('Location Not Available', 'This service provider has not set their location yet.');
+      return;
+    }
+
+    const label = encodeURIComponent(locationName || 'Service Location');
+    const url = Platform.select({
+      ios: `maps:0,0?q=${label}@${latitude},${longitude}`,
+      android: `geo:0,0?q=${latitude},${longitude}(${label})`,
+      web: `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`,
+    });
+
+    if (url) {
+      Linking.canOpenURL(url)
+        .then((supported) => {
+          if (supported) {
+            Linking.openURL(url);
+          } else {
+            const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+            Linking.openURL(fallbackUrl);
+          }
+        })
+        .catch(() => {
+          Alert.alert('Error', 'Unable to open maps');
+        });
+    }
   }, []);
   
   useEffect(() => {
@@ -220,12 +249,20 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.agentInfo}>
                     <Text style={styles.agentName}>{service.name}</Text>
-                    <View style={styles.locationRow}>
+                    <TouchableOpacity 
+                      style={styles.locationRow}
+                      onPress={() => handleLocationPress(
+                        service.provider_details?.latitude,
+                        service.provider_details?.longitude,
+                        service.provider_details?.location || service.provider_details?.city
+                      )}
+                      activeOpacity={0.7}
+                    >
                       <MapPin color="#F4A896" size={16} />
                       <Text style={styles.serviceLocation}>
-                        {service.provider_details?.city || service.provider_details?.location || 'Location not set'}
+                        {service.provider_details?.location || service.provider_details?.city || 'Location not set'}
                       </Text>
-                    </View>
+                    </TouchableOpacity>
                     <Text style={styles.agentService}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.agentMeta}>
                       <View style={styles.ratingContainer}>

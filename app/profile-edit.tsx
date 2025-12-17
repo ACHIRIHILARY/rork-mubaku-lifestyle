@@ -28,6 +28,9 @@ export default function ProfileEditScreen() {
     country: '',
     city: '',
     address: '',
+    latitude: '',
+    longitude: '',
+    location: '',
   });
 
   useEffect(() => {
@@ -39,14 +42,36 @@ export default function ProfileEditScreen() {
         country: profile.country || '',
         city: profile.city || '',
         address: profile.address || '',
+        latitude: profile.latitude?.toString() || '',
+        longitude: profile.longitude?.toString() || '',
+        location: profile.location || '',
       });
     }
   }, [profile]);
 
   const handleSave = async () => {
     try {
-      console.log('Updating profile:', formData);
-      await updateProfile(formData).unwrap();
+      const updateData: any = {
+        phone_number: formData.phone_number,
+        about_me: formData.about_me,
+        gender: formData.gender,
+        country: formData.country,
+        city: formData.city,
+        address: formData.address,
+        location: formData.location,
+      };
+
+      if (formData.latitude && formData.longitude) {
+        const lat = parseFloat(formData.latitude);
+        const lng = parseFloat(formData.longitude);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          updateData.latitude = lat;
+          updateData.longitude = lng;
+        }
+      }
+
+      console.log('Updating profile:', updateData);
+      await updateProfile(updateData).unwrap();
       Alert.alert('Success', 'Your profile has been updated successfully', [
         {
           text: 'OK',
@@ -216,6 +241,59 @@ export default function ProfileEditScreen() {
           </View>
         </View>
 
+        {profile?.role === 'provider' && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Service Location</Text>
+            <Text style={styles.sectionDescription}>
+              Set your service location so clients can find you easily. This will be displayed on your services.
+            </Text>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Location Name</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.location}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, location: text })
+                }
+                placeholder="e.g., Downtown Yaoundé, Bastos Quarter"
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Latitude</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.latitude}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, latitude: text })
+                }
+                placeholder="e.g., 3.8480"
+                keyboardType="decimal-pad"
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Longitude</Text>
+              <TextInput
+                style={styles.input}
+                value={formData.longitude}
+                onChangeText={(text) =>
+                  setFormData({ ...formData, longitude: text })
+                }
+                placeholder="e.g., 11.5021"
+                keyboardType="decimal-pad"
+              />
+            </View>
+
+            <View style={styles.locationHint}>
+              <Text style={styles.locationHintText}>
+                💡 Tip: You can get coordinates from Google Maps by right-clicking on your location.
+              </Text>
+            </View>
+          </View>
+        )}
+
         <TouchableOpacity
           style={[styles.saveButton, isUpdating && styles.disabledButton]}
           onPress={handleSave}
@@ -384,5 +462,23 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.6,
+  },
+  sectionDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  locationHint: {
+    backgroundColor: '#FFF9E6',
+    padding: 12,
+    borderRadius: 8,
+    borderLeftWidth: 3,
+    borderLeftColor: '#FFD700',
+  },
+  locationHintText: {
+    fontSize: 13,
+    color: '#666',
+    lineHeight: 18,
   },
 });
