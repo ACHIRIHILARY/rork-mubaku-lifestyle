@@ -23,7 +23,7 @@ export const notificationsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getNotifications: builder.query<Notification[], GetNotificationsParams | void>({
       query: (params = {}) => ({
-        url: '/api/v1/notifications/',
+        url: '/notifications/',
         params: params || {},
       }),
       providesTags: (result) =>
@@ -37,7 +37,7 @@ export const notificationsApi = api.injectEndpoints({
 
     markAsRead: builder.mutation<Notification, string>({
       query: (notificationId) => ({
-        url: `/api/v1/notifications/${notificationId}/read/`,
+        url: `/notifications/${notificationId}/read/`,
         method: 'PATCH',
       }),
       invalidatesTags: (result, error, notificationId) => [
@@ -48,7 +48,7 @@ export const notificationsApi = api.injectEndpoints({
 
     deleteNotification: builder.mutation<void, string>({
       query: (notificationId) => ({
-        url: `/api/v1/notifications/${notificationId}/`,
+        url: `/notifications/${notificationId}/`,
         method: 'DELETE',
       }),
       invalidatesTags: (result, error, notificationId) => [
