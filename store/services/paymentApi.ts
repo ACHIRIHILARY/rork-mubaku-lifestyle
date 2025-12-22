@@ -1,5 +1,23 @@
 import { api } from '../api';
 
+interface PaymentMethodApiResponse {
+  id: string;
+  name: string;
+  method_code: string;
+  icon_url: string;
+  min_amount: string;
+  max_amount: string;
+  instructions: string;
+  requires_service_number: boolean;
+  service_number_label: string;
+  service_number_hint: string;
+  validation_regex: string;
+  gateway: {
+    name: string;
+    type: string;
+  };
+}
+
 interface PaymentMethod {
   id: string;
   method_code: string;
@@ -33,11 +51,7 @@ interface PaymentMethod {
   };
 }
 
-interface PaymentMethodsResponse {
-  success: boolean;
-  default_currency: string;
-  methods: PaymentMethod[];
-}
+type PaymentMethodsResponse = PaymentMethodApiResponse[];
 
 interface AmountBreakdown {
   service_amount: number;
@@ -267,7 +281,7 @@ export const paymentApi = api.injectEndpoints({
   overrideExisting: true,
   endpoints: (builder) => ({
     getPaymentMethods: builder.query<PaymentMethodsResponse, void>({
-      query: () => '/payments/methods/',
+      query: () => '/payments/methods',
       providesTags: ['Payment'],
     }),
 

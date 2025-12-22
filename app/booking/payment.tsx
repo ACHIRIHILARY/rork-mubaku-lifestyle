@@ -21,7 +21,53 @@ export default function PaymentScreen() {
   const payButtonRef = useRef<any>(null);
   const [createAppointment, { isLoading: isCreating }] = useCreateAppointmentMutation();
   const [initiatePayment, { isLoading: isInitiating }] = useInitiatePaymentMutation();
-  const { data: paymentMethodsData, isLoading: isLoadingMethods, error: methodsError, refetch } = useGetPaymentMethodsQuery();
+  const { data: paymentMethodsArray, isLoading: isLoadingMethods, error: methodsError, refetch } = useGetPaymentMethodsQuery();
+
+  // Transform the API response to match the expected structure
+  const paymentMethodsData = React.useMemo(() => {
+    if (!paymentMethodsArray || !Array.isArray(paymentMethodsArray)) {
+      return null;
+    }
+
+    const transformedMethods = paymentMethodsArray.map((method) => ({
+      id: method.id,
+      method_code: method.method_code,
+      display_name: method.name, // API has 'name', we need 'display_name'
+      gateway: {
+        name: method.gateway.name,
+        type: method.gateway.type,
+        logo_url: method.icon_url, // Move icon_url to gateway.logo_url
+      },
+      configuration: {
+        requires_service_number: method.requires_service_number,
+        service_number_label: method.service_number_label,
+        service_number_hint: method.service_number_hint,
+        validation_regex: method.validation_regex,
+        example: method.method_code === 'mtn_momo' ? '237612345678' : '237698765432', // Hardcoded examples based on validation regex
+      },
+      limits: {
+        min_amount: parseFloat(method.min_amount),
+        max_amount: parseFloat(method.max_amount),
+        currency: 'XAF', // Default to XAF as per documentation
+      },
+      fees: {
+        type: 'percentage',
+        rate: 1.5, // Default gateway fee as per documentation
+        description: 'Gateway processing fee',
+      },
+      metadata: {
+        icon_url: method.icon_url,
+        instructions: method.instructions,
+        estimated_processing_time: '30-60 seconds', // Default as per documentation
+      },
+    }));
+
+    return {
+      success: true,
+      default_currency: 'XAF',
+      methods: transformedMethods,
+    };
+  }, [paymentMethodsArray]);
 
   const isLoading = isCreating || isInitiating;
 
