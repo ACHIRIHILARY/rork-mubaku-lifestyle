@@ -41,9 +41,9 @@ export default function PaymentScreen() {
       configuration: {
         requires_service_number: method.requires_service_number,
         service_number_label: method.service_number_label,
-        service_number_hint: method.service_number_hint,
-        validation_regex: method.validation_regex,
-        example: method.method_code === 'mtn_momo' ? '237612345678' : '237698765432', // Hardcoded examples based on validation regex
+        service_number_hint: 'Enter your 9-digit phone number (without country code)',
+        validation_regex: '^[0-9]{9}$', // Updated to validate 9 digits only
+        example: method.method_code === 'mtn_momo' ? '6XXXXXXXX' : '9XXXXXXXX', // Examples without country code
       },
       limits: {
         min_amount: parseFloat(method.min_amount),
@@ -91,13 +91,19 @@ export default function PaymentScreen() {
   };
 
   const handlePhoneChange = (text: string) => {
-    const formatted = text.replace(/\D/g, '');
+    // Remove any non-digits and strip '237' prefix if present
+    let formatted = text.replace(/\D/g, '');
+    if (formatted.startsWith('237')) {
+      formatted = formatted.substring(3);
+    }
+    // Limit to 9 digits
+    formatted = formatted.substring(0, 9);
     setPhoneNumber(formatted);
     setPhoneError('');
-    
+
     if (formatted.length > 0 && selectedMethodData) {
       if (!validatePhoneNumber(formatted)) {
-        setPhoneError('Invalid format. Use: ' + selectedMethodData.configuration.example);
+        setPhoneError('Please enter exactly 9 digits');
       }
     }
   };
@@ -185,7 +191,7 @@ export default function PaymentScreen() {
       const paymentResponse = await initiatePayment({
         appointment_id: appointment.id,
         payment_method: paymentMethod,
-        customer_phone: phoneNumber,
+        customer_phone: '237' + phoneNumber,
         metadata: {
           device_info: deviceInfo,
         },
@@ -444,7 +450,7 @@ export default function PaymentScreen() {
                       onChangeText={handlePhoneChange}
                       placeholder={selectedMethodData.configuration.example}
                       keyboardType="phone-pad"
-                      maxLength={12}
+                      maxLength={9}
                       autoComplete="tel"
                       textContentType="telephoneNumber"
                     />
@@ -464,7 +470,7 @@ export default function PaymentScreen() {
                     <View style={styles.infoRow}>
                       <Info size={20} color="#2D1A46" />
                       <Text style={styles.infoText}>
-                        You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber || '(your number)'}</Text>. Enter your PIN to authorize the payment.
+                        You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber ? `237${phoneNumber}` : '(your number)'}</Text>. Enter your PIN to authorize the payment.
                       </Text>
                     </View>
                     <Text style={styles.processingTime}>
