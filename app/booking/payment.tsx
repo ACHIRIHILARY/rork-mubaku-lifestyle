@@ -199,7 +199,9 @@ export default function PaymentScreen() {
       }).unwrap();
 
       console.log('[Payment] Payment initiated successfully');
-      console.log('[Payment Object', paymentResponse)
+
+      Alert.alert("Payment response:" paymentResponse)
+      
       console.log('[Payment] Frontend token:', paymentResponse.payment.frontend_token.substring(0, 8) + '...');
 
       router.push(
