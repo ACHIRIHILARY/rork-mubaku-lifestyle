@@ -194,10 +194,12 @@ export default function PaymentScreen() {
         customer_phone: '237' + phoneNumber,
         metadata: {
           device_info: deviceInfo,
+          ip_address: "127.0.0.1"
         },
       }).unwrap();
 
       console.log('[Payment] Payment initiated successfully');
+      console.log('[Payment Object', paymentResponse)
       console.log('[Payment] Frontend token:', paymentResponse.payment.frontend_token.substring(0, 8) + '...');
 
       router.push(
@@ -373,7 +375,7 @@ export default function PaymentScreen() {
               <View style={styles.methodsContainer}>
                 {paymentMethodsData?.methods?.map((method) => (
                   <TouchableOpacity
-                    key={method.method_code}
+                    key={method.method_code}    
                     style={[
                       styles.methodCard,
                       paymentMethod === method.method_code && styles.selectedMethodCard
