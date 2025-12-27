@@ -200,7 +200,7 @@ export default function PaymentScreen() {
 
       console.log('[Payment] Payment initiated successfully');
 
-      Alert.alert("Payment response:" paymentResponse)
+      Alert.alert("Payment response:", paymentResponse)
       
       console.log('[Payment] Frontend token:', paymentResponse.payment.frontend_token.substring(0, 8) + '...');
 
