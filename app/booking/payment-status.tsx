@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Animated, ScrollView } from 'react-native';
-import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw } from 'lucide-react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Animated, ScrollView, Alert, Share, Platform } from 'react-native';
+import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Download, Receipt, MapPin } from 'lucide-react-native';
 import { useLazyGetPaymentStatusQuery } from '@/store/services/paymentApi';
 
 type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
@@ -251,6 +251,74 @@ export default function PaymentStatusScreen() {
     console.log('[PaymentStatus] Frontend Token:', frontendToken?.substring(0, 8) + '...');
   };
 
+  const handleViewReceipt = () => {
+    if (!payment) return;
+
+    const receiptData = {
+      paymentId: payment.id || 'N/A',
+      transactionId: payment.gateway?.transaction_id || 'N/A',
+      receiptNumber: payment.gateway?.receipt_number || 'N/A',
+      amount: `${payment.amount.currency} ${Math.round(payment.amount.total)}`,
+      date: new Date(payment.timestamps?.created_at || '').toLocaleString(),
+      service: payment.appointment?.service || 'N/A',
+      provider: payment.appointment?.provider_name || 'N/A',
+      scheduledDate: new Date(payment.appointment?.scheduled_at || '').toLocaleString(),
+      paymentMethod: payment.payment_method?.display_name || 'N/A',
+      status: payment.status,
+    };
+
+    const receiptText = `
+MU BAKU LIFESTYLE - PAYMENT RECEIPT
+
+Payment ID: ${receiptData.paymentId}
+Transaction ID: ${receiptData.transactionId}
+Receipt Number: ${receiptData.receiptNumber}
+
+Amount Paid: ${receiptData.amount}
+Payment Date: ${receiptData.date}
+Payment Method: ${receiptData.paymentMethod}
+
+Service: ${receiptData.service}
+Provider: ${receiptData.provider}
+Scheduled Date: ${receiptData.scheduledDate}
+
+Status: ${receiptData.status.toUpperCase()}
+
+Thank you for using Mu Baku Lifestyle!
+    `.trim();
+
+    Alert.alert(
+      'Payment Receipt',
+      receiptText,
+      [
+        { text: 'Close', style: 'cancel' },
+        {
+          text: 'Share',
+          onPress: async () => {
+            try {
+              await Share.share({
+                message: receiptText,
+                title: 'Payment Receipt - Mu Baku Lifestyle',
+              });
+            } catch (error) {
+              console.error('Error sharing receipt:', error);
+              Alert.alert('Error', 'Unable to share receipt');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleViewLocation = () => {
+    if (payment?.appointment?.id) {
+      // Navigate to appointment status which should have location info
+      router.push(`/booking/status?appointmentId=${payment.appointment.id}` as any);
+    } else {
+      Alert.alert('Location Unavailable', 'Service location information is not available yet.');
+    }
+  };
+
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
@@ -425,6 +493,24 @@ export default function PaymentStatusScreen() {
             <TouchableOpacity style={styles.primaryButton} onPress={handleViewBooking} accessible={true}>
               <Text style={styles.primaryButtonText}>View My Booking</Text>
             </TouchableOpacity>
+            <View style={styles.actionButtonsRow}>
+              <TouchableOpacity
+                style={[styles.actionButton, styles.receiptButton]}
+                onPress={handleViewReceipt}
+                accessible={true}
+              >
+                <Receipt color="white" size={20} />
+                <Text style={styles.actionButtonText}>Receipt</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.actionButton, styles.locationButton]}
+                onPress={handleViewLocation}
+                accessible={true}
+              >
+                <MapPin color="white" size={20} />
+                <Text style={styles.actionButtonText}>Location</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
               <Text style={styles.secondaryButtonText}>Back to Home</Text>
             </TouchableOpacity>
@@ -716,5 +802,31 @@ const styles = StyleSheet.create({
     color: '#666',
     marginLeft: 12,
     fontWeight: '500',
+  },
+  actionButtonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginBottom: 12,
+  },
+  actionButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 8,
+  },
+  receiptButton: {
+    backgroundColor: '#10B981',
+  },
+  locationButton: {
+    backgroundColor: '#3B82F6',
+  },
+  actionButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

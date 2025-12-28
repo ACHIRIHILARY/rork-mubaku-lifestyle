@@ -559,7 +559,30 @@ export default function PaymentScreen() {
         )}
       </ScrollView>
 
-      {/* Pay Button */}
+      {/* Quick Summary & Pay Button - Positioned higher for better Android UX */}
+      {paymentMethod && selectedMethodData && (
+        <View style={styles.quickSummaryContainer}>
+          <View style={styles.quickSummaryCard}>
+            <View style={styles.quickSummaryRow}>
+              <Text style={styles.quickSummaryLabel}>Service:</Text>
+              <Text style={styles.quickSummaryValue}>{amount} {currency}</Text>
+            </View>
+            <View style={styles.quickSummaryRow}>
+              <Text style={styles.quickSummaryLabel}>Gateway Fee:</Text>
+              <Text style={styles.quickSummaryValue}>{currency} {Math.round(calculateGatewayFee())}</Text>
+            </View>
+            <View style={styles.quickSummaryDivider} />
+            <View style={styles.quickSummaryRow}>
+              <Text style={styles.quickSummaryTotalLabel}>Total:</Text>
+              <Text style={styles.quickSummaryTotalValue}>{currency} {Math.round(calculateTotalAmount())}</Text>
+            </View>
+            <Text style={styles.quickSummaryNote}>
+              💰 Funds held securely in escrow until service completion
+            </Text>
+          </View>
+        </View>
+      )}
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           ref={payButtonRef}
@@ -992,5 +1015,55 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  quickSummaryContainer: {
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  quickSummaryCard: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+  },
+  quickSummaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  quickSummaryLabel: {
+    fontSize: 14,
+    color: '#666',
+  },
+  quickSummaryValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2D1A46',
+  },
+  quickSummaryDivider: {
+    height: 1,
+    backgroundColor: '#E5E5E5',
+    marginVertical: 8,
+  },
+  quickSummaryTotalLabel: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  quickSummaryTotalValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#F4A896',
+  },
+  quickSummaryNote: {
+    fontSize: 12,
+    color: '#10B981',
+    textAlign: 'center',
+    marginTop: 8,
   },
 });
