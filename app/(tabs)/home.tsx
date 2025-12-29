@@ -85,9 +85,9 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerTop}>
+        {/* Welcome Section */}
+        <View style={styles.welcomeSection}>
+          <View style={styles.welcomeTop}>
             <View>
               <Text style={styles.greeting}>Hello, {user?.first_name || 'Guest'}!</Text>
               <Text style={styles.subGreeting}>Find your perfect look</Text>
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5F5F5',
   },
-  header: {
+  welcomeSection: {
     backgroundColor: '#F4A896',
     paddingHorizontal: 24,
     paddingTop: 20,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
   },
-  headerTop: {
+  welcomeTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

@@ -3,6 +3,7 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { Home, Calendar, Bell, User } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import StickyHeader from '../components/StickyHeader';
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
@@ -22,7 +23,8 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
+        header: () => <StickyHeader />,
         tabBarActiveTintColor: '#2D1A46',
         tabBarInactiveTintColor: '#999',
         tabBarStyle: {
