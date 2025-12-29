@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView, Platform } from 'react-native';
 import { Menu, User, Calendar, Receipt, Briefcase, Play, Settings, X, Users } from 'lucide-react-native';
 import { useAppSelector } from '@/store/hooks';
 import { router } from 'expo-router';
@@ -173,7 +173,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     backgroundColor: 'white',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingTop: Platform.OS === 'ios' ? 50 : 30, // Extra top padding for status bar
+    paddingBottom: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
     elevation: 4,
