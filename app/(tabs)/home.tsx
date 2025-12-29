@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Image } from 'react-native';
 import { Search, Star, X, User, MapPin } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
@@ -30,7 +30,7 @@ export default function HomeScreen() {
 
   const handleProviderPress = (providerId: number) => {
     console.log('Provider selected:', providerId);
-    router.push(`/profile-settings?userId=${providerId}` as any);
+    router.push(`/provider-detail?id=${providerId}` as any);
   };
   
   const handleCategoryPress = (categoryId: number) => {
@@ -207,57 +207,29 @@ export default function HomeScreen() {
             )}
           </View>
           {services && services.length > 0 ? (
-            <View style={styles.agentsContainer}>
+            <View style={styles.servicesGrid}>
               {services.map((service) => (
-                <TouchableOpacity 
-                  key={service.id} 
-                  style={styles.agentCard}
+                <TouchableOpacity
+                  key={service.id}
+                  style={styles.serviceCard}
                   onPress={() => handleServicePress(service.id)}
                 >
-                  <View style={styles.agentImagePlaceholder}>
-                    <Text style={styles.agentImageText}>💼</Text>
-                  </View>
-                  <View style={styles.agentInfo}>
-                    <Text style={styles.agentName}>{service.name}</Text>
-                    {(service.latitude && service.longitude) || (service.provider_details?.latitude && service.provider_details?.longitude) ? (
-                      <TouchableOpacity 
-                        style={styles.locationRow}
-                        onPress={() => handleLocationPress(
-                          service.latitude || service.provider_details?.latitude,
-                          service.longitude || service.provider_details?.longitude,
-                          service.location || service.provider_details?.location || service.provider_details?.city,
-                          service.name
-                        )}
-                        activeOpacity={0.7}
-                      >
-                        <MapPin color="#F4A896" size={16} />
-                        <Text style={styles.serviceLocation}>
-                          {service.location || service.provider_details?.location || service.provider_details?.city || 'View Location'}
-                        </Text>
-                      </TouchableOpacity>
+                  <View style={styles.serviceImageContainer}>
+                    {service.image_url ? (
+                      <Image source={{ uri: service.image_url }} style={styles.serviceImage} />
                     ) : (
-                      <View style={styles.locationRowDisabled}>
-                        <MapPin color="#CCC" size={16} />
-                        <Text style={styles.serviceLocationDisabled}>Location not set</Text>
+                      <View style={styles.serviceImagePlaceholder}>
+                        <Text style={styles.serviceImageText}>💼</Text>
                       </View>
                     )}
-                    <Text style={styles.agentService}>{service.category_details?.name || 'Service'}</Text>
-                    <View style={styles.agentMeta}>
-                      <View style={styles.ratingContainer}>
-                        <Star color="#FFD700" size={16} fill="#FFD700" />
-                        <Text style={styles.rating}>{service.rating || '5.0'}</Text>
-                      </View>
-                      <Text style={styles.price}>{Math.floor(Number(service.price))} {service.currency}</Text>
+                  </View>
+                  <View style={styles.serviceInfo}>
+                    <Text style={styles.serviceName} numberOfLines={1}>{service.name}</Text>
+                    <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_details?.name || 'Service'}</Text>
+                    <View style={styles.serviceMeta}>
+                      <Text style={styles.servicePrice}>{Math.floor(Number(service.price))} {service.currency}</Text>
+                      <Text style={styles.serviceDuration}>{service.duration_minutes}min</Text>
                     </View>
-                    <View style={styles.durationContainer}>
-                      <Text style={styles.duration}>{service.duration_minutes} min</Text>
-                    </View>
-                    <TouchableOpacity 
-                      style={styles.bookButton}
-                      onPress={() => handleServicePress(service.id)}
-                    >
-                      <Text style={styles.bookButtonText}>Book Now</Text>
-                    </TouchableOpacity>
                   </View>
                 </TouchableOpacity>
               ))}
@@ -265,13 +237,13 @@ export default function HomeScreen() {
           ) : (
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>
-                {debouncedSearch || selectedCategory 
-                  ? 'No services found matching your criteria' 
+                {debouncedSearch || selectedCategory
+                  ? 'No services found matching your criteria'
                   : 'No services available at this time'
                 }
               </Text>
               {(debouncedSearch || selectedCategory) && (
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.clearAllButton}
                   onPress={handleClearAll}
                 >
@@ -614,5 +586,74 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontWeight: '600',
+  },
+  servicesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  serviceCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    marginBottom: 16,
+    width: '31%', // 3 columns
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  serviceImageContainer: {
+    width: '100%',
+    height: 80,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    overflow: 'hidden',
+  },
+  serviceImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  serviceImagePlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#F4A896',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  serviceImageText: {
+    fontSize: 24,
+  },
+  serviceInfo: {
+    padding: 8,
+  },
+  serviceName: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginBottom: 2,
+  },
+  serviceCategory: {
+    fontSize: 9,
+    color: '#666',
+    marginBottom: 4,
+  },
+  serviceMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  servicePrice: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  serviceDuration: {
+    fontSize: 9,
+    color: '#666',
   },
 });

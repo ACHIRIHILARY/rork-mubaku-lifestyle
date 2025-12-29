@@ -1,19 +1,51 @@
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { useAppSelector } from '@/store/hooks';
 
 export default function SplashScreen() {
+  const { isAuthenticated, user, isInitialized } = useAppSelector(state => state.auth);
+
   useEffect(() => {
-    // Auto-navigate after 3 seconds for demo purposes
-    const timer = setTimeout(() => {
-      // Uncomment this line to auto-navigate
-      // router.push('/language');
-    }, 3000);
+    if (isInitialized) {
+      // Auth initialization is complete
+      if (isAuthenticated && user) {
+        // User is authenticated, navigate to tabs
+        router.replace('/(tabs)/home');
+      } else {
+        // User is not authenticated, navigate to login
+        router.replace('/login');
+      }
+    }
+  }, [isInitialized, isAuthenticated, user]);
 
-    return () => clearTimeout(timer);
-  }, []);
+  // Show loading state while auth is being initialized
+  if (!isInitialized) {
+    return (
+      <LinearGradient
+        colors={['#F4A896', '#F7B8A8']}
+        style={styles.container}
+      >
+        <View style={styles.content}>
+          <View style={styles.logoContainer}>
+            <Text style={styles.logoText}>Mubaku</Text>
+            <Text style={styles.logoSubtext}>STYLE</Text>
+          </View>
 
+          <Text style={styles.tagline}>Book Your Look.</Text>
+
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="white" />
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
+        </View>
+      </LinearGradient>
+    );
+  }
+
+  // This return should never be reached due to the useEffect navigation,
+  // but we keep it as a fallback
   return (
     <LinearGradient
       colors={['#F4A896', '#F7B8A8']}
@@ -24,10 +56,10 @@ export default function SplashScreen() {
           <Text style={styles.logoText}>Mubaku</Text>
           <Text style={styles.logoSubtext}>STYLE</Text>
         </View>
-        
+
         <Text style={styles.tagline}>Book Your Look.</Text>
-        
-        <TouchableOpacity 
+
+        <TouchableOpacity
           style={styles.getStartedButton}
           onPress={() => router.push('/login' as any)}
         >
@@ -89,5 +121,15 @@ const styles = StyleSheet.create({
     color: '#2D1A46',
     fontSize: 18,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  loadingText: {
+    color: 'white',
+    fontSize: 16,
+    marginTop: 16,
+    fontWeight: '300',
   },
 });
