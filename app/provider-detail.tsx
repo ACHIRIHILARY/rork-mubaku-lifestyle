@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image, Alert } from 'react-native';
-import { ArrowLeft, User, MapPin, Star, Phone, Mail } from 'lucide-react-native';
+import { ArrowLeft, User, Star, Phone, Mail } from 'lucide-react-native';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useGetAllServicesQuery } from '@/store/services/servicesApi';
 

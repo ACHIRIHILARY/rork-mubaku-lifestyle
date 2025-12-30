@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Image } from 'react-native';
-import { Search, Star, X, User, MapPin } from 'lucide-react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { Search, X, User } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
@@ -56,14 +56,7 @@ export default function HomeScreen() {
     setDebouncedSearch('');
   }, []);
 
-  const handleLocationPress = useCallback((latitude?: number, longitude?: number, locationName?: string, serviceName?: string) => {
-    if (!latitude || !longitude) {
-      Alert.alert('Location Not Available', 'This service provider has not set their location yet.');
-      return;
-    }
 
-    router.push(`/view-location?latitude=${latitude}&longitude=${longitude}&locationName=${encodeURIComponent(locationName || 'Service Location')}&serviceName=${encodeURIComponent(serviceName || '')}` as any);
-  }, []);
   
   useEffect(() => {
     const timer = setTimeout(() => {
