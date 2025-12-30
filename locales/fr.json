@@ -1,0 +1,14 @@
+{
+  "greeting": "Bonjour, {{name}}!",
+  "subGreeting": "Trouvez votre look parfait",
+  "searchPlaceholder": "Rechercher des services...",
+  "categories": "Catégories",
+  "clearAll": "Tout effacer",
+  "approvedProviders": "Fournisseurs approuvés",
+  "viewProfile": "Voir le profil",
+  "searchResults": "Résultats de la recherche",
+  "availableServices": "Services disponibles",
+  "noServicesFound": "Aucun service ne correspond à vos critères",
+  "noServicesAvailable": "Aucun service disponible pour le moment",
+  "clearFilters": "Effacer les filtres"
+}

@@ -3,12 +3,14 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { Search, X, User } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
+import { useTranslation } from 'react-i18next';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 
 
 
 export default function HomeScreen() {
+  const { t, i18n } = useTranslation();
 
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -82,8 +84,16 @@ export default function HomeScreen() {
         <View style={styles.welcomeSection}>
           <View style={styles.welcomeTop}>
             <View>
-              <Text style={styles.greeting}>Hello, {user?.first_name || 'Guest'}!</Text>
-              <Text style={styles.subGreeting}>Find your perfect look</Text>
+              <Text style={styles.greeting}>{t('greeting', { name: user?.first_name || 'Guest' })}</Text>
+              <Text style={styles.subGreeting}>{t('subGreeting')}</Text>
+            </View>
+            <View style={styles.languageSwitcher}>
+              <TouchableOpacity style={styles.langButton} onPress={() => i18n.changeLanguage('en')}>
+                <Text style={styles.langButtonText}>EN</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.langButton} onPress={() => i18n.changeLanguage('fr')}>
+                <Text style={styles.langButtonText}>FR</Text>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -92,7 +102,7 @@ export default function HomeScreen() {
             <Search color="#666" size={20} />
             <TextInput
               style={styles.searchInput}
-              placeholder="Search services..."
+              placeholder={t('searchPlaceholder')}
               placeholderTextColor="#666"
               value={searchQuery}
               onChangeText={setSearchQuery}
@@ -109,14 +119,14 @@ export default function HomeScreen() {
         {categories && categories.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Categories</Text>
+              <Text style={styles.sectionTitle}>{t('categories')}</Text>
               {(selectedCategory || debouncedSearch) && (
                 <TouchableOpacity 
                   style={styles.clearFilterButton}
                   onPress={handleClearAll}
                 >
                   <X color="#666" size={16} />
-                  <Text style={styles.clearFilterText}>Clear All</Text>
+                  <Text style={styles.clearFilterText}>{t('clearAll')}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -151,7 +161,7 @@ export default function HomeScreen() {
         {providers && providers.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Approved Providers</Text>
+              <Text style={styles.sectionTitle}>{t('approvedProviders')}</Text>
             </View>
             <View style={styles.providersContainer}>
               {providers.map((provider) => (
@@ -181,7 +191,7 @@ export default function HomeScreen() {
                     style={styles.viewProfileButton}
                     onPress={() => handleProviderPress(provider.pkid)}
                   >
-                    <Text style={styles.viewProfileButtonText}>View Profile</Text>
+                    <Text style={styles.viewProfileButtonText}>{t('viewProfile')}</Text>
                   </TouchableOpacity>
                 </TouchableOpacity>
               ))}
@@ -193,7 +203,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>
-              {selectedCategory || debouncedSearch ? 'Search Results' : 'Available Services'}
+              {selectedCategory || debouncedSearch ? t('searchResults') : t('availableServices')}
             </Text>
             {servicesLoading && debouncedSearch && (
               <ActivityIndicator size="small" color="#2D1A46" />
@@ -231,8 +241,8 @@ export default function HomeScreen() {
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>
                 {debouncedSearch || selectedCategory
-                  ? 'No services found matching your criteria'
-                  : 'No services available at this time'
+                  ? t('noServicesFound')
+                  : t('noServicesAvailable')
                 }
               </Text>
               {(debouncedSearch || selectedCategory) && (
@@ -240,7 +250,7 @@ export default function HomeScreen() {
                   style={styles.clearAllButton}
                   onPress={handleClearAll}
                 >
-                  <Text style={styles.clearAllButtonText}>Clear Filters</Text>
+                  <Text style={styles.clearAllButtonText}>{t('clearFilters')}</Text>
                 </TouchableOpacity>
               )}
             </View>
@@ -279,6 +289,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white',
     opacity: 0.9,
+  },
+  languageSwitcher: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  langButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 8,
+  },
+  langButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
   loadingContainer: {
     flex: 1,

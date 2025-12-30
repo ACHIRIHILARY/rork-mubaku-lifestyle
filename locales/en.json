@@ -1,0 +1,14 @@
+{
+  "greeting": "Hello, {{name}}!",
+  "subGreeting": "Find your perfect look",
+  "searchPlaceholder": "Search services...",
+  "categories": "Categories",
+  "clearAll": "Clear All",
+  "approvedProviders": "Approved Providers",
+  "viewProfile": "View Profile",
+  "searchResults": "Search Results",
+  "availableServices": "Available Services",
+  "noServicesFound": "No services found matching your criteria",
+  "noServicesAvailable": "No services available at this time",
+  "clearFilters": "Clear Filters"
+}
