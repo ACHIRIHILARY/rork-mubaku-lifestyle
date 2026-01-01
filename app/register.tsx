@@ -3,8 +3,10 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useRegisterMutation } from '@/store/services/authApi';
 import { Eye, EyeOff, AlertCircle } from 'lucide-react-native';
+import { useTranslation } from 'react-i18next';
 
 export default function RegisterScreen() {
+  const { t } = useTranslation();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -25,23 +27,23 @@ export default function RegisterScreen() {
     setErrorMessage('');
 
     if (!firstName || !lastName || !username || !email || !password) {
-      setErrorMessage('Please fill in all fields');
+      setErrorMessage(t('fillAllFields'));
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage('Passwords do not match');
+      setErrorMessage(t('passwordsDoNotMatch'));
       return;
     }
 
     if (password.length < 8) {
-      setErrorMessage('Password must be at least 8 characters long');
+      setErrorMessage(t('passwordMinLength'));
       return;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setErrorMessage('Please enter a valid email address');
+      setErrorMessage(t('validEmailRequired'));
       return;
     }
 
@@ -139,62 +141,62 @@ export default function RegisterScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent}>
           <View style={styles.content}>
             <View style={styles.header}>
-              <Text style={styles.title}>Create Account</Text>
-              <Text style={styles.subtitle}>Join Mubaku Lifestyle today</Text>
+              <Text style={styles.title}>{t('createAccount')}</Text>
+              <Text style={styles.subtitle}>{t('joinMubakulifestyle')}</Text>
             </View>
 
             <View style={styles.card}>
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>First Name</Text>
+                <Text style={styles.label}>{t('firstName')}</Text>
                 <TextInput
                   style={styles.input}
                   value={firstName}
                   onChangeText={setFirstName}
-                  placeholder="Enter your first name"
+                  placeholder={t('enterFirstName')}
                 />
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Last Name</Text>
+                <Text style={styles.label}>{t('lastName')}</Text>
                 <TextInput
                   style={styles.input}
                   value={lastName}
                   onChangeText={setLastName}
-                  placeholder="Enter your last name"
+                  placeholder={t('enterLastName')}
                 />
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Username</Text>
+                <Text style={styles.label}>{t('username')}</Text>
                 <TextInput
                   style={styles.input}
                   value={username}
                   onChangeText={setUsername}
-                  placeholder="Choose a username"
+                  placeholder={t('chooseUsername')}
                   autoCapitalize="none"
                 />
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Email</Text>
+                <Text style={styles.label}>{t('email')}</Text>
                 <TextInput
                   style={styles.input}
                   value={email}
                   onChangeText={setEmail}
-                  placeholder="Enter your email"
+                  placeholder={t('enterYourEmail')}
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Password</Text>
+                <Text style={styles.label}>{t('password')}</Text>
                 <View style={styles.passwordContainer}>
                   <TextInput
                     style={styles.passwordInput}
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Create a password"
+                    placeholder={t('createPassword')}
                     secureTextEntry={!showPassword}
                   />
                   <TouchableOpacity 
@@ -211,13 +213,13 @@ export default function RegisterScreen() {
               </View>
 
               <View style={styles.inputContainer}>
-                <Text style={styles.label}>Confirm Password</Text>
+                <Text style={styles.label}>{t('confirmPassword')}</Text>
                 <View style={styles.passwordContainer}>
                   <TextInput
                     style={styles.passwordInput}
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
-                    placeholder="Confirm your password"
+                    placeholder={t('confirmYourPassword')}
                     secureTextEntry={!showConfirmPassword}
                   />
                   <TouchableOpacity 
@@ -249,10 +251,10 @@ export default function RegisterScreen() {
                 {isLoading ? (
                   <View style={styles.loadingContainer}>
                     <ActivityIndicator color="white" size="small" />
-                    <Text style={[styles.registerText, { marginLeft: 12 }]}>Creating your account...</Text>
+                    <Text style={[styles.registerText, { marginLeft: 12 }]}>{t('creatingAccount')}</Text>
                   </View>
                 ) : (
-                  <Text style={styles.registerText}>Create Account</Text>
+                  <Text style={styles.registerText}>{t('createAccount')}</Text>
                 )}
               </TouchableOpacity>
 
@@ -260,7 +262,7 @@ export default function RegisterScreen() {
                 style={styles.loginButton}
                 onPress={() => router.push('/login')}
               >
-                <Text style={styles.loginText}>Already have an account? Login</Text>
+                <Text style={styles.loginText}>{t('alreadyHaveAccount')}</Text>
               </TouchableOpacity>
             </View>
           </View>

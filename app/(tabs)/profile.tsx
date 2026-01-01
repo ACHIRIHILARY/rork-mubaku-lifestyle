@@ -15,7 +15,7 @@ export default function ProfileSettingsScreen() {
   const [changePassword] = useChangePasswordMutation();
   const [deleteAccount] = useDeleteAccountMutation();
   const dispatch = useAppDispatch();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
@@ -29,17 +29,17 @@ export default function ProfileSettingsScreen() {
 
   const handleChangePassword = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert('Error', 'Please fill in all password fields');
+      Alert.alert(t('error'), t('fillAllFields'));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      Alert.alert('Error', 'New passwords do not match');
+      Alert.alert(t('error'), t('passwordsDoNotMatch'));
       return;
     }
 
     if (newPassword.length < 8) {
-      Alert.alert('Error', 'Password must be at least 8 characters long');
+      Alert.alert(t('error'), t('passwordMinLength'));
       return;
     }
 
@@ -50,15 +50,15 @@ export default function ProfileSettingsScreen() {
         new_password: newPassword,
       }).unwrap();
 
-      Alert.alert('Success', 'Your password has been changed successfully');
+      Alert.alert(t('success'), t('passwordChangedSuccessfully'));
       setPasswordModalVisible(false);
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
     } catch (error: any) {
       console.error('Change password error:', error);
-      const errorMessage = error?.data?.detail || error?.data?.current_password?.[0] || error?.data?.new_password?.[0] || 'Failed to change password. Please try again.';
-      Alert.alert('Error', errorMessage);
+      const errorMessage = error?.data?.detail || error?.data?.current_password?.[0] || error?.data?.new_password?.[0] || t('failedToChangePassword');
+      Alert.alert(t('error'), errorMessage);
     } finally {
       setIsChangingPassword(false);
     }
@@ -66,30 +66,30 @@ export default function ProfileSettingsScreen() {
 
   const handleDeleteAccount = () => {
     Alert.alert(
-      'Delete Account',
-      'Are you sure you want to delete your account? This action cannot be undone.',
+      t('deleteAccount'),
+      t('deleteAccountConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('delete'),
           style: 'destructive',
           onPress: async () => {
             Alert.prompt(
-              'Confirm Password',
-              'Please enter your current password to confirm account deletion:',
+              t('confirmPassword'),
+              t('enterPasswordConfirm'),
               async (password) => {
                 if (!password) {
-                  Alert.alert('Error', 'Password is required');
+                  Alert.alert(t('error'), t('passwordRequired'));
                   return;
                 }
                 try {
                   await deleteAccount({ current_password: password }).unwrap();
                   Alert.alert(
-                    'Success',
-                    'Your account has been deleted successfully',
+                    t('success'),
+                    t('accountDeletedSuccessfully'),
                     [
                       {
-                        text: 'OK',
+                        text: t('ok'),
                         onPress: () => {
                           dispatch(logoutAction());
                           router.replace('/login');
@@ -99,8 +99,8 @@ export default function ProfileSettingsScreen() {
                   );
                 } catch (error: any) {
                   console.error('Delete account error:', error);
-                  const errorMessage = error?.data?.current_password?.[0] || error?.data?.detail || 'Failed to delete account. Please try again.';
-                  Alert.alert('Error', errorMessage);
+                  const errorMessage = error?.data?.current_password?.[0] || error?.data?.detail || t('failedToDeleteAccount');
+                  Alert.alert(t('error'), errorMessage);
                 }
               },
               'secure-text'
@@ -119,7 +119,7 @@ export default function ProfileSettingsScreen() {
                    `Phone: ${user.phone_number || 'N/A'}\n` +
                    `City: ${user.city || 'N/A'}\n` +
                    `Country: ${user.country || 'N/A'}\n` +
-                   `Role: ${user.role === 'provider' ? 'Provider' : 'Client'}`;
+                   `Role: ${user.role === 'provider' ? t('provider') : t('client')}`;
 
     Alert.alert('Profile Details', details);
   };
@@ -127,43 +127,43 @@ export default function ProfileSettingsScreen() {
   const handleChangeLanguage = async (lang: string) => {
     await i18n.changeLanguage(lang);
     setLanguageModalVisible(false);
-    Alert.alert('Success', `Language changed to ${lang === 'en' ? 'English' : 'Français'}`);
+    Alert.alert(t('success'), t('languageChanged', { lang: lang === 'en' ? t('english') : t('french') }));
   };
 
   const settingsOptions = [
     {
       id: 'edit-profile',
-      title: 'Edit Profile',
-      description: 'Update your profile information',
+      title: t('editProfile'),
+      description: t('updateProfileInfo'),
       icon: Edit,
       onPress: () => router.push('/profile-edit' as any)
     },
     {
       id: 'view-profile',
-      title: 'View Profile Details',
-      description: 'See your complete profile information',
+      title: t('viewProfileDetails'),
+      description: t('seeCompleteProfile'),
       icon: User,
       onPress: handleViewProfileDetails
     },
     {
       id: 'language',
-      title: 'Language',
-      description: `Current: ${i18n.language === 'en' ? 'English' : 'Français'}`,
+      title: t('language'),
+      description: t('currentLanguage', { lang: i18n.language === 'en' ? t('english') : t('french') }),
       icon: Languages,
       onPress: () => setLanguageModalVisible(true)
     },
     {
       id: 'change-password',
-      title: 'Change Password',
-      description: 'Update your account password',
+      title: t('changePassword'),
+      description: t('updateAccountPassword'),
       icon: Lock,
       onPress: () => setPasswordModalVisible(true)
     },
 
     {
       id: 'delete-account',
-      title: 'Delete Account',
-      description: 'Permanently delete your account',
+      title: t('deleteAccount'),
+      description: t('permanentlyDeleteAccount'),
       icon: Trash2,
       onPress: handleDeleteAccount,
       isDanger: true
@@ -176,12 +176,12 @@ export default function ProfileSettingsScreen() {
 
   const handleLogout = () => {
     Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
+      t('logout'),
+      t('logoutConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Logout',
+          text: t('logout'),
           style: 'destructive',
           onPress: () => {
             dispatch(logoutAction());
@@ -195,7 +195,7 @@ export default function ProfileSettingsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Profile</Text>
+        <Text style={styles.headerTitle}>{t('profile')}</Text>
       </View>
 
       <ScrollView style={styles.content}>
@@ -222,7 +222,7 @@ export default function ProfileSettingsScreen() {
                   <Text style={styles.profilePhone}>{user.phone_number}</Text>
                 )}
                 <View style={styles.roleBadge}>
-                  <Text style={styles.roleText}>{user?.role === 'provider' ? 'Provider' : 'Client'}</Text>
+                  <Text style={styles.roleText}>{user?.role === 'provider' ? t('provider') : t('client')}</Text>
                 </View>
               </View>
             </View>
@@ -238,8 +238,8 @@ export default function ProfileSettingsScreen() {
               <Briefcase color="white" size={32} />
             </View>
             <View style={styles.providerInfo}>
-              <Text style={styles.providerTitle}>Become a Service Provider</Text>
-              <Text style={styles.providerDescription}>Offer your services and earn money</Text>
+              <Text style={styles.providerTitle}>{t('becomeProvider')}</Text>
+              <Text style={styles.providerDescription}>{t('offerServicesEarnMoney')}</Text>
             </View>
             <ChevronRight color="white" size={24} />
           </TouchableOpacity>
@@ -247,26 +247,26 @@ export default function ProfileSettingsScreen() {
 
         {showApplicationStatus && (
           <View style={styles.statusCard}>
-            <Text style={styles.statusTitle}>Provider Application Status</Text>
+            <Text style={styles.statusTitle}>{t('providerApplicationStatus')}</Text>
             <View style={[
               styles.statusBadge,
               applicationStatus.status === 'pending' && styles.statusPending,
               applicationStatus.status === 'approved' && styles.statusApproved,
             ]}>
               <Text style={styles.statusText}>
-                {applicationStatus.status === 'pending' ? 'Pending Review' : 
-                 applicationStatus.status === 'approved' ? 'Approved' : 
+                {applicationStatus.status === 'pending' ? t('pendingReview') : 
+                 applicationStatus.status === 'approved' ? t('approved') : 
                  applicationStatus.status}
               </Text>
             </View>
             {applicationStatus.status === 'pending' && (
               <Text style={styles.statusDescription}>
-                Your application is being reviewed. We will notify you once it is approved.
+                {t('applicationBeingReviewed')}
               </Text>
             )}
             {applicationStatus.status === 'approved' && (
               <Text style={styles.statusDescription}>
-                Congratulations! You can now create services and accept bookings.
+                {t('congratulationsApproved')}
               </Text>
             )}
           </View>
@@ -281,8 +281,8 @@ export default function ProfileSettingsScreen() {
               <Package color="white" size={32} />
             </View>
             <View style={styles.dashboardInfo}>
-              <Text style={styles.dashboardTitle}>Manage My Services</Text>
-              <Text style={styles.dashboardDescription}>Create, edit, and manage your services</Text>
+              <Text style={styles.dashboardTitle}>{t('manageMyServices')}</Text>
+              <Text style={styles.dashboardDescription}>{t('createEditManageServices')}</Text>
             </View>
             <ChevronRight color="white" size={24} />
           </TouchableOpacity>
@@ -318,7 +318,7 @@ export default function ProfileSettingsScreen() {
             onPress={handleLogout}
           >
             <LogOut color="#FF4444" size={24} />
-            <Text style={styles.logoutText}>Logout</Text>
+            <Text style={styles.logoutText}>{t('logout')}</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -332,21 +332,21 @@ export default function ProfileSettingsScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Change Password</Text>
+              <Text style={styles.modalTitle}>{t('changePassword')}</Text>
               <TouchableOpacity onPress={() => setPasswordModalVisible(false)}>
                 <Text style={styles.modalClose}>✕</Text>
               </TouchableOpacity>
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Current Password</Text>
+              <Text style={styles.inputLabel}>{t('currentPassword')}</Text>
               <View style={styles.passwordInputContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   value={currentPassword}
                   onChangeText={setCurrentPassword}
                   secureTextEntry={!showCurrentPassword}
-                  placeholder="Enter current password"
+                  placeholder={t('enterCurrentPassword')}
                 />
                 <TouchableOpacity onPress={() => setShowCurrentPassword(!showCurrentPassword)}>
                   {showCurrentPassword ? <EyeOff color="#666" size={20} /> : <Eye color="#666" size={20} />}
@@ -355,14 +355,14 @@ export default function ProfileSettingsScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>New Password</Text>
+              <Text style={styles.inputLabel}>{t('newPassword')}</Text>
               <View style={styles.passwordInputContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   value={newPassword}
                   onChangeText={setNewPassword}
                   secureTextEntry={!showNewPassword}
-                  placeholder="Enter new password"
+                  placeholder={t('enterNewPassword')}
                 />
                 <TouchableOpacity onPress={() => setShowNewPassword(!showNewPassword)}>
                   {showNewPassword ? <EyeOff color="#666" size={20} /> : <Eye color="#666" size={20} />}
@@ -371,14 +371,14 @@ export default function ProfileSettingsScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.inputLabel}>Confirm New Password</Text>
+              <Text style={styles.inputLabel}>{t('confirmNewPassword')}</Text>
               <View style={styles.passwordInputContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   secureTextEntry={!showConfirmPassword}
-                  placeholder="Confirm new password"
+                  placeholder={t('confirmNewPasswordPlaceholder')}
                 />
                 <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
                   {showConfirmPassword ? <EyeOff color="#666" size={20} /> : <Eye color="#666" size={20} />}
@@ -394,7 +394,7 @@ export default function ProfileSettingsScreen() {
               {isChangingPassword ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text style={styles.changePasswordText}>Change Password</Text>
+                <Text style={styles.changePasswordText}>{t('changePassword')}</Text>
               )}
             </TouchableOpacity>
           </View>
@@ -410,7 +410,7 @@ export default function ProfileSettingsScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.languageModalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.languageModalTitle}>Select Language</Text>
+              <Text style={styles.languageModalTitle}>{t('selectLanguage')}</Text>
               <TouchableOpacity onPress={() => setLanguageModalVisible(false)}>
                 <Text style={styles.modalClose}>✕</Text>
               </TouchableOpacity>
@@ -427,11 +427,11 @@ export default function ProfileSettingsScreen() {
                 <Text style={[
                   styles.languageName,
                   i18n.language === 'en' && styles.selectedLanguageText
-                ]}>English</Text>
+                ]}>{t('english')}</Text>
                 <Text style={[
                   styles.languageNative,
                   i18n.language === 'en' && styles.selectedLanguageText
-                ]}>English</Text>
+                ]}>{t('english')}</Text>
               </View>
               {i18n.language === 'en' && (
                 <View style={styles.checkmark}>
@@ -451,11 +451,11 @@ export default function ProfileSettingsScreen() {
                 <Text style={[
                   styles.languageName,
                   i18n.language === 'fr' && styles.selectedLanguageText
-                ]}>French</Text>
+                ]}>{t('french')}</Text>
                 <Text style={[
                   styles.languageNative,
                   i18n.language === 'fr' && styles.selectedLanguageText
-                ]}>Français</Text>
+                ]}>{t('french')}</Text>
               </View>
               {i18n.language === 'fr' && (
                 <View style={styles.checkmark}>

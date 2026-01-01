@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { Bell, CreditCard, Settings, Trash2 } from 'lucide-react-native';
 import { useGetNotificationsQuery, useMarkAsReadMutation, useDeleteNotificationMutation } from '@/store/services/notificationsApi';
+import { useTranslation } from 'react-i18next';
 
 export default function NotificationsScreen() {
+  const { t } = useTranslation();
   const { data: notifications, isLoading, error } = useGetNotificationsQuery();
   const [markAsRead] = useMarkAsReadMutation();
   const [deleteNotification] = useDeleteNotificationMutation();
@@ -23,12 +25,12 @@ export default function NotificationsScreen() {
   
   const handleDeleteNotification = (notificationId: string, message: string) => {
     Alert.alert(
-      'Delete Notification',
-      `Are you sure you want to delete this notification?`,
+      t('deleteNotification'),
+      t('deleteNotificationConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('cancel'), style: 'cancel' },
         {
-          text: 'Delete',
+          text: t('delete'),
           style: 'destructive',
           onPress: async () => {
             try {
@@ -36,7 +38,7 @@ export default function NotificationsScreen() {
               await deleteNotification(notificationId).unwrap();
             } catch (err) {
               console.error('Failed to delete notification:', err);
-              Alert.alert('Error', 'Failed to delete notification');
+              Alert.alert(t('error'), t('failedToDeleteNotification'));
             }
           },
         },
@@ -73,29 +75,29 @@ export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Notifications</Text>
+        <Text style={styles.headerTitle}>{t('notifications')}</Text>
       </View>
 
       <ScrollView style={styles.content}>
         {isLoading ? (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="#2D1A46" />
-            <Text style={styles.loadingText}>Loading notifications...</Text>
+            <Text style={styles.loadingText}>{t('loadingNotifications')}</Text>
           </View>
         ) : error ? (
           <View style={styles.emptyContainer}>
             <Bell color="#F44336" size={64} />
-            <Text style={styles.emptyTitle}>Error Loading Notifications</Text>
+            <Text style={styles.emptyTitle}>{t('errorLoadingNotifications')}</Text>
             <Text style={styles.emptyMessage}>
-              Failed to load notifications. Please try again later.
+              {t('failedToLoadNotifications')}
             </Text>
           </View>
         ) : !notifications || notifications.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Bell color="#ccc" size={64} />
-            <Text style={styles.emptyTitle}>No Notifications</Text>
+            <Text style={styles.emptyTitle}>{t('noNotifications')}</Text>
             <Text style={styles.emptyMessage}>
-              You&apos;ll see your notifications here when you have them
+              {t('seeNotificationsHere')}
             </Text>
           </View>
         ) : (

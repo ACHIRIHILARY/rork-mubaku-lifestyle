@@ -4,10 +4,11 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Keyb
 import { useLoginMutation } from '@/store/services/authApi';
 import { Eye, EyeOff } from 'lucide-react-native';
 import { useAppSelector } from '@/store/hooks';
+import { useTranslation } from 'react-i18next';
 
 
 export default function LoginScreen() {
-
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +45,7 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password');
+      Alert.alert(t('error'), t('enterBothEmailPassword'));
       return;
     }
 
@@ -111,31 +112,31 @@ export default function LoginScreen() {
         >
           <View style={styles.content}>
           <View style={styles.header}>
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Sign in to your account</Text>
+            <Text style={styles.title}>{t('welcomeBack')}</Text>
+            <Text style={styles.subtitle}>{t('signInToAccount')}</Text>
           </View>
 
           <View style={styles.card}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t('email')}</Text>
               <TextInput
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
-                placeholder="Enter your email"
+                placeholder={t('enterEmail')}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{t('password')}</Text>
               <View style={styles.passwordContainer}>
                 <TextInput
                   style={styles.passwordInput}
                   value={password}
                   onChangeText={setPassword}
-                  placeholder="Enter your password"
+                  placeholder={t('enterPassword')}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity 
@@ -160,11 +161,11 @@ export default function LoginScreen() {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
                   <ActivityIndicator color="white" />
                   <Text style={styles.loginText}>
-                    {isLoading ? 'Logging in...' : 'Loading...'}
+                    {isLoading ? t('loggingIn') : t('loading')}
                   </Text>
                 </View>
               ) : (
-                <Text style={styles.loginText}>Login</Text>
+                <Text style={styles.loginText}>{t('login')}</Text>
               )}
             </TouchableOpacity>
 
@@ -172,7 +173,7 @@ export default function LoginScreen() {
               style={styles.registerButton}
               onPress={() => router.push('/register')}
             >
-              <Text style={styles.registerText}>Don&apos;t have an account? Register</Text>
+              <Text style={styles.registerText}>{t('noAccount')}</Text>
             </TouchableOpacity>
           </View>
           </View>

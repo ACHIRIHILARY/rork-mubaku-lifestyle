@@ -3,8 +3,10 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { Search, X, User, Star } from 'lucide-react-native';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
+import { useTranslation } from 'react-i18next';
 
 export default function ProvidersScreen() {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
 
@@ -45,8 +47,8 @@ export default function ProvidersScreen() {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Service Providers</Text>
-          <Text style={styles.headerSubtitle}>Find and connect with professionals</Text>
+          <Text style={styles.headerTitle}>{t('serviceProviders')}</Text>
+          <Text style={styles.headerSubtitle}>{t('findConnectProfessionals')}</Text>
         </View>
 
         {/* Search Bar */}
@@ -54,7 +56,7 @@ export default function ProvidersScreen() {
           <Search color="#666" size={20} />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search providers..."
+            placeholder={t('searchProviders')}
             placeholderTextColor="#666"
             value={searchQuery}
             onChangeText={setSearchQuery}
@@ -71,7 +73,7 @@ export default function ProvidersScreen() {
           {isLoading ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color="#2D1A46" />
-              <Text style={styles.loadingText}>Loading providers...</Text>
+              <Text style={styles.loadingText}>{t('loadingProviders')}</Text>
             </View>
           ) : filteredProviders && filteredProviders.length > 0 ? (
             <View style={styles.providersGrid}>
@@ -95,7 +97,7 @@ export default function ProvidersScreen() {
                       {provider.full_name}
                     </Text>
                     <Text style={styles.providerLocation} numberOfLines={1}>
-                      📍 {provider.city || 'Location not set'}
+                      📍 {provider.city || t('locationNotSet')}
                     </Text>
                     {provider.about_me && (
                       <Text style={styles.providerAbout} numberOfLines={2}>
@@ -113,14 +115,14 @@ export default function ProvidersScreen() {
           ) : (
             <View style={styles.emptyContainer}>
               <Text style={styles.emptyText}>
-                {debouncedSearch ? 'No providers found matching your search' : 'No service providers available'}
+                {debouncedSearch ? t('noProvidersFound') : t('noProvidersAvailable')}
               </Text>
               {debouncedSearch && (
                 <TouchableOpacity
                   style={styles.clearAllButton}
                   onPress={handleClearSearch}
                 >
-                  <Text style={styles.clearAllButtonText}>Clear Search</Text>
+                  <Text style={styles.clearAllButtonText}>{t('clearSearch')}</Text>
                 </TouchableOpacity>
               )}
             </View>

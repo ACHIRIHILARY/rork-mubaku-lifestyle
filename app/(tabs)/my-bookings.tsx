@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl } from 'react-native';
 import { Calendar, Clock, MapPin, DollarSign, X, Edit } from 'lucide-react-native';
 import { useGetMyAppointmentsQuery, useCancelAppointmentMutation } from '@/store/services/appointmentApi';
+import { useTranslation } from 'react-i18next';
 
 type StatusFilter = '' | 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
 
 export default function MyBookingsScreen() {
+  const { t } = useTranslation();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('');
   const { data: appointments, isLoading, refetch, isFetching } = useGetMyAppointmentsQuery({ 
     status: statusFilter || undefined 
@@ -15,20 +17,20 @@ export default function MyBookingsScreen() {
 
   const handleCancelAppointment = (appointmentId: string, serviceName: string) => {
     Alert.alert(
-      'Cancel Appointment',
-      `Are you sure you want to cancel your appointment for "${serviceName}"?`,
+      t('cancelAppointment'),
+      t('cancelAppointmentConfirm', { serviceName }),
       [
-        { text: 'No', style: 'cancel' },
+        { text: t('no'), style: 'cancel' },
         {
-          text: 'Yes, Cancel',
+          text: t('yesCancel'),
           style: 'destructive',
           onPress: async () => {
             Alert.prompt(
-              'Cancellation Reason',
-              'Please provide a reason for cancellation:',
+              t('cancellationReason'),
+              t('provideCancellationReason'),
               async (reason) => {
                 if (!reason || reason.trim() === '') {
-                  Alert.alert('Error', 'Please provide a cancellation reason');
+                  Alert.alert(t('error'), t('provideReason'));
                   return;
                 }
                 try {
@@ -36,12 +38,12 @@ export default function MyBookingsScreen() {
                     appointmentId,
                     reason: reason.trim()
                   }).unwrap();
-                  Alert.alert('Success', 'Appointment cancelled successfully');
+                  Alert.alert(t('success'), t('appointmentCancelledSuccessfully'));
                   refetch();
                 } catch (error: any) {
                   console.error('Cancel appointment error:', error);
-                  const errorMessage = error?.data?.detail || error?.data?.message || 'Failed to cancel appointment';
-                  Alert.alert('Error', errorMessage);
+                  const errorMessage = error?.data?.detail || error?.data?.message || t('failedToCancelAppointment');
+                  Alert.alert(t('error'), errorMessage);
                 }
               },
               'plain-text'
@@ -78,18 +80,18 @@ export default function MyBookingsScreen() {
   };
 
   const statusFilters: { label: string; value: StatusFilter }[] = [
-    { label: 'All', value: '' },
-    { label: 'Pending', value: 'pending' },
-    { label: 'Confirmed', value: 'confirmed' },
-    { label: 'In Progress', value: 'in_progress' },
-    { label: 'Completed', value: 'completed' },
-    { label: 'Cancelled', value: 'cancelled' },
+    { label: t('all'), value: '' },
+    { label: t('pending'), value: 'pending' },
+    { label: t('confirmed'), value: 'confirmed' },
+    { label: t('inProgress'), value: 'in_progress' },
+    { label: t('completed'), value: 'completed' },
+    { label: t('cancelled'), value: 'cancelled' },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>My Bookings</Text>
+        <Text style={styles.headerTitle}>{t('myBookings')}</Text>
       </View>
 
       <View style={styles.filterContainer}>
@@ -127,17 +129,17 @@ export default function MyBookingsScreen() {
         ) : !appointments || appointments.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Calendar color="#ccc" size={64} />
-            <Text style={styles.emptyTitle}>No Bookings Found</Text>
+            <Text style={styles.emptyTitle}>{t('noBookingsFound')}</Text>
             <Text style={styles.emptyText}>
               {statusFilter 
-                ? `You don't have any ${statusFilter} bookings` 
-                : "You haven't made any bookings yet"}
+                ? t('noBookingsWithStatus', { status: statusFilter }) 
+                : t('noBookingsYet')}
             </Text>
             <TouchableOpacity 
               style={styles.browseButton}
               onPress={() => router.push('/(tabs)/home')}
             >
-              <Text style={styles.browseButtonText}>Browse Services</Text>
+              <Text style={styles.browseButtonText}>{t('browseServices')}</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -218,7 +220,7 @@ export default function MyBookingsScreen() {
                       onPress={() => handleReschedule(appointment.id)}
                     >
                       <Edit color="#2D1A46" size={18} />
-                      <Text style={styles.rescheduleButtonText}>Reschedule</Text>
+                      <Text style={styles.rescheduleButtonText}>{t('reschedule')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -227,7 +229,7 @@ export default function MyBookingsScreen() {
                       disabled={isCancelling}
                     >
                       <X color="white" size={18} />
-                      <Text style={styles.cancelButtonText}>Cancel</Text>
+                      <Text style={styles.cancelButtonText}>{t('cancel')}</Text>
                     </TouchableOpacity>
                   </View>
                 )}
