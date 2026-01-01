@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery, FetchArgs, BaseQueryApi } from '@reduxjs/toolkit/query/react';
 import type { RootState } from './store';
 import { updateAccessToken, logout } from './authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://mubakulifestyle.com/api/v1';
 
@@ -13,6 +14,10 @@ const baseQuery = fetchBaseQuery({
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
+    
+    const language = await AsyncStorage.getItem('user-language');
+    headers.set('Accept-Language', language || 'en');
+    
     return headers;
   },
 }); 

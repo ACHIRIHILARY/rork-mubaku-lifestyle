@@ -1,11 +1,12 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Modal, TextInput } from 'react-native';
-import { User, Lock, Trash2, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package, Edit } from 'lucide-react-native';
+import { User, Lock, Trash2, LogOut, ChevronRight, Briefcase, Eye, EyeOff, Package, Edit, Languages } from 'lucide-react-native';
 import { useGetCurrentUserQuery, useChangePasswordMutation, useDeleteAccountMutation } from '@/store/services/authApi';
 import { useGetApplicationStatusQuery } from '@/store/services/profileApi';
 import { useAppDispatch } from '@/store/hooks';
 import { logout as logoutAction } from '@/store/authSlice';
+import { useTranslation } from 'react-i18next';
 
 
 export default function ProfileSettingsScreen() {
@@ -14,8 +15,9 @@ export default function ProfileSettingsScreen() {
   const [changePassword] = useChangePasswordMutation();
   const [deleteAccount] = useDeleteAccountMutation();
   const dispatch = useAppDispatch();
+  const { i18n } = useTranslation();
 
-
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [passwordModalVisible, setPasswordModalVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -122,6 +124,12 @@ export default function ProfileSettingsScreen() {
     Alert.alert('Profile Details', details);
   };
 
+  const handleChangeLanguage = async (lang: string) => {
+    await i18n.changeLanguage(lang);
+    setLanguageModalVisible(false);
+    Alert.alert('Success', `Language changed to ${lang === 'en' ? 'English' : 'Français'}`);
+  };
+
   const settingsOptions = [
     {
       id: 'edit-profile',
@@ -136,6 +144,13 @@ export default function ProfileSettingsScreen() {
       description: 'See your complete profile information',
       icon: User,
       onPress: handleViewProfileDetails
+    },
+    {
+      id: 'language',
+      title: 'Language',
+      description: `Current: ${i18n.language === 'en' ? 'English' : 'Français'}`,
+      icon: Languages,
+      onPress: () => setLanguageModalVisible(true)
     },
     {
       id: 'change-password',
@@ -380,6 +395,72 @@ export default function ProfileSettingsScreen() {
                 <ActivityIndicator color="white" />
               ) : (
                 <Text style={styles.changePasswordText}>Change Password</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={languageModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setLanguageModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.languageModalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.languageModalTitle}>Select Language</Text>
+              <TouchableOpacity onPress={() => setLanguageModalVisible(false)}>
+                <Text style={styles.modalClose}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity
+              style={[
+                styles.languageOption,
+                i18n.language === 'en' && styles.selectedLanguageOption
+              ]}
+              onPress={() => handleChangeLanguage('en')}
+            >
+              <View style={styles.languageInfo}>
+                <Text style={[
+                  styles.languageName,
+                  i18n.language === 'en' && styles.selectedLanguageText
+                ]}>English</Text>
+                <Text style={[
+                  styles.languageNative,
+                  i18n.language === 'en' && styles.selectedLanguageText
+                ]}>English</Text>
+              </View>
+              {i18n.language === 'en' && (
+                <View style={styles.checkmark}>
+                  <Text style={styles.checkmarkText}>✓</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.languageOption,
+                i18n.language === 'fr' && styles.selectedLanguageOption
+              ]}
+              onPress={() => handleChangeLanguage('fr')}
+            >
+              <View style={styles.languageInfo}>
+                <Text style={[
+                  styles.languageName,
+                  i18n.language === 'fr' && styles.selectedLanguageText
+                ]}>French</Text>
+                <Text style={[
+                  styles.languageNative,
+                  i18n.language === 'fr' && styles.selectedLanguageText
+                ]}>Français</Text>
+              </View>
+              {i18n.language === 'fr' && (
+                <View style={styles.checkmark}>
+                  <Text style={styles.checkmarkText}>✓</Text>
+                </View>
               )}
             </TouchableOpacity>
           </View>
@@ -745,5 +826,61 @@ const styles = StyleSheet.create({
   },
   settingBadge: {
     fontSize: 20,
+  },
+  languageModalContent: {
+    backgroundColor: '#6B46C1',
+    borderRadius: 20,
+    padding: 24,
+    width: '100%',
+    maxWidth: 400,
+  },
+  languageModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  languageOption: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  selectedLanguageOption: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderColor: 'white',
+  },
+  languageInfo: {
+    flex: 1,
+  },
+  languageName: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: 'rgba(255, 255, 255, 0.9)',
+    marginBottom: 4,
+  },
+  languageNative: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
+  selectedLanguageText: {
+    color: 'white',
+  },
+  checkmark: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkmarkText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#6B46C1',
   },
 });
