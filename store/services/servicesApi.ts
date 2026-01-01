@@ -26,6 +26,7 @@ interface Service {
   latitude?: number;
   longitude?: number;
   location?: string;
+  image_url?: string;
   created_at: string;
   updated_at: string;
   provider_details?: any;

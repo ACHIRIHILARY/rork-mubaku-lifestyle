@@ -201,19 +201,10 @@ export default function PaymentScreen() {
       console.log('[Payment] Payment initiated successfully');
       console.log('[Payment] Payment response:', JSON.stringify(paymentResponse, null, 2));
 
-      // Handle different response structures
-      let paymentData;
-      if (paymentResponse.payment) {
-        // Response has {success: true, payment: {...}} structure
-        paymentData = paymentResponse.payment;
-      } else if (paymentResponse.frontend_token) {
-        // Response is the payment object directly
-        paymentData = paymentResponse;
-      } else {
-        throw new Error('Invalid payment response structure');
-      }
+      // Handle response structure
+      const paymentData = paymentResponse.payment;
 
-      if (!paymentData.frontend_token) {
+      if (!paymentData || !paymentData.frontend_token) {
         throw new Error('Frontend token not found in payment response');
       }
 

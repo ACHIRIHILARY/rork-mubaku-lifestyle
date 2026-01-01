@@ -8,8 +8,8 @@ import { useGetAllServicesQuery } from '@/store/services/servicesApi';
 export default function ProviderDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
 
-  const { data: providers } = useGetApprovedProvidersQuery();
-  const { data: allServices } = useGetAllServicesQuery();
+  const { data: providers } = useGetApprovedProvidersQuery(undefined);
+  const { data: allServices } = useGetAllServicesQuery({});
 
   const provider = React.useMemo(() => {
     if (!providers || !id) return null;

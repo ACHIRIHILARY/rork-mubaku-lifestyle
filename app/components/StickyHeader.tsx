@@ -172,9 +172,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: 'white',
-    paddingHorizontal: 16,
-    paddingTop: Platform.OS === 'ios' ? 50 : 30, // Extra top padding for status bar
-    paddingBottom: 12,
+    paddingHorizontal: 12,
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#E5E5E5',
     elevation: 4,
@@ -196,29 +196,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   brandText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     color: '#2D1A46',
+    letterSpacing: 0.5,
   },
   ctaButton: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F4A896',
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    gap: 6,
+    gap: 4,
   },
   ctaText: {
     color: 'white',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '600',
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-start',
-    paddingTop: 80, // Account for status bar
+    paddingTop: Platform.OS === 'ios' ? 60 : 40,
   },
   menuContainer: {
     backgroundColor: 'white',
