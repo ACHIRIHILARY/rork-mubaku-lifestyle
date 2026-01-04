@@ -202,7 +202,7 @@ export default function PaymentScreen() {
       console.log('[Payment] Payment response:', JSON.stringify(paymentResponse, null, 2));
 
       // Handle response structure
-      const paymentData = paymentResponse.payment;
+      const paymentData = paymentResponse;
 
       if (!paymentData || !paymentData.frontend_token) {
         throw new Error('Frontend token not found in payment response');
