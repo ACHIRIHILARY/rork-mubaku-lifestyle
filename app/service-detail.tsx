@@ -82,8 +82,8 @@ export default function ServiceDetailScreen() {
           {service.category_details && (
             <Text style={styles.category}>{service.category_details.name}</Text>
           )}
-          {service.provider_details && (
-            <Text style={styles.providerName}>By {service.provider_details.full_name || 'Provider'}</Text>
+          {service.provider_location && (
+            <Text style={styles.providerName}>By {service.provider_location.full_name || 'Provider'}</Text>
           )}
           {service.total_bookings !== undefined && service.total_bookings > 0 && (
             <Text style={styles.bookingsCount}>{service.total_bookings} bookings</Text>
@@ -118,15 +118,15 @@ export default function ServiceDetailScreen() {
           )}
 
           {/* Location */}
-          {((service.latitude && service.longitude) || (service.provider_details?.latitude && service.provider_details?.longitude)) && (
+          {((service.provider_location?.latitude && service.provider_location?.longitude) || (service.provider_location?.latitude && service.provider_location?.longitude)) && (
             <View style={styles.locationCard}>
               <Text style={styles.cardTitle}>Location</Text>
               <Text style={styles.locationText}>
-                {service.location || service.provider_details?.location || service.provider_details?.city || 'Service Location'}
+                {service.provider_location?.location || service.provider_location?.location || service.provider_location?.city || 'Service Location'}
               </Text>
               <TouchableOpacity 
                 style={styles.viewLocationButton}
-                onPress={() => router.push(`/view-location?latitude=${service.latitude || service.provider_details?.latitude}&longitude=${service.longitude || service.provider_details?.longitude}&locationName=${encodeURIComponent(service.location || service.provider_details?.location || service.provider_details?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+                onPress={() => router.push(`/view-location?latitude=${service.provider_location?.latitude || service.provider_location?.latitude}&longitude=${service.provider_location?.longitude || service.provider_location?.longitude}&locationName=${encodeURIComponent(service.location || service.provider_location?.location || service.provider_location?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
               >
                 <MapPin color="white" size={18} />
                 <Text style={styles.viewLocationButtonText}>View on Map</Text>
@@ -135,14 +135,14 @@ export default function ServiceDetailScreen() {
           )}
 
           {/* Provider Info */}
-          {service.provider_details && (
+          {service.provider_location && (
             <View style={styles.providerCard}>
               <Text style={styles.cardTitle}>Provider Information</Text>
               <Text style={styles.providerInfo}>
-                {service.provider_details.full_name || 'Provider'}
+                {service.provider_location.full_name || 'Provider'}
               </Text>
-              {service.provider_details.email && (
-                <Text style={styles.providerContact}>{service.provider_details.email}</Text>
+              {service.provider_location.email && (
+                <Text style={styles.providerContact}>{service.provider_location.email}</Text>
               )}
             </View>
           )}

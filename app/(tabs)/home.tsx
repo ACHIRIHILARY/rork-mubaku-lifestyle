@@ -6,7 +6,7 @@ import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useTranslation } from 'react-i18next';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function HomeScreen() {
@@ -88,10 +88,16 @@ export default function HomeScreen() {
               <Text style={styles.subGreeting}>{t('subGreeting')}</Text>
             </View>
             <View style={styles.languageSwitcher}>
-              <TouchableOpacity style={styles.langButton} onPress={() => i18n.changeLanguage('en')}>
+              <TouchableOpacity style={styles.langButton} onPress={async() => {
+                await AsyncStorage.setItem('user-language', 'en')
+                i18n.changeLanguage('en')
+              }}>
                 <Text style={styles.langButtonText}>EN</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.langButton} onPress={() => i18n.changeLanguage('fr')}>
+              <TouchableOpacity style={styles.langButton} onPress={async() => {
+                await AsyncStorage.setItem('user-language', 'fr')
+                i18n.changeLanguage('fr')
+              }}>
                 <Text style={styles.langButtonText}>FR</Text>
               </TouchableOpacity>
             </View>

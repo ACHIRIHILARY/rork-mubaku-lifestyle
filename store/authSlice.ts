@@ -65,6 +65,7 @@ const authSlice = createSlice({
 
       AsyncStorage.setItem('accessToken', action.payload.accessToken);
       AsyncStorage.setItem('refreshToken', action.payload.refreshToken);
+      AsyncStorage.setItem('tokenLifeSpan', 'new Date');
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;

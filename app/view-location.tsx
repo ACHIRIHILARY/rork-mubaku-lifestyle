@@ -43,7 +43,7 @@ export default function ViewLocationScreen() {
     const url = Platform.select({
       ios: `maps:0,0?q=${label}@${latitude},${longitude}`,
       android: `geo:0,0?q=${latitude},${longitude}(${label})`,
-      web: `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`,
+      web: `https://www.google.com/maps/search/?api=AIzaSyCl2wtzcjTd1ekKgpNNgQRNuqRjtM8qRic&query=${latitude},${longitude}`,
     });
 
     if (url) {
@@ -52,7 +52,7 @@ export default function ViewLocationScreen() {
           if (supported) {
             Linking.openURL(url);
           } else {
-            const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+            const fallbackUrl = `https://www.google.com/maps/search/?api=AIzaSyCl2wtzcjTd1ekKgpNNgQRNuqRjtM8qRic&query=${latitude},${longitude}`;
             Linking.openURL(fallbackUrl);
           }
         })
