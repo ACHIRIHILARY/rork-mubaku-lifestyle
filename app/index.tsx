@@ -3,8 +3,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useAppSelector } from '@/store/hooks';
+import { useTranslation } from 'react-i18next';
 
 export default function SplashScreen() {
+  const { t } = useTranslation();
   const { isAuthenticated, user, isInitialized } = useAppSelector(state => state.auth);
 
   useEffect(() => {
@@ -29,15 +31,15 @@ export default function SplashScreen() {
       >
         <View style={styles.content}>
           <View style={styles.logoContainer}>
-            <Text style={styles.logoText}>Mubaku</Text>
-            <Text style={styles.logoSubtext}>STYLE</Text>
+            <Text style={styles.logoText}>{t('mubaku')}</Text>
+            <Text style={styles.logoSubtext}>{t('style')}</Text>
           </View>
 
-          <Text style={styles.tagline}>Book Your Look.</Text>
+          <Text style={styles.tagline}>{t('bookYourLook')}</Text>
 
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="large" color="white" />
-            <Text style={styles.loadingText}>Loading...</Text>
+            <Text style={styles.loadingText}>{t('loading')}</Text>
           </View>
         </View>
       </LinearGradient>
@@ -53,17 +55,17 @@ export default function SplashScreen() {
     >
       <View style={styles.content}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>Mubaku</Text>
-          <Text style={styles.logoSubtext}>STYLE</Text>
+          <Text style={styles.logoText}>{t('mubaku')}</Text>
+          <Text style={styles.logoSubtext}>{t('style')}</Text>
         </View>
 
-        <Text style={styles.tagline}>Book Your Look.</Text>
+        <Text style={styles.tagline}>{t('bookYourLook')}</Text>
 
         <TouchableOpacity
           style={styles.getStartedButton}
           onPress={() => router.push('/login' as any)}
         >
-          <Text style={styles.getStartedText}>Get Started</Text>
+          <Text style={styles.getStartedText}>{t('getStarted')}</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>

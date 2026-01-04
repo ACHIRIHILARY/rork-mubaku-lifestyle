@@ -68,11 +68,11 @@ export default function RegisterScreen() {
       }).unwrap();
 
       Alert.alert(
-        'Registration Successful!',
-        `Welcome to Mubaku Lifestyle, ${firstName}! Your account has been created successfully.\n\nYou can now login with your credentials.`,
+        t('registrationSuccessful'),
+        t('welcomeToMubaku', { name: firstName }),
         [
-          { 
-            text: 'Go to Login', 
+          {
+            text: t('login'),
             onPress: () => {
               router.replace('/login');
             },
@@ -126,7 +126,7 @@ export default function RegisterScreen() {
       }
       
       setErrorMessage(message);
-      Alert.alert('Registration Failed', message);
+      Alert.alert(t('registrationFailed'), message);
     } finally {
       isSubmitting.current = false;
     }

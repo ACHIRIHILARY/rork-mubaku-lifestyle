@@ -96,7 +96,7 @@ export default function LoginScreen() {
         }
       }
       
-      Alert.alert('Login Error', errorMessage);
+      Alert.alert(t('loginError'), errorMessage);
     }
   };
 
