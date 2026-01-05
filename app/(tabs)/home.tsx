@@ -88,16 +88,22 @@ export default function HomeScreen() {
               <Text style={styles.subGreeting}>{t('subGreeting')}</Text>
             </View>
             <View style={styles.languageSwitcher}>
-              <TouchableOpacity style={styles.langButton} onPress={async() => {
-                await AsyncStorage.setItem('user-language', 'en')
-                i18n.changeLanguage('en')
-              }}>
+              <TouchableOpacity
+                style={[styles.langButton, i18n.language === 'en' && styles.langButtonActive]}
+                onPress={async() => {
+                  await AsyncStorage.setItem('user-language', 'en')
+                  i18n.changeLanguage('en')
+                }}
+              >
                 <Text style={styles.langButtonText}>EN</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.langButton} onPress={async() => {
-                await AsyncStorage.setItem('user-language', 'fr')
-                i18n.changeLanguage('fr')
-              }}>
+              <TouchableOpacity
+                style={[styles.langButton, i18n.language === 'fr' && styles.langButtonActive]}
+                onPress={async() => {
+                  await AsyncStorage.setItem('user-language', 'fr')
+                  i18n.changeLanguage('fr')
+                }}
+              >
                 <Text style={styles.langButtonText}>FR</Text>
               </TouchableOpacity>
             </View>
@@ -233,7 +239,7 @@ export default function HomeScreen() {
                     )}
                   </View>
                   <View style={styles.serviceInfo}>
-                    <Text style={styles.serviceName} numberOfLines={1}>{service.name}</Text>
+                    <Text style={styles.serviceName} numberOfLines={2}>{service.name} by <Text style={{fontWeight: 'normal'}}>{service.provider_details?.full_name}</Text></Text>
                     <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.serviceMeta}>
                       <Text style={styles.servicePrice}>{Math.floor(Number(service.price))} {service.currency}</Text>
@@ -309,6 +315,9 @@ const styles = StyleSheet.create({
   langButtonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+  langButtonActive: {
+    backgroundColor: '#8B5CF6',
   },
   loadingContainer: {
     flex: 1,
@@ -619,7 +628,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 12,
     marginBottom: 16,
-    width: '31%', // 3 columns
+    width: '48%', // 2 columns
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -631,7 +640,7 @@ const styles = StyleSheet.create({
   },
   serviceImageContainer: {
     width: '100%',
-    height: 80,
+    height: 100,
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
     overflow: 'hidden',
@@ -649,34 +658,35 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   serviceImageText: {
-    fontSize: 24,
+    fontSize: 32,
   },
   serviceInfo: {
-    padding: 8,
+    padding: 12,
   },
   serviceName: {
-    fontSize: 11,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginBottom: 2,
+    marginBottom: 4,
   },
   serviceCategory: {
-    fontSize: 9,
+    fontSize: 12,
     color: '#666',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   serviceMeta: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 4,
   },
   servicePrice: {
-    fontSize: 10,
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#2D1A46',
   },
   serviceDuration: {
-    fontSize: 9,
+    fontSize: 12,
     color: '#666',
   },
 });

@@ -9,7 +9,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { store } from "@/store/store";
 
-import { initializeAuth } from "@/store/authSlice";
+import { initializeAuth, checkTokenExpiration } from "@/store/authSlice";
 import { authApi } from "@/store/services/authApi";
 
 
@@ -68,7 +68,7 @@ export default function RootLayout() {
     const initAuth = async () => {
       try {
         const result = await store.dispatch(initializeAuth()).unwrap();
-        
+
         if (result) {
           console.log('Auth tokens loaded from storage, fetching user data...');
           store.dispatch(authApi.endpoints.getCurrentUser.initiate());
@@ -83,6 +83,24 @@ export default function RootLayout() {
     };
 
     initAuth();
+  }, []);
+
+  // Periodic token expiration check (every hour)
+  useEffect(() => {
+    const checkExpiration = () => {
+      const state = store.getState();
+      if (state.auth.isAuthenticated && state.auth.tokenCreatedAt) {
+        store.dispatch(checkTokenExpiration());
+      }
+    };
+
+    // Check immediately when component mounts
+    checkExpiration();
+
+    // Set up interval to check every hour (3600000 ms)
+    const intervalId = setInterval(checkExpiration, 3600000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

@@ -1,6 +1,16 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// Constants for token expiration (10 days in milliseconds)
+const TOKEN_EXPIRATION_MS = 10 * 24 * 60 * 60 * 1000; // 10 days
+
+// Utility function to check if tokens are expired
+const areTokensExpired = (tokenCreatedAt: number): boolean => {
+  const now = Date.now();
+  const timeDiff = now - tokenCreatedAt;
+  return timeDiff >= TOKEN_EXPIRATION_MS;
+};
+
 interface User {
   pkid: number;
   username: string;
@@ -20,6 +30,7 @@ interface User {
 interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
+  tokenCreatedAt: number | null; // UTC timestamp when tokens were created
   user: User | null;
   isAuthenticated: boolean;
   isInitialized: boolean;
@@ -28,6 +39,7 @@ interface AuthState {
 const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
+  tokenCreatedAt: null,
   user: null,
   isAuthenticated: false,
   isInitialized: false,
@@ -39,9 +51,20 @@ export const initializeAuth = createAsyncThunk(
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
       const refreshToken = await AsyncStorage.getItem('refreshToken');
-      
-      if (accessToken && refreshToken) {
-        return { accessToken, refreshToken };
+      const tokenCreatedAtStr = await AsyncStorage.getItem('tokenCreatedAt');
+
+      if (accessToken && refreshToken && tokenCreatedAtStr) {
+        const tokenCreatedAt = parseInt(tokenCreatedAtStr, 10);
+
+        // Check if tokens are expired
+        if (areTokensExpired(tokenCreatedAt)) {
+          console.log('Tokens are expired (10+ days old), clearing stored tokens');
+          // Clear expired tokens
+          await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'tokenCreatedAt']);
+          return null;
+        }
+
+        return { accessToken, refreshToken, tokenCreatedAt };
       }
       return null;
     } catch (error) {
@@ -56,8 +79,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<{ accessToken: string; refreshToken: string; user?: User }>) => {
+      const now = Date.now(); // UTC timestamp in milliseconds
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
+      state.tokenCreatedAt = now;
       if (action.payload.user) {
         state.user = action.payload.user;
       }
@@ -65,7 +90,7 @@ const authSlice = createSlice({
 
       AsyncStorage.setItem('accessToken', action.payload.accessToken);
       AsyncStorage.setItem('refreshToken', action.payload.refreshToken);
-      AsyncStorage.setItem('tokenLifeSpan', 'new Date');
+      AsyncStorage.setItem('tokenCreatedAt', now.toString());
     },
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
@@ -77,11 +102,13 @@ const authSlice = createSlice({
     logout: (state) => {
       state.accessToken = null;
       state.refreshToken = null;
+      state.tokenCreatedAt = null;
       state.user = null;
       state.isAuthenticated = false;
 
       AsyncStorage.removeItem('accessToken');
       AsyncStorage.removeItem('refreshToken');
+      AsyncStorage.removeItem('tokenCreatedAt');
     },
   },
   extraReducers: (builder) => {
@@ -90,6 +117,7 @@ const authSlice = createSlice({
         if (action.payload) {
           state.accessToken = action.payload.accessToken;
           state.refreshToken = action.payload.refreshToken;
+          state.tokenCreatedAt = action.payload.tokenCreatedAt || null;
           state.isAuthenticated = true;
         }
         state.isInitialized = true;
@@ -99,6 +127,22 @@ const authSlice = createSlice({
       });
   },
 });
+
+// Action to check token expiration and logout if expired
+export const checkTokenExpiration = createAsyncThunk(
+  'auth/checkExpiration',
+  async (_, { getState, dispatch }) => {
+    const state = getState() as { auth: AuthState };
+
+    if (state.auth.tokenCreatedAt && areTokensExpired(state.auth.tokenCreatedAt)) {
+      console.log('Token expiration check: tokens are expired, logging out');
+      dispatch(logout());
+      return true; // Tokens were expired and user was logged out
+    }
+
+    return false; // Tokens are still valid
+  }
+);
 
 export const { setCredentials, setUser, updateAccessToken, logout } = authSlice.actions;
 export default authSlice.reducer;
