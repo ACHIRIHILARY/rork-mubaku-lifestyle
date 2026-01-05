@@ -136,6 +136,17 @@ export const appointmentApi = api.injectEndpoints({
       ],
     }),
 
+    completeAppointment: builder.mutation<Appointment, string>({
+      query: (appointmentId) => ({
+        url: `/appointments/${appointmentId}/complete/`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, appointmentId) => [
+        { type: 'Appointment', id: appointmentId },
+        'Appointment',
+      ],
+    }),
+
     getProviderAvailability: builder.query<Availability[], void>({
       query: () => '/appointments/availability/',
       providesTags: ['Availability'],
@@ -223,4 +234,5 @@ export const {
   useDeleteAvailabilityExceptionMutation,
   useGetMonthlyCalendarQuery,
   useGetDailyDetailsQuery,
+  useCompleteAppointmentMutation,
 } = appointmentApi;

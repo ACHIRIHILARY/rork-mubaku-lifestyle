@@ -1,26 +1,81 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform } from 'react-native';
-import { CheckCircle, Clock, Star } from 'lucide-react-native';
-import { useGetAppointmentDetailQuery } from '@/store/services/appointmentApi';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform, Alert } from 'react-native';
+import { CheckCircle, Clock, Star, Receipt, CalendarDays, MapPin, XCircle } from 'lucide-react-native'; // Added Receipt, CalendarDays, MapPin, XCircle
+import { useGetAppointmentDetailQuery, useCancelAppointmentMutation, useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
 
 export default function BookingStatus() {
   const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
-  const { data: appointment, isLoading } = useGetAppointmentDetailQuery(appointmentId || '', {
+  const { data: appointment, isLoading, refetch } = useGetAppointmentDetailQuery(appointmentId || '', {
     skip: !appointmentId,
   });
   const [rating, setRating] = useState<number>(0);
   const [review, setReview] = useState('');
 
+  const [cancelAppointment, { isLoading: isCancelling }] = useCancelAppointmentMutation();
+  const [completeAppointment, { isLoading: isCompleting }] = useCompleteAppointmentMutation();
+
   const statusSteps = [
     { id: 1, title: 'Booked', completed: true, icon: CheckCircle },
-    { id: 2, title: 'In Progress', completed: false, icon: Clock },
-    { id: 3, title: 'Completed', completed: false, icon: CheckCircle },
+    { id: 2, title: 'In Progress', completed: appointment?.status === 'in_progress' || appointment?.status === 'completed', icon: Clock },
+    { id: 3, title: 'Completed', completed: appointment?.status === 'completed', icon: CheckCircle },
   ];
 
   const handleSubmitReview = () => {
     console.log('Review submitted:', { rating, review, appointmentId });
+    // In a real app, you would send this review to your API
+    Alert.alert('Thank you!', 'Your review has been submitted.');
     router.push('/(tabs)/home');
+  };
+
+  const handleCompleteService = async () => {
+    if (!appointmentId) return;
+
+    Alert.alert(
+      'Complete Service',
+      'Are you sure you want to mark this service as completed? Funds will be released to the provider.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Confirm',
+          onPress: async () => {
+            try {
+              await completeAppointment(appointmentId).unwrap();
+              Alert.alert('Success', 'Service marked as completed. Funds released to provider.');
+              refetch(); // Refetch to update status
+            } catch (error) {
+              console.error('Failed to complete service:', error);
+              Alert.alert('Error', 'Could not mark service as completed.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const handleCancelBooking = async () => {
+    if (!appointmentId) return;
+
+    Alert.alert(
+      'Cancel Appointment',
+      'Are you sure you want to cancel this appointment? A cancellation fee may apply.',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes, Cancel',
+          onPress: async () => {
+            try {
+              await cancelAppointment({ appointmentId, reason: 'User cancelled via app' }).unwrap();
+              Alert.alert('Success', 'Appointment cancelled successfully.');
+              refetch(); // Refetch to update status
+            } catch (error) {
+              console.error('Failed to cancel appointment:', error);
+              Alert.alert('Error', 'Could not cancel appointment.');
+            }
+          },
+        },
+      ]
+    );
   };
 
   const formatTime = (dateStr: string) => {
@@ -75,27 +130,48 @@ export default function BookingStatus() {
     );
   }
 
+  const isCompleted = appointment.status === 'completed';
+  const isCancelled = appointment.status === 'cancelled';
+  const canComplete = (appointment.status === 'confirmed' || appointment.status === 'in_progress');
+  const canCancel = !isCompleted && !isCancelled;
+  const showEscrowMessage = appointment.payment_status === 'held_in_escrow' && !isCompleted && !isCancelled;
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.content}>
         {/* Success Message */}
         <View style={styles.successContainer}>
-          <CheckCircle color="#4CAF50" size={64} />
-          <Text style={styles.successTitle}>Booking Confirmed!</Text>
+          {isCompleted ? (
+            <CheckCircle color="#4CAF50" size={64} />
+          ) : isCancelled ? (
+            <XCircle color="#EF4444" size={64} />
+          ) : (
+            <CheckCircle color="#4CAF50" size={64} />
+          )}
+          
+          <Text style={styles.successTitle}>
+            {isCompleted ? 'Service Completed!' : isCancelled ? 'Appointment Cancelled' : 'Booking Confirmed!'}
+          </Text>
           <Text style={styles.successMessage}>
-            Your appointment has been successfully booked
+            {isCompleted ? 'Hope you enjoyed your service!' : isCancelled ? 'Your appointment has been cancelled as requested.' : 'Your appointment has been successfully booked.'}
           </Text>
         </View>
 
-        {/* Booking Details */}
+        {/* Receipt Card */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Booking Details</Text>
-          {appointment.service && (
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Service:</Text>
-              <Text style={styles.detailValue}>{appointment.service.name}</Text>
-            </View>
-          )}
+          <View style={styles.receiptHeader}>
+            <Receipt color="#2D1A46" size={24} />
+            <Text style={styles.cardTitle}>Transaction Receipt</Text>
+          </View>
+          
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Service:</Text>
+            <Text style={styles.detailValue}>{appointment.service?.name || 'N/A'}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Provider:</Text>
+            <Text style={styles.detailValue}>{appointment.provider?.business_name || appointment.provider?.name || 'N/A'}</Text>
+          </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Date:</Text>
             <Text style={styles.detailValue}>
@@ -116,13 +192,23 @@ export default function BookingStatus() {
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Status:</Text>
             <Text style={[styles.detailValue, styles.statusText]}>
-              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1).replace(/_/g, ' ')}
             </Text>
           </View>
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Total Paid:</Text>
-            <Text style={styles.detailValue}>{appointment.currency} {appointment.amount}</Text>
+            <Text style={[styles.detailValue, styles.amountValue]}>
+              {appointment.currency} {appointment.amount.toFixed(2)}
+            </Text>
           </View>
+          
+          {showEscrowMessage && (
+            <View style={styles.escrowInfo}>
+              <Text style={styles.escrowText}>
+                🔒 Funds held securely in escrow until service completion
+              </Text>
+            </View>
+          )}
         </View>
 
         {/* Progress Tracker */}
@@ -162,41 +248,81 @@ export default function BookingStatus() {
           </View>
         </View>
 
+        {/* Action Buttons */}
+        {(canComplete || canCancel) && (
+          <View style={styles.actionButtonsCard}>
+            {canComplete && (
+              <TouchableOpacity
+                style={[styles.actionButton, styles.completeButton]}
+                onPress={handleCompleteService}
+                disabled={isCompleting}
+              >
+                {isCompleting ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <>
+                    <CheckCircle color="white" size={20} />
+                    <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            )}
+            {canCancel && (
+              <TouchableOpacity
+                style={[styles.actionButton, styles.cancelButton]}
+                onPress={handleCancelBooking}
+                disabled={isCancelling}
+              >
+                {isCancelling ? (
+                  <ActivityIndicator color="white" />
+                ) : (
+                  <>
+                    <XCircle color="white" size={20} />
+                    <Text style={styles.actionButtonText}>Cancel Appointment</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+
         {/* Review Section */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Rate Your Experience</Text>
-          
-          <View style={styles.ratingContainer}>
-            <Text style={styles.ratingLabel}>How was your service?</Text>
-            <View style={styles.starsContainer}>
-              {renderStars()}
+        {isCompleted && (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Rate Your Experience</Text>
+            
+            <View style={styles.ratingContainer}>
+              <Text style={styles.ratingLabel}>How was your service?</Text>
+              <View style={styles.starsContainer}>
+                {renderStars()}
+              </View>
             </View>
-          </View>
 
-          <View style={styles.reviewContainer}>
-            <Text style={styles.reviewLabel}>Write a review (optional)</Text>
-            <TextInput
-              style={styles.reviewInput}
-              value={review}
-              onChangeText={setReview}
-              placeholder="Share your experience..."
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-            />
-          </View>
+            <View style={styles.reviewContainer}>
+              <Text style={styles.reviewLabel}>Write a review (optional)</Text>
+              <TextInput
+                style={styles.reviewInput}
+                value={review}
+                onChangeText={setReview}
+                placeholder="Share your experience..."
+                multiline
+                numberOfLines={4}
+                textAlignVertical="top"
+              />
+            </View>
 
-          <TouchableOpacity 
-            style={styles.submitButton}
-            onPress={handleSubmitReview}
-          >
-            <Text style={styles.submitButtonText}>Submit Review</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity 
+              style={styles.submitButton}
+              onPress={handleSubmitReview}
+            >
+              <Text style={styles.submitButtonText}>Submit Review</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </ScrollView>
 
       {/* Home Button */}
-      <View style={styles.buttonContainer}>
+      <View style={styles.bottomButtonContainer}>
         <TouchableOpacity
           style={styles.homeButton}
           onPress={() => router.push('/(tabs)/home')}
@@ -228,6 +354,7 @@ const styles = StyleSheet.create({
     color: '#2D1A46',
     marginTop: 16,
     marginBottom: 8,
+    textAlign: 'center',
   },
   successMessage: {
     fontSize: 16,
@@ -248,11 +375,16 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  receiptHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 10,
+  },
   cardTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginBottom: 16,
   },
   detailRow: {
     flexDirection: 'row',
@@ -268,6 +400,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#2D1A46',
+    textAlign: 'right',
+    flexShrink: 1, // Allow text to shrink
+  },
+  amountValue: {
+    color: '#10B981', // Green for amount
+    fontWeight: '700',
+  },
+  escrowInfo: {
+    marginTop: 15,
+    paddingTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  escrowText: {
+    fontSize: 13,
+    color: '#10B981',
+    textAlign: 'center',
+    fontWeight: '500',
   },
   progressContainer: {
     paddingVertical: 10,
@@ -307,6 +457,40 @@ const styles = StyleSheet.create({
   },
   completedStepTitle: {
     color: '#2D1A46',
+    fontWeight: '600',
+  },
+  actionButtonsCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+    gap: 10,
+  },
+  actionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    borderRadius: 12,
+    gap: 8,
+  },
+  completeButton: {
+    backgroundColor: '#4CAF50', // Green for complete
+  },
+  cancelButton: {
+    backgroundColor: '#EF4444', // Red for cancel
+  },
+  actionButtonText: {
+    color: 'white',
+    fontSize: 16,
     fontWeight: '600',
   },
   ratingContainer: {
@@ -353,7 +537,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  buttonContainer: {
+  bottomButtonContainer: {
     paddingHorizontal: 24,
     paddingVertical: 20,
     paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
