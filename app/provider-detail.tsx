@@ -35,10 +35,12 @@ export default function ProviderDetailScreen() {
       `Call ${provider.full_name}?`,
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Call', onPress: () => {
-          // In a real app, you'd use Linking to make a call
-          console.log('Call:', provider.phone_number);
-        }},
+        {
+          text: 'Call', onPress: () => {
+            // In a real app, you'd use Linking to make a call
+            console.log('Call:', provider.phone_number);
+          }
+        },
       ]
     );
   };
@@ -68,6 +70,21 @@ export default function ProviderDetailScreen() {
       </View>
 
       <ScrollView style={styles.content}>
+        {/* Image Gallery */}
+        <View style={styles.imageGallery}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.imageScroll}>
+            {provider.profile_photo ? (
+              <Image source={{ uri: provider.profile_photo }} style={styles.galleryImage} />
+            ) : (
+              <View style={styles.galleryImagePlaceholder}>
+                <User color="white" size={64} />
+                <Text style={styles.galleryPlaceholderText}>Provider Image</Text>
+              </View>
+            )}
+            {/* Future: Add more images here when API supports multiple images */}
+          </ScrollView>
+        </View>
+
         {/* Provider Profile Card */}
         <View style={styles.profileCard}>
           <View style={styles.profileHeader}>
@@ -97,6 +114,47 @@ export default function ProviderDetailScreen() {
               <Text style={styles.aboutText}>{provider.about_me}</Text>
             </View>
           )}
+
+          {/* Reviews Section */}
+          <View style={styles.reviewsSection}>
+            <View style={styles.reviewsHeader}>
+              <Text style={styles.sectionTitle}>Customer Reviews</Text>
+              <View style={styles.averageRating}>
+                <Star color="#FFD700" size={20} fill="#FFD700" />
+                <Text style={styles.averageRatingText}>4.8</Text>
+                <Text style={styles.totalReviewsText}>(24 reviews)</Text>
+              </View>
+            </View>
+
+            {/* Sample Reviews - In real app, fetch from API */}
+            <View style={styles.reviewList}>
+              <View style={styles.reviewCard}>
+                <View style={styles.reviewHeader}>
+                  <Text style={styles.reviewerName}>Alice Johnson</Text>
+                  <View style={styles.reviewRating}>
+                    <Star color="#FFD700" size={14} fill="#FFD700" />
+                    <Text style={styles.reviewRatingText}>5</Text>
+                  </View>
+                </View>
+                <Text style={styles.reviewComment}>Great service! Highly professional and punctual. Will definitely book again.</Text>
+              </View>
+
+              <View style={styles.reviewCard}>
+                <View style={styles.reviewHeader}>
+                  <Text style={styles.reviewerName}>Bob Wilson</Text>
+                  <View style={styles.reviewRating}>
+                    <Star color="#FFD700" size={14} fill="#FFD700" />
+                    <Text style={styles.reviewRatingText}>4</Text>
+                  </View>
+                </View>
+                <Text style={styles.reviewComment}>Very satisfied with the service. Clean and efficient work.</Text>
+              </View>
+
+              <TouchableOpacity style={styles.viewAllReviewsButton}>
+                <Text style={styles.viewAllReviewsText}>View All Reviews</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           {/* Contact Info */}
           <View style={styles.contactSection}>
@@ -185,6 +243,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
   },
+
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -369,5 +428,102 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#666',
     textAlign: 'center',
+  },
+  imageGallery: {
+    height: 250,
+    backgroundColor: '#F5F5F5',
+  },
+  imageScroll: {
+    flex: 1,
+  },
+  galleryImage: {
+    width: 300,
+    height: 200,
+    margin: 16,
+    borderRadius: 12,
+    resizeMode: 'cover',
+  },
+  galleryImagePlaceholder: {
+    width: 300,
+    height: 200,
+    margin: 16,
+    borderRadius: 12,
+    backgroundColor: '#2D1A46',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  galleryPlaceholderText: {
+    color: 'white',
+    fontSize: 16,
+    marginTop: 8,
+  },
+  reviewsSection: {
+    marginBottom: 16,
+  },
+  reviewsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  averageRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  averageRatingText: {
+    marginLeft: 4,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  totalReviewsText: {
+    marginLeft: 4,
+    fontSize: 14,
+    color: '#666',
+  },
+  reviewList: {
+    gap: 12,
+  },
+  reviewCard: {
+    backgroundColor: '#F9F9F9',
+    borderRadius: 8,
+    padding: 12,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  reviewerName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2D1A46',
+  },
+  reviewRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  reviewRatingText: {
+    marginLeft: 4,
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#666',
+  },
+  reviewComment: {
+    fontSize: 14,
+    color: '#666',
+    lineHeight: 18,
+  },
+  viewAllReviewsButton: {
+    alignSelf: 'center',
+    marginTop: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+  },
+  viewAllReviewsText: {
+    fontSize: 14,
+    color: '#F4A896',
+    fontWeight: '600',
   },
 });

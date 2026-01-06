@@ -1,19 +1,35 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl } from 'react-native';
-import { Calendar, Clock, MapPin, DollarSign, X, Edit } from 'lucide-react-native';
+import { Calendar, Clock, MapPin, DollarSign, X, Edit, CheckCircle, AlertTriangle } from 'lucide-react-native';
 import { useGetMyAppointmentsQuery, useCancelAppointmentMutation } from '@/store/services/appointmentApi';
 import { useTranslation } from 'react-i18next';
 
-type StatusFilter = '' | 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+type TabType = 'upcoming' | 'completed' | 'cancelled';
 
 export default function MyBookingsScreen() {
   const { t } = useTranslation();
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('');
-  const { data: appointments, isLoading, refetch, isFetching } = useGetMyAppointmentsQuery({ 
-    status: statusFilter || undefined 
-  });
+  const [activeTab, setActiveTab] = useState<TabType>('upcoming');
+  const { data: allAppointments, isLoading, refetch, isFetching } = useGetMyAppointmentsQuery({});
   const [cancelAppointment, { isLoading: isCancelling }] = useCancelAppointmentMutation();
+
+  // Filter appointments based on active tab
+  const appointments = React.useMemo(() => {
+    if (!allAppointments) return [];
+
+    switch (activeTab) {
+      case 'upcoming':
+        return allAppointments.filter(apt =>
+          ['pending', 'confirmed', 'in_progress'].includes(apt.status)
+        );
+      case 'completed':
+        return allAppointments.filter(apt => apt.status === 'completed');
+      case 'cancelled':
+        return allAppointments.filter(apt => apt.status === 'cancelled');
+      default:
+        return allAppointments;
+    }
+  }, [allAppointments, activeTab]);
 
   const handleCancelAppointment = (appointmentId: string, serviceName: string) => {
     Alert.alert(
@@ -79,13 +95,25 @@ export default function MyBookingsScreen() {
     return status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   };
 
-  const statusFilters: { label: string; value: StatusFilter }[] = [
-    { label: t('all'), value: '' },
-    { label: t('pending'), value: 'pending' },
-    { label: t('confirmed'), value: 'confirmed' },
-    { label: t('inProgress'), value: 'in_progress' },
-    { label: t('completed'), value: 'completed' },
-    { label: t('cancelled'), value: 'cancelled' },
+  const tabs: { id: TabType; label: string; icon: any; count?: number }[] = [
+    {
+      id: 'upcoming',
+      label: t('upcoming') || 'Upcoming',
+      icon: Calendar,
+      count: allAppointments?.filter(apt => ['pending', 'confirmed', 'in_progress'].includes(apt.status)).length || 0
+    },
+    {
+      id: 'completed',
+      label: t('completed') || 'Completed',
+      icon: CheckCircle,
+      count: allAppointments?.filter(apt => apt.status === 'completed').length || 0
+    },
+    {
+      id: 'cancelled',
+      label: t('cancelled') || 'Cancelled',
+      icon: AlertTriangle,
+      count: allAppointments?.filter(apt => apt.status === 'cancelled').length || 0
+    },
   ];
 
   return (
@@ -94,29 +122,37 @@ export default function MyBookingsScreen() {
         <Text style={styles.headerTitle}>{t('myBookings')}</Text>
       </View>
 
-      <View style={styles.filterContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
-          {statusFilters.map((filter) => (
+      {/* Tab Navigation */}
+      <View style={styles.tabContainer}>
+        {tabs.map((tab) => {
+          const IconComponent = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
             <TouchableOpacity
-              key={filter.value}
-              style={[
-                styles.filterButton,
-                statusFilter === filter.value && styles.filterButtonActive
-              ]}
-              onPress={() => setStatusFilter(filter.value)}
+              key={tab.id}
+              style={[styles.tabButton, isActive && styles.tabButtonActive]}
+              onPress={() => setActiveTab(tab.id)}
             >
-              <Text style={[
-                styles.filterText,
-                statusFilter === filter.value && styles.filterTextActive
-              ]}>
-                {filter.label}
+              <IconComponent
+                color={isActive ? 'white' : '#666'}
+                size={20}
+              />
+              <Text style={[styles.tabText, isActive && styles.tabTextActive]}>
+                {tab.label}
               </Text>
+              {tab.count !== undefined && tab.count > 0 && (
+                <View style={[styles.tabBadge, isActive && styles.tabBadgeActive]}>
+                  <Text style={[styles.tabBadgeText, isActive && styles.tabBadgeTextActive]}>
+                    {tab.count}
+                  </Text>
+                </View>
+              )}
             </TouchableOpacity>
-          ))}
-        </ScrollView>
+          );
+        })}
       </View>
 
-      <ScrollView 
+      <ScrollView
         style={styles.content}
         refreshControl={
           <RefreshControl refreshing={isFetching} onRefresh={refetch} />
@@ -129,18 +165,24 @@ export default function MyBookingsScreen() {
         ) : !appointments || appointments.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Calendar color="#ccc" size={64} />
-            <Text style={styles.emptyTitle}>{t('noBookingsFound')}</Text>
-            <Text style={styles.emptyText}>
-              {statusFilter 
-                ? t('noBookingsWithStatus', { status: statusFilter }) 
-                : t('noBookingsYet')}
+            <Text style={styles.emptyTitle}>
+              {activeTab === 'upcoming' && (t('noUpcomingBookings') || 'No upcoming bookings')}
+              {activeTab === 'completed' && (t('noCompletedBookings') || 'No completed bookings')}
+              {activeTab === 'cancelled' && (t('noCancelledBookings') || 'No cancelled bookings')}
             </Text>
-            <TouchableOpacity 
-              style={styles.browseButton}
-              onPress={() => router.push('/(tabs)/home')}
-            >
-              <Text style={styles.browseButtonText}>{t('browseServices')}</Text>
-            </TouchableOpacity>
+            <Text style={styles.emptyText}>
+              {activeTab === 'upcoming' && (t('bookYourFirstService') || 'Book your first service to get started!')}
+              {activeTab === 'completed' && (t('noCompletedBookingsYet') || 'No completed bookings yet.')}
+              {activeTab === 'cancelled' && (t('noCancelledBookingsYet') || 'No cancelled bookings.')}
+            </Text>
+            {activeTab === 'upcoming' && (
+              <TouchableOpacity
+                style={styles.browseButton}
+                onPress={() => router.push('/(tabs)/home')}
+              >
+                <Text style={styles.browseButtonText}>{t('browseServices')}</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ) : (
           <View style={styles.appointmentsContainer}>
@@ -233,6 +275,24 @@ export default function MyBookingsScreen() {
                     </TouchableOpacity>
                   </View>
                 )}
+
+                {appointment.status === 'completed' && (
+                  <View style={styles.appointmentActions}>
+                    <TouchableOpacity
+                      style={styles.reviewButton}
+                      onPress={() => router.push(`/booking/write-review?appointmentId=${appointment.id}` as any)}
+                    >
+                      <Text style={styles.reviewButtonText}>{t('leaveReview')}</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.bookAgainButton}
+                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}`)}
+                    >
+                      <Text style={styles.bookAgainButtonText}>{t('bookAgain')}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             ))}
           </View>
@@ -257,6 +317,59 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
+    color: 'white',
+  },
+  tabContainer: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E5E5',
+  },
+  tabButton: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    marginHorizontal: 4,
+    backgroundColor: '#F5F5F5',
+    position: 'relative',
+  },
+  tabButtonActive: {
+    backgroundColor: '#2D1A46',
+  },
+  tabText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+    marginTop: 4,
+  },
+  tabTextActive: {
+    color: 'white',
+  },
+  tabBadge: {
+    position: 'absolute',
+    top: -8,
+    right: -8,
+    backgroundColor: '#F4A896',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+  },
+  tabBadgeActive: {
+    backgroundColor: '#F4A896',
+  },
+  tabBadgeText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  tabBadgeTextActive: {
     color: 'white',
   },
   filterContainer: {
@@ -433,5 +546,31 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.6,
+  },
+  reviewButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#F4A896',
+  },
+  reviewButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
+  },
+  bookAgainButton: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#2D1A46',
+  },
+  bookAgainButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
   },
 });

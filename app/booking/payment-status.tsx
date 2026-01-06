@@ -27,7 +27,7 @@ export default function PaymentStatusScreen() {
 
     const startPolling = async () => {
       console.log('[PaymentStatus] Starting payment status polling');
-      
+
       try {
         await getPaymentStatus(frontendToken);
       } catch (err) {
@@ -38,7 +38,7 @@ export default function PaymentStatusScreen() {
       pollingIntervalRef.current = setInterval(async () => {
         pollCount++;
         console.log(`[PaymentStatus] Poll #${pollCount}`);
-        
+
         if (pollCount >= 60) {
           console.log('[PaymentStatus] Max polling attempts reached');
           stopPolling();
@@ -47,7 +47,7 @@ export default function PaymentStatusScreen() {
 
         try {
           const result = await getPaymentStatus(frontendToken);
-          
+
           if (result.data?.polling?.stop) {
             console.log('[PaymentStatus] Stopping polling:', result.data.polling.reason);
             stopPolling();
@@ -68,13 +68,13 @@ export default function PaymentStatusScreen() {
     timerIntervalRef.current = setInterval(() => {
       setTimeElapsed((prev) => {
         const newTime = prev + 1;
-        
+
         if (newTime >= 300) {
           console.log('[PaymentStatus] Payment timeout reached (5 minutes)');
           setHasExpired(true);
           stopPolling();
         }
-        
+
         return newTime;
       });
     }, 1000);
@@ -172,7 +172,7 @@ export default function PaymentStatusScreen() {
 
   const getStatusTitle = (status: PaymentStatus) => {
     if (hasExpired) return 'Payment Timeout';
-    
+
     switch (status) {
       case 'completed':
         return 'Payment Successful!';
@@ -311,9 +311,10 @@ Thank you for using Mu Baku Lifestyle!
   };
 
   const handleViewLocation = () => {
-    if (payment?.appointment?.id) {
-      // Navigate to appointment status which should have location info
-      router.push(`/booking/status?appointmentId=${payment.appointment.id}` as any);
+    if (payment?.appointment?.service_location) {
+      // Navigate to view location with service coordinates
+      const location = payment.appointment.service_location;
+      router.push(`/view-location?latitude=${location.latitude}&longitude=${location.longitude}&locationName=${encodeURIComponent(location.location || 'Service Location')}&serviceName=${encodeURIComponent(payment.appointment.service || 'Service')}` as any);
     } else {
       Alert.alert('Location Unavailable', 'Service location information is not available yet.');
     }
@@ -365,7 +366,11 @@ Thank you for using Mu Baku Lifestyle!
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollContent} contentContainerStyle={styles.scrollContentContainer}>
+      <ScrollView
+        style={styles.scrollContent}
+        contentContainerStyle={styles.scrollContentContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.content}>
           <View style={styles.iconContainer}>
             {hasExpired ? <XCircle color="#EF4444" size={80} /> : getStatusIcon(status)}
@@ -389,11 +394,11 @@ Thank you for using Mu Baku Lifestyle!
               {payment?.state_machine && (
                 <View style={styles.progressContainer}>
                   <View style={styles.progressBar}>
-                    <View 
+                    <View
                       style={[
                         styles.progressFill,
                         { width: `${payment.state_machine.progress}%`, backgroundColor: statusColor }
-                      ]} 
+                      ]}
                     />
                   </View>
                   <Text style={styles.progressText}>
@@ -410,7 +415,7 @@ Thank you for using Mu Baku Lifestyle!
                   </Text>
                 </View>
                 <Text style={styles.instructionText}>
-                  {status === 'pending' 
+                  {status === 'pending'
                     ? `Look for a USSD popup on ${phoneNumber}. Enter your mobile money PIN to approve the payment.`
                     : 'Please wait while we confirm your payment with the mobile money provider.'}
                 </Text>
@@ -493,24 +498,14 @@ Thank you for using Mu Baku Lifestyle!
             <TouchableOpacity style={styles.primaryButton} onPress={handleViewBooking} accessible={true}>
               <Text style={styles.primaryButtonText}>View My Booking</Text>
             </TouchableOpacity>
-            <View style={styles.actionButtonsRow}>
-              <TouchableOpacity
-                style={[styles.actionButton, styles.receiptButton]}
-                onPress={handleViewReceipt}
-                accessible={true}
-              >
-                <Receipt color="white" size={20} />
-                <Text style={styles.actionButtonText}>Receipt</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.actionButton, styles.locationButton]}
-                onPress={handleViewLocation}
-                accessible={true}
-              >
-                <MapPin color="white" size={20} />
-                <Text style={styles.actionButtonText}>Location</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={[styles.actionButton, styles.receiptButton]}
+              onPress={handleViewReceipt}
+              accessible={true}
+            >
+              <Receipt color="white" size={20} />
+              <Text style={styles.actionButtonText}>Receipt</Text>
+            </TouchableOpacity>
             <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
               <Text style={styles.secondaryButtonText}>Back to Home</Text>
             </TouchableOpacity>

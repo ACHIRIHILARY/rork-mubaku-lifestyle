@@ -15,17 +15,17 @@ export default function HomeScreen() {
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [debouncedSearch, setDebouncedSearch] = useState<string>('');
-  
+
   const { data: user } = useGetCurrentUserQuery();
-  
+
   const queryParams: { category?: string; search?: string } = {};
   if (selectedCategory) queryParams.category = selectedCategory.toString();
   if (debouncedSearch) queryParams.search = debouncedSearch;
-  
+
   const { data: services, isLoading: servicesLoading } = useGetAllServicesQuery(queryParams);
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: providers } = useGetApprovedProvidersQuery();
-  
+
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}` as any);
   };
@@ -34,23 +34,23 @@ export default function HomeScreen() {
     console.log('Provider selected:', providerId);
     router.push(`/provider-detail?id=${providerId}` as any);
   };
-  
+
   const handleCategoryPress = (categoryId: number) => {
     console.log('Category selected:', categoryId);
     router.push(`/category-detail?id=${categoryId}` as any);
   };
-  
+
   const handleCategoryFilter = (categoryPkid: number) => {
     console.log('Filtering by category pkid:', categoryPkid);
     setSelectedCategory(categoryPkid);
   };
-  
+
   const handleClearSearch = useCallback(() => {
     console.log('Clearing search');
     setSearchQuery('');
     setDebouncedSearch('');
   }, []);
-  
+
   const handleClearAll = useCallback(() => {
     console.log('Clearing all filters');
     setSelectedCategory(null);
@@ -59,23 +59,53 @@ export default function HomeScreen() {
   }, []);
 
 
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
     }, 500);
-    
+
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  console.log('Home screen loaded', { 
-    user, 
-    servicesCount: services?.length, 
+  console.log('Home screen loaded', {
+    user,
+    servicesCount: services?.length,
     categoriesCount: categories?.length,
-    providersCount: providers?.length 
+    providersCount: providers?.length
   });
 
+  // Redirect providers to dashboard
+  React.useEffect(() => {
+    if (user?.role === 'provider') {
+      router.replace('/(tabs)/dashboard' as any);
+    }
+  }, [user]);
 
+  // Mock personalized data - in real app, fetch from API
+  const upcomingAppointments = [
+    {
+      id: '1',
+      service: { name: 'Haircut & Styling', provider_details: { full_name: 'Beauty Studio Pro' } },
+      scheduled_for: new Date(Date.now() + 1000 * 60 * 60 * 24), // Tomorrow
+      status: 'confirmed'
+    }
+  ];
+
+  const previousBookings = [
+    {
+      provider: { pkid: 1, full_name: 'Beauty Studio Pro', city: 'Yaounde' },
+      lastService: 'Haircut & Styling',
+      lastBooked: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // 30 days ago
+    },
+    {
+      provider: { pkid: 2, full_name: 'Relax Spa Center', city: 'Douala' },
+      lastService: 'Full Body Massage',
+      lastBooked: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14), // 14 days ago
+    }
+  ];
+
+  const recommendedServices = services?.slice(0, 4) || []; // Mock recommendations
 
   return (
     <SafeAreaView style={styles.container}>
@@ -90,7 +120,7 @@ export default function HomeScreen() {
             <View style={styles.languageSwitcher}>
               <TouchableOpacity
                 style={[styles.langButton, i18n.language === 'en' && styles.langButtonActive]}
-                onPress={async() => {
+                onPress={async () => {
                   await AsyncStorage.setItem('user-language', 'en')
                   i18n.changeLanguage('en')
                 }}
@@ -99,7 +129,7 @@ export default function HomeScreen() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.langButton, i18n.language === 'fr' && styles.langButtonActive]}
-                onPress={async() => {
+                onPress={async () => {
                   await AsyncStorage.setItem('user-language', 'fr')
                   i18n.changeLanguage('fr')
                 }}
@@ -127,13 +157,127 @@ export default function HomeScreen() {
           </View>
         </View>
 
+        {/* Personalized Sections for Clients */}
+        {user?.role !== 'provider' && (
+          <>
+            {/* Upcoming Appointments */}
+            {upcomingAppointments.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>📅 Upcoming Appointments</Text>
+                </View>
+                {upcomingAppointments.map((appointment) => (
+                  <TouchableOpacity
+                    key={appointment.id}
+                    style={styles.appointmentCard}
+                    onPress={() => router.push('/(tabs)/my-bookings' as any)}
+                  >
+                    <View style={styles.appointmentInfo}>
+                      <Text style={styles.appointmentService}>{appointment.service.name}</Text>
+                      <Text style={styles.appointmentProvider}>with {appointment.service.provider_details?.full_name}</Text>
+                      <Text style={styles.appointmentDate}>
+                        {appointment.scheduled_for.toLocaleDateString('en-US', {
+                          weekday: 'long',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </Text>
+                    </View>
+                    <View style={styles.appointmentStatus}>
+                      <Text style={styles.appointmentStatusText}>Confirmed</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+
+            {/* Book Again */}
+            {previousBookings.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>🔄 Book Again</Text>
+                  <Text style={styles.sectionSubtitle}>Quick access to your favorite providers</Text>
+                </View>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  <View style={styles.bookAgainContainer}>
+                    {previousBookings.map((booking) => (
+                      <TouchableOpacity
+                        key={booking.provider.pkid}
+                        style={styles.bookAgainCard}
+                        onPress={() => handleProviderPress(booking.provider.pkid)}
+                      >
+                        <View style={styles.bookAgainAvatar}>
+                          <User color="white" size={24} />
+                        </View>
+                        <View style={styles.bookAgainInfo}>
+                          <Text style={styles.bookAgainName} numberOfLines={1}>
+                            {booking.provider.full_name}
+                          </Text>
+                          <Text style={styles.bookAgainService} numberOfLines={1}>
+                            {booking.lastService}
+                          </Text>
+                          <Text style={styles.bookAgainLocation}>
+                            📍 {booking.provider.city}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </ScrollView>
+              </View>
+            )}
+
+            {/* Recommendations */}
+            {recommendedServices.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>✨ Recommended for You</Text>
+                  <Text style={styles.sectionSubtitle}>Popular services near you</Text>
+                </View>
+                <View style={styles.recommendationsGrid}>
+                  {recommendedServices.slice(0, 4).map((service) => (
+                    <TouchableOpacity
+                      key={service.id}
+                      style={styles.recommendationCard}
+                      onPress={() => handleServicePress(service.id)}
+                    >
+                      <View style={styles.recommendationImage}>
+                        {service.image_url ? (
+                          <Image source={{ uri: service.image_url }} style={styles.recommendationImageContent} />
+                        ) : (
+                          <View style={styles.recommendationImagePlaceholder}>
+                            <Text style={styles.recommendationImageText}>💼</Text>
+                          </View>
+                        )}
+                      </View>
+                      <View style={styles.recommendationInfo}>
+                        <Text style={styles.recommendationName} numberOfLines={1}>
+                          {service.name}
+                        </Text>
+                        <Text style={styles.recommendationProvider} numberOfLines={1}>
+                          by {service.provider_details?.full_name}
+                        </Text>
+                        <Text style={styles.recommendationPrice}>
+                          {Math.floor(Number(service.price))} {service.currency}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )}
+          </>
+        )}
+
         {/* Categories */}
         {categories && categories.length > 0 && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>{t('categories')}</Text>
               {(selectedCategory || debouncedSearch) && (
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={styles.clearFilterButton}
                   onPress={handleClearAll}
                 >
@@ -147,8 +291,8 @@ export default function HomeScreen() {
                 {categories.map((category) => {
                   const isSelected = selectedCategory === category.pkid;
                   return (
-                    <TouchableOpacity 
-                      key={category.id} 
+                    <TouchableOpacity
+                      key={category.id}
                       style={[
                         styles.categoryCard,
                         isSelected && styles.categoryCardSelected
@@ -177,8 +321,8 @@ export default function HomeScreen() {
             </View>
             <View style={styles.providersContainer}>
               {providers.map((provider) => (
-                <TouchableOpacity 
-                  key={provider.pkid} 
+                <TouchableOpacity
+                  key={provider.pkid}
                   style={styles.providerCard}
                   onPress={() => handleProviderPress(provider.pkid)}
                 >
@@ -199,7 +343,7 @@ export default function HomeScreen() {
                       <Text style={styles.providerContact}>📞 {provider.phone_number}</Text>
                     )}
                   </View>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     style={styles.viewProfileButton}
                     onPress={() => handleProviderPress(provider.pkid)}
                   >
@@ -239,7 +383,7 @@ export default function HomeScreen() {
                     )}
                   </View>
                   <View style={styles.serviceInfo}>
-                    <Text style={styles.serviceName} numberOfLines={2}>{service.name} by <Text style={{fontWeight: 'normal'}}>{service.provider_details?.full_name}</Text></Text>
+                    <Text style={styles.serviceName} numberOfLines={2}>{service.name} by <Text style={{ fontWeight: 'normal' }}>{service.provider_details?.full_name}</Text></Text>
                     <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_details?.name || 'Service'}</Text>
                     <View style={styles.serviceMeta}>
                       <Text style={styles.servicePrice}>{Math.floor(Number(service.price))} {service.currency}</Text>
@@ -360,6 +504,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#2D1A46',
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: '#666',
   },
   clearFilterButton: {
     flexDirection: 'row',
@@ -688,5 +836,151 @@ const styles = StyleSheet.create({
   serviceDuration: {
     fontSize: 12,
     color: '#666',
+  },
+  appointmentCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  appointmentInfo: {
+    flex: 1,
+  },
+  appointmentService: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2D1A46',
+    marginBottom: 4,
+  },
+  appointmentProvider: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  appointmentDate: {
+    fontSize: 14,
+    color: '#F4A896',
+    fontWeight: '500',
+  },
+  appointmentStatus: {
+    backgroundColor: '#E8F5E9',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+  },
+  appointmentStatusText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#4CAF50',
+  },
+  bookAgainContainer: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  bookAgainCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 16,
+    width: 160,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  bookAgainAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#F4A896',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 12,
+  },
+  bookAgainInfo: {
+    alignItems: 'center',
+  },
+  bookAgainName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2D1A46',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  bookAgainService: {
+    fontSize: 12,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  bookAgainLocation: {
+    fontSize: 12,
+    color: '#999',
+    textAlign: 'center',
+  },
+  recommendationsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  recommendationCard: {
+    backgroundColor: 'white',
+    borderRadius: 12,
+    marginBottom: 16,
+    width: '48%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  recommendationImage: {
+    width: '100%',
+    height: 80,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    overflow: 'hidden',
+  },
+  recommendationImageContent: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  recommendationImagePlaceholder: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#F4A896',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  recommendationImageText: {
+    fontSize: 20,
+  },
+  recommendationInfo: {
+    padding: 12,
+  },
+  recommendationName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2D1A46',
+    marginBottom: 4,
+  },
+  recommendationProvider: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 8,
+  },
+  recommendationPrice: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#F4A896',
   },
 });

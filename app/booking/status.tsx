@@ -119,7 +119,7 @@ export default function BookingStatus() {
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Appointment not found</Text>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.homeButton}
             onPress={() => router.push('/(tabs)/home')}
           >
@@ -148,7 +148,7 @@ export default function BookingStatus() {
           ) : (
             <CheckCircle color="#4CAF50" size={64} />
           )}
-          
+
           <Text style={styles.successTitle}>
             {isCompleted ? 'Service Completed!' : isCancelled ? 'Appointment Cancelled' : 'Booking Confirmed!'}
           </Text>
@@ -163,7 +163,7 @@ export default function BookingStatus() {
             <Receipt color="#2D1A46" size={24} />
             <Text style={styles.cardTitle}>Transaction Receipt</Text>
           </View>
-          
+
           <View style={styles.detailRow}>
             <Text style={styles.detailLabel}>Service:</Text>
             <Text style={styles.detailValue}>{appointment.service?.name || 'N/A'}</Text>
@@ -201,7 +201,7 @@ export default function BookingStatus() {
               {appointment.currency} {appointment.amount.toFixed(2)}
             </Text>
           </View>
-          
+
           {showEscrowMessage && (
             <View style={styles.escrowInfo}>
               <Text style={styles.escrowText}>
@@ -224,9 +224,9 @@ export default function BookingStatus() {
                       styles.stepCircle,
                       step.completed && styles.completedStep
                     ]}>
-                      <IconComponent 
-                        color={step.completed ? 'white' : '#ccc'} 
-                        size={20} 
+                      <IconComponent
+                        color={step.completed ? 'white' : '#ccc'}
+                        size={20}
                       />
                     </View>
                     {index < statusSteps.length - 1 && (
@@ -286,11 +286,31 @@ export default function BookingStatus() {
           </View>
         )}
 
+        {/* View Location Button - Only shown for booked appointments with location */}
+        {appointment && !isCancelled && (appointment.latitude && appointment.longitude) && (
+          <View style={styles.locationCard}>
+            <TouchableOpacity
+              style={styles.viewLocationButton}
+              onPress={() => {
+                const locationName = appointment.location || `${appointment.provider?.city || 'Service'} Location`;
+                const serviceName = appointment.service?.name || 'Service';
+                router.push(`/view-location?latitude=${appointment.latitude}&longitude=${appointment.longitude}&locationName=${encodeURIComponent(locationName)}&serviceName=${encodeURIComponent(serviceName)}` as any);
+              }}
+            >
+              <MapPin color="white" size={20} />
+              <Text style={styles.viewLocationButtonText}>View Live Location & Directions</Text>
+            </TouchableOpacity>
+            <Text style={styles.locationHint}>
+              Get real-time directions to your service location
+            </Text>
+          </View>
+        )}
+
         {/* Review Section */}
         {isCompleted && (
           <View style={styles.card}>
             <Text style={styles.cardTitle}>Rate Your Experience</Text>
-            
+
             <View style={styles.ratingContainer}>
               <Text style={styles.ratingLabel}>How was your service?</Text>
               <View style={styles.starsContainer}>
@@ -311,7 +331,7 @@ export default function BookingStatus() {
               />
             </View>
 
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.submitButton}
               onPress={handleSubmitReview}
             >
@@ -321,7 +341,7 @@ export default function BookingStatus() {
         )}
       </ScrollView>
 
-      {/* Home Button */}
+      {/* Home Button - Now inside scroll view for better Android navigation */}
       <View style={styles.bottomButtonContainer}>
         <TouchableOpacity
           style={styles.homeButton}
@@ -330,7 +350,11 @@ export default function BookingStatus() {
           <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+
+      {/* Extra spacing for Android navigation */}
+      <View style={styles.bottomSpacing} />
+    </ScrollView>
+    </SafeAreaView >
   );
 }
 
@@ -579,5 +603,39 @@ const styles = StyleSheet.create({
   },
   statusText: {
     textTransform: 'capitalize',
+  },
+  locationCard: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  viewLocationButton: {
+    backgroundColor: '#2D1A46',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 12,
+    gap: 8,
+  },
+  viewLocationButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  locationHint: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 12,
+  },
+  bottomSpacing: {
+    height: Platform.OS === 'android' ? 80 : 20, // Extra spacing for Android navigation
   },
 });

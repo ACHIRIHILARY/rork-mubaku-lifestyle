@@ -1,8 +1,9 @@
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { ArrowLeft, Camera, X } from 'lucide-react-native';
 import { useCreateServiceMutation, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function CreateServiceScreen() {
   const { data: categories, isLoading: categoriesLoading } = useGetAllCategoriesQuery();
@@ -18,6 +19,7 @@ export default function CreateServiceScreen() {
     latitude: string;
     longitude: string;
     location: string;
+    image?: string;
   }>({
     name: '',
     description: '',
@@ -28,8 +30,9 @@ export default function CreateServiceScreen() {
     latitude: '',
     longitude: '',
     location: '',
+    image: undefined,
   });
-  
+
   React.useEffect(() => {
     if (categories) {
       console.log('Categories loaded:', JSON.stringify(categories, null, 2));
@@ -38,10 +41,33 @@ export default function CreateServiceScreen() {
       });
     }
   }, [categories]);
-  
+
   React.useEffect(() => {
     console.log('Selected category:', formData.category, 'Type:', typeof formData.category);
   }, [formData.category]);
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please grant camera roll permissions to upload images.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setFormData({ ...formData, image: result.assets[0].uri });
+    }
+  };
+
+  const removeImage = () => {
+    setFormData({ ...formData, image: undefined });
+  };
 
   const handleSubmit = async () => {
     if (!formData.name.trim()) {
@@ -66,16 +92,16 @@ export default function CreateServiceScreen() {
         Alert.alert('Error', 'Please select a category');
         return;
       }
-      
+
       const categoryExists = categories?.find(c => c.pkid === formData.category);
-      
+
       if (!categoryExists) {
         console.error('Invalid category pkid:', formData.category);
         console.error('Available categories:', JSON.stringify(categories?.map(c => ({ pkid: c.pkid, name: c.name })), null, 2));
         Alert.alert('Error', `Invalid category selected. Available categories: ${categories?.map(c => `${c.name} (ID: ${c.pkid})`).join(', ')}`);
         return;
       }
-      
+
       const payload = {
         name: formData.name.trim(),
         description: formData.description.trim() || undefined,
@@ -95,7 +121,7 @@ export default function CreateServiceScreen() {
         location: payload.location,
         hasLocation: !!(payload.latitude && payload.longitude)
       });
-      
+
       const result = await createService(payload).unwrap();
       console.log('Service created, response:', JSON.stringify(result, null, 2));
       console.log('Response location data:', {
@@ -117,9 +143,9 @@ export default function CreateServiceScreen() {
       console.error('Create service error:', JSON.stringify(error, null, 2));
       console.error('Error data:', error?.data);
       console.error('Error status:', error?.status);
-      
+
       let errorMessage = 'Failed to create service';
-      
+
       if (error?.data) {
         if (typeof error.data === 'string') {
           errorMessage = error.data;
@@ -136,18 +162,18 @@ export default function CreateServiceScreen() {
           }
         }
       }
-      
+
       Alert.alert('Error', errorMessage);
     }
   };
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
-      <Stack.Screen 
+      <Stack.Screen
         options={{
           headerShown: true,
           headerTitle: 'Create Service',
@@ -160,7 +186,7 @@ export default function CreateServiceScreen() {
             backgroundColor: '#F4A896',
           },
           headerTintColor: 'white',
-        }} 
+        }}
       />
 
       <ScrollView style={styles.content}>
@@ -191,6 +217,24 @@ export default function CreateServiceScreen() {
           </View>
 
           <View style={styles.inputGroup}>
+            <Text style={styles.label}>Service Image</Text>
+            {formData.image ? (
+              <View style={styles.imagePreview}>
+                <Image source={{ uri: formData.image }} style={styles.previewImage} />
+                <TouchableOpacity style={styles.removeImageButton} onPress={removeImage}>
+                  <X color="white" size={20} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity style={styles.imageUploadButton} onPress={pickImage}>
+                <Camera color="#2D1A46" size={24} />
+                <Text style={styles.imageUploadText}>Add Service Image</Text>
+                <Text style={styles.imageUploadSubtext}>Upload a photo to showcase your service</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+
+          <View style={styles.inputGroup}>
             <Text style={styles.label}>Category *</Text>
             {categoriesLoading ? (
               <ActivityIndicator color="#2D1A46" />
@@ -198,7 +242,7 @@ export default function CreateServiceScreen() {
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoriesScroll}>
                 {categories?.map((category) => {
                   const isSelected = formData.category === category.pkid;
-                  
+
                   return (
                     <TouchableOpacity
                       key={category.id}
@@ -438,5 +482,48 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     marginBottom: 16,
+  },
+  imagePreview: {
+    position: 'relative',
+    marginTop: 8,
+  },
+  previewImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    resizeMode: 'cover',
+  },
+  removeImageButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 16,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageUploadButton: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: '#E5E5E5',
+    borderStyle: 'dashed',
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageUploadText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2D1A46',
+    marginTop: 8,
+  },
+  imageUploadSubtext: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 4,
   },
 });

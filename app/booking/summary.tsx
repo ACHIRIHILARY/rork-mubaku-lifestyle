@@ -63,7 +63,7 @@ export default function BookingSummary() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
@@ -87,15 +87,15 @@ export default function BookingSummary() {
         {/* Booking Details */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Date & Time</Text>
-          
+
           <View style={styles.detailRow}>
             <Calendar color="#666" size={20} />
             <Text style={styles.detailText}>
-              {new Date(date).toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
+              {new Date(date).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
               })}
             </Text>
           </View>
@@ -115,27 +115,59 @@ export default function BookingSummary() {
           )}
         </View>
 
-        {/* Price */}
+        {/* Price Breakdown */}
         <View style={styles.priceCard}>
-          <View style={styles.priceHeader}>
-            <Text style={styles.priceHeaderLabel}>Total Price</Text>
-            <Text style={styles.priceHeaderValue}>
-              {service.currency} {Number(service.price).toFixed(0)}
-            </Text>
-          </View>
-          <Text style={styles.priceNote}>Payment processing fee will be added at checkout</Text>
-        </View>
-      </ScrollView>
+          <Text style={styles.cardTitle}>Price Breakdown</Text>
 
-      {/* Confirm Button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.confirmButton}
-          onPress={handleConfirmBooking}
-        >
-          <Text style={styles.confirmButtonText}>Continue to Payment</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.priceBreakdown}>
+            <View style={styles.priceRow}>
+              <Text style={styles.priceLabel}>Service Cost</Text>
+              <Text style={styles.priceValue}>
+                {service.currency} {Number(service.price).toFixed(0)}
+              </Text>
+            </View>
+
+            <View style={styles.priceRow}>
+              <Text style={styles.priceLabel}>App Fee</Text>
+              <Text style={styles.priceValue}>
+                {service.currency} {Math.floor(Number(service.price) * 0.05)}
+              </Text>
+            </View>
+
+            <View style={styles.priceRow}>
+              <Text style={styles.priceLabel}>Taxes</Text>
+              <Text style={styles.priceValue}>
+                {service.currency} {Math.floor(Number(service.price) * 0.18)}
+              </Text>
+            </View>
+
+            <View style={styles.priceDivider} />
+
+            <View style={styles.priceRow}>
+              <Text style={styles.totalLabel}>Total</Text>
+              <Text style={styles.totalValue}>
+                {service.currency} {Math.floor(Number(service.price) * 1.23)}
+              </Text>
+            </View>
+          </View>
+
+          <Text style={styles.priceNote}>
+            * Final amount may vary based on payment processing fees
+          </Text>
+        </View>
+        {/* Confirm Button - Now inside scroll view for better Android navigation */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={styles.confirmButton}
+            onPress={handleConfirmBooking}
+          >
+            <Text style={styles.confirmButtonText}>Continue to Payment</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Extra spacing for Android navigation */}
+        <View style={styles.bottomSpacing} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -260,9 +292,43 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  priceBreakdown: {
+    marginTop: 16,
+  },
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  priceLabel: {
+    fontSize: 14,
+    color: 'rgba(255, 255, 255, 0.8)',
+  },
+  priceValue: {
+    fontSize: 14,
+    color: 'white',
+    fontWeight: '600',
+  },
+  priceDivider: {
+    height: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    marginVertical: 8,
+  },
+  totalLabel: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  totalValue: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
+  },
   priceNote: {
     fontSize: 12,
     color: 'rgba(255, 255, 255, 0.6)',
+    marginTop: 12,
   },
   buttonContainer: {
     paddingHorizontal: 24,
@@ -282,5 +348,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  bottomSpacing: {
+    height: Platform.OS === 'android' ? 80 : 20, // Extra spacing for Android navigation
   },
 });

@@ -1,8 +1,9 @@
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, Switch, KeyboardAvoidingView, Platform } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, Alert, Switch, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { ArrowLeft, Camera, X } from 'lucide-react-native';
 import { useUpdateServiceMutation, useGetServiceByIdQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EditServiceScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -21,6 +22,7 @@ export default function EditServiceScreen() {
     latitude: string;
     longitude: string;
     location: string;
+    image?: string;
   }>({
     name: '',
     description: '',
@@ -32,6 +34,7 @@ export default function EditServiceScreen() {
     latitude: '',
     longitude: '',
     location: '',
+    image: undefined,
   });
 
   useEffect(() => {
@@ -43,7 +46,7 @@ export default function EditServiceScreen() {
         location: service.location,
         hasLocation: !!(service.latitude && service.longitude)
       });
-      
+
       setFormData({
         name: service.name,
         description: service.description || '',
@@ -55,9 +58,33 @@ export default function EditServiceScreen() {
         latitude: service.latitude?.toString() || '',
         longitude: service.longitude?.toString() || '',
         location: service.location || '',
+        image: service.image_url || undefined,
       });
     }
   }, [service]);
+
+  const pickImage = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission needed', 'Please grant camera roll permissions to upload images.');
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setFormData({ ...formData, image: result.assets[0].uri });
+    }
+  };
+
+  const removeImage = () => {
+    setFormData({ ...formData, image: undefined });
+  };
 
   const handleSubmit = async () => {
     if (!formData.name.trim()) {
@@ -95,7 +122,7 @@ export default function EditServiceScreen() {
         longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
         location: formData.location.trim() || undefined,
       };
-      
+
       console.log('Updating service with payload:', JSON.stringify(payload, null, 2));
       console.log('Location data being sent:', {
         latitude: payload.latitude,
@@ -103,12 +130,12 @@ export default function EditServiceScreen() {
         location: payload.location,
         hasLocation: !!(payload.latitude && payload.longitude)
       });
-      
+
       const result = await updateService({
         serviceId: id,
         data: payload,
       }).unwrap();
-      
+
       console.log('Service updated, response:', JSON.stringify(result, null, 2));
       console.log('Response location data:', {
         latitude: result.latitude,
@@ -129,7 +156,7 @@ export default function EditServiceScreen() {
   if (serviceLoading) {
     return (
       <View style={styles.container}>
-        <Stack.Screen 
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: 'Edit Service',
@@ -137,7 +164,7 @@ export default function EditServiceScreen() {
               backgroundColor: '#F4A896',
             },
             headerTintColor: 'white',
-          }} 
+          }}
         />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#2D1A46" />
@@ -149,7 +176,7 @@ export default function EditServiceScreen() {
   if (!service) {
     return (
       <View style={styles.container}>
-        <Stack.Screen 
+        <Stack.Screen
           options={{
             headerShown: true,
             headerTitle: 'Edit Service',
@@ -157,7 +184,7 @@ export default function EditServiceScreen() {
               backgroundColor: '#F4A896',
             },
             headerTintColor: 'white',
-          }} 
+          }}
         />
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>Service not found</Text>
@@ -170,12 +197,12 @@ export default function EditServiceScreen() {
   }
 
   return (
-    <KeyboardAvoidingView 
+    <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
     >
-      <Stack.Screen 
+      <Stack.Screen
         options={{
           headerShown: true,
           headerTitle: 'Edit Service',
@@ -188,7 +215,7 @@ export default function EditServiceScreen() {
             backgroundColor: '#F4A896',
           },
           headerTintColor: 'white',
-        }} 
+        }}
       />
 
       <ScrollView style={styles.content}>
@@ -231,6 +258,24 @@ export default function EditServiceScreen() {
               numberOfLines={4}
               textAlignVertical="top"
             />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Service Image</Text>
+            {formData.image ? (
+              <View style={styles.imagePreview}>
+                <Image source={{ uri: formData.image }} style={styles.previewImage} />
+                <TouchableOpacity style={styles.removeImageButton} onPress={removeImage}>
+                  <X color="white" size={20} />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <TouchableOpacity style={styles.imageUploadButton} onPress={pickImage}>
+                <Camera color="#2D1A46" size={24} />
+                <Text style={styles.imageUploadText}>Add Service Image</Text>
+                <Text style={styles.imageUploadSubtext}>Upload a photo to showcase your service</Text>
+              </TouchableOpacity>
+            )}
           </View>
 
           <View style={styles.inputGroup}>
@@ -504,5 +549,48 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#2D1A46',
     marginBottom: 4,
+  },
+  imagePreview: {
+    position: 'relative',
+    marginTop: 8,
+  },
+  previewImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    resizeMode: 'cover',
+  },
+  removeImageButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    borderRadius: 16,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageUploadButton: {
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: '#E5E5E5',
+    borderStyle: 'dashed',
+    borderRadius: 12,
+    padding: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageUploadText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#2D1A46',
+    marginTop: 8,
+  },
+  imageUploadSubtext: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 4,
   },
 });

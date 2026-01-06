@@ -21,15 +21,15 @@ export default function LoginScreen() {
   useEffect(() => {
     if (waitingForUser && user && isAuthenticated) {
       console.log('User data loaded after login:', JSON.stringify(user, null, 2));
-      
+
       if (redirectTimeoutRef.current) {
         clearTimeout(redirectTimeoutRef.current);
       }
 
       const destination = '/(tabs)/home';
-      
+
       console.log('Redirecting user to:', destination);
-      
+
       setWaitingForUser(false);
       router.replace(destination);
     }
@@ -52,9 +52,9 @@ export default function LoginScreen() {
     try {
       await login({ email, password }).unwrap();
       console.log('Login successful, waiting for user data...');
-      
+
       setWaitingForUser(true);
-      
+
       redirectTimeoutRef.current = setTimeout(() => {
         console.warn('User data fetch timeout, redirecting to home as fallback');
         setWaitingForUser(false);
@@ -62,18 +62,18 @@ export default function LoginScreen() {
       }, 5000);
     } catch (error: unknown) {
       setWaitingForUser(false);
-      
+
       if (redirectTimeoutRef.current) {
         clearTimeout(redirectTimeoutRef.current);
       }
-      
+
       console.error('Login error:', JSON.stringify(error, null, 2));
-      
+
       let errorMessage = 'Login failed. Please check your credentials and try again.';
-      
+
       if (error && typeof error === 'object') {
         const err = error as { data?: unknown; message?: string; status?: number; statusText?: string };
-        
+
         if (err.data) {
           if (typeof err.data === 'string') {
             errorMessage = err.data;
@@ -95,87 +95,93 @@ export default function LoginScreen() {
           errorMessage = `Error: ${err.status} - ${err.statusText || 'Request failed'}`;
         }
       }
-      
+
       Alert.alert(t('loginError'), errorMessage);
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
         >
           <View style={styles.content}>
-          <View style={styles.header}>
-            <Text style={styles.title}>{t('welcomeBack')}</Text>
-            <Text style={styles.subtitle}>{t('signInToAccount')}</Text>
-          </View>
-
-          <View style={styles.card}>
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('email')}</Text>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder={t('enterEmail')}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
+            <View style={styles.header}>
+              <Text style={styles.title}>{t('welcomeBack')}</Text>
+              <Text style={styles.subtitle}>{t('signInToAccount')}</Text>
             </View>
 
-            <View style={styles.inputContainer}>
-              <Text style={styles.label}>{t('password')}</Text>
-              <View style={styles.passwordContainer}>
+            <View style={styles.card}>
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>{t('email')}</Text>
                 <TextInput
-                  style={styles.passwordInput}
-                  value={password}
-                  onChangeText={setPassword}
-                  placeholder={t('enterPassword')}
-                  secureTextEntry={!showPassword}
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder={t('enterEmail')}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
                 />
-                <TouchableOpacity 
-                  style={styles.eyeIcon}
-                  onPress={() => setShowPassword(!showPassword)}
+              </View>
+
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>{t('password')}</Text>
+                <View style={styles.passwordContainer}>
+                  <TextInput
+                    style={styles.passwordInput}
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder={t('enterPassword')}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.eyeIcon}
+                    onPress={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <Eye size={20} color="#666" />
+                    ) : (
+                      <EyeOff size={20} color="#666" />
+                    )}
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity
+                  style={styles.forgotPasswordButton}
+                  onPress={() => router.push('/forgot-password' as any)}
                 >
-                  {showPassword ? (
-                    <Eye size={20} color="#666" />
-                  ) : (
-                    <EyeOff size={20} color="#666" />
-                  )}
+                  <Text style={styles.forgotPasswordText}>{t('forgotPassword')}</Text>
                 </TouchableOpacity>
               </View>
+
+              <TouchableOpacity
+                style={[styles.loginButton, (isLoading || waitingForUser) && styles.loginButtonDisabled]}
+                onPress={handleLogin}
+                disabled={isLoading || waitingForUser}
+              >
+                {(isLoading || waitingForUser) ? (
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <ActivityIndicator color="white" />
+                    <Text style={styles.loginText}>
+                      {isLoading ? t('loggingIn') : t('loading')}
+                    </Text>
+                  </View>
+                ) : (
+                  <Text style={styles.loginText}>{t('login')}</Text>
+                )}
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.registerButton}
+                onPress={() => router.push('/register')}
+              >
+                <Text style={styles.registerText}>{t('noAccount')}</Text>
+              </TouchableOpacity>
             </View>
-
-            <TouchableOpacity 
-              style={[styles.loginButton, (isLoading || waitingForUser) && styles.loginButtonDisabled]} 
-              onPress={handleLogin}
-              disabled={isLoading || waitingForUser}
-            >
-              {(isLoading || waitingForUser) ? (
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-                  <ActivityIndicator color="white" />
-                  <Text style={styles.loginText}>
-                    {isLoading ? t('loggingIn') : t('loading')}
-                  </Text>
-                </View>
-              ) : (
-                <Text style={styles.loginText}>{t('login')}</Text>
-              )}
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              style={styles.registerButton}
-              onPress={() => router.push('/register')}
-            >
-              <Text style={styles.registerText}>{t('noAccount')}</Text>
-            </TouchableOpacity>
-          </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -286,5 +292,14 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     paddingHorizontal: 12,
+  },
+  forgotPasswordButton: {
+    alignSelf: 'flex-end',
+    marginTop: 8,
+  },
+  forgotPasswordText: {
+    color: '#F4A896',
+    fontSize: 14,
+    fontWeight: '500',
   },
 });

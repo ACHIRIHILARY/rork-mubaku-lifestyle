@@ -115,11 +115,11 @@ export default function ProfileSettingsScreen() {
     if (!user) return;
 
     const details = `Name: ${user.full_name || 'N/A'}\n` +
-                   `Email: ${user.email || 'N/A'}\n` +
-                   `Phone: ${user.phone_number || 'N/A'}\n` +
-                   `City: ${user.city || 'N/A'}\n` +
-                   `Country: ${user.country || 'N/A'}\n` +
-                   `Role: ${user.role === 'provider' ? t('provider') : t('client')}`;
+      `Email: ${user.email || 'N/A'}\n` +
+      `Phone: ${user.phone_number || 'N/A'}\n` +
+      `City: ${user.city || 'N/A'}\n` +
+      `Country: ${user.country || 'N/A'}\n` +
+      `Role: ${user.role === 'provider' ? t('provider') : t('client')}`;
 
     Alert.alert('Profile Details', details);
   };
@@ -130,13 +130,27 @@ export default function ProfileSettingsScreen() {
     Alert.alert(t('success'), t('languageChanged', { lang: lang === 'en' ? t('english') : t('french') }));
   };
 
-  const settingsOptions = [
+  const clientSettingsOptions = [
     {
       id: 'edit-profile',
       title: t('editProfile'),
       description: t('updateProfileInfo'),
       icon: Edit,
       onPress: () => router.push('/profile-edit' as any)
+    },
+    {
+      id: 'favorites',
+      title: t('favoriteProviders'),
+      description: t('manageFavoriteProviders'),
+      icon: User,
+      onPress: () => Alert.alert('Coming Soon', 'Favorite providers feature will be available soon!')
+    },
+    {
+      id: 'payment-methods',
+      title: t('paymentMethods'),
+      description: t('managePaymentMethods'),
+      icon: Lock,
+      onPress: () => Alert.alert('Payment Methods', 'Available payment methods:\n• MTN Mobile Money\n• Orange Mobile Money\n\nThis feature will be fully integrated soon!')
     },
     {
       id: 'view-profile',
@@ -159,7 +173,13 @@ export default function ProfileSettingsScreen() {
       icon: Lock,
       onPress: () => setPasswordModalVisible(true)
     },
-
+    {
+      id: 'help-support',
+      title: t('helpSupport'),
+      description: t('getHelpSupport'),
+      icon: User,
+      onPress: () => Alert.alert('Help & Support', 'For assistance, please contact our support team at support@mubakulifestyle.com')
+    },
     {
       id: 'delete-account',
       title: t('deleteAccount'),
@@ -169,6 +189,68 @@ export default function ProfileSettingsScreen() {
       isDanger: true
     }
   ];
+
+  const providerSettingsOptions = [
+    {
+      id: 'edit-profile',
+      title: t('editProfile'),
+      description: t('updateProfileInfo'),
+      icon: Edit,
+      onPress: () => router.push('/profile-edit' as any)
+    },
+    {
+      id: 'public-profile',
+      title: t('myPublicProfile'),
+      description: t('howClientsSeeYou'),
+      icon: User,
+      onPress: () => router.push(('/provider-detail?id=' + user?.pkid) as any)
+    },
+    {
+      id: 'payout-settings',
+      title: t('payoutBankDetails'),
+      description: t('managePayoutSettings'),
+      icon: Lock,
+      onPress: () => Alert.alert('Coming Soon', 'Payout and bank details management will be available soon!')
+    },
+    {
+      id: 'view-profile',
+      title: t('viewProfileDetails'),
+      description: t('seeCompleteProfile'),
+      icon: User,
+      onPress: handleViewProfileDetails
+    },
+    {
+      id: 'language',
+      title: t('language'),
+      description: t('currentLanguage', { lang: i18n.language === 'en' ? t('english') : t('french') }),
+      icon: Languages,
+      onPress: () => setLanguageModalVisible(true)
+    },
+    {
+      id: 'change-password',
+      title: t('changePassword'),
+      description: t('updateAccountPassword'),
+      icon: Lock,
+      onPress: () => setPasswordModalVisible(true)
+    },
+    {
+      id: 'help-support',
+      title: t('helpSupport'),
+      description: t('getHelpSupport'),
+      icon: User,
+      onPress: () => Alert.alert('Help & Support', 'For assistance, please contact our support team at support@mubakulifestyle.com')
+    },
+    {
+      id: 'delete-account',
+      title: t('deleteAccount'),
+      description: t('permanentlyDeleteAccount'),
+      icon: Trash2,
+      onPress: handleDeleteAccount,
+      isDanger: true
+    }
+  ];
+
+  const settingsOptions = user?.role === 'provider' ? providerSettingsOptions : clientSettingsOptions;
 
   const showProviderApplication = user?.role === 'client' && (!applicationStatus || applicationStatus.status === 'rejected' || applicationStatus.status === 'withdrawn');
   const showApplicationStatus = applicationStatus && applicationStatus.status !== 'rejected' && applicationStatus.status !== 'withdrawn';
@@ -230,7 +312,7 @@ export default function ProfileSettingsScreen() {
         )}
 
         {showProviderApplication && (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.providerCard}
             onPress={() => router.push('/agent-profile-setup')}
           >
@@ -254,9 +336,9 @@ export default function ProfileSettingsScreen() {
               applicationStatus.status === 'approved' && styles.statusApproved,
             ]}>
               <Text style={styles.statusText}>
-                {applicationStatus.status === 'pending' ? t('pendingReview') : 
-                 applicationStatus.status === 'approved' ? t('approved') : 
-                 applicationStatus.status}
+                {applicationStatus.status === 'pending' ? t('pendingReview') :
+                  applicationStatus.status === 'approved' ? t('approved') :
+                    applicationStatus.status}
               </Text>
             </View>
             {applicationStatus.status === 'pending' && (
@@ -273,7 +355,7 @@ export default function ProfileSettingsScreen() {
         )}
 
         {isApprovedProvider && (
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.dashboardCard}
             onPress={() => router.push('/provider-services' as any)}
           >
@@ -292,7 +374,7 @@ export default function ProfileSettingsScreen() {
           {settingsOptions.map((option) => {
             const IconComponent = option.icon;
             return (
-              <TouchableOpacity 
+              <TouchableOpacity
                 key={option.id}
                 style={[styles.settingCard, option.isDanger && styles.dangerCard]}
                 onPress={option.onPress}
@@ -313,7 +395,7 @@ export default function ProfileSettingsScreen() {
         </View>
 
         <View style={styles.logoutContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.logoutButton}
             onPress={handleLogout}
           >
