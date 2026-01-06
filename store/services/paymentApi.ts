@@ -1,5 +1,7 @@
 import { api } from '../api';
 
+
+
 interface PaymentMethodApiResponse {
   id: string;
   name: string;
@@ -15,39 +17,6 @@ interface PaymentMethodApiResponse {
   gateway: {
     name: string;
     type: string;
-  };
-}
-
-interface PaymentMethod {
-  id: string;
-  method_code: string;
-  display_name: string;
-  gateway: {
-    name: string;
-    type: string;
-    logo_url: string;
-  };
-  configuration: {
-    requires_service_number: boolean;
-    service_number_label: string;
-    service_number_hint: string;
-    validation_regex: string;
-    example: string;
-  };
-  limits: {
-    min_amount: number;
-    max_amount: number;
-    currency: string;
-  };
-  fees: {
-    type: string;
-    rate: number;
-    description: string;
-  };
-  metadata: {
-    icon_url: string;
-    instructions: string;
-    estimated_processing_time: string;
   };
 }
 

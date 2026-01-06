@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Animated, ScrollView, Alert, Share } from 'react-native';
-import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Receipt, MapPin } from 'lucide-react-native';
+import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Receipt } from 'lucide-react-native';
 import { useLazyGetPaymentStatusQuery } from '@/store/services/paymentApi';
 
 type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';

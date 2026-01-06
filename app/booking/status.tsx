@@ -341,7 +341,7 @@ export default function BookingStatus() {
         )}
       </ScrollView>
 
-      {/* Home Button - Now inside scroll view for better Android navigation */}
+      {/* Home Button - Outside scroll view for proper positioning */}
       <View style={styles.bottomButtonContainer}>
         <TouchableOpacity
           style={styles.homeButton}
@@ -350,11 +350,7 @@ export default function BookingStatus() {
           <Text style={styles.homeButtonText}>Back to Home</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Extra spacing for Android navigation */}
-      <View style={styles.bottomSpacing} />
-    </ScrollView>
-    </SafeAreaView >
+    </SafeAreaView>
   );
 }
 

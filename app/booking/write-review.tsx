@@ -64,7 +64,7 @@ export default function WriteReviewScreen() {
             Alert.alert('Success', 'Review submitted successfully!', [
                 { text: 'OK', onPress: () => router.back() }
             ]);
-        } catch (error) {
+        } catch {
             Alert.alert('Error', 'Failed to submit review. Please try again.');
         } finally {
             setIsSubmitting(false);

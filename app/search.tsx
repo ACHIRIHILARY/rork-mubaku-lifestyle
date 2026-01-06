@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, FlatList, Image, ActivityIndicator } from 'react-native';
-import { Search, X, MapPin, Star, Calendar, Clock } from 'lucide-react-native';
+import { Search, X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { router } from 'expo-router';
 import * as Location from 'expo-location';
-import Slider from '@react-native-community/slider';
 
 export default function SearchScreen() {
     const { t } = useTranslation();
@@ -18,8 +17,7 @@ export default function SearchScreen() {
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(500);
     const [minRating, setMinRating] = useState(0);
-    const [availabilityDate, setAvailabilityDate] = useState('');
-    const [availabilityTime, setAvailabilityTime] = useState('');
+    // Unused variables removed
 
     const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
     const [showFilters, setShowFilters] = useState(false);
@@ -159,45 +157,49 @@ export default function SearchScreen() {
                             value={location}
                             onChangeText={setLocation}
                         />
-                        <View style={styles.sliderContainer}>
-                            <Text>Radius: {radius} miles</Text>
-                            <Slider
-                                minimumValue={1}
-                                maximumValue={50}
-                                value={radius}
-                                onValueChange={setRadius}
-                                step={1}
-                            />
-                        </View>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Radius (miles)"
+                            value={radius.toString()}
+                            onChangeText={(text) => {
+                                const num = parseInt(text.replace(/[^0-9]/g, '')) || 1;
+                                setRadius(Math.min(50, Math.max(1, num)));
+                            }}
+                            keyboardType="numeric"
+                        />
                     </View>
 
                     <View style={styles.filterSection}>
                         <Text style={styles.filterLabel}>{t('priceRange')}</Text>
-                        <View style={styles.sliderContainer}>
-                            <Text>Min: ${minPrice} - Max: ${maxPrice}</Text>
-                            <Slider
-                                minimumValue={0}
-                                maximumValue={1000}
-                                value={minPrice}
-                                onValueChange={setMinPrice}
+                        <View style={styles.priceInputs}>
+                            <TextInput
+                                style={[styles.input, { flex: 1 }]}
+                                placeholder="Min price"
+                                value={minPrice.toString()}
+                                onChangeText={(text) => setMinPrice(parseInt(text.replace(/[^0-9]/g, '')) || 0)}
+                                keyboardType="numeric"
                             />
-                            <Slider
-                                minimumValue={0}
-                                maximumValue={1000}
-                                value={maxPrice}
-                                onValueChange={setMaxPrice}
+                            <TextInput
+                                style={[styles.input, { flex: 1, marginLeft: 8 }]}
+                                placeholder="Max price"
+                                value={maxPrice.toString()}
+                                onChangeText={(text) => setMaxPrice(parseInt(text.replace(/[^0-9]/g, '')) || 500)}
+                                keyboardType="numeric"
                             />
                         </View>
                     </View>
 
                     <View style={styles.filterSection}>
                         <Text style={styles.filterLabel}>{t('minRating')}</Text>
-                        <Slider
-                            minimumValue={0}
-                            maximumValue={5}
-                            value={minRating}
-                            onValueChange={setMinRating}
-                            step={0.5}
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Minimum rating (0-5)"
+                            value={minRating.toString()}
+                            onChangeText={(text) => {
+                                const num = parseFloat(text.replace(/[^0-9.]/g, '')) || 0;
+                                setMinRating(Math.min(5, Math.max(0, num)));
+                            }}
+                            keyboardType="decimal-pad"
                         />
                         <Text>{minRating} stars and up</Text>
                     </View>
@@ -288,6 +290,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         padding: 10,
         fontSize: 16,
+    },
+    priceInputs: {
+        flexDirection: 'row',
     },
     sliderContainer: {
         marginTop: 8,

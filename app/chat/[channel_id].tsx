@@ -66,7 +66,7 @@ export default function ChatScreen() {
 
     useEffect(() => {
         setMessages(conversationData.messages);
-    }, [channel_id]);
+    }, [channel_id, conversationData.messages]);
 
     const formatTime = (date: Date) => {
         return date.toLocaleTimeString('en-US', {
