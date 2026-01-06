@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "app.rork.mubaku-lifestyle"
+      "package": "com.achiri.mubakulifestyle"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
@@ -38,6 +38,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": "https://rork.com/"
+      },
+      "eas": {
+        "projectId": "cf4e8b5e-a19d-403d-9167-6937198b6efe"
+      }
+    },
+    "owner": "achiri"
   }
 }
