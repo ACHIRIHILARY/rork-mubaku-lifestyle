@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform, Alert } from 'react-native';
-import { CheckCircle, Clock, Star, Receipt, CalendarDays, MapPin, XCircle } from 'lucide-react-native'; // Added Receipt, CalendarDays, MapPin, XCircle
+import { CheckCircle, Clock, Star, Receipt, MapPin, XCircle } from 'lucide-react-native'; // Added Receipt, MapPin, XCircle
 import { useGetAppointmentDetailQuery, useCancelAppointmentMutation, useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
 
 export default function BookingStatus() {

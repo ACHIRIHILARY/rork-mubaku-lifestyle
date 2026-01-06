@@ -100,9 +100,9 @@ export const appointmentApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Appointment' as const, id })),
-              'Appointment',
-            ]
+            ...result.map(({ id }) => ({ type: 'Appointment' as const, id })),
+            'Appointment',
+          ]
           : ['Appointment'],
     }),
 
@@ -138,8 +138,9 @@ export const appointmentApi = api.injectEndpoints({
 
     completeAppointment: builder.mutation<Appointment, string>({
       query: (appointmentId) => ({
-        url: `/appointments/${appointmentId}/complete/`,
+        url: `/appointments/${appointmentId}/`,
         method: 'POST',
+        body: { action: 'complete' },
       }),
       invalidatesTags: (result, error, appointmentId) => [
         { type: 'Appointment', id: appointmentId },
@@ -208,7 +209,7 @@ export const appointmentApi = api.injectEndpoints({
     }),
 
     getDailyDetails: builder.query<any, { providerId: string; year: number; month: number; day: number }>({
-      query: ({ providerId, year, month, day }) => 
+      query: ({ providerId, year, month, day }) =>
         `/appointments/providers/${providerId}/calendar/${year}/${month}/${day}/`,
       providesTags: (result, error, { providerId }) => [
         { type: 'Availability', id: `${providerId}-daily` },

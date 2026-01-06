@@ -34,7 +34,7 @@ export default function ForgotPasswordScreen() {
                 'Password reset link has been sent to your email.',
                 [{ text: 'OK', onPress: () => router.back() }]
             );
-        } catch (error) {
+        } catch {
             Alert.alert('Error', 'Failed to send reset email. Please try again.');
         } finally {
             setIsLoading(false);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { DollarSign, Star, TrendingUp, Users } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';

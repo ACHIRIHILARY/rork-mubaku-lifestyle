@@ -310,15 +310,7 @@ Thank you for using Mu Baku Lifestyle!
     );
   };
 
-  const handleViewLocation = () => {
-    if (payment?.appointment?.service_location) {
-      // Navigate to view location with service coordinates
-      const location = payment.appointment.service_location;
-      router.push(`/view-location?latitude=${location.latitude}&longitude=${location.longitude}&locationName=${encodeURIComponent(location.location || 'Service Location')}&serviceName=${encodeURIComponent(payment.appointment.service || 'Service')}` as any);
-    } else {
-      Alert.alert('Location Unavailable', 'Service location information is not available yet.');
-    }
-  };
+
 
   if (error) {
     return (

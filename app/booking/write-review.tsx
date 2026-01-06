@@ -7,7 +7,6 @@ import * as ImagePicker from 'expo-image-picker';
 
 export default function WriteReviewScreen() {
     const { t } = useTranslation();
-    const { appointmentId } = useLocalSearchParams();
 
     const [rating, setRating] = useState(0);
     const [review, setReview] = useState('');
