@@ -210,19 +210,8 @@ export default function PaymentScreen() {
 
       console.log('[Payment] Frontend token:', paymentData.frontend_token.substring(0, 8) + '...');
 
-      // Show success message and redirect to booking details
-      Alert.alert(
-        'Payment Completed Successfully!',
-        `Your payment of ${currency} ${Math.round(totalAmount)} has been processed successfully.`,
-        [
-          {
-            text: 'View Booking Details',
-            onPress: () => {
-              router.replace(`/booking/status?appointmentId=${appointment.id}&paymentSuccess=true&paymentMessage=${encodeURIComponent('Payment completed successfully')}` as any);
-            }
-          }
-        ]
-      );
+      // Navigate to payment status page for polling
+      router.replace(`/booking/payment-status?frontendToken=${paymentData.frontend_token}&phoneNumber=${encodeURIComponent(phoneNumber)}` as any);
     } catch (error: any) {
       console.error('[Payment] Error:', error?.status || 'Unknown');
 
@@ -887,185 +876,184 @@ const styles = StyleSheet.create({
     color: '#2D1A46',
     lineHeight: 20,
   },
-  phoneHighlight: {
-    fontWeight: 'bold',
-    color: '#F4A896',
+});
+color: '#F4A896',
   },
-  processingTime: {
-    fontSize: 12,
+processingTime: {
+  fontSize: 12,
     color: '#666',
-    marginTop: 8,
+      marginTop: 8,
   },
-  agreementContainer: {
-    marginTop: 16,
+agreementContainer: {
+  marginTop: 16,
   },
-  checkbox: {
-    flexDirection: 'row',
+checkbox: {
+  flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  checkboxBox: {
-    width: 24,
+checkboxBox: {
+  width: 24,
     height: 24,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: '#2D1A46',
-    marginRight: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
+      borderRadius: 6,
+        borderWidth: 2,
+          borderColor: '#2D1A46',
+            marginRight: 12,
+              justifyContent: 'center',
+                alignItems: 'center',
   },
-  checkboxBoxChecked: {
-    backgroundColor: '#2D1A46',
+checkboxBoxChecked: {
+  backgroundColor: '#2D1A46',
   },
-  checkmark: {
-    color: 'white',
+checkmark: {
+  color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
+      fontWeight: 'bold',
   },
-  checkboxLabel: {
-    flex: 1,
+checkboxLabel: {
+  flex: 1,
     fontSize: 14,
-    color: '#2D1A46',
-    lineHeight: 20,
+      color: '#2D1A46',
+        lineHeight: 20,
   },
-  feeLabel: {
-    fontSize: 14,
+feeLabel: {
+  fontSize: 14,
     color: '#666',
   },
-  feeAmount: {
-    fontSize: 14,
+feeAmount: {
+  fontSize: 14,
     fontWeight: '600',
-    color: '#666',
+      color: '#666',
   },
-  divider: {
-    height: 1,
+divider: {
+  height: 1,
     backgroundColor: '#E5E5E5',
-    marginVertical: 12,
+      marginVertical: 12,
   },
-  totalCard: {
-    backgroundColor: 'white',
+totalCard: {
+  backgroundColor: 'white',
     borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
+      padding: 20,
+        marginBottom: 20,
+          shadowColor: '#000',
+            shadowOffset: {
+    width: 0,
       height: 2,
     },
-    shadowOpacity: 0.1,
+  shadowOpacity: 0.1,
     shadowRadius: 3.84,
-    elevation: 5,
+      elevation: 5,
   },
-  totalCardTitle: {
-    fontSize: 18,
+totalCardTitle: {
+  fontSize: 18,
     fontWeight: 'bold',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  grandTotalLabel: {
-    fontSize: 18,
+grandTotalLabel: {
+  fontSize: 18,
     fontWeight: 'bold',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  grandTotalAmount: {
-    fontSize: 24,
+grandTotalAmount: {
+  fontSize: 24,
     fontWeight: 'bold',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  escrowNote: {
-    fontSize: 12,
+escrowNote: {
+  fontSize: 12,
     color: '#10B981',
-    marginTop: 12,
-    textAlign: 'center',
+      marginTop: 12,
+        textAlign: 'center',
   },
-  loadingButtonContent: {
-    flexDirection: 'row',
+loadingButtonContent: {
+  flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+      gap: 12,
   },
-  totalRow: {
-    flexDirection: 'row',
+totalRow: {
+  flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+      alignItems: 'center',
   },
-  totalLabel: {
-    fontSize: 18,
+totalLabel: {
+  fontSize: 18,
     fontWeight: 'bold',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  totalAmount: {
-    fontSize: 24,
+totalAmount: {
+  fontSize: 24,
     fontWeight: 'bold',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  buttonContainer: {
-    paddingHorizontal: 24,
+buttonContainer: {
+  paddingHorizontal: 24,
     paddingVertical: 20,
-    paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E5E5',
+      paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
+        backgroundColor: 'white',
+          borderTopWidth: 1,
+            borderTopColor: '#E5E5E5',
   },
-  payButton: {
-    backgroundColor: '#2D1A46',
+payButton: {
+  backgroundColor: '#2D1A46',
     paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
+      borderRadius: 12,
+        alignItems: 'center',
   },
-  disabledButton: {
-    backgroundColor: '#ccc',
+disabledButton: {
+  backgroundColor: '#ccc',
   },
-  payButtonText: {
-    color: 'white',
+payButtonText: {
+  color: 'white',
     fontSize: 18,
-    fontWeight: '600',
+      fontWeight: '600',
   },
-  quickSummaryContainer: {
-    backgroundColor: 'white',
+quickSummaryContainer: {
+  backgroundColor: 'white',
     borderTopWidth: 1,
-    borderTopColor: '#E5E5E5',
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+      borderTopColor: '#E5E5E5',
+        paddingHorizontal: 24,
+          paddingVertical: 16,
   },
-  quickSummaryCard: {
-    backgroundColor: '#F8F9FA',
+quickSummaryCard: {
+  backgroundColor: '#F8F9FA',
     borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: '#E5E5E5',
+      padding: 16,
+        borderWidth: 1,
+          borderColor: '#E5E5E5',
   },
-  quickSummaryRow: {
-    flexDirection: 'row',
+quickSummaryRow: {
+  flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
+      alignItems: 'center',
+        marginBottom: 8,
   },
-  quickSummaryLabel: {
-    fontSize: 14,
+quickSummaryLabel: {
+  fontSize: 14,
     color: '#666',
   },
-  quickSummaryValue: {
-    fontSize: 14,
+quickSummaryValue: {
+  fontSize: 14,
     fontWeight: '600',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  quickSummaryDivider: {
-    height: 1,
+quickSummaryDivider: {
+  height: 1,
     backgroundColor: '#E5E5E5',
-    marginVertical: 8,
+      marginVertical: 8,
   },
-  quickSummaryTotalLabel: {
-    fontSize: 16,
+quickSummaryTotalLabel: {
+  fontSize: 16,
     fontWeight: 'bold',
-    color: '#2D1A46',
+      color: '#2D1A46',
   },
-  quickSummaryTotalValue: {
-    fontSize: 18,
+quickSummaryTotalValue: {
+  fontSize: 18,
     fontWeight: 'bold',
-    color: '#F4A896',
+      color: '#F4A896',
   },
-  quickSummaryNote: {
-    fontSize: 12,
+quickSummaryNote: {
+  fontSize: 12,
     color: '#10B981',
-    textAlign: 'center',
-    marginTop: 8,
+      textAlign: 'center',
+        marginTop: 8,
   },
 });

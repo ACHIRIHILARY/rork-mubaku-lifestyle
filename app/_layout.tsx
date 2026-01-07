@@ -10,6 +10,7 @@ import i18n from "./i18n";
 import { store } from "@/store/store";
 
 import { initializeAuth, checkTokenExpiration } from "@/store/authSlice";
+import { initializeLanguage } from "@/store/languageSlice";
 import { authApi } from "@/store/services/authApi";
 
 
@@ -46,6 +47,7 @@ function RootLayoutNav() {
       <Stack.Screen name="booking/payment" options={{ headerShown: false }} />
       <Stack.Screen name="booking/status" options={{ headerShown: false }} />
       <Stack.Screen name="booking/payment-status" options={{ headerShown: false }} />
+      <Stack.Screen name="booking/transaction-details" options={{ headerShown: false }} />
       <Stack.Screen name="booking/reschedule" options={{ headerShown: false }} />
       <Stack.Screen name="my-bookings" options={{ headerShown: false }} />
       <Stack.Screen name="home" options={{ headerShown: false }} />
@@ -65,24 +67,28 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   useEffect(() => {
-    const initAuth = async () => {
+    const initApp = async () => {
       try {
-        const result = await store.dispatch(initializeAuth()).unwrap();
+        // Initialize both auth and language
+        const [authResult] = await Promise.all([
+          store.dispatch(initializeAuth()).unwrap(),
+          store.dispatch(initializeLanguage()).unwrap(),
+        ]);
 
-        if (result) {
+        if (authResult) {
           console.log('Auth tokens loaded from storage, fetching user data...');
           store.dispatch(authApi.endpoints.getCurrentUser.initiate());
         } else {
           console.log('No stored auth tokens found');
         }
       } catch (error) {
-        console.error('Failed to initialize auth:', error);
+        console.error('Failed to initialize app:', error);
       } finally {
         SplashScreen.hideAsync();
       }
     };
 
-    initAuth();
+    initApp();
   }, []);
 
   // Periodic token expiration check (every hour)

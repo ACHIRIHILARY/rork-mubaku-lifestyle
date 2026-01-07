@@ -6,11 +6,15 @@ import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useTranslation } from 'react-i18next';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSelector, useDispatch } from 'react-redux';
+import { setLanguage } from '@/store/languageSlice';
+import type { RootState, AppDispatch } from '@/store/store';
 
 
 export default function HomeScreen() {
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
+  const currentLanguage = useSelector((state: RootState) => state.language.currentLanguage);
 
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -119,19 +123,19 @@ export default function HomeScreen() {
             </View>
             <View style={styles.languageSwitcher}>
               <TouchableOpacity
-                style={[styles.langButton, i18n.language === 'en' && styles.langButtonActive]}
-                onPress={async () => {
-                  await AsyncStorage.setItem('user-language', 'en')
-                  i18n.changeLanguage('en')
+                style={[styles.langButton, currentLanguage === 'en' && styles.langButtonActive]}
+                onPress={() => {
+                  dispatch(setLanguage('en'));
+                  i18n.changeLanguage('en');
                 }}
               >
                 <Text style={styles.langButtonText}>EN</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.langButton, i18n.language === 'fr' && styles.langButtonActive]}
-                onPress={async () => {
-                  await AsyncStorage.setItem('user-language', 'fr')
-                  i18n.changeLanguage('fr')
+                style={[styles.langButton, currentLanguage === 'fr' && styles.langButtonActive]}
+                onPress={() => {
+                  dispatch(setLanguage('fr'));
+                  i18n.changeLanguage('fr');
                 }}
               >
                 <Text style={styles.langButtonText}>FR</Text>
@@ -244,8 +248,8 @@ export default function HomeScreen() {
                       onPress={() => handleServicePress(service.id)}
                     >
                       <View style={styles.recommendationImage}>
-                        {service.image_url ? (
-                          <Image source={{ uri: service.image_url }} style={styles.recommendationImageContent} />
+                        {service.image ? (
+                          <Image source={{ uri: service.image }} style={styles.recommendationImageContent} />
                         ) : (
                           <View style={styles.recommendationImagePlaceholder}>
                             <Text style={styles.recommendationImageText}>💼</Text>
@@ -257,10 +261,10 @@ export default function HomeScreen() {
                           {service.name}
                         </Text>
                         <Text style={styles.recommendationProvider} numberOfLines={1}>
-                          by {service.provider_details?.full_name}
+                          by {service.provider_name}
                         </Text>
                         <Text style={styles.recommendationPrice}>
-                          {Math.floor(Number(service.price))} {service.currency}
+                          {service.price_display}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -374,8 +378,8 @@ export default function HomeScreen() {
                   onPress={() => handleServicePress(service.id)}
                 >
                   <View style={styles.serviceImageContainer}>
-                    {service.image_url ? (
-                      <Image source={{ uri: service.image_url }} style={styles.serviceImage} />
+                    {service.image ? (
+                      <Image source={{ uri: service.image }} style={styles.serviceImage} />
                     ) : (
                       <View style={styles.serviceImagePlaceholder}>
                         <Text style={styles.serviceImageText}>💼</Text>
@@ -383,10 +387,24 @@ export default function HomeScreen() {
                     )}
                   </View>
                   <View style={styles.serviceInfo}>
-                    <Text style={styles.serviceName} numberOfLines={2}>{service.name} by <Text style={{ fontWeight: 'normal' }}>{service.provider_details?.full_name}</Text></Text>
-                    <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_details?.name || 'Service'}</Text>
+                    <View style={styles.serviceHeader}>
+                      <Text style={styles.serviceName} numberOfLines={2}>{service.name}</Text>
+                      {service.is_verified_provider && (
+                        <View style={styles.verifiedBadge}>
+                          <Text style={styles.verifiedBadgeText}>✓</Text>
+                        </View>
+                      )}
+                    </View>
+                    <View style={styles.providerInfo}>
+                      <Text style={styles.providerBusiness} numberOfLines={1}>{service.provider_business}</Text>
+                      <Text style={styles.providerName} numberOfLines={1}>by {service.provider_name}</Text>
+                    </View>
+                    <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_name}</Text>
+                    <View style={styles.locationRow}>
+                      <Text style={styles.serviceLocation}>📍 {service.provider_location.city}</Text>
+                    </View>
                     <View style={styles.serviceMeta}>
-                      <Text style={styles.servicePrice}>{Math.floor(Number(service.price))} {service.currency}</Text>
+                      <Text style={styles.servicePrice}>{service.price_display}</Text>
                       <Text style={styles.serviceDuration}>{service.duration_minutes}min</Text>
                     </View>
                   </View>
@@ -811,16 +829,46 @@ const styles = StyleSheet.create({
   serviceInfo: {
     padding: 12,
   },
+  serviceHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 6,
+  },
+  verifiedBadge: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#10B981',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verifiedBadgeText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
   serviceName: {
     fontSize: 14,
     fontWeight: 'bold',
     color: '#2D1A46',
-    marginBottom: 4,
+  },
+  providerInfo: {
+    marginBottom: 6,
+  },
+  providerBusiness: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#2D1A46',
+  },
+  providerName: {
+    fontSize: 11,
+    color: '#666',
   },
   serviceCategory: {
     fontSize: 12,
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   serviceMeta: {
     flexDirection: 'row',

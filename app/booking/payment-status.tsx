@@ -234,8 +234,9 @@ export default function PaymentStatusScreen() {
   };
 
   const handleViewBooking = () => {
-    if (payment?.appointment?.id) {
-      router.replace(`/booking/status?appointmentId=${payment.appointment.id}` as any);
+    if (payment?.id) {
+      // Navigate to transaction details page instead of booking status
+      router.replace(`/booking/transaction-details?paymentId=${payment.id}` as any);
     } else {
       router.replace('/(tabs)/my-bookings' as any);
     }

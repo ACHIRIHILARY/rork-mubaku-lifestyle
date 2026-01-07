@@ -1,15 +1,18 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-import { Home, Calendar, Bell, User, Users } from 'lucide-react-native';
+import { Home, Calendar, Bell, User, Users, BarChart3 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import StickyHeader from '../components/StickyHeader';
 import { useTranslation } from 'react-i18next';
+import { useAppSelector } from '@/store/hooks';
 
 export default function TabLayout() {
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  
+  const { user } = useAppSelector(state => state.auth);
+  const isProvider = user?.role === 'provider';
+
   const tabBarHeight = Platform.select({
     ios: 50 + insets.bottom,
     android: Math.max(60, 60 + insets.bottom),
@@ -21,7 +24,7 @@ export default function TabLayout() {
     android: Math.max(insets.bottom, 8),
     default: 8,
   });
-  
+
   return (
     <Tabs
       screenOptions={{
@@ -55,20 +58,23 @@ export default function TabLayout() {
         },
       }}
     >
-      <Tabs.Screen
-        name="home"
-        options={{
-          title: t('home'),
-          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
-        }}
-      />
-      <Tabs.Screen
-        name="my-bookings"
-        options={{
-          title: t('bookings'),
-          tabBarIcon: ({ color, size }) => <Calendar color={color} size={size} />,
-        }}
-      />
+      {isProvider ? (
+        <Tabs.Screen
+          name="dashboard"
+          options={{
+            title: t('dashboard'),
+            tabBarIcon: ({ color, size }) => <BarChart3 color={color} size={size} />,
+          }}
+        />
+      ) : (
+        <Tabs.Screen
+          name="home"
+          options={{
+            title: t('home'),
+            tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
+          }}
+        />
+      )}
       <Tabs.Screen
         name="providers"
         options={{
@@ -77,10 +83,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="my-bookings"
         options={{
-          title: t('notifications'),
-          tabBarIcon: ({ color, size }) => <Bell color={color} size={size} />,
+          title: t('bookings'),
+          tabBarIcon: ({ color, size }) => <Calendar color={color} size={size} />,
         }}
       />
       <Tabs.Screen

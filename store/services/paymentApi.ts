@@ -270,6 +270,13 @@ export const paymentApi = api.injectEndpoints({
       ],
     }),
 
+    getPaymentById: builder.query<PaymentStatusResponse, string>({
+      query: (paymentId) => `/payments/${paymentId}/`,
+      providesTags: (result, error, paymentId) => [
+        { type: 'Payment', id: paymentId },
+      ],
+    }),
+
     getPaymentHistory: builder.query<PaymentHistoryResponse, {
       status?: string;
       page?: number;
@@ -293,5 +300,6 @@ export const {
   useInitiatePaymentMutation,
   useGetPaymentStatusQuery,
   useLazyGetPaymentStatusQuery,
+  useGetPaymentByIdQuery,
   useGetPaymentHistoryQuery,
 } = paymentApi;

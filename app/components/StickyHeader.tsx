@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView, Platform } from 'react-native';
-import { Menu, User, Calendar, Receipt, Briefcase, Play, Settings, X, Users } from 'lucide-react-native';
+import { Menu, User, Calendar, Receipt, Briefcase, Play, Settings, X, Users, Bell } from 'lucide-react-native';
 import { useAppSelector } from '@/store/hooks';
 import { router } from 'expo-router';
 
@@ -81,15 +81,25 @@ export default function StickyHeader() {
           <Text style={styles.brandText}>Mubaku Lifestyle</Text>
         </View>
 
-        {/* Right: CTA Button */}
-        <TouchableOpacity
-          style={styles.ctaButton}
-          onPress={handleCTAPress}
-          accessibilityLabel="Set up my business"
-        >
-          <Briefcase color="white" size={16} />
-          <Text style={styles.ctaText}>Set up my business</Text>
-        </TouchableOpacity>
+        {/* Right: Notification and CTA */}
+        <View style={styles.rightContainer}>
+          <TouchableOpacity
+            style={styles.notificationButton}
+            onPress={() => router.push('/(tabs)/messages')}
+            accessibilityLabel="Notifications"
+          >
+            <Bell color="#2D1A46" size={20} />
+            {/* Add badge for unread notifications if needed */}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.ctaButton}
+            onPress={handleCTAPress}
+            accessibilityLabel="Set up my business"
+          >
+            <Briefcase color="white" size={16} />
+            <Text style={styles.ctaText}>Set up my business</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Menu Modal */}
@@ -297,5 +307,15 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 12,
+  },
+  rightContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  notificationButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: '#F5F5F5',
   },
 });

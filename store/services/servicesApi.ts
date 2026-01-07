@@ -15,24 +15,38 @@ interface ServiceCategory {
 
 interface Service {
   id: string;
-  provider: string;
-  category: number;
+  pkid: number;
   name: string;
   description?: string;
+  category: number;
+  category_name: string;
+  provider: number;
+  provider_name: string;
+  provider_business: string;
+  is_verified_provider: boolean;
+  duration: string;
   duration_minutes: number;
-  price: number;
+  price: string;
+  image: string;
   currency: string;
+  price_display: string;
   is_active: boolean;
-  latitude?: number;
-  longitude?: number;
-  location?: string;
-  image_url?: string;
   created_at: string;
   updated_at: string;
-  provider_details?: any;
-  category_details?: ServiceCategory;
-  rating?: number;
-  total_bookings?: number;
+  provider_location: {
+    address: string;
+    city: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+    business_name: string;
+    map_embed: string;
+    static_map?: string;
+    google_maps_link: string;
+    is_verified_provider: boolean;
+  };
+  provider_map: string;
+  provider_static_map?: string;
 }
 
 interface CreateServiceRequest {
@@ -80,9 +94,9 @@ export const servicesApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Service' as const, id })),
-              'Service',
-            ]
+            ...result.map(({ id }) => ({ type: 'Service' as const, id })),
+            'Service',
+          ]
           : ['Service'],
     }),
 
@@ -96,9 +110,9 @@ export const servicesApi = api.injectEndpoints({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Service' as const, id })),
-              'Service',
-            ]
+            ...result.map(({ id }) => ({ type: 'Service' as const, id })),
+            'Service',
+          ]
           : ['Service'],
     }),
 

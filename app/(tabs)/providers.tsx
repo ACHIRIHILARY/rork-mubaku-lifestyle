@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { Search, X, User, Star } from 'lucide-react-native';
+import { Search, X, User, Star, MessageCircle } from 'lucide-react-native';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useTranslation } from 'react-i18next';
 
@@ -14,6 +14,11 @@ export default function ProvidersScreen() {
 
   const handleProviderPress = (providerId: number) => {
     router.push(`/provider-detail?id=${providerId}` as any);
+  };
+
+  const handleChatPress = (providerId: number, providerName: string) => {
+    // For now, we'll navigate to messages. In a real app, this would start/create a conversation
+    router.push('/(tabs)/messages' as any);
   };
 
   const handleClearSearch = useCallback(() => {
@@ -78,38 +83,45 @@ export default function ProvidersScreen() {
           ) : filteredProviders && filteredProviders.length > 0 ? (
             <View style={styles.providersGrid}>
               {filteredProviders.map((provider) => (
-                <TouchableOpacity
-                  key={provider.pkid}
-                  style={styles.providerCard}
-                  onPress={() => handleProviderPress(provider.pkid)}
-                >
-                  <View style={styles.providerImageContainer}>
-                    {provider.profile_photo ? (
-                      <Image source={{ uri: provider.profile_photo }} style={styles.providerImage} />
-                    ) : (
-                      <View style={styles.providerImagePlaceholder}>
-                        <User color="white" size={24} />
-                      </View>
-                    )}
-                  </View>
-                  <View style={styles.providerInfo}>
-                    <Text style={styles.providerName} numberOfLines={1}>
-                      {provider.full_name}
-                    </Text>
-                    <Text style={styles.providerLocation} numberOfLines={1}>
-                      📍 {provider.city || t('locationNotSet')}
-                    </Text>
-                    {provider.about_me && (
-                      <Text style={styles.providerAbout} numberOfLines={2}>
-                        {provider.about_me}
-                      </Text>
-                    )}
-                    <View style={styles.providerRating}>
-                      <Star color="#FFD700" size={14} fill="#FFD700" />
-                      <Text style={styles.ratingText}>4.8</Text>
+                <View key={provider.pkid} style={styles.providerCardContainer}>
+                  <TouchableOpacity
+                    style={styles.providerCard}
+                    onPress={() => handleProviderPress(provider.pkid)}
+                  >
+                    <View style={styles.providerImageContainer}>
+                      {provider.profile_photo ? (
+                        <Image source={{ uri: provider.profile_photo }} style={styles.providerImage} />
+                      ) : (
+                        <View style={styles.providerImagePlaceholder}>
+                          <User color="white" size={24} />
+                        </View>
+                      )}
                     </View>
-                  </View>
-                </TouchableOpacity>
+                    <View style={styles.providerInfo}>
+                      <Text style={styles.providerName} numberOfLines={1}>
+                        {provider.full_name}
+                      </Text>
+                      <Text style={styles.providerLocation} numberOfLines={1}>
+                        📍 {provider.city || t('locationNotSet')}
+                      </Text>
+                      {provider.about_me && (
+                        <Text style={styles.providerAbout} numberOfLines={2}>
+                          {provider.about_me}
+                        </Text>
+                      )}
+                      <View style={styles.providerRating}>
+                        <Star color="#FFD700" size={14} fill="#FFD700" />
+                        <Text style={styles.ratingText}>4.8</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.chatButton}
+                    onPress={() => handleChatPress(provider.pkid, provider.full_name)}
+                  >
+                    <MessageCircle color="white" size={16} />
+                  </TouchableOpacity>
+                </View>
               ))}
             </View>
           ) : (
@@ -195,12 +207,15 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
   },
+  providerCardContainer: {
+    position: 'relative',
+    width: '48%', // 2 columns
+    marginBottom: 16,
+  },
   providerCard: {
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 16,
-    marginBottom: 16,
-    width: '48%', // 2 columns
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -209,6 +224,25 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  chatButton: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: '#F4A896',
+    borderRadius: 20,
+    width: 32,
+    height: 32,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3,
   },
   providerImageContainer: {
     alignItems: 'center',
