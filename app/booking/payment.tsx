@@ -187,7 +187,7 @@ export default function PaymentScreen() {
       console.log('[Payment] Initiating payment...');
 
       const deviceInfo = `${Platform.OS}/${Platform.Version}`;
-      
+
       const paymentResponse = await initiatePayment({
         appointment_id: appointment.id,
         payment_method: paymentMethod,
@@ -210,19 +210,29 @@ export default function PaymentScreen() {
 
       console.log('[Payment] Frontend token:', paymentData.frontend_token.substring(0, 8) + '...');
 
-      router.push(
-        `/booking/payment-status?frontendToken=${paymentData.frontend_token}&phoneNumber=${phoneNumber}&amount=${Math.round(totalAmount)}&currency=${currency}` as any
+      // Show success message and redirect to booking details
+      Alert.alert(
+        'Payment Completed Successfully!',
+        `Your payment of ${currency} ${Math.round(totalAmount)} has been processed successfully.`,
+        [
+          {
+            text: 'View Booking Details',
+            onPress: () => {
+              router.replace(`/booking/status?appointmentId=${appointment.id}&paymentSuccess=true&paymentMessage=${encodeURIComponent('Payment completed successfully')}` as any);
+            }
+          }
+        ]
       );
     } catch (error: any) {
       console.error('[Payment] Error:', error?.status || 'Unknown');
-      
+
       let errorTitle = 'Payment Failed';
       let errorMessage = 'Unable to process payment. Please try again.';
       let suggestions: string[] = [];
-      
+
       if (error?.data?.error) {
         const errorData = error.data.error;
-        
+
         if (errorData.code) {
           switch (errorData.code) {
             case 'INVALID_PHONE_FORMAT':
@@ -233,7 +243,7 @@ export default function PaymentScreen() {
                 'Include country code 237',
               ];
               break;
-            
+
             case 'INSUFFICIENT_FUNDS':
               errorTitle = 'Insufficient Funds';
               errorMessage = 'Your account balance is too low';
@@ -242,7 +252,7 @@ export default function PaymentScreen() {
                 'Try a different payment method',
               ];
               break;
-            
+
             case 'GATEWAY_TIMEOUT':
               errorTitle = 'Connection Issue';
               errorMessage = 'Unable to reach payment gateway';
@@ -251,7 +261,7 @@ export default function PaymentScreen() {
                 'Try again in 30 seconds',
               ];
               break;
-            
+
             case 'DUPLICATE_TRANSACTION':
               errorTitle = 'Duplicate Payment';
               errorMessage = 'This payment may already be processing';
@@ -260,7 +270,7 @@ export default function PaymentScreen() {
                 'Wait a few moments before retrying',
               ];
               break;
-            
+
             case 'DAILY_LIMIT_EXCEEDED':
               errorTitle = 'Daily Limit Reached';
               errorMessage = 'You have reached your daily transaction limit';
@@ -269,7 +279,7 @@ export default function PaymentScreen() {
                 'Contact your mobile money provider',
               ];
               break;
-            
+
             case 'PAYMENT_INITIATION_FAILED':
               errorTitle = 'Payment Setup Failed';
               errorMessage = errorData.message || 'Could not start payment process';
@@ -278,7 +288,7 @@ export default function PaymentScreen() {
                 'Check if your phone number is active',
               ];
               break;
-            
+
             default:
               errorMessage = errorData.message || errorMessage;
               suggestions = errorData.suggestions || [];
@@ -311,11 +321,11 @@ export default function PaymentScreen() {
         errorMessage = 'Our servers are experiencing issues';
         suggestions = ['Please try again in a few minutes'];
       }
-      
-      const fullMessage = suggestions.length > 0 
-        ? `${errorMessage}\n\n${suggestions.join('\n')}` 
+
+      const fullMessage = suggestions.length > 0
+        ? `${errorMessage}\n\n${suggestions.join('\n')}`
         : errorMessage;
-      
+
       Alert.alert(errorTitle, fullMessage);
     }
   };
@@ -323,7 +333,7 @@ export default function PaymentScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.backButton}
           onPress={() => router.back()}
         >
@@ -379,11 +389,11 @@ export default function PaymentScreen() {
                   <Text style={styles.sectionSubtitle}>Select MTN or Orange Money</Text>
                 </View>
               </View>
-              
+
               <View style={styles.methodsContainer}>
                 {paymentMethodsData?.methods?.map((method) => (
                   <TouchableOpacity
-                    key={method.method_code}    
+                    key={method.method_code}
                     style={[
                       styles.methodCard,
                       paymentMethod === method.method_code && styles.selectedMethodCard
@@ -398,9 +408,9 @@ export default function PaymentScreen() {
                         styles.methodIconContainer,
                         paymentMethod === method.method_code && styles.selectedMethodIcon
                       ]}>
-                        <Smartphone 
-                          color={paymentMethod === method.method_code ? 'white' : '#2D1A46'} 
-                          size={24} 
+                        <Smartphone
+                          color={paymentMethod === method.method_code ? 'white' : '#2D1A46'}
+                          size={24}
                         />
                       </View>
                       <View style={styles.methodInfo}>
@@ -445,7 +455,7 @@ export default function PaymentScreen() {
                     <Text style={styles.sectionSubtitle}>Enter the {selectedMethodData.display_name} number for payment</Text>
                   </View>
                 </View>
-                
+
                 <View style={styles.card}>
                   <View style={styles.inputContainer}>
                     <Text style={styles.label}>
@@ -475,7 +485,7 @@ export default function PaymentScreen() {
                       </Text>
                     )}
                   </View>
-                  
+
                   <View style={styles.infoBox}>
                     <View style={styles.infoRow}>
                       <Info size={20} color="#2D1A46" />
@@ -489,7 +499,7 @@ export default function PaymentScreen() {
                   </View>
 
                   <View style={styles.agreementContainer}>
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       style={styles.checkbox}
                       onPress={() => setAgreementAccepted(!agreementAccepted)}
                     >
@@ -523,29 +533,29 @@ export default function PaymentScreen() {
               </View>
             </View>
             <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Service Price</Text>
-            <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
-          </View>
-          {selectedMethodData && (
-            <>
-              <View style={styles.totalRow}>
-                <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
-                <Text style={styles.feeAmount}>
-                  {currency} {Math.round(calculateGatewayFee())}
+              <Text style={styles.totalLabel}>Service Price</Text>
+              <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
+            </View>
+            {selectedMethodData && (
+              <>
+                <View style={styles.totalRow}>
+                  <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
+                  <Text style={styles.feeAmount}>
+                    {currency} {Math.round(calculateGatewayFee())}
+                  </Text>
+                </View>
+                <View style={styles.divider} />
+                <View style={styles.totalRow}>
+                  <Text style={styles.grandTotalLabel}>Total Amount</Text>
+                  <Text style={styles.grandTotalAmount}>
+                    {currency} {Math.round(calculateTotalAmount())}
+                  </Text>
+                </View>
+                <Text style={styles.escrowNote}>
+                  💰 Funds held securely in escrow until service completed
                 </Text>
-              </View>
-              <View style={styles.divider} />
-              <View style={styles.totalRow}>
-                <Text style={styles.grandTotalLabel}>Total Amount</Text>
-                <Text style={styles.grandTotalAmount}>
-                  {currency} {Math.round(calculateTotalAmount())}
-                </Text>
-              </View>
-              <Text style={styles.escrowNote}>
-                💰 Funds held securely in escrow until service completed
-              </Text>
-            </>
-          )}
+              </>
+            )}
           </View>
         )}
       </ScrollView>

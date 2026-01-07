@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, Image, ActivityIndicator } from 'react-native';
 import { Star, Camera, X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
-import { router, useLocalSearchParams } from 'expo-router';
+import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function WriteReviewScreen() {

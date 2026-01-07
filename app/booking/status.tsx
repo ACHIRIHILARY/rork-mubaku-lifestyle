@@ -5,7 +5,11 @@ import { CheckCircle, Clock, Star, Receipt, MapPin, XCircle } from 'lucide-react
 import { useGetAppointmentDetailQuery, useCancelAppointmentMutation, useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
 
 export default function BookingStatus() {
-  const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
+  const { appointmentId, paymentSuccess, paymentMessage } = useLocalSearchParams<{
+    appointmentId: string;
+    paymentSuccess?: string;
+    paymentMessage?: string;
+  }>();
   const { data: appointment, isLoading, refetch } = useGetAppointmentDetailQuery(appointmentId || '', {
     skip: !appointmentId,
   });
@@ -139,6 +143,15 @@ export default function BookingStatus() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.content}>
+        {/* Payment Success Message */}
+        {paymentSuccess === 'true' && paymentMessage && (
+          <View style={styles.paymentSuccessContainer}>
+            <CheckCircle color="#10B981" size={48} />
+            <Text style={styles.paymentSuccessTitle}>Payment Successful!</Text>
+            <Text style={styles.paymentSuccessMessage}>{decodeURIComponent(paymentMessage)}</Text>
+          </View>
+        )}
+
         {/* Success Message */}
         <View style={styles.successContainer}>
           {isCompleted ? (
