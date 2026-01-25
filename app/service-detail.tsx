@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { ArrowLeft, Star, Clock, DollarSign, MapPin } from 'lucide-react-native';
 import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
+import CustomTabBar from './components/CustomTabBar';
 
 export default function ServiceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -53,114 +54,115 @@ export default function ServiceDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <ArrowLeft color="white" size={24} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Service Details</Text>
-          <View style={styles.placeholder} />
-        </View>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => router.back()}
+            >
+              <ArrowLeft color="white" size={24} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Service Details</Text>
+            <View style={styles.placeholder} />
+          </View>
 
-        {/* Service Info */}
-        <View style={styles.content}>
-          <View style={styles.serviceHeader}>
-            <Text style={styles.serviceName}>{service.name}</Text>
-            {service.rating !== undefined && service.rating > 0 && (
-              <View style={styles.ratingContainer}>
-                <Star color="#FFD700" size={20} fill="#FFD700" />
-                <Text style={styles.rating}>{service.rating.toFixed(1)}</Text>
+          {/* Service Info */}
+          <View style={styles.content}>
+            <View style={styles.serviceHeader}>
+              <Text style={styles.serviceName}>{service.name}</Text>
+              {(service as any).rating !== undefined && (service as any).rating > 0 && (
+                <View style={styles.ratingContainer}>
+                  <Star color="#FFD700" size={20} fill="#FFD700" />
+                  <Text style={styles.rating}>{(service as any).rating.toFixed(1)}</Text>
+                </View>
+              )}
+            </View>
+
+            {service.category_name && (
+              <Text style={styles.category}>{service.category_name}</Text>
+            )}
+            {service.provider_location && (
+              <Text style={styles.providerName}>By {service.provider_location.business_name || 'Provider'}</Text>
+            )}
+            {(service as any).total_bookings !== undefined && (service as any).total_bookings > 0 && (
+              <Text style={styles.bookingsCount}>{(service as any).total_bookings} bookings</Text>
+            )}
+
+            {/* Service Details Card */}
+            <View style={styles.detailsCard}>
+              <Text style={styles.cardTitle}>Service Details</Text>
+              
+              <View style={styles.detailRow}>
+                <Clock color="#666" size={20} />
+                <Text style={styles.detailText}>Duration: {durationHours}</Text>
+              </View>
+
+              <View style={styles.detailRow}>
+                <DollarSign color="#666" size={20} />
+                <Text style={styles.detailText}>Price: {service.currency} {service.price}</Text>
+              </View>
+
+              <View style={styles.statusRow}>
+                <View style={[styles.statusDot, { backgroundColor: service.is_active ? '#4CAF50' : '#F44336' }]} />
+                <Text style={styles.statusText}>{service.is_active ? 'Available' : 'Currently Unavailable'}</Text>
+              </View>
+            </View>
+
+            {/* Description */}
+            {service.description && (
+              <View style={styles.descriptionCard}>
+                <Text style={styles.cardTitle}>Description</Text>
+                <Text style={styles.description}>{service.description}</Text>
+              </View>
+            )}
+
+            {/* Location */}
+            {((service.provider_location?.latitude && service.provider_location?.longitude) || (service.provider_location?.latitude && service.provider_location?.longitude)) && (
+              <View style={styles.locationCard}>
+                <Text style={styles.cardTitle}>Location</Text>
+                <Text style={styles.locationText}>
+                  {service.provider_location?.address || service.provider_location?.city || 'Service Location'}
+                </Text>
+                <TouchableOpacity 
+                  style={styles.viewLocationButton}
+                  onPress={() => router.push(`/view-location?latitude=${service.provider_location?.latitude}&longitude=${service.provider_location?.longitude}&locationName=${encodeURIComponent(service.provider_location?.address || service.provider_location?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+                >
+                  <MapPin color="white" size={18} />
+                  <Text style={styles.viewLocationButtonText}>View on Map</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Provider Info */}
+            {service.provider_location && (
+              <View style={styles.providerCard}>
+                <Text style={styles.cardTitle}>Provider Information</Text>
+                <Text style={styles.providerInfo}>
+                  {service.provider_location.business_name || 'Provider'}
+                </Text>
+                <Text style={styles.providerContact}>{service.provider_location.city}, {service.provider_location.country}</Text>
+              </View>
+            )}
+
+            {/* Book Button */}
+            {service.is_active && (
+              <View style={styles.bookingContainer}>
+                <TouchableOpacity 
+                  style={styles.bookButton}
+                  onPress={() => router.push(`/booking/select-datetime?serviceId=${service.id}` as any)}
+                >
+                  <Text style={styles.bookButtonText}>Book Service</Text>
+                </TouchableOpacity>
               </View>
             )}
           </View>
-
-          {service.category_details && (
-            <Text style={styles.category}>{service.category_details.name}</Text>
-          )}
-          {service.provider_location && (
-            <Text style={styles.providerName}>By {service.provider_location.full_name || 'Provider'}</Text>
-          )}
-          {service.total_bookings !== undefined && service.total_bookings > 0 && (
-            <Text style={styles.bookingsCount}>{service.total_bookings} bookings</Text>
-          )}
-
-          {/* Service Details Card */}
-          <View style={styles.detailsCard}>
-            <Text style={styles.cardTitle}>Service Details</Text>
-            
-            <View style={styles.detailRow}>
-              <Clock color="#666" size={20} />
-              <Text style={styles.detailText}>Duration: {durationHours}</Text>
-            </View>
-
-            <View style={styles.detailRow}>
-              <DollarSign color="#666" size={20} />
-              <Text style={styles.detailText}>Price: {service.currency} {service.price}</Text>
-            </View>
-
-            <View style={styles.statusRow}>
-              <View style={[styles.statusDot, { backgroundColor: service.is_active ? '#4CAF50' : '#F44336' }]} />
-              <Text style={styles.statusText}>{service.is_active ? 'Available' : 'Currently Unavailable'}</Text>
-            </View>
-          </View>
-
-          {/* Description */}
-          {service.description && (
-            <View style={styles.descriptionCard}>
-              <Text style={styles.cardTitle}>Description</Text>
-              <Text style={styles.description}>{service.description}</Text>
-            </View>
-          )}
-
-          {/* Location */}
-          {((service.provider_location?.latitude && service.provider_location?.longitude) || (service.provider_location?.latitude && service.provider_location?.longitude)) && (
-            <View style={styles.locationCard}>
-              <Text style={styles.cardTitle}>Location</Text>
-              <Text style={styles.locationText}>
-                {service.provider_location?.location || service.provider_location?.location || service.provider_location?.city || 'Service Location'}
-              </Text>
-              <TouchableOpacity 
-                style={styles.viewLocationButton}
-                onPress={() => router.push(`/view-location?latitude=${service.provider_location?.latitude || service.provider_location?.latitude}&longitude=${service.provider_location?.longitude || service.provider_location?.longitude}&locationName=${encodeURIComponent(service.location || service.provider_location?.location || service.provider_location?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
-              >
-                <MapPin color="white" size={18} />
-                <Text style={styles.viewLocationButtonText}>View on Map</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Provider Info */}
-          {service.provider_location && (
-            <View style={styles.providerCard}>
-              <Text style={styles.cardTitle}>Provider Information</Text>
-              <Text style={styles.providerInfo}>
-                {service.provider_location.full_name || 'Provider'}
-              </Text>
-              {service.provider_location.email && (
-                <Text style={styles.providerContact}>{service.provider_location.email}</Text>
-              )}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-
-      {/* Book Button */}
-      {service.is_active && (
-        <View style={styles.bookingContainer}>
-          <TouchableOpacity 
-            style={styles.bookButton}
-            onPress={() => router.push(`/booking/select-datetime?serviceId=${service.id}`)}
-          >
-            <Text style={styles.bookButtonText}>Book Service</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 

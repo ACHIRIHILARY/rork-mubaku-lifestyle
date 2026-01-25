@@ -4,6 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Scro
 import { ArrowLeft, Smartphone, Info, AlertCircle } from 'lucide-react-native';
 import { useCreateAppointmentMutation } from '@/store/services/appointmentApi';
 import { useGetPaymentMethodsQuery, useInitiatePaymentMutation } from '@/store/services/paymentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function PaymentScreen() {
   const { serviceId, date, startTime, endTime, amount, currency } = useLocalSearchParams<{
@@ -201,17 +202,22 @@ export default function PaymentScreen() {
       console.log('[Payment] Payment initiated successfully');
       console.log('[Payment] Payment response:', JSON.stringify(paymentResponse, null, 2));
 
-      // Handle response structure
-      const paymentData = paymentResponse;
+      // Handle both response structures: { payment: {...} } or direct {...}
+      const paymentData = paymentResponse?.payment || paymentResponse;
 
-      if (!paymentData || !paymentData.frontend_token) {
+      // Get frontend_token from the response
+      const frontendToken = paymentData?.frontend_token;
+
+      if (!frontendToken) {
+        console.error('[Payment] Response structure:', Object.keys(paymentResponse || {}));
+        console.error('[Payment] Payment data structure:', Object.keys(paymentData || {}));
         throw new Error('Frontend token not found in payment response');
       }
 
-      console.log('[Payment] Frontend token:', paymentData.frontend_token.substring(0, 8) + '...');
+      console.log('[Payment] Frontend token:', frontendToken.substring(0, 8) + '...');
 
       // Navigate to payment status page for polling
-      router.replace(`/booking/payment-status?frontendToken=${paymentData.frontend_token}&phoneNumber=${encodeURIComponent(phoneNumber)}` as any);
+      router.replace(`/booking/payment-status?frontendToken=${frontendToken}&phoneNumber=${encodeURIComponent(phoneNumber)}` as any);
     } catch (error: any) {
       console.error('[Payment] Error:', error?.status || 'Unknown');
 
@@ -320,283 +326,262 @@ export default function PaymentScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Payment</Text>
-        <View style={styles.placeholder} />
-      </View>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Payment</Text>
+          <View style={styles.placeholder} />
+        </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {isLoadingMethods ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#2D1A46" />
-            <Text style={styles.loadingText}>Loading payment methods...</Text>
-          </View>
-        ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
-          <View style={styles.errorContainer}>
-            <AlertCircle color="#EF4444" size={48} />
-            <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
-            <Text style={styles.errorMessage}>
-              Unable to load payment methods. Please check your connection and try again.
-            </Text>
-            <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
-              <Text style={styles.retryButtonText}>Retry</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.retryButton, { marginTop: 12, backgroundColor: '#666' }]} onPress={() => router.back()}>
-              <Text style={styles.retryButtonText}>Go Back</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <>
-            <View style={styles.stepIndicator}>
-              <View style={[styles.stepBadge, styles.stepBadgeActive]}>
-                <Text style={styles.stepNumber}>1</Text>
-              </View>
-              <View style={styles.stepLine} />
-              <View style={[styles.stepBadge, paymentMethod ? styles.stepBadgeActive : styles.stepBadgeInactive]}>
-                <Text style={[styles.stepNumber, !paymentMethod && styles.stepNumberInactive]}>2</Text>
-              </View>
-              <View style={styles.stepLine} />
-              <View style={[styles.stepBadge, styles.stepBadgeInactive]}>
-                <Text style={[styles.stepNumber, styles.stepNumberInactive]}>3</Text>
-              </View>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {isLoadingMethods ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#2D1A46" />
+              <Text style={styles.loadingText}>Loading payment methods...</Text>
             </View>
-
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <View style={styles.stepNumberCircle}>
-                  <Text style={styles.stepNumberText}>1</Text>
+          ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
+            <View style={styles.errorContainer}>
+              <AlertCircle color="#EF4444" size={48} />
+              <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
+              <Text style={styles.errorMessage}>
+                Unable to load payment methods. Please check your connection and try again.
+              </Text>
+              <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+                <Text style={styles.retryButtonText}>Retry</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.retryButton, { marginTop: 12, backgroundColor: '#666' }]} onPress={() => router.back()}>
+                <Text style={styles.retryButtonText}>Go Back</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={styles.stepIndicator}>
+                <View style={[styles.stepBadge, styles.stepBadgeActive]}>
+                  <Text style={styles.stepNumber}>1</Text>
                 </View>
-                <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitle}>Choose Payment Method</Text>
-                  <Text style={styles.sectionSubtitle}>Select MTN or Orange Money</Text>
+                <View style={styles.stepLine} />
+                <View style={[styles.stepBadge, paymentMethod ? styles.stepBadgeActive : styles.stepBadgeInactive]}>
+                  <Text style={[styles.stepNumber, !paymentMethod && styles.stepNumberInactive]}>2</Text>
+                </View>
+                <View style={styles.stepLine} />
+                <View style={[styles.stepBadge, styles.stepBadgeInactive]}>
+                  <Text style={[styles.stepNumber, styles.stepNumberInactive]}>3</Text>
                 </View>
               </View>
 
-              <View style={styles.methodsContainer}>
-                {paymentMethodsData?.methods?.map((method) => (
-                  <TouchableOpacity
-                    key={method.method_code}
-                    style={[
-                      styles.methodCard,
-                      paymentMethod === method.method_code && styles.selectedMethodCard
-                    ]}
-                    onPress={() => {
-                      setPaymentMethod(method.method_code);
-                      setPhoneNumber('');
-                    }}
-                  >
-                    <View style={styles.methodHeader}>
-                      <View style={[
-                        styles.methodIconContainer,
-                        paymentMethod === method.method_code && styles.selectedMethodIcon
-                      ]}>
-                        <Smartphone
-                          color={paymentMethod === method.method_code ? 'white' : '#2D1A46'}
-                          size={24}
-                        />
-                      </View>
-                      <View style={styles.methodInfo}>
-                        <Text style={[
-                          styles.methodTitle,
-                          paymentMethod === method.method_code && styles.selectedMethodText
-                        ]}>
-                          {method.display_name}
-                        </Text>
-                        <Text style={[
-                          styles.methodDescription,
-                          paymentMethod === method.method_code && styles.selectedMethodDescription
-                        ]}>
-                          Mobile money payment
-                        </Text>
-                        <Text style={[
-                          styles.methodLimits,
-                          paymentMethod === method.method_code && styles.selectedMethodDescription
-                        ]}>
-                          Limit: {method.limits.currency} {Math.round(method.limits.min_amount)} - {Math.round(method.limits.max_amount)}
-                        </Text>
-                      </View>
-                      {paymentMethod === method.method_code && (
-                        <View style={styles.selectedCheckmark}>
-                          <Text style={styles.checkmarkText}>✓</Text>
-                        </View>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {paymentMethod && selectedMethodData && (
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.stepNumberCircle}>
-                    <Text style={styles.stepNumberText}>2</Text>
+                    <Text style={styles.stepNumberText}>1</Text>
                   </View>
                   <View style={styles.sectionTitleContainer}>
-                    <Text style={styles.sectionTitle}>Enter Your Mobile Number</Text>
-                    <Text style={styles.sectionSubtitle}>Enter the {selectedMethodData.display_name} number for payment</Text>
+                    <Text style={styles.sectionTitle}>Choose Payment Method</Text>
+                    <Text style={styles.sectionSubtitle}>Select MTN or Orange Money</Text>
                   </View>
                 </View>
 
-                <View style={styles.card}>
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.label}>
-                      {selectedMethodData.configuration.service_number_label}
-                    </Text>
-                    <TextInput
-                      style={[
-                        styles.input,
-                        phoneError ? styles.inputError : null
-                      ]}
-                      value={phoneNumber}
-                      onChangeText={handlePhoneChange}
-                      placeholder={selectedMethodData.configuration.example}
-                      keyboardType="phone-pad"
-                      maxLength={9}
-                      autoComplete="tel"
-                      textContentType="telephoneNumber"
-                    />
-                    {phoneError ? (
-                      <View style={styles.inputErrorContainer}>
-                        <AlertCircle size={16} color="#EF4444" />
-                        <Text style={styles.errorText}>{phoneError}</Text>
-                      </View>
-                    ) : (
-                      <Text style={styles.hint}>
-                        {selectedMethodData.configuration.service_number_hint}
-                      </Text>
-                    )}
-                  </View>
-
-                  <View style={styles.infoBox}>
-                    <View style={styles.infoRow}>
-                      <Info size={20} color="#2D1A46" />
-                      <Text style={styles.infoText}>
-                        You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber ? `237${phoneNumber}` : '(your number)'}</Text>. Enter your PIN to authorize the payment.
-                      </Text>
-                    </View>
-                    <Text style={styles.processingTime}>
-                      ⏱️ Usually takes {selectedMethodData.metadata.estimated_processing_time}
-                    </Text>
-                  </View>
-
-                  <View style={styles.agreementContainer}>
+                <View style={styles.methodsContainer}>
+                  {paymentMethodsData?.methods?.map((method) => (
                     <TouchableOpacity
-                      style={styles.checkbox}
-                      onPress={() => setAgreementAccepted(!agreementAccepted)}
+                      key={method.method_code}
+                      style={[
+                        styles.methodCard,
+                        paymentMethod === method.method_code && styles.selectedMethodCard
+                      ]}
+                      onPress={() => {
+                        setPaymentMethod(method.method_code);
+                        setPhoneNumber('');
+                      }}
                     >
-                      <View style={[
-                        styles.checkboxBox,
-                        agreementAccepted && styles.checkboxBoxChecked
-                      ]}>
-                        {agreementAccepted && (
-                          <Text style={styles.checkmark}>✓</Text>
+                      <View style={styles.methodHeader}>
+                        <View style={[
+                          styles.methodIconContainer,
+                          paymentMethod === method.method_code && styles.selectedMethodIcon
+                        ]}>
+                          <Smartphone
+                            color={paymentMethod === method.method_code ? 'white' : '#2D1A46'}
+                            size={24}
+                          />
+                        </View>
+                        <View style={styles.methodInfo}>
+                          <Text style={[
+                            styles.methodTitle,
+                            paymentMethod === method.method_code && styles.selectedMethodText
+                          ]}>
+                            {method.display_name}
+                          </Text>
+                          <Text style={[
+                            styles.methodDescription,
+                            paymentMethod === method.method_code && styles.selectedMethodDescription
+                          ]}>
+                            Mobile money payment
+                          </Text>
+                          <Text style={[
+                            styles.methodLimits,
+                            paymentMethod === method.method_code && styles.selectedMethodDescription
+                          ]}>
+                            Limit: {method.limits.currency} {Math.round(method.limits.min_amount)} - {Math.round(method.limits.max_amount)}
+                          </Text>
+                        </View>
+                        {paymentMethod === method.method_code && (
+                          <View style={styles.selectedCheckmark}>
+                            <Text style={styles.checkmarkText}>✓</Text>
+                          </View>
                         )}
                       </View>
-                      <Text style={styles.checkboxLabel}>
-                        I understand that payment will be held securely until service completion
-                      </Text>
                     </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {paymentMethod && selectedMethodData && (
+                <View style={styles.section}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.stepNumberCircle}>
+                      <Text style={styles.stepNumberText}>2</Text>
+                    </View>
+                    <View style={styles.sectionTitleContainer}>
+                      <Text style={styles.sectionTitle}>Enter Your Mobile Number</Text>
+                      <Text style={styles.sectionSubtitle}>Enter the {selectedMethodData.display_name} number for payment</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.card}>
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.label}>
+                        {selectedMethodData.configuration.service_number_label}
+                      </Text>
+                      <TextInput
+                        style={[
+                          styles.input,
+                          phoneError ? styles.inputError : null
+                        ]}
+                        value={phoneNumber}
+                        onChangeText={handlePhoneChange}
+                        placeholder={selectedMethodData.configuration.example}
+                        keyboardType="phone-pad"
+                        maxLength={9}
+                        autoComplete="tel"
+                        textContentType="telephoneNumber"
+                      />
+                      {phoneError ? (
+                        <View style={styles.inputErrorContainer}>
+                          <AlertCircle size={16} color="#EF4444" />
+                          <Text style={styles.errorText}>{phoneError}</Text>
+                        </View>
+                      ) : (
+                        <Text style={styles.hint}>
+                          {selectedMethodData.configuration.service_number_hint}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View style={styles.infoBox}>
+                      <View style={styles.infoRow}>
+                        <Info size={20} color="#2D1A46" />
+                        <Text style={styles.infoText}>
+                          You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber ? `237${phoneNumber}` : '(your number)'}</Text>. Enter your PIN to authorize the payment.
+                        </Text>
+                      </View>
+                      <Text style={styles.processingTime}>
+                        ⏱️ Usually takes {selectedMethodData.metadata.estimated_processing_time}
+                      </Text>
+                    </View>
+
+                    <View style={styles.agreementContainer}>
+                      <TouchableOpacity
+                        style={styles.checkbox}
+                        onPress={() => setAgreementAccepted(!agreementAccepted)}
+                      >
+                        <View style={[
+                          styles.checkboxBox,
+                          agreementAccepted && styles.checkboxBoxChecked
+                        ]}>
+                          {agreementAccepted && (
+                            <Text style={styles.checkmark}>✓</Text>
+                          )}
+                        </View>
+                        <Text style={styles.checkboxLabel}>
+                          I understand that payment will be held securely until service completion
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            )}
-          </>
-        )}
-
-        {!isLoadingMethods && paymentMethodsData?.methods && (
-          <View style={styles.totalCard}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.stepNumberCircle}>
-                <Text style={styles.stepNumberText}>3</Text>
-              </View>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.totalCardTitle}>Payment Summary</Text>
-              </View>
-            </View>
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Service Price</Text>
-              <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
-            </View>
-            {selectedMethodData && (
-              <>
-                <View style={styles.totalRow}>
-                  <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
-                  <Text style={styles.feeAmount}>
-                    {currency} {Math.round(calculateGatewayFee())}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.totalRow}>
-                  <Text style={styles.grandTotalLabel}>Total Amount</Text>
-                  <Text style={styles.grandTotalAmount}>
-                    {currency} {Math.round(calculateTotalAmount())}
-                  </Text>
-                </View>
-                <Text style={styles.escrowNote}>
-                  💰 Funds held securely in escrow until service completed
-                </Text>
-              </>
-            )}
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Quick Summary & Pay Button - Positioned higher for better Android UX */}
-      {paymentMethod && selectedMethodData && (
-        <View style={styles.quickSummaryContainer}>
-          <View style={styles.quickSummaryCard}>
-            <View style={styles.quickSummaryRow}>
-              <Text style={styles.quickSummaryLabel}>Service:</Text>
-              <Text style={styles.quickSummaryValue}>{amount} {currency}</Text>
-            </View>
-            <View style={styles.quickSummaryRow}>
-              <Text style={styles.quickSummaryLabel}>Gateway Fee:</Text>
-              <Text style={styles.quickSummaryValue}>{currency} {Math.round(calculateGatewayFee())}</Text>
-            </View>
-            <View style={styles.quickSummaryDivider} />
-            <View style={styles.quickSummaryRow}>
-              <Text style={styles.quickSummaryTotalLabel}>Total:</Text>
-              <Text style={styles.quickSummaryTotalValue}>{currency} {Math.round(calculateTotalAmount())}</Text>
-            </View>
-            <Text style={styles.quickSummaryNote}>
-              💰 Funds held securely in escrow until service completion
-            </Text>
-          </View>
-        </View>
-      )}
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          ref={payButtonRef}
-          style={[
-            styles.payButton,
-            (!paymentMethod || isLoading) && styles.disabledButton
-          ]}
-          onPress={handlePayment}
-          disabled={!paymentMethod || isLoading}
-          accessible={!isLoading}
-        >
-          {isLoading ? (
-            <View style={styles.loadingButtonContent}>
-              <ActivityIndicator color="white" />
-              <Text style={styles.payButtonText}>Processing...</Text>
-            </View>
-          ) : selectedMethodData ? (
-            <Text style={styles.payButtonText}>Pay {currency} {Math.round(calculateTotalAmount())}</Text>
-          ) : (
-            <Text style={styles.payButtonText}>Select Payment Method</Text>
+              )}
+            </>
           )}
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+
+          {!isLoadingMethods && paymentMethodsData?.methods && (
+            <View style={styles.totalCard}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.stepNumberCircle}>
+                  <Text style={styles.stepNumberText}>3</Text>
+                </View>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.totalCardTitle}>Payment Summary</Text>
+                </View>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalLabel}>Service Price</Text>
+                <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
+              </View>
+              {selectedMethodData && (
+                <>
+                  <View style={styles.totalRow}>
+                    <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
+                    <Text style={styles.feeAmount}>
+                      {currency} {Math.round(calculateGatewayFee())}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.totalRow}>
+                    <Text style={styles.grandTotalLabel}>Total Amount</Text>
+                    <Text style={styles.grandTotalAmount}>
+                      {currency} {Math.round(calculateTotalAmount())}
+                    </Text>
+                  </View>
+                  <Text style={styles.escrowNote}>
+                    💰 Funds held securely in escrow until service completed
+                  </Text>
+                </>
+              )}
+            </View>
+          )}
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            ref={payButtonRef}
+            style={[
+              styles.payButton,
+              (!paymentMethod || isLoading) && styles.disabledButton
+            ]}
+            onPress={handlePayment}
+            disabled={!paymentMethod || isLoading}
+            accessible={!isLoading}
+          >
+            {isLoading ? (
+              <View style={styles.loadingButtonContent}>
+                <ActivityIndicator color="white" />
+                <Text style={styles.payButtonText}>Processing...</Text>
+              </View>
+            ) : selectedMethodData ? (
+              <Text style={styles.payButtonText}>Pay {currency} {Math.round(calculateTotalAmount())}</Text>
+            ) : (
+              <Text style={styles.payButtonText}>Select Payment Method</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -876,184 +861,184 @@ const styles = StyleSheet.create({
     color: '#2D1A46',
     lineHeight: 20,
   },
-});
-color: '#F4A896',
+  phoneHighlight: {
+    fontWeight: 'bold' as const,
+    color: '#F4A896',
   },
-processingTime: {
-  fontSize: 12,
+  processingTime: {
+    fontSize: 12,
     color: '#666',
-      marginTop: 8,
+    marginTop: 8,
   },
-agreementContainer: {
-  marginTop: 16,
+  agreementContainer: {
+    marginTop: 16,
   },
-checkbox: {
-  flexDirection: 'row',
+  checkbox: {
+    flexDirection: 'row',
     alignItems: 'flex-start',
   },
-checkboxBox: {
-  width: 24,
+  checkboxBox: {
+    width: 24,
     height: 24,
-      borderRadius: 6,
-        borderWidth: 2,
-          borderColor: '#2D1A46',
-            marginRight: 12,
-              justifyContent: 'center',
-                alignItems: 'center',
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-checkboxBoxChecked: {
-  backgroundColor: '#2D1A46',
+  checkboxBoxChecked: {
+    backgroundColor: '#2D1A46',
   },
-checkmark: {
-  color: 'white',
+  checkmark: {
+    color: 'white',
     fontSize: 16,
-      fontWeight: 'bold',
+    fontWeight: 'bold',
   },
-checkboxLabel: {
-  flex: 1,
+  checkboxLabel: {
+    flex: 1,
     fontSize: 14,
-      color: '#2D1A46',
-        lineHeight: 20,
+    color: '#2D1A46',
+    lineHeight: 20,
   },
-feeLabel: {
-  fontSize: 14,
+  feeLabel: {
+    fontSize: 14,
     color: '#666',
   },
-feeAmount: {
-  fontSize: 14,
+  feeAmount: {
+    fontSize: 14,
     fontWeight: '600',
-      color: '#666',
+    color: '#666',
   },
-divider: {
-  height: 1,
+  divider: {
+    height: 1,
     backgroundColor: '#E5E5E5',
-      marginVertical: 12,
+    marginVertical: 12,
   },
-totalCard: {
-  backgroundColor: 'white',
+  totalCard: {
+    backgroundColor: 'white',
     borderRadius: 16,
-      padding: 20,
-        marginBottom: 20,
-          shadowColor: '#000',
-            shadowOffset: {
-    width: 0,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
       height: 2,
     },
-  shadowOpacity: 0.1,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
-      elevation: 5,
+    elevation: 5,
   },
-totalCardTitle: {
-  fontSize: 18,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-grandTotalLabel: {
-  fontSize: 18,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-grandTotalAmount: {
-  fontSize: 24,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-escrowNote: {
-  fontSize: 12,
-    color: '#10B981',
-      marginTop: 12,
-        textAlign: 'center',
-  },
-loadingButtonContent: {
-  flexDirection: 'row',
-    alignItems: 'center',
-      gap: 12,
-  },
-totalRow: {
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-      alignItems: 'center',
-  },
-totalLabel: {
-  fontSize: 18,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-totalAmount: {
-  fontSize: 24,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-buttonContainer: {
-  paddingHorizontal: 24,
-    paddingVertical: 20,
-      paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
-        backgroundColor: 'white',
-          borderTopWidth: 1,
-            borderTopColor: '#E5E5E5',
-  },
-payButton: {
-  backgroundColor: '#2D1A46',
-    paddingVertical: 16,
-      borderRadius: 12,
-        alignItems: 'center',
-  },
-disabledButton: {
-  backgroundColor: '#ccc',
-  },
-payButtonText: {
-  color: 'white',
+  totalCardTitle: {
     fontSize: 18,
-      fontWeight: '600',
+    fontWeight: 'bold',
+    color: '#2D1A46',
   },
-quickSummaryContainer: {
-  backgroundColor: 'white',
-    borderTopWidth: 1,
-      borderTopColor: '#E5E5E5',
-        paddingHorizontal: 24,
-          paddingVertical: 16,
+  grandTotalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
   },
-quickSummaryCard: {
-  backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-      padding: 16,
-        borderWidth: 1,
-          borderColor: '#E5E5E5',
+  grandTotalAmount: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2D1A46',
   },
-quickSummaryRow: {
-  flexDirection: 'row',
+  escrowNote: {
+    fontSize: 12,
+    color: '#10B981',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  loadingButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  totalRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-      alignItems: 'center',
-        marginBottom: 8,
+    alignItems: 'center',
   },
-quickSummaryLabel: {
-  fontSize: 14,
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  totalAmount: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  buttonContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  payButton: {
+    backgroundColor: '#2D1A46',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  payButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  quickSummaryContainer: {
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  quickSummaryCard: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+  },
+  quickSummaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  quickSummaryLabel: {
+    fontSize: 14,
     color: '#666',
   },
-quickSummaryValue: {
-  fontSize: 14,
+  quickSummaryValue: {
+    fontSize: 14,
     fontWeight: '600',
-      color: '#2D1A46',
+    color: '#2D1A46',
   },
-quickSummaryDivider: {
-  height: 1,
+  quickSummaryDivider: {
+    height: 1,
     backgroundColor: '#E5E5E5',
-      marginVertical: 8,
+    marginVertical: 8,
   },
-quickSummaryTotalLabel: {
-  fontSize: 16,
+  quickSummaryTotalLabel: {
+    fontSize: 16,
     fontWeight: 'bold',
-      color: '#2D1A46',
+    color: '#2D1A46',
   },
-quickSummaryTotalValue: {
-  fontSize: 18,
+  quickSummaryTotalValue: {
+    fontSize: 18,
     fontWeight: 'bold',
-      color: '#F4A896',
+    color: '#F4A896',
   },
-quickSummaryNote: {
-  fontSize: 12,
+  quickSummaryNote: {
+    fontSize: 12,
     color: '#10B981',
-      textAlign: 'center',
-        marginTop: 8,
+    textAlign: 'center',
+    marginTop: 8,
   },
 });

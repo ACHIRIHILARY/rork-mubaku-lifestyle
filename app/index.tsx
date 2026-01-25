@@ -14,10 +14,10 @@ export default function SplashScreen() {
       // Auth initialization is complete
       if (isAuthenticated && user) {
         // User is authenticated, navigate to tabs
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/home' as any);
       } else {
         // User is not authenticated, navigate to login
-        router.replace('/login');
+        router.replace('/login' as any);
       }
     }
   }, [isInitialized, isAuthenticated, user]);

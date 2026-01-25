@@ -70,6 +70,7 @@
   "inProgress": "In Progress",
   "completed": "Completed",
   "cancelled": "Cancelled",
+  "viewDetails": "View Details",
   "noBookingsFound": "No Bookings Found",
   "noBookingsYet": "You haven't made any bookings yet",
   "noBookingsWithStatus": "You don't have any {{status}} bookings",

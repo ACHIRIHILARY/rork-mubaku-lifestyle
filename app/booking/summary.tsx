@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
 import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function BookingSummary() {
   const { serviceId, date, startTime, endTime } = useLocalSearchParams<{
@@ -35,7 +36,7 @@ export default function BookingSummary() {
   const handleConfirmBooking = () => {
     if (service) {
       router.push(
-        `/booking/payment?serviceId=${serviceId}&date=${date}&startTime=${startTime}&endTime=${endTime}&amount=${service.price}&currency=${service.currency}`
+        `/booking/payment?serviceId=${serviceId}&date=${date}&startTime=${startTime}&endTime=${endTime}&amount=${service.price}&currency=${service.currency}` as any
       );
     }
   };
@@ -61,100 +62,82 @@ export default function BookingSummary() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Review Your Booking</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <ScrollView style={styles.content}>
-        {/* Service Info */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Service</Text>
-          <Text style={styles.serviceName}>{service.name}</Text>
-          <Text style={styles.categoryName}>{service.category_details?.name}</Text>
-          {service.provider_details && (
-            <Text style={styles.providerName}>By {service.provider_details.full_name}</Text>
-          )}
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Review Your Booking</Text>
+          <View style={styles.placeholder} />
         </View>
 
-        {/* Booking Details */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Date & Time</Text>
-
-          <View style={styles.detailRow}>
-            <Calendar color="#666" size={20} />
-            <Text style={styles.detailText}>
-              {new Date(date).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </Text>
+        <ScrollView style={styles.content}>
+          {/* Service Info */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Service</Text>
+            <Text style={styles.serviceName}>{service.name}</Text>
+            <Text style={styles.categoryName}>{service.category_name}</Text>
+            {service.provider_name && (
+              <Text style={styles.providerName}>By {service.provider_name}</Text>
+            )}
           </View>
 
-          <View style={styles.detailRow}>
-            <Clock color="#666" size={20} />
-            <Text style={styles.detailText}>
-              {formatTime(startTime)} - {formatTime(endTime)}
-            </Text>
-          </View>
+          {/* Booking Details */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Date & Time</Text>
 
-          {durationMinutes > 0 && (
+            <View style={styles.detailRow}>
+              <Calendar color="#666" size={20} />
+              <Text style={styles.detailText}>
+                {new Date(date).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
+            </View>
+
             <View style={styles.detailRow}>
               <Clock color="#666" size={20} />
-              <Text style={styles.detailText}>{durationMinutes} minutes</Text>
-            </View>
-          )}
-        </View>
-
-        {/* Price Breakdown */}
-        <View style={styles.priceCard}>
-          <Text style={styles.cardTitle}>Price Breakdown</Text>
-
-          <View style={styles.priceBreakdown}>
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Service Cost</Text>
-              <Text style={styles.priceValue}>
-                {service.currency} {Number(service.price).toFixed(0)}
+              <Text style={styles.detailText}>
+                {formatTime(startTime)} - {formatTime(endTime)}
               </Text>
             </View>
 
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>App Fee</Text>
-              <Text style={styles.priceValue}>
-                {service.currency} {Math.floor(Number(service.price) * 0.05)}
-              </Text>
-            </View>
-
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Taxes</Text>
-              <Text style={styles.priceValue}>
-                {service.currency} {Math.floor(Number(service.price) * 0.18)}
-              </Text>
-            </View>
-
-            <View style={styles.priceDivider} />
-
-            <View style={styles.priceRow}>
-              <Text style={styles.totalLabel}>Total</Text>
-              <Text style={styles.totalValue}>
-                {service.currency} {Math.floor(Number(service.price) * 1.23)}
-              </Text>
-            </View>
+            {durationMinutes > 0 && (
+              <View style={styles.detailRow}>
+                <Clock color="#666" size={20} />
+                <Text style={styles.detailText}>{durationMinutes} minutes</Text>
+              </View>
+            )}
           </View>
 
-          <Text style={styles.priceNote}>
-            * Final amount may vary based on payment processing fees
-          </Text>
-        </View>
+          {/* Price Breakdown */}
+          <View style={styles.priceCard}>
+            <Text style={styles.cardTitle}>Price Breakdown</Text>
+
+            <View style={styles.priceBreakdown}>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceLabel}>Service Cost</Text>
+                <Text style={styles.priceValue}>
+                  {service.currency} {Number(service.price).toFixed(0)}
+                </Text>
+              </View>
+
+              <View style={styles.priceDivider} />
+            </View>
+
+            <Text style={styles.priceNote}>
+              * Final amount may vary based on payment processing fees
+            </Text>
+          </View>
+          <View style={styles.bottomSpacing} />
+        </ScrollView>
         {/* Confirm Button - Now inside scroll view for better Android navigation */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -164,11 +147,9 @@ export default function BookingSummary() {
             <Text style={styles.confirmButtonText}>Continue to Payment</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Extra spacing for Android navigation */}
-        <View style={styles.bottomSpacing} />
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -333,7 +314,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingHorizontal: 24,
     paddingVertical: 20,
-    paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderTopColor: '#E5E5E5',
@@ -350,6 +330,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bottomSpacing: {
-    height: Platform.OS === 'android' ? 80 : 20, // Extra spacing for Android navigation
+    height: 20,
   },
 });

@@ -123,7 +123,7 @@ export default function ProviderServicesScreen() {
         />
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => router.push('/provider-services/create')}
+          onPress={() => router.push('/provider-services/create' as any)}
         >
           <Plus color="white" size={24} />
         </TouchableOpacity>
@@ -151,7 +151,7 @@ export default function ProviderServicesScreen() {
             {!searchQuery && (
               <TouchableOpacity 
                 style={styles.createFirstButton}
-                onPress={() => router.push('/provider-services/create')}
+                onPress={() => router.push('/provider-services/create' as any)}
               >
                 <Plus color="white" size={20} />
                 <Text style={styles.createFirstButtonText}>Create Service</Text>
@@ -161,7 +161,7 @@ export default function ProviderServicesScreen() {
         ) : (
           <View style={styles.servicesContainer}>
             {filteredServices.map((service) => {
-              const hasLocation = !!(service.latitude && service.longitude);
+              const hasLocation = !!((service as any).latitude && (service as any).longitude);
               return (
               <View key={service.id} style={[
                 styles.serviceCard,
@@ -177,7 +177,7 @@ export default function ProviderServicesScreen() {
                   <View style={styles.serviceInfo}>
                     <Text style={styles.serviceName}>{service.name}</Text>
                     <Text style={styles.serviceCategory}>
-                      {service.category_details?.name || 'Category'}
+                      {service.category_name || 'Category'}
                     </Text>
                     {service.description && (
                       <Text style={styles.serviceDescription} numberOfLines={2}>
@@ -207,10 +207,10 @@ export default function ProviderServicesScreen() {
                     <DollarSign color="#666" size={16} />
                     <Text style={styles.detailText}>{service.price} {service.currency}</Text>
                   </View>
-                  {service.total_bookings !== undefined && (
+                  {(service as any).total_bookings !== undefined && (
                     <View style={styles.detailRow}>
                       <BarChart3 color="#666" size={16} />
-                      <Text style={styles.detailText}>{service.total_bookings} bookings</Text>
+                      <Text style={styles.detailText}>{(service as any).total_bookings} bookings</Text>
                     </View>
                   )}
                 </View>
@@ -218,7 +218,7 @@ export default function ProviderServicesScreen() {
                 {hasLocation && (
                   <TouchableOpacity
                     style={styles.viewLocationButton}
-                    onPress={() => router.push(`/view-location?latitude=${service.latitude}&longitude=${service.longitude}&locationName=${encodeURIComponent(service.location || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+                    onPress={() => router.push(`/view-location?latitude=${(service as any).latitude}&longitude=${(service as any).longitude}&locationName=${encodeURIComponent((service as any).location || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
                   >
                     <Navigation color="#2D1A46" size={16} />
                     <Text style={styles.viewLocationButtonText}>View Location</Text>

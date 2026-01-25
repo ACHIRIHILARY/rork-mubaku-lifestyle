@@ -108,7 +108,7 @@ export default function ApplicationStatusScreen() {
             </Text>
             <TouchableOpacity
               style={styles.applyButton}
-              onPress={() => router.push('/agent-profile-setup')}
+              onPress={() => router.push('/agent-profile-setup' as any)}
             >
               <Text style={styles.applyButtonText}>Apply Now</Text>
             </TouchableOpacity>
@@ -203,7 +203,7 @@ export default function ApplicationStatusScreen() {
               <View style={styles.actionsCard}>
                 <TouchableOpacity
                   style={styles.reapplyButton}
-                  onPress={() => router.push('/agent-profile-setup')}
+                  onPress={() => router.push('/agent-profile-setup' as any)}
                 >
                   <Text style={styles.reapplyButtonText}>Reapply</Text>
                 </TouchableOpacity>
@@ -214,7 +214,7 @@ export default function ApplicationStatusScreen() {
               <View style={styles.actionsCard}>
                 <TouchableOpacity
                   style={styles.servicesButton}
-                  onPress={() => router.push('/provider-services')}
+                  onPress={() => router.push('/provider-services' as any)}
                 >
                   <Text style={styles.servicesButtonText}>Manage Services</Text>
                 </TouchableOpacity>

@@ -2,6 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { ArrowLeft, Home, MapPin } from 'lucide-react-native';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function ChooseLocation() {
   const { agentId, date, time } = useLocalSearchParams();
@@ -26,89 +27,92 @@ export default function ChooseLocation() {
 
   const handleNext = () => {
     if (selectedLocation) {
-      router.push(`/booking/summary?agentId=${agentId}&date=${date}&time=${time}&location=${selectedLocation}`);
+      router.push(`/booking/summary?agentId=${agentId as string}&date=${date as string}&time=${time as string}&location=${selectedLocation}` as any);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Choose Location</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <View style={styles.content}>
-        <Text style={styles.subtitle}>Where would you like to receive the service?</Text>
-
-        <View style={styles.locationsContainer}>
-          {locations.map((location) => {
-            const IconComponent = location.icon;
-            return (
-              <TouchableOpacity
-                key={location.id}
-                style={[
-                  styles.locationCard,
-                  selectedLocation === location.id && styles.selectedLocationCard
-                ]}
-                onPress={() => setSelectedLocation(location.id)}
-              >
-                <View style={styles.locationHeader}>
-                  <View style={[
-                    styles.iconContainer,
-                    selectedLocation === location.id && styles.selectedIconContainer
-                  ]}>
-                    <IconComponent 
-                      color={selectedLocation === location.id ? 'white' : '#2D1A46'} 
-                      size={24} 
-                    />
-                  </View>
-                  <View style={styles.locationInfo}>
-                    <Text style={[
-                      styles.locationTitle,
-                      selectedLocation === location.id && styles.selectedLocationText
-                    ]}>
-                      {location.title}
-                    </Text>
-                    <Text style={[
-                      styles.locationDescription,
-                      selectedLocation === location.id && styles.selectedLocationDescription
-                    ]}>
-                      {location.description}
-                    </Text>
-                  </View>
-                </View>
-                <Text style={[
-                  styles.locationPrice,
-                  selectedLocation === location.id && styles.selectedLocationText
-                ]}>
-                  {location.price}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Choose Location</Text>
+          <View style={styles.placeholder} />
         </View>
-      </View>
 
-      {/* Next Button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            !selectedLocation && styles.disabledButton
-          ]}
-          onPress={handleNext}
-          disabled={!selectedLocation}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <View style={styles.content}>
+          <Text style={styles.subtitle}>Where would you like to receive the service?</Text>
+
+          <View style={styles.locationsContainer}>
+            {locations.map((location) => {
+              const IconComponent = location.icon;
+              return (
+                <TouchableOpacity
+                  key={location.id}
+                  style={[
+                    styles.locationCard,
+                    selectedLocation === location.id && styles.selectedLocationCard
+                  ]}
+                  onPress={() => setSelectedLocation(location.id)}
+                >
+                  <View style={styles.locationHeader}>
+                    <View style={[
+                      styles.iconContainer,
+                      selectedLocation === location.id && styles.selectedIconContainer
+                    ]}>
+                      <IconComponent 
+                        color={selectedLocation === location.id ? 'white' : '#2D1A46'} 
+                        size={24} 
+                      />
+                    </View>
+                    <View style={styles.locationInfo}>
+                      <Text style={[
+                        styles.locationTitle,
+                        selectedLocation === location.id && styles.selectedLocationText
+                      ]}>
+                        {location.title}
+                      </Text>
+                      <Text style={[
+                        styles.locationDescription,
+                        selectedLocation === location.id && styles.selectedLocationDescription
+                      ]}>
+                        {location.description}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={[
+                    styles.locationPrice,
+                    selectedLocation === location.id && styles.selectedLocationText
+                  ]}>
+                    {location.price}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Next Button */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              !selectedLocation && styles.disabledButton
+            ]}
+            onPress={handleNext}
+            disabled={!selectedLocation}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 

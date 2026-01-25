@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform, Alert } from 'react-native';
 import { CheckCircle, Clock, Star, Receipt, MapPin, XCircle } from 'lucide-react-native'; // Added Receipt, MapPin, XCircle
 import { useGetAppointmentDetailQuery, useCancelAppointmentMutation, useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function BookingStatus() {
   const { appointmentId, paymentSuccess, paymentMessage } = useLocalSearchParams<{
@@ -29,7 +30,7 @@ export default function BookingStatus() {
     console.log('Review submitted:', { rating, review, appointmentId });
     // In a real app, you would send this review to your API
     Alert.alert('Thank you!', 'Your review has been submitted.');
-    router.push('/(tabs)/home');
+    router.push('/(tabs)/home' as any);
   };
 
   const handleCompleteService = async () => {
@@ -141,231 +142,225 @@ export default function BookingStatus() {
   const showEscrowMessage = appointment.payment_status === 'held_in_escrow' && !isCompleted && !isCancelled;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.content}>
-        {/* Payment Success Message */}
-        {paymentSuccess === 'true' && paymentMessage && (
-          <View style={styles.paymentSuccessContainer}>
-            <CheckCircle color="#10B981" size={48} />
-            <Text style={styles.paymentSuccessTitle}>Payment Successful!</Text>
-            <Text style={styles.paymentSuccessMessage}>{decodeURIComponent(paymentMessage)}</Text>
-          </View>
-        )}
-
-        {/* Success Message */}
-        <View style={styles.successContainer}>
-          {isCompleted ? (
-            <CheckCircle color="#4CAF50" size={64} />
-          ) : isCancelled ? (
-            <XCircle color="#EF4444" size={64} />
-          ) : (
-            <CheckCircle color="#4CAF50" size={64} />
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.content}>
+          {/* Payment Success Message */}
+          {paymentSuccess === 'true' && paymentMessage && (
+            <View style={styles.successContainer}>
+              <CheckCircle color="#10B981" size={48} />
+              <Text style={styles.successTitle}>Payment Successful!</Text>
+              <Text style={styles.successMessage}>{decodeURIComponent(paymentMessage)}</Text>
+            </View>
           )}
 
-          <Text style={styles.successTitle}>
-            {isCompleted ? 'Service Completed!' : isCancelled ? 'Appointment Cancelled' : 'Booking Confirmed!'}
-          </Text>
-          <Text style={styles.successMessage}>
-            {isCompleted ? 'Hope you enjoyed your service!' : isCancelled ? 'Your appointment has been cancelled as requested.' : 'Your appointment has been successfully booked.'}
-          </Text>
-        </View>
+          {/* Success Message */}
+          <View style={styles.successContainer}>
+            {isCompleted ? (
+              <CheckCircle color="#4CAF50" size={64} />
+            ) : isCancelled ? (
+              <XCircle color="#EF4444" size={64} />
+            ) : (
+              <CheckCircle color="#4CAF50" size={64} />
+            )}
 
-        {/* Receipt Card */}
-        <View style={styles.card}>
-          <View style={styles.receiptHeader}>
-            <Receipt color="#2D1A46" size={24} />
-            <Text style={styles.cardTitle}>Transaction Receipt</Text>
+            <Text style={styles.successTitle}>
+              {isCompleted ? 'Service Completed!' : isCancelled ? 'Appointment Cancelled' : 'Booking Confirmed!'}
+            </Text>
+            <Text style={styles.successMessage}>
+              {isCompleted ? 'Hope you enjoyed your service!' : isCancelled ? 'Your appointment has been cancelled as requested.' : 'Your appointment has been successfully booked.'}
+            </Text>
           </View>
 
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Service:</Text>
-            <Text style={styles.detailValue}>{appointment.service?.name || 'N/A'}</Text>
+          {/* Receipt Card */}
+          <View style={styles.card}>
+            <View style={styles.receiptHeader}>
+              <Receipt color="#2D1A46" size={24} />
+              <Text style={styles.cardTitle}>Transaction Receipt</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Service:</Text>
+              <Text style={styles.detailValue}>{appointment.service?.name || 'N/A'}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Provider:</Text>
+              <Text style={styles.detailValue}>{appointment.provider?.business_name || appointment.provider?.name || 'N/A'}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Date:</Text>
+              <Text style={styles.detailValue}>
+                {new Date(appointment.scheduled_for).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Time:</Text>
+              <Text style={styles.detailValue}>
+                {formatTime(appointment.scheduled_for)} - {formatTime(appointment.scheduled_until)}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Status:</Text>
+              <Text style={[styles.detailValue, styles.statusText]}>
+                {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1).replace(/_/g, ' ')}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Total Paid:</Text>
+              <Text style={[styles.detailValue, styles.amountValue]}>
+                {appointment.currency} {Number(appointment.amount || 0).toFixed(2)}
+              </Text>
+            </View>
+
+            {showEscrowMessage && (
+              <View style={styles.escrowInfo}>
+                <Text style={styles.escrowText}>
+                  🔒 Funds held securely in escrow until service completion
+                </Text>
+              </View>
+            )}
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Provider:</Text>
-            <Text style={styles.detailValue}>{appointment.provider?.business_name || appointment.provider?.name || 'N/A'}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Date:</Text>
-            <Text style={styles.detailValue}>
-              {new Date(appointment.scheduled_for).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+
+          {/* Progress Tracker */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Service Progress</Text>
+            <View style={styles.progressContainer}>
+              {statusSteps.map((step, index) => {
+                const IconComponent = step.icon;
+                return (
+                  <View key={step.id} style={styles.progressStep}>
+                    <View style={styles.stepIndicator}>
+                      <View style={[
+                        styles.stepCircle,
+                        step.completed && styles.completedStep
+                      ]}>
+                        <IconComponent
+                          color={step.completed ? 'white' : '#ccc'}
+                          size={20}
+                        />
+                      </View>
+                      {index < statusSteps.length - 1 && (
+                        <View style={[
+                          styles.stepLine,
+                          step.completed && styles.completedLine
+                        ]} />
+                      )}
+                    </View>
+                    <Text style={[
+                      styles.stepTitle,
+                      step.completed && styles.completedStepTitle
+                    ]}>
+                      {step.title}
+                    </Text>
+                  </View>
+                );
               })}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Time:</Text>
-            <Text style={styles.detailValue}>
-              {formatTime(appointment.scheduled_for)} - {formatTime(appointment.scheduled_until)}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Status:</Text>
-            <Text style={[styles.detailValue, styles.statusText]}>
-              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1).replace(/_/g, ' ')}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Total Paid:</Text>
-            <Text style={[styles.detailValue, styles.amountValue]}>
-              {appointment.currency} {appointment.amount.toFixed(2)}
-            </Text>
+            </View>
           </View>
 
-          {showEscrowMessage && (
-            <View style={styles.escrowInfo}>
-              <Text style={styles.escrowText}>
-                🔒 Funds held securely in escrow until service completion
+          {/* Action Buttons */}
+          {(canComplete || canCancel) && (
+            <View style={styles.actionButtonsCard}>
+              {canComplete && (
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.completeButton]}
+                  onPress={handleCompleteService}
+                  disabled={isCompleting}
+                >
+                  {isCompleting ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <>
+                      <CheckCircle color="white" size={20} />
+                      <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+              {canCancel && (
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.cancelButton]}
+                  onPress={handleCancelBooking}
+                  disabled={isCancelling}
+                >
+                  {isCancelling ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <>
+                      <XCircle color="white" size={20} />
+                      <Text style={styles.actionButtonText}>Cancel Appointment</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+
+          {/* View Location Button - Only shown for booked appointments with location */}
+          {appointment && !isCancelled && ((appointment as any).latitude && (appointment as any).longitude) && (
+            <View style={styles.locationCard}>
+              <TouchableOpacity
+                style={styles.viewLocationButton}
+                onPress={() => {
+                  const locationName = (appointment as any).location || `${appointment.provider?.city || 'Service'} Location`;
+                  const serviceName = appointment.service?.name || 'Service';
+                  router.push(`/view-location?latitude=${(appointment as any).latitude}&longitude=${(appointment as any).longitude}&locationName=${encodeURIComponent(locationName)}&serviceName=${encodeURIComponent(serviceName)}` as any);
+                }}
+              >
+                <MapPin color="white" size={20} />
+                <Text style={styles.viewLocationButtonText}>View Live Location & Directions</Text>
+              </TouchableOpacity>
+              <Text style={styles.locationHint}>
+                Get real-time directions to your service location
               </Text>
             </View>
           )}
-        </View>
 
-        {/* Progress Tracker */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Service Progress</Text>
-          <View style={styles.progressContainer}>
-            {statusSteps.map((step, index) => {
-              const IconComponent = step.icon;
-              return (
-                <View key={step.id} style={styles.progressStep}>
-                  <View style={styles.stepIndicator}>
-                    <View style={[
-                      styles.stepCircle,
-                      step.completed && styles.completedStep
-                    ]}>
-                      <IconComponent
-                        color={step.completed ? 'white' : '#ccc'}
-                        size={20}
-                      />
-                    </View>
-                    {index < statusSteps.length - 1 && (
-                      <View style={[
-                        styles.stepLine,
-                        step.completed && styles.completedLine
-                      ]} />
-                    )}
-                  </View>
-                  <Text style={[
-                    styles.stepTitle,
-                    step.completed && styles.completedStepTitle
-                  ]}>
-                    {step.title}
-                  </Text>
+          {/* Review Section */}
+          {isCompleted && (
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Rate Your Experience</Text>
+
+              <View style={styles.ratingContainer}>
+                <Text style={styles.ratingLabel}>How was your service?</Text>
+                <View style={styles.starsContainer}>
+                  {renderStars()}
                 </View>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Action Buttons */}
-        {(canComplete || canCancel) && (
-          <View style={styles.actionButtonsCard}>
-            {canComplete && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.completeButton]}
-                onPress={handleCompleteService}
-                disabled={isCompleting}
-              >
-                {isCompleting ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <>
-                    <CheckCircle color="white" size={20} />
-                    <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
-            {canCancel && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.cancelButton]}
-                onPress={handleCancelBooking}
-                disabled={isCancelling}
-              >
-                {isCancelling ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <>
-                    <XCircle color="white" size={20} />
-                    <Text style={styles.actionButtonText}>Cancel Appointment</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
-
-        {/* View Location Button - Only shown for booked appointments with location */}
-        {appointment && !isCancelled && (appointment.latitude && appointment.longitude) && (
-          <View style={styles.locationCard}>
-            <TouchableOpacity
-              style={styles.viewLocationButton}
-              onPress={() => {
-                const locationName = appointment.location || `${appointment.provider?.city || 'Service'} Location`;
-                const serviceName = appointment.service?.name || 'Service';
-                router.push(`/view-location?latitude=${appointment.latitude}&longitude=${appointment.longitude}&locationName=${encodeURIComponent(locationName)}&serviceName=${encodeURIComponent(serviceName)}` as any);
-              }}
-            >
-              <MapPin color="white" size={20} />
-              <Text style={styles.viewLocationButtonText}>View Live Location & Directions</Text>
-            </TouchableOpacity>
-            <Text style={styles.locationHint}>
-              Get real-time directions to your service location
-            </Text>
-          </View>
-        )}
-
-        {/* Review Section */}
-        {isCompleted && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Rate Your Experience</Text>
-
-            <View style={styles.ratingContainer}>
-              <Text style={styles.ratingLabel}>How was your service?</Text>
-              <View style={styles.starsContainer}>
-                {renderStars()}
               </View>
+
+              <View style={styles.reviewContainer}>
+                <Text style={styles.reviewLabel}>Write a review (optional)</Text>
+                <TextInput
+                  style={styles.reviewInput}
+                  value={review}
+                  onChangeText={setReview}
+                  placeholder="Share your experience..."
+                  multiline
+                  numberOfLines={4}
+                  textAlignVertical="top"
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={handleSubmitReview}
+              >
+                <Text style={styles.submitButtonText}>Submit Review</Text>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.reviewContainer}>
-              <Text style={styles.reviewLabel}>Write a review (optional)</Text>
-              <TextInput
-                style={styles.reviewInput}
-                value={review}
-                onChangeText={setReview}
-                placeholder="Share your experience..."
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-              />
-            </View>
-
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmitReview}
-            >
-              <Text style={styles.submitButtonText}>Submit Review</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Home Button - Outside scroll view for proper positioning */}
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity
-          style={styles.homeButton}
-          onPress={() => router.push('/(tabs)/home')}
-        >
-          <Text style={styles.homeButtonText}>Back to Home</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

@@ -9,7 +9,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { store } from "@/store/store";
 
-import { initializeAuth, checkTokenExpiration } from "@/store/authSlice";
+import { initializeAuth, checkTokenExpiration, setInitialized } from "@/store/authSlice";
 import { initializeLanguage } from "@/store/languageSlice";
 import { authApi } from "@/store/services/authApi";
 
@@ -68,12 +68,21 @@ function RootLayoutNav() {
 export default function RootLayout() {
   useEffect(() => {
     const initApp = async () => {
+      const timeout = setTimeout(() => {
+        console.log('Init timeout reached, forcing app ready state');
+        store.dispatch(setInitialized());
+        SplashScreen.hideAsync();
+      }, 5000);
+
       try {
-        // Initialize both auth and language
+        console.log('Starting app initialization...');
+        
         const [authResult] = await Promise.all([
           store.dispatch(initializeAuth()).unwrap(),
           store.dispatch(initializeLanguage()).unwrap(),
         ]);
+
+        clearTimeout(timeout);
 
         if (authResult) {
           console.log('Auth tokens loaded from storage, fetching user data...');
@@ -83,6 +92,8 @@ export default function RootLayout() {
         }
       } catch (error) {
         console.error('Failed to initialize app:', error);
+        clearTimeout(timeout);
+        store.dispatch(setInitialized());
       } finally {
         SplashScreen.hideAsync();
       }

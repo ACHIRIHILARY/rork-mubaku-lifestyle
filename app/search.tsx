@@ -17,7 +17,8 @@ export default function SearchScreen() {
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(500);
     const [minRating, setMinRating] = useState(0);
-    // Unused variables removed
+    const [, setAvailabilityDate] = useState('');
+    const [, setAvailabilityTime] = useState('');
 
     const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
     const [showFilters, setShowFilters] = useState(false);

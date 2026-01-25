@@ -92,7 +92,7 @@ export default function ProfileSettingsScreen() {
                         text: t('ok'),
                         onPress: () => {
                           dispatch(logoutAction());
-                          router.replace('/login');
+                          router.replace('/login' as any);
                         }
                       }
                     ]
@@ -267,7 +267,7 @@ export default function ProfileSettingsScreen() {
           style: 'destructive',
           onPress: () => {
             dispatch(logoutAction());
-            router.replace('/login');
+            router.replace('/login' as any);
           }
         }
       ]
@@ -314,7 +314,7 @@ export default function ProfileSettingsScreen() {
         {showProviderApplication && (
           <TouchableOpacity
             style={styles.providerCard}
-            onPress={() => router.push('/agent-profile-setup')}
+            onPress={() => router.push('/agent-profile-setup' as any)}
           >
             <View style={styles.providerIconContainer}>
               <Briefcase color="white" size={32} />

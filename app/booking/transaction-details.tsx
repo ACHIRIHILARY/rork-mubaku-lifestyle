@@ -1,14 +1,15 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Share } from 'react-native';
-import { CheckCircle, Receipt, MapPin, Clock, AlertCircle, ArrowLeft } from 'lucide-react-native';
-import { useGetPaymentByIdQuery, useLazyGetPaymentStatusQuery } from '@/store/services/paymentApi';
+import { CheckCircle, Receipt, Clock, AlertCircle, ArrowLeft } from 'lucide-react-native';
+import { useGetPaymentByIdQuery } from '@/store/services/paymentApi';
 import { useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function TransactionDetailsScreen() {
     const { paymentId } = useLocalSearchParams<{ paymentId: string }>();
     const [completeAppointment, { isLoading: isCompleting }] = useCompleteAppointmentMutation();
-    const [getPaymentStatus] = useLazyGetPaymentStatusQuery();
+    
 
     const { data: payment, isLoading, error, refetch } = useGetPaymentByIdQuery(paymentId || '', {
         skip: !paymentId,
@@ -135,165 +136,150 @@ Thank you for using Mu Baku Lifestyle!
         );
     }
 
-    const isCompleted = payment.appointment?.status === 'completed';
-    const canComplete = payment.appointment?.status === 'confirmed' || payment.appointment?.status === 'in_progress';
+    const isCompleted = (payment.appointment as any)?.status === 'completed';
+    const canComplete = (payment.appointment as any)?.status === 'confirmed' || (payment.appointment as any)?.status === 'in_progress';
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => router.back()}
-                >
-                    <ArrowLeft color="white" size={24} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Transaction Details</Text>
-                <View style={styles.placeholder} />
-            </View>
-
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                {/* Success Banner */}
-                <View style={styles.successBanner}>
-                    <CheckCircle color="#10B981" size={32} />
-                    <View style={styles.successTextContainer}>
-                        <Text style={styles.successTitle}>Payment Successful!</Text>
-                        <Text style={styles.successMessage}>Your transaction has been completed successfully.</Text>
-                    </View>
+        <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => router.back()}
+                    >
+                        <ArrowLeft color="white" size={24} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Transaction Details</Text>
+                    <View style={styles.placeholder} />
                 </View>
 
-                {/* Transaction Details Card */}
-                <View style={styles.card}>
-                    <View style={styles.cardHeader}>
-                        <Receipt color="#2D1A46" size={24} />
-                        <Text style={styles.cardTitle}>Payment Details</Text>
+                <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+                    {/* Success Banner */}
+                    <View style={styles.successBanner}>
+                        <CheckCircle color="#10B981" size={32} />
+                        <View style={styles.successTextContainer}>
+                            <Text style={styles.successTitle}>Payment Successful!</Text>
+                            <Text style={styles.successMessage}>Your transaction has been completed successfully.</Text>
+                        </View>
                     </View>
 
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Transaction ID</Text>
-                        <Text style={styles.detailValue} numberOfLines={1}>
-                            {payment.gateway?.transaction_id || 'N/A'}
-                        </Text>
-                    </View>
+                    {/* Transaction Details Card */}
+                    <View style={styles.card}>
+                        <View style={styles.cardHeader}>
+                            <Receipt color="#2D1A46" size={24} />
+                            <Text style={styles.cardTitle}>Payment Details</Text>
+                        </View>
 
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Receipt Number</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.gateway?.receipt_number || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Amount Paid</Text>
-                        <Text style={[styles.detailValue, styles.amountValue]}>
-                            {payment.amount.currency} {Math.round(payment.amount.total)}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Payment Method</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.payment_method?.display_name || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Payment Date</Text>
-                        <Text style={styles.detailValue}>
-                            {formatTime(payment.timestamps?.created_at)}
-                        </Text>
-                    </View>
-
-                    {payment.escrow && (
-                        <View style={styles.escrowInfo}>
-                            <Text style={styles.escrowText}>
-                                🔒 Funds held securely in escrow until service completion
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Transaction ID</Text>
+                            <Text style={styles.detailValue} numberOfLines={1}>
+                                {payment.gateway?.transaction_id || 'N/A'}
                             </Text>
                         </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Receipt Number</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.gateway?.receipt_number || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Amount Paid</Text>
+                            <Text style={[styles.detailValue, styles.amountValue]}>
+                                {payment.amount.currency} {Math.round(payment.amount.total)}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Payment Method</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.payment_method?.display_name || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Payment Date</Text>
+                            <Text style={styles.detailValue}>
+                                {formatTime(payment.timestamps?.created_at)}
+                            </Text>
+                        </View>
+
+                        {payment.escrow && (
+                            <View style={styles.escrowInfo}>
+                                <Text style={styles.escrowText}>
+                                    🔒 Funds held securely in escrow until service completion
+                                </Text>
+                            </View>
+                        )}
+                    </View>
+
+                    {/* Service Details Card */}
+                    <View style={styles.card}>
+                        <View style={styles.cardHeader}>
+                            <Clock color="#2D1A46" size={24} />
+                            <Text style={styles.cardTitle}>Service Details</Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Service</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.appointment?.service || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Provider</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.appointment?.provider_name || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Scheduled Date</Text>
+                            <Text style={styles.detailValue}>
+                                {formatTime(payment.appointment?.scheduled_at)}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Status</Text>
+                            <Text style={[styles.detailValue, styles.statusValue]}>
+                                {(payment.appointment as any)?.status?.charAt(0).toUpperCase() + (payment.appointment as any)?.status?.slice(1) || 'N/A'}
+                            </Text>
+                        </View>
+                    </View>
+
+                    {/* Action Buttons */}
+                    {canComplete && (
+                        <View style={styles.actionCard}>
+                            <TouchableOpacity
+                                style={[styles.actionButton, styles.completeButton]}
+                                onPress={handleCompleteService}
+                                disabled={isCompleting}
+                            >
+                                {isCompleting ? (
+                                    <ActivityIndicator color="white" />
+                                ) : (
+                                    <>
+                                        <CheckCircle color="white" size={20} />
+                                        <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
+                                    </>
+                                )}
+                            </TouchableOpacity>
+                        </View>
                     )}
-                </View>
 
-                {/* Service Details Card */}
-                <View style={styles.card}>
-                    <View style={styles.cardHeader}>
-                        <Clock color="#2D1A46" size={24} />
-                        <Text style={styles.cardTitle}>Service Details</Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Service</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.appointment?.service || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Provider</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.appointment?.provider_name || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Scheduled Date</Text>
-                        <Text style={styles.detailValue}>
-                            {formatTime(payment.appointment?.scheduled_at)}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Status</Text>
-                        <Text style={[styles.detailValue, styles.statusValue]}>
-                            {payment.appointment?.status?.charAt(0).toUpperCase() + payment.appointment?.status?.slice(1) || 'N/A'}
-                        </Text>
-                    </View>
-                </View>
-
-                {/* Action Buttons */}
-                {canComplete && (
-                    <View style={styles.actionCard}>
-                        <TouchableOpacity
-                            style={[styles.actionButton, styles.completeButton]}
-                            onPress={handleCompleteService}
-                            disabled={isCompleting}
-                        >
-                            {isCompleting ? (
-                                <ActivityIndicator color="white" />
-                            ) : (
-                                <>
-                                    <CheckCircle color="white" size={20} />
-                                    <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
-                                </>
-                            )}
-                        </TouchableOpacity>
-                    </View>
-                )}
-
-                {isCompleted && (
-                    <View style={styles.completedCard}>
-                        <CheckCircle color="#10B981" size={24} />
-                        <Text style={styles.completedText}>Service has been marked as completed</Text>
-                    </View>
-                )}
-            </ScrollView>
-
-            {/* Bottom Actions */}
-            <View style={styles.bottomContainer}>
-                <TouchableOpacity
-                    style={styles.secondaryButton}
-                    onPress={handleShareReceipt}
-                >
-                    <Receipt color="#2D1A46" size={20} />
-                    <Text style={styles.secondaryButtonText}>Share Receipt</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleViewBooking}
-                >
-                    <Text style={styles.primaryButtonText}>View Booking</Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+                    {isCompleted && (
+                        <View style={styles.completedCard}>
+                            <CheckCircle color="#10B981" size={24} />
+                            <Text style={styles.completedText}>Service has been marked as completed</Text>
+                        </View>
+                    )}
+                </ScrollView>
+            </SafeAreaView>
+            <CustomTabBar />
+        </View>
     );
 }
 

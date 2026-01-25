@@ -57,7 +57,7 @@ export default function AgentProfileSetup() {
         [
           {
             text: 'Return to Home',
-            onPress: () => router.replace('/(tabs)/home'),
+            onPress: () => router.replace('/(tabs)/home' as any),
           },
         ]
       );

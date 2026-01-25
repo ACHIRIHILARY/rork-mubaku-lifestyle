@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { Search, X, User } from 'lucide-react-native';
+import { Search, X } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useTranslation } from 'react-i18next';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
@@ -9,7 +9,6 @@ import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLanguage } from '@/store/languageSlice';
 import type { RootState, AppDispatch } from '@/store/store';
-
 
 export default function HomeScreen() {
   const { t, i18n } = useTranslation();
@@ -32,11 +31,6 @@ export default function HomeScreen() {
 
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}` as any);
-  };
-
-  const handleProviderPress = (providerId: number) => {
-    console.log('Provider selected:', providerId);
-    router.push(`/provider-detail?id=${providerId}` as any);
   };
 
   const handleCategoryPress = (categoryId: number) => {
@@ -62,8 +56,6 @@ export default function HomeScreen() {
     setDebouncedSearch('');
   }, []);
 
-
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -79,37 +71,11 @@ export default function HomeScreen() {
     providersCount: providers?.length
   });
 
-  // Redirect providers to dashboard
   React.useEffect(() => {
     if (user?.role === 'provider') {
       router.replace('/(tabs)/dashboard' as any);
     }
   }, [user]);
-
-  // Mock personalized data - in real app, fetch from API
-  const upcomingAppointments = [
-    {
-      id: '1',
-      service: { name: 'Haircut & Styling', provider_details: { full_name: 'Beauty Studio Pro' } },
-      scheduled_for: new Date(Date.now() + 1000 * 60 * 60 * 24), // Tomorrow
-      status: 'confirmed'
-    }
-  ];
-
-  const previousBookings = [
-    {
-      provider: { pkid: 1, full_name: 'Beauty Studio Pro', city: 'Yaounde' },
-      lastService: 'Haircut & Styling',
-      lastBooked: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // 30 days ago
-    },
-    {
-      provider: { pkid: 2, full_name: 'Relax Spa Center', city: 'Douala' },
-      lastService: 'Full Body Massage',
-      lastBooked: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14), // 14 days ago
-    }
-  ];
-
-  const recommendedServices = services?.slice(0, 4) || []; // Mock recommendations
 
   return (
     <SafeAreaView style={styles.container}>
@@ -161,120 +127,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Personalized Sections for Clients */}
-        {user?.role !== 'provider' && (
-          <>
-            {/* Upcoming Appointments */}
-            {upcomingAppointments.length > 0 && (
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>📅 Upcoming Appointments</Text>
-                </View>
-                {upcomingAppointments.map((appointment) => (
-                  <TouchableOpacity
-                    key={appointment.id}
-                    style={styles.appointmentCard}
-                    onPress={() => router.push('/(tabs)/my-bookings' as any)}
-                  >
-                    <View style={styles.appointmentInfo}>
-                      <Text style={styles.appointmentService}>{appointment.service.name}</Text>
-                      <Text style={styles.appointmentProvider}>with {appointment.service.provider_details?.full_name}</Text>
-                      <Text style={styles.appointmentDate}>
-                        {appointment.scheduled_for.toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </Text>
-                    </View>
-                    <View style={styles.appointmentStatus}>
-                      <Text style={styles.appointmentStatusText}>Confirmed</Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-
-            {/* Book Again */}
-            {previousBookings.length > 0 && (
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>🔄 Book Again</Text>
-                  <Text style={styles.sectionSubtitle}>Quick access to your favorite providers</Text>
-                </View>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={styles.bookAgainContainer}>
-                    {previousBookings.map((booking) => (
-                      <TouchableOpacity
-                        key={booking.provider.pkid}
-                        style={styles.bookAgainCard}
-                        onPress={() => handleProviderPress(booking.provider.pkid)}
-                      >
-                        <View style={styles.bookAgainAvatar}>
-                          <User color="white" size={24} />
-                        </View>
-                        <View style={styles.bookAgainInfo}>
-                          <Text style={styles.bookAgainName} numberOfLines={1}>
-                            {booking.provider.full_name}
-                          </Text>
-                          <Text style={styles.bookAgainService} numberOfLines={1}>
-                            {booking.lastService}
-                          </Text>
-                          <Text style={styles.bookAgainLocation}>
-                            📍 {booking.provider.city}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </ScrollView>
-              </View>
-            )}
-
-            {/* Recommendations */}
-            {recommendedServices.length > 0 && (
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>✨ Recommended for You</Text>
-                  <Text style={styles.sectionSubtitle}>Popular services near you</Text>
-                </View>
-                <View style={styles.recommendationsGrid}>
-                  {recommendedServices.slice(0, 4).map((service) => (
-                    <TouchableOpacity
-                      key={service.id}
-                      style={styles.recommendationCard}
-                      onPress={() => handleServicePress(service.id)}
-                    >
-                      <View style={styles.recommendationImage}>
-                        {service.image ? (
-                          <Image source={{ uri: service.image }} style={styles.recommendationImageContent} />
-                        ) : (
-                          <View style={styles.recommendationImagePlaceholder}>
-                            <Text style={styles.recommendationImageText}>💼</Text>
-                          </View>
-                        )}
-                      </View>
-                      <View style={styles.recommendationInfo}>
-                        <Text style={styles.recommendationName} numberOfLines={1}>
-                          {service.name}
-                        </Text>
-                        <Text style={styles.recommendationProvider} numberOfLines={1}>
-                          by {service.provider_name}
-                        </Text>
-                        <Text style={styles.recommendationPrice}>
-                          {service.price_display}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            )}
-          </>
-        )}
-
         {/* Categories */}
         {categories && categories.length > 0 && (
           <View style={styles.section}>
@@ -317,48 +169,6 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {/* Approved Providers */}
-        {providers && providers.length > 0 && (
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{t('approvedProviders')}</Text>
-            </View>
-            <View style={styles.providersContainer}>
-              {providers.map((provider) => (
-                <TouchableOpacity
-                  key={provider.pkid}
-                  style={styles.providerCard}
-                  onPress={() => handleProviderPress(provider.pkid)}
-                >
-                  <View style={styles.providerImagePlaceholder}>
-                    <User color="white" size={32} />
-                  </View>
-                  <View style={styles.providerInfo}>
-                    <Text style={styles.providerName}>{provider.full_name}</Text>
-                    {provider.about_me && (
-                      <Text style={styles.providerAbout} numberOfLines={2}>
-                        {provider.about_me}
-                      </Text>
-                    )}
-                    {provider.city && (
-                      <Text style={styles.providerLocation}>📍 {provider.city}</Text>
-                    )}
-                    {provider.phone_number && (
-                      <Text style={styles.providerContact}>📞 {provider.phone_number}</Text>
-                    )}
-                  </View>
-                  <TouchableOpacity
-                    style={styles.viewProfileButton}
-                    onPress={() => handleProviderPress(provider.pkid)}
-                  >
-                    <Text style={styles.viewProfileButtonText}>{t('viewProfile')}</Text>
-                  </TouchableOpacity>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        )}
-
         {/* Top Services */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -379,7 +189,7 @@ export default function HomeScreen() {
                 >
                   <View style={styles.serviceImageContainer}>
                     {service.image ? (
-                      <Image source={{ uri: service.image }} style={styles.serviceImage} />
+                      <Image source={{ uri: `https://mubakulifestyle.com/${service.image}` }} style={styles.serviceImage} />
                     ) : (
                       <View style={styles.serviceImagePlaceholder}>
                         <Text style={styles.serviceImageText}>💼</Text>
@@ -395,16 +205,16 @@ export default function HomeScreen() {
                         </View>
                       )}
                     </View>
-                    <View style={styles.providerInfo}>
+                    <View style={styles.serviceProviderInfo}>
                       <Text style={styles.providerBusiness} numberOfLines={1}>{service.provider_business}</Text>
-                      <Text style={styles.providerName} numberOfLines={1}>by {service.provider_name}</Text>
+                      <Text style={styles.serviceProviderName} numberOfLines={1}>by {service.provider_name}</Text>
                     </View>
                     <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_name}</Text>
                     <View style={styles.locationRow}>
                       <Text style={styles.serviceLocation}>📍 {service.provider_location.city}</Text>
                     </View>
                     <View style={styles.serviceMeta}>
-                      <Text style={styles.servicePrice}>{service.price_display}</Text>
+                      <Text style={styles.servicePrice}>{service.price} XAF</Text>
                       <Text style={styles.serviceDuration}>{service.duration_minutes}min</Text>
                     </View>
                   </View>
@@ -456,7 +266,7 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: 'white',
   },
   subGreeting: {
@@ -476,7 +286,7 @@ const styles = StyleSheet.create({
   },
   langButtonText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
   },
   langButtonActive: {
     backgroundColor: '#8B5CF6',
@@ -520,7 +330,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
   sectionSubtitle: {
@@ -539,7 +349,7 @@ const styles = StyleSheet.create({
   clearFilterText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   categoriesContainer: {
     flexDirection: 'row',
@@ -573,7 +383,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     textAlign: 'center',
   },
@@ -612,7 +422,7 @@ const styles = StyleSheet.create({
   },
   providerName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -640,7 +450,7 @@ const styles = StyleSheet.create({
   viewProfileButtonText: {
     color: 'white',
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   agentsContainer: {
     gap: 16,
@@ -682,7 +492,7 @@ const styles = StyleSheet.create({
   },
   agentName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -704,12 +514,12 @@ const styles = StyleSheet.create({
   rating: {
     marginLeft: 4,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#333',
   },
   price: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
   bookButton: {
@@ -722,7 +532,7 @@ const styles = StyleSheet.create({
   bookButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   durationContainer: {
     marginBottom: 8,
@@ -745,7 +555,7 @@ const styles = StyleSheet.create({
   },
   serviceLocation: {
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '700' as const,
     color: '#2D1A46',
   },
   locationRowDisabled: {
@@ -761,7 +571,7 @@ const styles = StyleSheet.create({
   },
   serviceLocationDisabled: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#999',
   },
   emptyContainer: {
@@ -783,7 +593,7 @@ const styles = StyleSheet.create({
   clearAllButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   servicesGrid: {
     flexDirection: 'row',
@@ -794,7 +604,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 12,
     marginBottom: 16,
-    width: '48%', // 2 columns
+    width: '48%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -846,22 +656,22 @@ const styles = StyleSheet.create({
   verifiedBadgeText: {
     color: 'white',
     fontSize: 10,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
   },
   serviceName: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
-  providerInfo: {
+  serviceProviderInfo: {
     marginBottom: 6,
   },
   providerBusiness: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
   },
-  providerName: {
+  serviceProviderName: {
     fontSize: 11,
     color: '#666',
   },
@@ -878,7 +688,7 @@ const styles = StyleSheet.create({
   },
   servicePrice: {
     fontSize: 13,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
   serviceDuration: {
@@ -903,7 +713,7 @@ const styles = StyleSheet.create({
   },
   appointmentService: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -915,7 +725,7 @@ const styles = StyleSheet.create({
   appointmentDate: {
     fontSize: 14,
     color: '#F4A896',
-    fontWeight: '500',
+    fontWeight: '500' as const,
   },
   appointmentStatus: {
     backgroundColor: '#E8F5E9',
@@ -925,7 +735,7 @@ const styles = StyleSheet.create({
   },
   appointmentStatusText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#4CAF50',
   },
   bookAgainContainer: {
@@ -958,7 +768,7 @@ const styles = StyleSheet.create({
   },
   bookAgainName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     textAlign: 'center',
     marginBottom: 4,
@@ -1017,7 +827,7 @@ const styles = StyleSheet.create({
   },
   recommendationName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -1028,7 +838,7 @@ const styles = StyleSheet.create({
   },
   recommendationPrice: {
     fontSize: 13,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#F4A896',
   },
 });

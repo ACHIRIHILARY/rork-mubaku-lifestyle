@@ -1,11 +1,11 @@
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl } from 'react-native';
-import { Calendar, Clock, MapPin, DollarSign, X, Edit, CheckCircle, AlertTriangle } from 'lucide-react-native';
+import { Calendar, Clock, MapPin, DollarSign, X, Edit, CheckCircle, AlertTriangle, XCircle, RefreshCw } from 'lucide-react-native';
 import { useGetMyAppointmentsQuery, useCancelAppointmentMutation } from '@/store/services/appointmentApi';
 import { useTranslation } from 'react-i18next';
 
-type TabType = 'upcoming' | 'completed' | 'cancelled';
+type TabType = 'upcoming' | 'completed' | 'cancelled' | 'failed';
 
 export default function MyBookingsScreen() {
   const { t } = useTranslation();
@@ -13,19 +13,32 @@ export default function MyBookingsScreen() {
   const { data: allAppointments, isLoading, refetch, isFetching } = useGetMyAppointmentsQuery({});
   const [cancelAppointment, { isLoading: isCancelling }] = useCancelAppointmentMutation();
 
+  // Helper function to check if payment failed
+  const isPaymentFailed = (apt: any) => {
+    return apt.payment_status === 'failed' || apt.payment_status === 'expired';
+  };
+
   // Filter appointments based on active tab
   const appointments = React.useMemo(() => {
     if (!allAppointments) return [];
 
     switch (activeTab) {
       case 'upcoming':
+        // Exclude bookings with failed payments from upcoming
         return allAppointments.filter(apt =>
-          ['pending', 'confirmed', 'in_progress'].includes(apt.status)
+          ['pending', 'confirmed', 'in_progress'].includes(apt.status) &&
+          !isPaymentFailed(apt)
         );
       case 'completed':
-        return allAppointments.filter(apt => apt.status === 'completed');
+        // Only show completed bookings with successful payments
+        return allAppointments.filter(apt => 
+          apt.status === 'completed' && !isPaymentFailed(apt)
+        );
       case 'cancelled':
         return allAppointments.filter(apt => apt.status === 'cancelled');
+      case 'failed':
+        // Show bookings with failed or expired payments
+        return allAppointments.filter(apt => isPaymentFailed(apt));
       default:
         return allAppointments;
     }
@@ -70,8 +83,8 @@ export default function MyBookingsScreen() {
     );
   };
 
-  const handleReschedule = (appointmentId: string) => {
-    router.push(`/booking/reschedule?appointmentId=${appointmentId}` as any);
+  const handleViewAppointmentDetails = (appointmentId: string) => {
+    router.push(`/booking/status?appointmentId=${appointmentId}` as any);
   };
 
   const getStatusColor = (status: string) => {
@@ -95,18 +108,28 @@ export default function MyBookingsScreen() {
     return status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   };
 
+  const failedCount = allAppointments?.filter(apt => isPaymentFailed(apt)).length || 0;
+
   const tabs: { id: TabType; label: string; icon: any; count?: number }[] = [
     {
       id: 'upcoming',
       label: t('upcoming') || 'Upcoming',
       icon: Calendar,
-      count: allAppointments?.filter(apt => ['pending', 'confirmed', 'in_progress'].includes(apt.status)).length || 0
+      count: allAppointments?.filter(apt => 
+        ['pending', 'confirmed', 'in_progress'].includes(apt.status) && !isPaymentFailed(apt)
+      ).length || 0
     },
     {
       id: 'completed',
       label: t('completed') || 'Completed',
       icon: CheckCircle,
-      count: allAppointments?.filter(apt => apt.status === 'completed').length || 0
+      count: allAppointments?.filter(apt => apt.status === 'completed' && !isPaymentFailed(apt)).length || 0
+    },
+    {
+      id: 'failed',
+      label: t('failed') || 'Failed',
+      icon: XCircle,
+      count: failedCount
     },
     {
       id: 'cancelled',
@@ -168,17 +191,19 @@ export default function MyBookingsScreen() {
             <Text style={styles.emptyTitle}>
               {activeTab === 'upcoming' && (t('noUpcomingBookings') || 'No upcoming bookings')}
               {activeTab === 'completed' && (t('noCompletedBookings') || 'No completed bookings')}
+              {activeTab === 'failed' && (t('noFailedBookings') || 'No failed bookings')}
               {activeTab === 'cancelled' && (t('noCancelledBookings') || 'No cancelled bookings')}
             </Text>
             <Text style={styles.emptyText}>
               {activeTab === 'upcoming' && (t('bookYourFirstService') || 'Book your first service to get started!')}
               {activeTab === 'completed' && (t('noCompletedBookingsYet') || 'No completed bookings yet.')}
+              {activeTab === 'failed' && (t('noFailedBookingsYet') || 'All your payments were successful!')}
               {activeTab === 'cancelled' && (t('noCancelledBookingsYet') || 'No cancelled bookings.')}
             </Text>
             {activeTab === 'upcoming' && (
               <TouchableOpacity
                 style={styles.browseButton}
-                onPress={() => router.push('/(tabs)/home')}
+                onPress={() => router.push('/(tabs)/home' as any)}
               >
                 <Text style={styles.browseButtonText}>{t('browseServices')}</Text>
               </TouchableOpacity>
@@ -247,22 +272,51 @@ export default function MyBookingsScreen() {
                   </View>
 
                   {appointment.payment_status && (
-                    <View style={styles.paymentStatus}>
-                      <Text style={styles.paymentStatusText}>
+                    <View style={[
+                      styles.paymentStatus,
+                      isPaymentFailed(appointment) && styles.paymentStatusFailed
+                    ]}>
+                      <Text style={[
+                        styles.paymentStatusText,
+                        isPaymentFailed(appointment) && styles.paymentStatusTextFailed
+                      ]}>
                         Payment: {appointment.payment_status.replace(/_/g, ' ')}
+                      </Text>
+                    </View>
+                  )}
+
+                  {isPaymentFailed(appointment) && (
+                    <View style={styles.paymentFailedBanner}>
+                      <XCircle color="#D32F2F" size={16} />
+                      <Text style={styles.paymentFailedText}>
+                        Payment failed - Please rebook this service
                       </Text>
                     </View>
                   )}
                 </View>
 
-                {(appointment.status === 'pending' || appointment.status === 'confirmed') && (
+                {/* Show rebook button for failed payments */}
+                {isPaymentFailed(appointment) && (
+                  <View style={styles.appointmentActions}>
+                    <TouchableOpacity
+                      style={styles.rebookButton}
+                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}` as any)}
+                    >
+                      <RefreshCw color="white" size={18} />
+                      <Text style={styles.rebookButtonText}>{t('rebook') || 'Rebook Service'}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {/* Only show actions for non-failed payments */}
+                {(appointment.status === 'pending' || appointment.status === 'confirmed') && !isPaymentFailed(appointment) && (
                   <View style={styles.appointmentActions}>
                     <TouchableOpacity
                       style={styles.rescheduleButton}
-                      onPress={() => handleReschedule(appointment.id)}
+                      onPress={() => handleViewAppointmentDetails(appointment.id)}
                     >
                       <Edit color="#2D1A46" size={18} />
-                      <Text style={styles.rescheduleButtonText}>{t('reschedule')}</Text>
+                      <Text style={styles.rescheduleButtonText}>{t('viewDetails')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -276,7 +330,7 @@ export default function MyBookingsScreen() {
                   </View>
                 )}
 
-                {appointment.status === 'completed' && (
+                {appointment.status === 'completed' && !isPaymentFailed(appointment) && (
                   <View style={styles.appointmentActions}>
                     <TouchableOpacity
                       style={styles.reviewButton}
@@ -287,7 +341,7 @@ export default function MyBookingsScreen() {
 
                     <TouchableOpacity
                       style={styles.bookAgainButton}
-                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}`)}
+                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}` as any)}
                     >
                       <Text style={styles.bookAgainButtonText}>{t('bookAgain')}</Text>
                     </TouchableOpacity>
@@ -569,6 +623,44 @@ const styles = StyleSheet.create({
     backgroundColor: '#2D1A46',
   },
   bookAgainButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
+  },
+  paymentStatusFailed: {
+    backgroundColor: '#FFEBEE',
+  },
+  paymentStatusTextFailed: {
+    color: '#D32F2F',
+  },
+  paymentFailedBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: '#FFEBEE',
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#D32F2F',
+  },
+  paymentFailedText: {
+    fontSize: 13,
+    color: '#D32F2F',
+    fontWeight: '600',
+    flex: 1,
+  },
+  rebookButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#F4A896',
+  },
+  rebookButtonText: {
     fontSize: 14,
     fontWeight: '600',
     color: 'white',

@@ -41,10 +41,10 @@ export default function EditServiceScreen() {
     if (service) {
       console.log('Service loaded for editing:', JSON.stringify(service, null, 2));
       console.log('Service location fields:', {
-        latitude: service.latitude,
-        longitude: service.longitude,
-        location: service.location,
-        hasLocation: !!(service.latitude && service.longitude)
+        latitude: (service as any).latitude,
+        longitude: (service as any).longitude,
+        location: (service as any).location,
+        hasLocation: !!((service as any).latitude && (service as any).longitude)
       });
 
       setFormData({
@@ -55,10 +55,10 @@ export default function EditServiceScreen() {
         price: service.price.toString(),
         currency: service.currency,
         is_active: service.is_active,
-        latitude: service.latitude?.toString() || '',
-        longitude: service.longitude?.toString() || '',
-        location: service.location || '',
-        image: service.image_url || undefined,
+        latitude: (service as any).latitude?.toString() || '',
+        longitude: (service as any).longitude?.toString() || '',
+        location: (service as any).location || '',
+        image: (service as any).image_url || undefined,
       });
     }
   }, [service]);
@@ -138,9 +138,9 @@ export default function EditServiceScreen() {
 
       console.log('Service updated, response:', JSON.stringify(result, null, 2));
       console.log('Response location data:', {
-        latitude: result.latitude,
-        longitude: result.longitude,
-        location: result.location
+        latitude: (result as any).latitude,
+        longitude: (result as any).longitude,
+        location: (result as any).location
       });
 
       Alert.alert('Success', 'Service updated successfully', [

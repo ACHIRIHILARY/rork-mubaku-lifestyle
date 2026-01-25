@@ -4,6 +4,7 @@ import { Star, Camera, X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function WriteReviewScreen() {
     const { t } = useTranslation();
@@ -71,83 +72,86 @@ export default function WriteReviewScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>{t('writeReview')}</Text>
-                    <Text style={styles.subtitle}>{t('shareExperience')}</Text>
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('rating')}</Text>
-                    <View style={styles.starsContainer}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <TouchableOpacity key={star} onPress={() => handleStarPress(star)}>
-                                <Star
-                                    size={32}
-                                    color={star <= rating ? '#FFD700' : '#E0E0E0'}
-                                    fill={star <= rating ? '#FFD700' : 'transparent'}
-                                />
-                            </TouchableOpacity>
-                        ))}
+        <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+            <SafeAreaView style={styles.container}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <View style={styles.header}>
+                        <Text style={styles.title}>{t('writeReview')}</Text>
+                        <Text style={styles.subtitle}>{t('shareExperience')}</Text>
                     </View>
-                    {rating > 0 && (
-                        <Text style={styles.ratingText}>
-                            {rating} {rating === 1 ? 'star' : 'stars'}
-                        </Text>
-                    )}
-                </View>
 
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('review')}</Text>
-                    <TextInput
-                        style={styles.reviewInput}
-                        multiline
-                        numberOfLines={6}
-                        placeholder={t('writeReviewPlaceholder')}
-                        value={review}
-                        onChangeText={setReview}
-                        textAlignVertical="top"
-                    />
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('photos')} ({t('optional')})</Text>
-                    <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
-                        <Camera size={24} color="#666" />
-                        <Text style={styles.addPhotoText}>{t('addPhoto')}</Text>
-                    </TouchableOpacity>
-
-                    {photos.length > 0 && (
-                        <View style={styles.photosContainer}>
-                            {photos.map((photo, index) => (
-                                <View key={index} style={styles.photoWrapper}>
-                                    <Image source={{ uri: photo }} style={styles.photo} />
-                                    <TouchableOpacity
-                                        style={styles.removePhotoButton}
-                                        onPress={() => removePhoto(index)}
-                                    >
-                                        <X size={16} color="white" />
-                                    </TouchableOpacity>
-                                </View>
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>{t('rating')}</Text>
+                        <View style={styles.starsContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <TouchableOpacity key={star} onPress={() => handleStarPress(star)}>
+                                    <Star
+                                        size={32}
+                                        color={star <= rating ? '#FFD700' : '#E0E0E0'}
+                                        fill={star <= rating ? '#FFD700' : 'transparent'}
+                                    />
+                                </TouchableOpacity>
                             ))}
                         </View>
-                    )}
-                </View>
+                        {rating > 0 && (
+                            <Text style={styles.ratingText}>
+                                {rating} {rating === 1 ? 'star' : 'stars'}
+                            </Text>
+                        )}
+                    </View>
 
-                <TouchableOpacity
-                    style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
-                    onPress={handleSubmit}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? (
-                        <ActivityIndicator color="white" />
-                    ) : (
-                        <Text style={styles.submitButtonText}>{t('submitReview')}</Text>
-                    )}
-                </TouchableOpacity>
-            </ScrollView>
-        </SafeAreaView>
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>{t('review')}</Text>
+                        <TextInput
+                            style={styles.reviewInput}
+                            multiline
+                            numberOfLines={6}
+                            placeholder={t('writeReviewPlaceholder')}
+                            value={review}
+                            onChangeText={setReview}
+                            textAlignVertical="top"
+                        />
+                    </View>
+
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>{t('photos')} ({t('optional')})</Text>
+                        <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
+                            <Camera size={24} color="#666" />
+                            <Text style={styles.addPhotoText}>{t('addPhoto')}</Text>
+                        </TouchableOpacity>
+
+                        {photos.length > 0 && (
+                            <View style={styles.photosContainer}>
+                                {photos.map((photo, index) => (
+                                    <View key={index} style={styles.photoWrapper}>
+                                        <Image source={{ uri: photo }} style={styles.photo} />
+                                        <TouchableOpacity
+                                            style={styles.removePhotoButton}
+                                            onPress={() => removePhoto(index)}
+                                        >
+                                            <X size={16} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                            </View>
+                        )}
+                    </View>
+
+                    <TouchableOpacity
+                        style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
+                        onPress={handleSubmit}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <ActivityIndicator color="white" />
+                        ) : (
+                            <Text style={styles.submitButtonText}>{t('submitReview')}</Text>
+                        )}
+                    </TouchableOpacity>
+                </ScrollView>
+            </SafeAreaView>
+            <CustomTabBar />
+        </View>
     );
 }
 

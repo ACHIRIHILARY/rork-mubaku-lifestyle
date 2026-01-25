@@ -125,12 +125,12 @@ export default function CreateServiceScreen() {
       const result = await createService(payload).unwrap();
       console.log('Service created, response:', JSON.stringify(result, null, 2));
       console.log('Response location data:', {
-        latitude: result.latitude,
-        longitude: result.longitude,
-        location: result.location
+        latitude: (result as any).latitude,
+        longitude: (result as any).longitude,
+        location: (result as any).location
       });
 
-      if (result.latitude && result.longitude) {
+      if ((result as any).latitude && (result as any).longitude) {
         Alert.alert('Success', 'Service created successfully with location!', [
           { text: 'OK', onPress: () => router.back() }
         ]);

@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Platform } from 'react-native';
 
 // Constants for token expiration (10 days in milliseconds)
 const TOKEN_EXPIRATION_MS = 10 * 24 * 60 * 60 * 1000; // 10 days
@@ -148,6 +147,9 @@ const authSlice = createSlice({
       AsyncStorage.removeItem('refreshToken');
       AsyncStorage.removeItem('tokenCreatedAt');
     },
+    setInitialized: (state) => {
+      state.isInitialized = true;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -182,6 +184,6 @@ export const checkTokenExpiration = createAsyncThunk(
   }
 );
 
-export const { setCredentials, setUser, updateAccessToken, logout } = authSlice.actions;
+export const { setCredentials, setUser, updateAccessToken, logout, setInitialized } = authSlice.actions;
 export default authSlice.reducer;
 export type { User };

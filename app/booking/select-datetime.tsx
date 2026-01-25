@@ -2,6 +2,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function SelectDateTime() {
   const { serviceId } = useLocalSearchParams<{ serviceId: string }>();
@@ -59,109 +60,112 @@ export default function SelectDateTime() {
       const [hours] = selectedTime.split(':');
       const endHour = parseInt(hours) + 1;
       const endTime = `${endHour.toString().padStart(2, '0')}:00:00`;
-      router.push(`/booking/summary?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedTime}&endTime=${endTime}`);
+      router.push(`/booking/summary?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedTime}&endTime=${endTime}` as any);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Select Date & Time</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <ScrollView style={styles.content}>
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Calendar color="#2D1A46" size={24} />
-            <Text style={styles.sectionTitle}>Choose Date</Text>
-          </View>
-          
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
-            {availableDates.map((date) => {
-              const dateStr = date.toISOString().split('T')[0];
-              return (
-                <TouchableOpacity
-                  key={dateStr}
-                  style={[
-                    styles.dateCard,
-                    selectedDate === dateStr && styles.selectedDateCard,
-                  ]}
-                  onPress={() => {
-                    setSelectedDate(dateStr);
-                    setSelectedTime('');
-                  }}
-                >
-                  <Text style={[
-                    styles.dateDay,
-                    selectedDate === dateStr && styles.selectedDateText,
-                  ]}>
-                    {formatDate(dateStr)}
-                  </Text>
-                  <Text style={[
-                    styles.dateNumber,
-                    selectedDate === dateStr && styles.selectedDateText,
-                  ]}>
-                    {date.getDate()}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Select Date & Time</Text>
+          <View style={styles.placeholder} />
         </View>
 
-        {selectedDate && (
+        <ScrollView style={styles.content}>
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Clock color="#2D1A46" size={24} />
-              <Text style={styles.sectionTitle}>Choose Time</Text>
+              <Calendar color="#2D1A46" size={24} />
+              <Text style={styles.sectionTitle}>Choose Date</Text>
             </View>
             
-            <View style={styles.timeGrid}>
-              {timeSlots.map((slot) => {
-                const isSelected = selectedTime === slot;
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
+              {availableDates.map((date) => {
+                const dateStr = date.toISOString().split('T')[0];
                 return (
                   <TouchableOpacity
-                    key={slot}
+                    key={dateStr}
                     style={[
-                      styles.timeCard,
-                      isSelected && styles.selectedTimeCard,
+                      styles.dateCard,
+                      selectedDate === dateStr && styles.selectedDateCard,
                     ]}
-                    onPress={() => setSelectedTime(slot)}
+                    onPress={() => {
+                      setSelectedDate(dateStr);
+                      setSelectedTime('');
+                    }}
                   >
                     <Text style={[
-                      styles.timeText,
-                      isSelected && styles.selectedTimeText,
+                      styles.dateDay,
+                      selectedDate === dateStr && styles.selectedDateText,
                     ]}>
-                      {formatTime(slot)}
+                      {formatDate(dateStr)}
+                    </Text>
+                    <Text style={[
+                      styles.dateNumber,
+                      selectedDate === dateStr && styles.selectedDateText,
+                    ]}>
+                      {date.getDate()}
                     </Text>
                   </TouchableOpacity>
                 );
               })}
-            </View>
+            </ScrollView>
           </View>
-        )}
-      </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            (!selectedDate || !selectedTime) && styles.disabledButton
-          ]}
-          onPress={handleNext}
-          disabled={!selectedDate || !selectedTime}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          {selectedDate && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Clock color="#2D1A46" size={24} />
+                <Text style={styles.sectionTitle}>Choose Time</Text>
+              </View>
+              
+              <View style={styles.timeGrid}>
+                {timeSlots.map((slot) => {
+                  const isSelected = selectedTime === slot;
+                  return (
+                    <TouchableOpacity
+                      key={slot}
+                      style={[
+                        styles.timeCard,
+                        isSelected && styles.selectedTimeCard,
+                      ]}
+                      onPress={() => setSelectedTime(slot)}
+                    >
+                      <Text style={[
+                        styles.timeText,
+                        isSelected && styles.selectedTimeText,
+                      ]}>
+                        {formatTime(slot)}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          )}
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              (!selectedDate || !selectedTime) && styles.disabledButton
+            ]}
+            onPress={handleNext}
+            disabled={!selectedDate || !selectedTime}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 

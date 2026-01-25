@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
 import { useGetAppointmentDetailQuery, useRescheduleAppointmentMutation, useGetAvailableSlotsQuery } from '@/store/services/appointmentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function RescheduleAppointmentScreen() {
   const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
@@ -88,129 +89,131 @@ export default function RescheduleAppointmentScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Reschedule Appointment</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <ScrollView style={styles.content}>
-        <View style={styles.appointmentInfo}>
-          <Text style={styles.serviceName}>{appointment.service?.name}</Text>
-          <Text style={styles.currentSchedule}>
-            Current: {new Date(appointment.scheduled_for).toLocaleDateString()} at{' '}
-            {new Date(appointment.scheduled_for).toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit'
-            })}
-          </Text>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Reschedule Appointment</Text>
+          <View style={styles.placeholder} />
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Calendar color="#2D1A46" size={24} />
-            <Text style={styles.sectionTitle}>Choose Date</Text>
+        <ScrollView style={styles.content}>
+          <View style={styles.appointmentInfo}>
+            <Text style={styles.serviceName}>{appointment.service?.name}</Text>
+            <Text style={styles.currentSchedule}>
+              Current: {new Date(appointment.scheduled_for).toLocaleDateString()} at{' '}
+              {new Date(appointment.scheduled_for).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </Text>
           </View>
-          
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
-            {dates.map((date) => (
-              <TouchableOpacity
-                key={date.id}
-                style={[
-                  styles.dateCard,
-                  selectedDate === date.date && styles.selectedDateCard,
-                ]}
-                onPress={() => {
-                  setSelectedDate(date.date);
-                  setSelectedTime(null);
-                }}
-              >
-                <Text style={[
-                  styles.dateDay,
-                  selectedDate === date.date && styles.selectedDateText,
-                ]}>
-                  {date.day}
-                </Text>
-                <Text style={[
-                  styles.dateNumber,
-                  selectedDate === date.date && styles.selectedDateText,
-                ]}>
-                  {new Date(date.date).getDate()}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
 
-        {selectedDate && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Clock color="#2D1A46" size={24} />
-              <Text style={styles.sectionTitle}>Available Times</Text>
+              <Calendar color="#2D1A46" size={24} />
+              <Text style={styles.sectionTitle}>Choose Date</Text>
             </View>
             
-            {slotsLoading ? (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="small" color="#2D1A46" />
-              </View>
-            ) : availableTimesForDate.length === 0 ? (
-              <View style={styles.noSlotsContainer}>
-                <Text style={styles.noSlotsText}>No available times for this date</Text>
-              </View>
-            ) : (
-              <View style={styles.timeGrid}>
-                {availableTimesForDate.map((slot, index) => {
-                  const isSelected = selectedTime?.start === slot.start_time && selectedTime?.end === slot.end_time;
-                  return (
-                    <TouchableOpacity
-                      key={index}
-                      style={[
-                        styles.timeCard,
-                        isSelected && styles.selectedTimeCard,
-                      ]}
-                      onPress={() => setSelectedTime({ start: slot.start_time, end: slot.end_time })}
-                    >
-                      <Text style={[
-                        styles.timeText,
-                        isSelected && styles.selectedTimeText,
-                      ]}>
-                        {new Date(slot.start_time).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            )}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
+              {dates.map((date) => (
+                <TouchableOpacity
+                  key={date.id}
+                  style={[
+                    styles.dateCard,
+                    selectedDate === date.date && styles.selectedDateCard,
+                  ]}
+                  onPress={() => {
+                    setSelectedDate(date.date);
+                    setSelectedTime(null);
+                  }}
+                >
+                  <Text style={[
+                    styles.dateDay,
+                    selectedDate === date.date && styles.selectedDateText,
+                  ]}>
+                    {date.day}
+                  </Text>
+                  <Text style={[
+                    styles.dateNumber,
+                    selectedDate === date.date && styles.selectedDateText,
+                  ]}>
+                    {new Date(date.date).getDate()}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
-        )}
-      </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.rescheduleButton,
-            (!selectedDate || !selectedTime || isRescheduling) && styles.disabledButton
-          ]}
-          onPress={handleReschedule}
-          disabled={!selectedDate || !selectedTime || isRescheduling}
-        >
-          {isRescheduling ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text style={styles.rescheduleButtonText}>Confirm Reschedule</Text>
+          {selectedDate && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Clock color="#2D1A46" size={24} />
+                <Text style={styles.sectionTitle}>Available Times</Text>
+              </View>
+              
+              {slotsLoading ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="small" color="#2D1A46" />
+                </View>
+              ) : availableTimesForDate.length === 0 ? (
+                <View style={styles.noSlotsContainer}>
+                  <Text style={styles.noSlotsText}>No available times for this date</Text>
+                </View>
+              ) : (
+                <View style={styles.timeGrid}>
+                  {availableTimesForDate.map((slot, index) => {
+                    const isSelected = selectedTime?.start === slot.start_time && selectedTime?.end === slot.end_time;
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        style={[
+                          styles.timeCard,
+                          isSelected && styles.selectedTimeCard,
+                        ]}
+                        onPress={() => setSelectedTime({ start: slot.start_time, end: slot.end_time })}
+                      >
+                        <Text style={[
+                          styles.timeText,
+                          isSelected && styles.selectedTimeText,
+                        ]}>
+                          {new Date(slot.start_time).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
+            </View>
           )}
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.rescheduleButton,
+                (!selectedDate || !selectedTime || isRescheduling) && styles.disabledButton
+              ]}
+              onPress={handleReschedule}
+              disabled={!selectedDate || !selectedTime || isRescheduling}
+            >
+              {isRescheduling ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.rescheduleButtonText}>Confirm Reschedule</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 

@@ -14,6 +14,7 @@ import {
   useGetCategoryByIdQuery,
   useGetCategoryServicesQuery,
 } from '@/store/services/servicesApi';
+import CustomTabBar from './components/CustomTabBar';
 
 export default function CategoryDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -37,7 +38,7 @@ export default function CategoryDetailScreen() {
   });
 
   const handleServicePress = (serviceId: string) => {
-    router.push(`/service-detail?id=${serviceId}`);
+    router.push(`/service-detail?id=${serviceId}` as any);
   };
 
   const isLoading = categoryLoading || servicesLoading;
@@ -89,97 +90,100 @@ export default function CategoryDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: category.name,
-          headerStyle: { backgroundColor: '#F4A896' },
-          headerTintColor: 'white',
-        }}
-      />
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <Stack.Screen
+          options={{
+            title: category.name,
+            headerStyle: { backgroundColor: '#F4A896' },
+            headerTintColor: 'white',
+          }}
+        />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View style={styles.categoryIconLarge}>
-            <Text style={styles.categoryIconText}>💇</Text>
-          </View>
-          <Text style={styles.categoryTitle}>{category.name}</Text>
-          {category.description && (
-            <Text style={styles.categoryDescription}>
-              {category.description}
-            </Text>
-          )}
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{services?.length || 0}</Text>
-              <Text style={styles.statLabel}>Services</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <View style={styles.categoryIconLarge}>
+              <Text style={styles.categoryIconText}>💇</Text>
             </View>
-          </View>
-        </View>
-
-        <View style={styles.servicesSection}>
-          <Text style={styles.sectionTitle}>Available Services</Text>
-
-          {!services || services.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                No services available in this category yet
+            <Text style={styles.categoryTitle}>{category.name}</Text>
+            {category.description && (
+              <Text style={styles.categoryDescription}>
+                {category.description}
               </Text>
-              <TouchableOpacity
-                style={styles.browseButton}
-                onPress={() => router.back()}
-              >
-                <Text style={styles.browseButtonText}>Browse Other Categories</Text>
-              </TouchableOpacity>
+            )}
+            <View style={styles.statsContainer}>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{services?.length || 0}</Text>
+                <Text style={styles.statLabel}>Services</Text>
+              </View>
             </View>
-          ) : (
-            <View style={styles.servicesContainer}>
-              {services.map((service) => (
+          </View>
+
+          <View style={styles.servicesSection}>
+            <Text style={styles.sectionTitle}>Available Services</Text>
+
+            {!services || services.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>
+                  No services available in this category yet
+                </Text>
                 <TouchableOpacity
-                  key={service.id}
-                  style={styles.serviceCard}
-                  onPress={() => handleServicePress(service.id)}
+                  style={styles.browseButton}
+                  onPress={() => router.back()}
                 >
-                  <View style={styles.serviceImagePlaceholder}>
-                    <Text style={styles.serviceImageText}>💼</Text>
-                  </View>
-                  <View style={styles.serviceInfo}>
-                    <Text style={styles.serviceName}>{service.name}</Text>
-                    {service.description && (
-                      <Text style={styles.serviceDescription} numberOfLines={2}>
-                        {service.description}
-                      </Text>
-                    )}
-                    <View style={styles.serviceMeta}>
-                      <View style={styles.ratingContainer}>
-                        <Star color="#FFD700" size={16} fill="#FFD700" />
-                        <Text style={styles.rating}>
-                          {service.rating || '5.0'}
+                  <Text style={styles.browseButtonText}>Browse Other Categories</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.servicesContainer}>
+                {services.map((service) => (
+                  <TouchableOpacity
+                    key={service.id}
+                    style={styles.serviceCard}
+                    onPress={() => handleServicePress(service.id)}
+                  >
+                    <View style={styles.serviceImagePlaceholder}>
+                      <Text style={styles.serviceImageText}>💼</Text>
+                    </View>
+                    <View style={styles.serviceInfo}>
+                      <Text style={styles.serviceName}>{service.name}</Text>
+                      {service.description && (
+                        <Text style={styles.serviceDescription} numberOfLines={2}>
+                          {service.description}
+                        </Text>
+                      )}
+                      <View style={styles.serviceMeta}>
+                        <View style={styles.ratingContainer}>
+                          <Star color="#FFD700" size={16} fill="#FFD700" />
+                          <Text style={styles.rating}>
+                            {(service as any).rating || '5.0'}
+                          </Text>
+                        </View>
+                        <Text style={styles.duration}>
+                          {service.duration_minutes} min
                         </Text>
                       </View>
-                      <Text style={styles.duration}>
-                        {service.duration_minutes} min
-                      </Text>
+                      <View style={styles.serviceFooter}>
+                        <Text style={styles.price}>
+                          {service.price} {service.currency}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.bookButton}
+                          onPress={() => handleServicePress(service.id)}
+                        >
+                          <Text style={styles.bookButtonText}>Book</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={styles.serviceFooter}>
-                      <Text style={styles.price}>
-                        {service.price} {service.currency}
-                      </Text>
-                      <TouchableOpacity
-                        style={styles.bookButton}
-                        onPress={() => handleServicePress(service.id)}
-                      >
-                        <Text style={styles.bookButtonText}>Book</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 

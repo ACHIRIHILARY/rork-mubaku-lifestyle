@@ -15,7 +15,7 @@ interface Appointment {
   amount: number;
   currency: string;
   status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
-  payment_status?: 'held_in_escrow' | 'released' | 'refunded';
+  payment_status?: 'pending' | 'held_in_escrow' | 'released' | 'refunded' | 'failed' | 'expired';
   client?: any;
   provider?: any;
   service?: any;
@@ -138,13 +138,13 @@ export const appointmentApi = api.injectEndpoints({
 
     completeAppointment: builder.mutation<Appointment, string>({
       query: (appointmentId) => ({
-        url: `/appointments/${appointmentId}/`,
+        url: `/appointments/${appointmentId}/complete/`,
         method: 'POST',
-        body: { action: 'complete' },
       }),
       invalidatesTags: (result, error, appointmentId) => [
         { type: 'Appointment', id: appointmentId },
         'Appointment',
+        'Availability',
       ],
     }),
 

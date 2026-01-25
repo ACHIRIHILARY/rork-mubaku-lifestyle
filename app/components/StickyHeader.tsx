@@ -37,11 +37,11 @@ export default function StickyHeader() {
       icon: Users,
       route: '/(tabs)/providers',
     },
-    {
-      title: 'Payments & History',
-      icon: Receipt,
-      route: '/booking/payment-status', // This might need to be updated to a dedicated payments history screen
-    },
+    // {
+    //   title: 'Payments & History',
+    //   icon: Receipt,
+    //   route: '/booking/', // This might need to be updated to a dedicated payments history screen
+    // },
   ];
 
   const businessItems = [
@@ -85,7 +85,7 @@ export default function StickyHeader() {
         <View style={styles.rightContainer}>
           <TouchableOpacity
             style={styles.notificationButton}
-            onPress={() => router.push('/(tabs)/messages')}
+            onPress={() => router.push('/(tabs)/messages' as any)}
             accessibilityLabel="Notifications"
           >
             <Bell color="#2D1A46" size={20} />

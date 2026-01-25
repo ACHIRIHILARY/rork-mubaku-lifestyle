@@ -31,7 +31,7 @@ export default function LoginScreen() {
       console.log('Redirecting user to:', destination);
 
       setWaitingForUser(false);
-      router.replace(destination);
+      router.replace(destination as any);
     }
   }, [waitingForUser, user, isAuthenticated]);
 
@@ -58,7 +58,7 @@ export default function LoginScreen() {
       redirectTimeoutRef.current = setTimeout(() => {
         console.warn('User data fetch timeout, redirecting to home as fallback');
         setWaitingForUser(false);
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/home' as any);
       }, 5000);
     } catch (error: unknown) {
       setWaitingForUser(false);
@@ -177,7 +177,7 @@ export default function LoginScreen() {
 
               <TouchableOpacity
                 style={styles.registerButton}
-                onPress={() => router.push('/register')}
+                onPress={() => router.push('/register' as any)}
               >
                 <Text style={styles.registerText}>{t('noAccount')}</Text>
               </TouchableOpacity>

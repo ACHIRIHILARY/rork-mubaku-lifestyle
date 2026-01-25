@@ -158,6 +158,8 @@ interface Payment {
   next_steps?: NextSteps;
   failure_details?: FailureDetails;
   instructions?: InstructionsInfo;
+  errorCode?: number | string;
+  errorMessage?: string;
 }
 
 interface InitiatePaymentRequest {

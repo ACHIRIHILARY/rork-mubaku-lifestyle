@@ -1,23 +1,51 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Animated, ScrollView, Alert, Share } from 'react-native';
-import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Receipt } from 'lucide-react-native';
+import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Receipt, Calendar, Navigation } from 'lucide-react-native';
 import { useLazyGetPaymentStatusQuery } from '@/store/services/paymentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
 
 export default function PaymentStatusScreen() {
-  const { frontendToken, phoneNumber } = useLocalSearchParams<{
+  const { frontendToken, phoneNumber, serviceName, locationName, latitude, longitude } = useLocalSearchParams<{
     frontendToken: string;
     phoneNumber: string;
+    serviceName?: string;
+    locationName?: string;
+    latitude?: string;
+    longitude?: string;
   }>();
   const [getPaymentStatus, { data: payment, isLoading, error }] = useLazyGetPaymentStatusQuery();
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [hasExpired, setHasExpired] = useState(false);
+  const [pollingMessage, setPollingMessage] = useState('Processing payment, please wait…');
+  const [pollAttempts, setPollAttempts] = useState(0);
+  const [finalResult, setFinalResult] = useState<{
+    status: PaymentStatus;
+    errorCode: number | string | null;
+    errorMessage: string | null;
+    locked: boolean;
+  } | null>(null);
+  const finalResultRef = useRef<{
+    status: PaymentStatus;
+    errorCode: number | string | null;
+    errorMessage: string | null;
+    locked: boolean;
+  } | null>(null);
+  const MAX_POLL_ATTEMPTS = 40;
+  const TIMEOUT_SECONDS = 120;
   const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  const stopTimer = () => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+  };
 
   useEffect(() => {
     if (!frontendToken) {
@@ -36,27 +64,75 @@ export default function PaymentStatusScreen() {
 
       let pollCount = 0;
       pollingIntervalRef.current = setInterval(async () => {
+        // Check if status is already locked - stop immediately
+        if (finalResultRef.current?.locked) {
+          console.log('[PaymentStatus] Status already locked, stopping poll');
+          stopPolling();
+          stopTimer();
+          return;
+        }
+
         pollCount++;
+        setPollAttempts(pollCount);
         console.log(`[PaymentStatus] Poll #${pollCount}`);
 
-        if (pollCount >= 60) {
-          console.log('[PaymentStatus] Max polling attempts reached');
+        if (pollCount >= MAX_POLL_ATTEMPTS) {
+          console.log('[PaymentStatus] Max polling attempts reached (2 minutes)');
+          setHasExpired(true);
+          const result = {
+            status: 'failed' as PaymentStatus,
+            errorCode: null,
+            errorMessage: 'Payment could not be confirmed. Please try again.',
+            locked: true,
+          };
+          finalResultRef.current = result;
+          setFinalResult(result);
+          setPollingMessage('Payment could not be confirmed. Please try again.');
           stopPolling();
+          stopTimer();
           return;
         }
 
         try {
           const result = await getPaymentStatus(frontendToken);
+          const paymentData = result.data as any;
 
-          if (result.data?.polling?.stop) {
-            console.log('[PaymentStatus] Stopping polling:', result.data.polling.reason);
+          const currentStatus = paymentData?.status;
+          const errCode = paymentData?.errorCode;
+          const errMsg = paymentData?.errorMessage;
+
+          console.log(`[PaymentStatus] Poll response - status: ${currentStatus}, errorCode: ${errCode}, errorMessage: ${errMsg}`);
+
+          // If status is NOT pending, stop polling immediately
+          if (currentStatus !== 'pending') {
+            console.log(`[PaymentStatus] Status is ${currentStatus}, stopping polling`);
+            console.log(`[PaymentStatus] Locking final result - code: ${errCode}, message: ${errMsg}`);
+            
+            // Lock EVERYTHING in one atomic operation
+            const result = {
+              status: currentStatus as PaymentStatus,
+              errorCode: errCode || null,
+              errorMessage: errMsg || null,
+              locked: true,
+            };
+            
+            // Set ref FIRST (synchronous), then state
+            finalResultRef.current = result;
+            setFinalResult(result);
+            
+            if (currentStatus === 'completed' && !errCode) {
+              setPollingMessage('Payment successful. Booking confirmed!');
+            } else {
+              setPollingMessage(errMsg || 'Payment could not be completed.');
+            }
+            
             stopPolling();
+            stopTimer();
+            return;
           }
 
-          if (result.data?.status === 'completed' || result.data?.status === 'failed') {
-            console.log('[PaymentStatus] Final status reached:', result.data.status);
-            stopPolling();
-          }
+          // Status is pending - continue polling
+          console.log('[PaymentStatus] Status is pending, continuing to poll...');
         } catch (err) {
           console.error('[PaymentStatus] Polling error:', err);
         }
@@ -69,10 +145,20 @@ export default function PaymentStatusScreen() {
       setTimeElapsed((prev) => {
         const newTime = prev + 1;
 
-        if (newTime >= 300) {
-          console.log('[PaymentStatus] Payment timeout reached (5 minutes)');
+        if (newTime >= TIMEOUT_SECONDS && !finalResultRef.current?.locked) {
+          console.log('[PaymentStatus] Payment timeout reached (2 minutes)');
           setHasExpired(true);
+          const result = {
+            status: 'failed' as PaymentStatus,
+            errorCode: null,
+            errorMessage: 'Payment could not be confirmed. Please try again.',
+            locked: true,
+          };
+          finalResultRef.current = result;
+          setFinalResult(result);
+          setPollingMessage('Payment could not be confirmed. Please try again.');
           stopPolling();
+          stopTimer();
         }
 
         return newTime;
@@ -81,9 +167,7 @@ export default function PaymentStatusScreen() {
 
     return () => {
       stopPolling();
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
+      stopTimer();
     };
   }, [frontendToken, getPaymentStatus]);
 
@@ -136,7 +220,7 @@ export default function PaymentStatusScreen() {
   };
 
   const formatTimeRemaining = (seconds: number) => {
-    const remaining = Math.max(0, 300 - seconds);
+    const remaining = Math.max(0, TIMEOUT_SECONDS - seconds);
     const mins = Math.floor(remaining / 60);
     const secs = remaining % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -170,8 +254,17 @@ export default function PaymentStatusScreen() {
     }
   };
 
+  const getErrorTitle = (): string => {
+    return 'Payment Failed';
+  };
+
   const getStatusTitle = (status: PaymentStatus) => {
-    if (hasExpired) return 'Payment Timeout';
+    const paymentData: any = payment;
+    if (paymentData?.errorCode || paymentData?.gateway?.error_code) {
+      return 'Payment Failed';
+    }
+
+    if (hasExpired && status !== 'completed') return 'Payment Timeout';
 
     switch (status) {
       case 'completed':
@@ -187,12 +280,28 @@ export default function PaymentStatusScreen() {
     }
   };
 
+  const formatAmount = () => {
+    if (!payment?.amount) return '';
+    const currency = payment.amount.currency || 'XAF';
+    const total = payment.amount.total;
+    if (total === undefined || total === null || isNaN(total)) return '';
+    return `${currency} ${Math.round(total).toLocaleString()}`;
+  };
+
   const getStatusMessage = () => {
-    if (hasExpired) {
-      return 'The payment request has expired. Please try booking again.';
+    const paymentData: any = payment;
+    const hasError = paymentData?.errorCode || paymentData?.gateway?.error_code;
+    const errMsg = paymentData?.errorMessage || paymentData?.gateway?.error_message || paymentData?.failure_details?.message;
+
+    if (hasError) {
+      return errMsg || 'Payment rejected. Please try again.';
     }
 
-    if (!payment) return 'Connecting to payment gateway...';
+    if (hasExpired && payment?.status !== 'completed') {
+      return 'Payment could not be confirmed. Please retry.';
+    }
+
+    if (!payment) return pollingMessage;
 
     if (payment.status === 'pending') {
       return `Check your phone (${phoneNumber}) for a USSD prompt. Dial the code shown on your screen to authorize the payment.`;
@@ -202,16 +311,19 @@ export default function PaymentStatusScreen() {
       return 'Your payment is being processed. This usually takes 30-60 seconds. Please wait...';
     }
 
-    if (payment.status === 'completed') {
-      return `Payment of ${payment.amount.currency} ${Math.round(payment.amount.total)} completed successfully! Your booking is confirmed and the provider has been notified.`;
+    if (payment.status === 'completed' && !hasError) {
+      const amount = formatAmount();
+      if (amount) {
+        return `Payment of ${amount} completed successfully! Your booking is confirmed and the provider has been notified.`;
+      }
+      return 'Payment successful. Booking confirmed!';
     }
 
     if (payment.status === 'failed') {
-      const failureMessage = payment.failure_details?.message || 'Payment could not be completed';
-      return failureMessage;
+      return errMsg || 'Payment could not be completed';
     }
 
-    return payment.instructions?.message || 'Setting up your payment...';
+    return payment.instructions?.message || pollingMessage;
   };
 
   const getStatusColor = (status: PaymentStatus) => {
@@ -229,16 +341,29 @@ export default function PaymentStatusScreen() {
     }
   };
 
-  const handleRetry = () => {
-    router.back();
+  const handleViewMyBookings = () => {
+    router.replace('/(tabs)/my-bookings' as any);
   };
 
-  const handleViewBooking = () => {
-    if (payment?.id) {
-      // Navigate to transaction details page instead of booking status
-      router.replace(`/booking/transaction-details?paymentId=${payment.id}` as any);
+  const handleViewRoute = () => {
+    const lat = latitude;
+    const lng = longitude;
+    const locName = locationName || 'Service Location';
+    const svcName = serviceName || payment?.appointment?.service || 'Service';
+
+    if (lat && lng) {
+      router.push({
+        pathname: '/view-location',
+        params: {
+          latitude: String(lat),
+          longitude: String(lng),
+          locationName: locName,
+          serviceName: svcName,
+          showRoute: 'true',
+        },
+      } as any);
     } else {
-      router.replace('/(tabs)/my-bookings' as any);
+      Alert.alert('Location Unavailable', 'Service location is not available for this booking.');
     }
   };
 
@@ -250,6 +375,10 @@ export default function PaymentStatusScreen() {
     console.log('[PaymentStatus] Contact support requested');
     console.log('[PaymentStatus] Payment ID:', payment?.id);
     console.log('[PaymentStatus] Frontend Token:', frontendToken?.substring(0, 8) + '...');
+  };
+
+  const handleRetryPayment = () => {
+    router.back();
   };
 
   const handleViewReceipt = () => {
@@ -351,179 +480,184 @@ Thank you for using Mu Baku Lifestyle!
     );
   }
 
-  const status = payment?.status || 'pending';
-  const isProcessing = status === 'pending' || status === 'processing';
-  const isCompleted = status === 'completed';
-  const isFailed = status === 'failed' || hasExpired;
-  const statusColor = getStatusColor(status);
+  // CRITICAL: Once locked, use ONLY the frozen finalResult - completely ignore payment object
+  const isLocked = finalResultRef.current?.locked || finalResult?.locked;
+  const frozenResult = finalResultRef.current || finalResult;
+  
+  const status: PaymentStatus = isLocked && frozenResult ? frozenResult.status : (payment?.status || 'pending');
+  const errorCode = isLocked && frozenResult ? frozenResult.errorCode : null;
+  const errorMessage = isLocked && frozenResult ? frozenResult.errorMessage : null;
+  const hasErrorCode = !!errorCode;
+  
+  const isCompleted = status === 'completed' && !hasErrorCode;
+  const isProcessing = !isLocked && (status === 'pending' || status === 'processing') && !hasExpired;
+  const isFailed = isLocked ? (status === 'failed' || hasErrorCode || hasExpired) : (status === 'failed' || (hasExpired && !isCompleted));
+  const statusColor = getStatusColor(isFailed ? 'failed' : status);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollContent}
-        contentContainerStyle={styles.scrollContentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.content}>
-          <View style={styles.iconContainer}>
-            {hasExpired ? <XCircle color="#EF4444" size={80} /> : getStatusIcon(status)}
-          </View>
-
-          <Text style={[styles.title, { color: isFailed ? '#EF4444' : '#2D1A46' }]}>
-            {getStatusTitle(status)}
-          </Text>
-
-          <Text style={styles.message}>{getStatusMessage()}</Text>
-
-          {isProcessing && !hasExpired && (
-            <>
-              <View style={styles.timerContainer}>
-                <Clock color="#666" size={20} />
-                <Text style={styles.timerText}>Elapsed: {formatTime(timeElapsed)}</Text>
-                <Text style={styles.timerDivider}>•</Text>
-                <Text style={styles.timerText}>Timeout: {formatTimeRemaining(timeElapsed)}</Text>
-              </View>
-
-              {payment?.state_machine && (
-                <View style={styles.progressContainer}>
-                  <View style={styles.progressBar}>
-                    <View
-                      style={[
-                        styles.progressFill,
-                        { width: `${payment.state_machine.progress}%`, backgroundColor: statusColor }
-                      ]}
-                    />
-                  </View>
-                  <Text style={styles.progressText}>
-                    {payment.state_machine.current.replace(/_/g, ' ').toUpperCase()}
-                  </Text>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView
+          style={styles.scrollContent}
+          contentContainerStyle={styles.scrollContentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
+            {isFailed ? (
+              <>
+                <View style={styles.iconContainer}>
+                  <XCircle color="#B91C1C" size={80} />
                 </View>
-              )}
-
-              <View style={styles.instructionCard}>
-                <View style={styles.instructionHeader}>
-                  <Phone color="#2D1A46" size={24} />
-                  <Text style={styles.instructionTitle}>
-                    {status === 'pending' ? 'Action Required' : 'Processing'}
-                  </Text>
-                </View>
-                <Text style={styles.instructionText}>
-                  {status === 'pending'
-                    ? `Look for a USSD popup on ${phoneNumber}. Enter your mobile money PIN to approve the payment.`
-                    : 'Please wait while we confirm your payment with the mobile money provider.'}
+                <Text style={[styles.title, { color: '#B91C1C' }]}>
+                  {hasExpired && !payment?.gateway?.error_code && !payment?.failure_details ? 'Payment Timeout' : 'Payment Failed'}
                 </Text>
-                {status === 'pending' && (
-                  <Text style={styles.instructionNote}>
-                    💡 Tip: If you don&apos;t see a prompt, dial *126# (MTN) or #150# (Orange) and check for pending transactions.
+
+                <View style={styles.fancyErrorCard}>
+                  <Text style={styles.fancyErrorMessageLarge}>
+                    {errorMessage || (hasExpired ? 'The request timed out while waiting for payment confirmation. Please check your balance and try again.' : 'Payment could not be completed.')}
                   </Text>
+                  {errorCode && (
+                    <View style={styles.errorCodeContainer}>
+                      <Text style={styles.errorCodeText}>
+                        ERROR CODE: {errorCode}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.failedActions}>
+                  <TouchableOpacity style={styles.retryButton} onPress={handleRetryPayment}>
+                    <RefreshCcw color="white" size={20} />
+                    <Text style={styles.retryButtonText}>Try Again</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.goHomeButton} onPress={handleGoHome}>
+                    <Text style={styles.goHomeButtonText}>Go to Home</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={styles.iconContainer}>
+                  {getStatusIcon(status)}
+                </View>
+
+                <Text style={[styles.title, { color: '#2D1A46' }]}>
+                  {getStatusTitle(status)}
+                </Text>
+
+                <Text style={styles.message}>{getStatusMessage()}</Text>
+
+                {isProcessing && !hasExpired && (
+                  <>
+                    <View style={styles.timerContainer}>
+                      <Clock color="#666" size={20} />
+                      <Text style={styles.timerText}>Elapsed: {formatTime(timeElapsed)}</Text>
+                      <Text style={styles.timerDivider}>•</Text>
+                      <Text style={styles.timerText}>Timeout: {formatTimeRemaining(timeElapsed)}</Text>
+                    </View>
+
+                    <View style={styles.progressContainer}>
+                      <View style={styles.progressBar}>
+                        <View
+                          style={[
+                            styles.progressFill,
+                            { width: `${Math.min((pollAttempts / MAX_POLL_ATTEMPTS) * 100, 100)}%`, backgroundColor: statusColor }
+                          ]}
+                        />
+                      </View>
+                      <Text style={styles.progressText}>
+                        {payment?.state_machine?.current?.replace(/_/g, ' ').toUpperCase() || `VERIFYING (${pollAttempts}/${MAX_POLL_ATTEMPTS})`}
+                      </Text>
+                    </View>
+
+                    <View style={styles.instructionCard}>
+                      <View style={styles.instructionHeader}>
+                        <Phone color="#2D1A46" size={24} />
+                        <Text style={styles.instructionTitle}>
+                          {status === 'pending' ? 'Action Required' : 'Processing'}
+                        </Text>
+                      </View>
+                      <Text style={styles.instructionText}>
+                        {status === 'pending'
+                          ? `Look for a USSD popup on ${phoneNumber}. Enter your mobile money PIN to approve the payment.`
+                          : 'Please wait while we confirm your payment with the mobile money provider.'}
+                      </Text>
+                      {status === 'pending' && (
+                        <Text style={styles.instructionNote}>
+                          💡 Tip: If you don&apos;t see a prompt, dial *126# (MTN) or #150# (Orange) and check for pending transactions.
+                        </Text>
+                      )}
+                    </View>
+                  </>
                 )}
-              </View>
-            </>
-          )}
 
-          {isCompleted && payment?.gateway && (
-            <View style={styles.detailsCard}>
-              <Text style={styles.detailsTitle}>Payment Details</Text>
-              {payment.gateway.transaction_id && (
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>Transaction ID</Text>
-                  <Text style={styles.detailValue} numberOfLines={1}>
-                    {payment.gateway.transaction_id}
-                  </Text>
-                </View>
-              )}
-              {payment.gateway.receipt_number && (
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>Receipt Number</Text>
-                  <Text style={styles.detailValue}>{payment.gateway.receipt_number}</Text>
-                </View>
-              )}
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Amount Paid</Text>
-                <Text style={[styles.detailValue, styles.amountValue]}>
-                  {payment.amount.currency} {Math.round(payment.amount.total)}
-                </Text>
-              </View>
-              {payment.escrow && (
-                <View style={styles.escrowInfo}>
-                  <Text style={styles.escrowText}>
-                    🔒 Funds held securely in escrow until service completion
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
+                {isCompleted && payment?.gateway && (
+                  <View style={styles.detailsCard}>
+                    <Text style={styles.detailsTitle}>Payment Details</Text>
+                    {payment.gateway.transaction_id && (
+                      <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>Transaction ID</Text>
+                        <Text style={styles.detailValue} numberOfLines={1}>
+                          {payment.gateway.transaction_id}
+                        </Text>
+                      </View>
+                    )}
+                    {payment.gateway.receipt_number && (
+                      <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>Receipt Number</Text>
+                        <Text style={styles.detailValue}>{payment.gateway.receipt_number}</Text>
+                      </View>
+                    )}
+                    <View style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>Amount Paid</Text>
+                      <Text style={[styles.detailValue, styles.amountValue]}>
+                        {payment.amount.currency} {Math.round(payment.amount.total)}
+                      </Text>
+                    </View>
+                    {payment.escrow && (
+                      <View style={styles.escrowInfo}>
+                        <Text style={styles.escrowText}>
+                          🔒 Funds held securely in escrow until service completion
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                )}
 
-          {isFailed && payment?.failure_details && (
-            <View style={styles.errorCard}>
-              <View style={styles.errorHeader}>
-                <AlertCircle size={24} color="#EF4444" />
-                <Text style={styles.errorTitle}>
-                  {payment.failure_details.code.replace(/_/g, ' ')}
-                </Text>
-              </View>
-              <Text style={styles.errorMessage}>{payment.failure_details.message}</Text>
-              {payment.failure_details.retry_allowed && (
-                <Text style={styles.retryHint}>
-                  ✓ You can try again with the same or a different payment method
-                </Text>
-              )}
-            </View>
-          )}
+                {isCompleted && (
+                  <View style={styles.successActions}>
+                    <TouchableOpacity
+                      style={styles.viewBookingsButton}
+                      onPress={handleViewMyBookings}
+                    >
+                      <Calendar color="white" size={20} />
+                      <Text style={styles.viewBookingsButtonText}>View My Bookings</Text>
+                    </TouchableOpacity>
 
-          {hasExpired && (
-            <View style={styles.errorCard}>
-              <View style={styles.errorHeader}>
-                <Clock size={24} color="#EF4444" />
-                <Text style={styles.errorTitle}>Payment Expired</Text>
-              </View>
-              <Text style={styles.errorMessage}>
-                The payment request expired after 5 minutes. No charges were made to your account.
-              </Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+                    <TouchableOpacity
+                      style={styles.viewRouteButton}
+                      onPress={handleViewRoute}
+                    >
+                      <Navigation color="white" size={20} />
+                      <Text style={styles.viewRouteButtonText}>Navigate to Location</Text>
+                    </TouchableOpacity>
 
-      <View style={styles.buttonContainer}>
-        {isCompleted && (
-          <View accessible={false}>
-            <TouchableOpacity style={styles.primaryButton} onPress={handleViewBooking} accessible={true}>
-              <Text style={styles.primaryButtonText}>View My Booking</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.actionButton, styles.receiptButton]}
-              onPress={handleViewReceipt}
-              accessible={true}
-            >
-              <Receipt color="white" size={20} />
-              <Text style={styles.actionButtonText}>Receipt</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
-              <Text style={styles.secondaryButtonText}>Back to Home</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.viewReceiptButton}
+                      onPress={handleViewReceipt}
+                    >
+                      <Receipt color="#2D1A46" size={20} />
+                      <Text style={styles.viewReceiptButtonText}>View Receipt</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            )}
           </View>
-        )}
-
-        {isFailed && (
-          <View accessible={false}>
-            <TouchableOpacity style={styles.primaryButton} onPress={handleRetry} accessible={true}>
-              <Text style={styles.primaryButtonText}>Try Again</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
-              <Text style={styles.secondaryButtonText}>Back to Home</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {isProcessing && !hasExpired && (
-          <View style={styles.waitingContainer}>
-            <ActivityIndicator size="small" color="#2D1A46" />
-            <Text style={styles.waitingText}>Please do not close this screen</Text>
-          </View>
-        )}
-      </View>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -554,6 +688,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 40,
     alignItems: 'center',
+    paddingBottom: 40,
   },
   iconContainer: {
     marginBottom: 24,
@@ -702,36 +837,50 @@ const styles = StyleSheet.create({
     color: '#10B981',
     textAlign: 'center',
   },
-  errorCard: {
+  fancyErrorCard: {
     width: '100%',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FFF1F2',
     borderRadius: 16,
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#FCA5A5',
+    borderColor: '#FFB8BF',
   },
-  errorHeader: {
+  fancyErrorHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
-  errorTitle: {
+  fancyErrorTitle: {
     fontSize: 18,
-    color: '#DC2626',
     fontWeight: 'bold',
+    color: '#B91C1C',
     marginLeft: 12,
     textTransform: 'capitalize',
   },
-  errorMessage: {
+  fancyErrorMessage: {
     fontSize: 15,
     color: '#991B1B',
     lineHeight: 22,
-    marginBottom: 8,
+    marginBottom: 16,
   },
-  retryHint: {
-    fontSize: 13,
-    color: '#DC2626',
+  fancyErrorMessageLarge: {
+    fontSize: 18,
+    color: '#991B1B',
+    lineHeight: 28,
+    marginBottom: 16,
+    fontWeight: '500',
+  },
+  errorCodeContainer: {
+    backgroundColor: '#FEE2E2',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
+  },
+  errorCodeText: {
+    fontSize: 14,
+    color: '#991B1B',
     fontWeight: '600',
   },
   errorDetails: {
@@ -779,41 +928,89 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  waitingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-  },
-  waitingText: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 12,
-    fontWeight: '500',
-  },
-  actionButtonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  successActions: {
+    width: '100%',
     gap: 12,
-    marginBottom: 12,
+    marginTop: 8,
+    marginBottom: 24,
   },
-  actionButton: {
-    flex: 1,
+  viewBookingsButton: {
+    backgroundColor: '#2D1A46',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 14,
+    gap: 10,
+    paddingVertical: 16,
     borderRadius: 12,
-    gap: 8,
   },
-  receiptButton: {
-    backgroundColor: '#10B981',
-  },
-  locationButton: {
-    backgroundColor: '#3B82F6',
-  },
-  actionButtonText: {
+  viewBookingsButtonText: {
     color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  viewRouteButton: {
+    backgroundColor: '#10B981',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  viewRouteButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  viewReceiptButton: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+  },
+  viewReceiptButtonText: {
+    color: '#2D1A46',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  failedActions: {
+    width: '100%',
+    gap: 12,
+    marginTop: 8,
+    marginBottom: 24,
+  },
+  retryButton: {
+    backgroundColor: '#2D1A46',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  goHomeButton: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+  },
+  goHomeButtonText: {
+    color: '#2D1A46',
     fontSize: 16,
     fontWeight: '600',
   },

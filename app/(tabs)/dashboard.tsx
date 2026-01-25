@@ -122,13 +122,13 @@ export default function ProviderDashboardScreen() {
                     <View style={styles.actionsGrid}>
                         <TouchableOpacity
                             style={styles.actionButton}
-                            onPress={() => router.push('/provider-services')}
+                            onPress={() => router.push('/provider-services' as any)}
                         >
                             <Text style={styles.actionButtonText}>{t('manageServices')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.actionButton}
-                            onPress={() => router.push('/provider-availability')}
+                            onPress={() => router.push('/provider-availability' as any)}
                         >
                             <Text style={styles.actionButtonText}>{t('updateAvailability')}</Text>
                         </TouchableOpacity>
