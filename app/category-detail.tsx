@@ -120,7 +120,7 @@ export default function CategoryDetailScreen() {
           </View>
 
           <View style={styles.servicesSection}>
-            <Text style={styles.sectionTitle}>Available Services</Text>
+            <Text style={styles.sectionTitle}>Available Servicess</Text>
 
             {!services || services.length === 0 ? (
               <View style={styles.emptyContainer}>

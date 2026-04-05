@@ -1,6 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, Platform, Image } from 'react-native';
 import { ArrowLeft, Smartphone, Info, AlertCircle } from 'lucide-react-native';
 import { useCreateAppointmentMutation } from '@/store/services/appointmentApi';
 import { useGetPaymentMethodsQuery, useInitiatePaymentMutation } from '@/store/services/paymentApi';
@@ -404,10 +404,24 @@ export default function PaymentScreen() {
                           styles.methodIconContainer,
                           paymentMethod === method.method_code && styles.selectedMethodIcon
                         ]}>
-                          <Smartphone
-                            color={paymentMethod === method.method_code ? 'white' : '#2D1A46'}
-                            size={24}
-                          />
+                          {method.metadata?.icon_url ? (
+                            <Image 
+                              source={{ 
+                                uri: method.metadata.icon_url.startsWith('http') 
+                                  ? method.metadata.icon_url 
+                                  : `https://mubakulifestyle.com${method.metadata.icon_url}`
+                              }} 
+                              style={{ width: 24, height: 24 }}
+                              resizeMode="contain"
+                              onError={(e) => console.log('[Payment] Image load error:', e.nativeEvent.error)}
+                            />
+                          ) : (
+                            // Fallback icon if no image URL
+                            <Smartphone 
+                              size={24} 
+                              color={paymentMethod === method.method_code ? 'white' : '#2D1A46'} 
+                            />
+                          )}
                         </View>
                         <View style={styles.methodInfo}>
                           <Text style={[

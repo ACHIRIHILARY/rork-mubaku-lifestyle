@@ -189,7 +189,7 @@ export default function HomeScreen() {
                 >
                   <View style={styles.serviceImageContainer}>
                     {service.image ? (
-                      <Image source={{ uri: `https://mubakulifestyle.com/${service.image}` }} style={styles.serviceImage} />
+                      <Image source={{ uri: `https://mubakulifestyle.com${service.image}` }} style={styles.serviceImage} />
                     ) : (
                       <View style={styles.serviceImagePlaceholder}>
                         <Text style={styles.serviceImageText}>💼</Text>
@@ -198,7 +198,7 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.serviceInfo}>
                     <View style={styles.serviceHeader}>
-                      <Text style={styles.serviceName} numberOfLines={2}>{service.name}</Text>
+                      <Text style={styles.serviceName} numberOfLines={2}>{service.name} </Text>
                       {service.is_verified_provider && (
                         <View style={styles.verifiedBadge}>
                           <Text style={styles.verifiedBadgeText}>✓</Text>

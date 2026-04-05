@@ -13,9 +13,17 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/e77733fb-3ae9-42b3-8478-091704381134"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "app.rork.mubaku-lifestyle",
+      "buildNumber": "1.0.0",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos",
         "NSCameraUsageDescription": "Allow $(PRODUCT_NAME) to access your camera",
@@ -34,6 +42,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.mubaku.mubakulifestyle",
+      "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
@@ -47,7 +56,8 @@
       ]
     },
     "web": {
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "bundler": "metro"
     },
     "plugins": [
       [
@@ -76,6 +86,9 @@
     "experiments": {
       "typedRoutes": true
     },
+    "cli": {
+      "appVersionSource": "remote"
+    },
     "extra": {
       "router": {
         "origin": "https://rork.com/"
@@ -83,6 +96,7 @@
       "eas": {
         "projectId": "e77733fb-3ae9-42b3-8478-091704381134"
       }
-    }
+    },
+    "owner": "miclem"
   }
 }
