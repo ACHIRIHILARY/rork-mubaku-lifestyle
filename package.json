@@ -6,7 +6,8 @@
     "start": "bunx rork start -p isikekkndhnufieg0fafi --tunnel",
     "start-web": "bunx rork start -p isikekkndhnufieg0fafi --web --tunnel",
     "start-web-dev": "DEBUG=expo* bunx rork start -p isikekkndhnufieg0fafi --web --tunnel",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "postinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "@ai-sdk/react": "^2.0.83",
@@ -26,6 +27,7 @@
     "expo": "^54.0.20",
     "expo-blur": "~15.0.7",
     "expo-constants": "~18.0.10",
+    "expo-dev-client": "~6.0.20",
     "expo-font": "~14.0.9",
     "expo-haptics": "~15.0.7",
     "expo-image": "~3.0.10",
@@ -42,9 +44,9 @@
     "expo-web-browser": "^15.0.8",
     "hono": "^4.10.2",
     "i18next": "^25.6.0",
-    "lucide-react-native": "^0.479.0",
-    "react": "19.1.2",
-    "react-dom": "19.1.2",
+    "lucide-react-native": "^0.475.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-i18next": "^16.2.3",
     "react-native": "0.81.5",
     "react-native-gesture-handler": "~2.28.0",
@@ -66,11 +68,16 @@
     "@types/react": "~19.1.10",
     "eslint": "9.31.0",
     "eslint-config-expo": "9.2.0",
-    "typescript": "~5.9.2"
+    "typescript": "~5.9.2",
+    "npm-force-resolutions": "0.0.10"
+  },
+  "resolutions": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "overrides": {
-    "react": "19.1.2",
-    "react-dom": "19.1.2"
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "private": true
 }
