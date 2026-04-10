@@ -1,31 +1,30 @@
 {
   "cli": {
-    "version": ">= 16.28.0"
+    "appVersionSource": "remote"
   },
   "build": {
+    "production": {
+      "android": {
+        "buildType": "app-bundle",
+        "autoIncrement": true
+      },
+      "ios": {
+        "autoIncrement": true
+      }
+    },
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "env": {
-        "EXPO_USE_BUN": "0",
-        "NPM_FLAGS": "--legacy-peer-deps"
-      }
+      "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      },
-      "env": {
-        "EXPO_USE_BUN": "0",
-        "NPM_FLAGS": "--legacy-peer-deps"
-      }
-    },
+      "distribution": "internal"
+    }
+  },
+  "submit": {
     "production": {
-      "autoIncrement": true,
-      "env": {
-        "EXPO_USE_BUN": "0",
-        "NPM_FLAGS": "--legacy-peer-deps"
+      "android": {
+        "serviceAccountKeyPath": "./path-to-service-account.json",
+        "track": "production"
       }
     }
   }
