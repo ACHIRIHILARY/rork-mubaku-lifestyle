@@ -34,7 +34,7 @@ export const mockAgents: Agent[] = [
     service: 'Hair Styling',
     rating: 4.8,
     price: 75,
-    image: 'https://images.unsplash.com/photo-1594736797933-d0401ba2fe65?w=400&h=400&fit=crop&crop=face',
+    image: 'https://images.un.com/photo-1594736797933-d0401ba2fe65?w=400&h=400&fit=crop&crop=face',
     experience: '5 years',
     description: 'Professional hair stylist specializing in modern cuts and color treatments. I love creating unique looks that enhance your natural beauty.',
     specialty: ['Hair Cutting', 'Hair Coloring', 'Styling']

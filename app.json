@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/mubakulifestyle-logo.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -38,7 +38,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.mubaku.mubakulifestyle",
@@ -56,7 +56,7 @@
       ]
     },
     "web": {
-      "favicon": "./assets/images/favicon.png",
+      "favicon": "./assets/images/icon.png",
       "bundler": "metro"
     },
     "plugins": [
@@ -76,10 +76,10 @@
       [
         "expo-location",
         {
-          "isAndroidForegroundServiceEnabled": true,
-          "isAndroidBackgroundLocationEnabled": true,
-          "isIosBackgroundLocationEnabled": true,
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow Mubaku Lifestyle to use your location to find nearby services.",
+          "locationWhenInUsePermission": "Allow Mubaku Lifestyle to use your location to find nearby services.",
+          "isAndroidBackgroundLocationEnabled": false,
+          "isIosBackgroundLocationEnabled": false
         }
       ]
     ],
