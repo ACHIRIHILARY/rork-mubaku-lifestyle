@@ -2,13 +2,13 @@
 
 **Project Root:** `.`
 
-**Total Files:** 61
+**Total Files:** 78
 
 ---
 
 ## Directory: `.expo`
 
-### File: `.expo\README.md`
+### File: `.expo/README.md`
 
 **Size:** 756 bytes  
 ```markdown
@@ -29,11 +29,35 @@ Upon project creation, the ".expo" folder is already added to your ".gitignore" 
 
 ---
 
+## Directory: `.expo/types`
+
+### File: `.expo/types/router.d.ts`
+
+**Size:** 13324 bytes  
+```typescript
+/* eslint-disable */
+import * as Router from 'expo-router';
+
+export * from 'expo-router';
+
+declare module 'expo-router' {
+  export namespace ExpoRouter {
+    export interface __routes<T extends string | object = string> {
+      hrefInputParams: { pathname: Router.RelativePathString, params?: Router.UnknownInputParams } | { pathname: Router.ExternalPathString, params?: Router.UnknownInputParams } | { pathname: `/agent-profile-setup`; params?: Router.UnknownInputParams; } | { pathname: `/application-status`; params?: Router.UnknownInputParams; } | { pathname: `/category-detail`; params?: Router.UnknownInputParams; } | { pathname: `/client-profile-setup`; params?: Router.UnknownInputParams; } | { pathname: `/forgot-password`; params?: Router.UnknownInputParams; } | { pathname: `/i18n`; params?: Router.UnknownInputParams; } | { pathname: `/`; params?: Router.UnknownInputParams; } | { pathname: `/login`; params?: Router.UnknownInputParams; } | { pathname: `/mockData`; params?: Router.UnknownInputParams; } | { pathname: `/profile-edit`; params?: Router.UnknownInputParams; } | { pathname: `/provider-availability`; params?: Router.UnknownInputParams; } | { pathname: `/provider-detail`; params?: Router.UnknownInputParams; } | { pathname: `/provider-services`; params?: Router.UnknownInputParams; } | { pathname: `/register`; params?: Router.UnknownInputParams; } | { pathname: `/role-selection`; params?: Router.UnknownInputParams; } | { pathname: `/search`; params?: Router.UnknownInputParams; } | { pathname: `/service-detail`; params?: Router.UnknownInputParams; } | { pathname: `/view-location`; params?: Router.UnknownInputParams; } | { pathname: `/_sitemap`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/dashboard` | `/dashboard`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/home` | `/home`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/messages` | `/messages`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/my-bookings` | `/my-bookings`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/notifications` | `/notifications`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/profile` | `/profile`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/providers` | `/providers`; params?: Router.UnknownInputParams; } | { pathname: `/booking/booking-details`; params?: Router.UnknownInputParams; } | { pathname: `/booking/choose-location`; params?: Router.UnknownInputParams; } | { pathname: `/booking/payment-status`; params?: Router.UnknownInputParams; } | { pathname: `/booking/payment`; params?: Router.UnknownInputParams; } | { pathname: `/booking/reschedule`; params?: Router.UnknownInputParams; } | { pathname: `/booking/select-datetime`; params?: Router.UnknownInputParams; } | { pathname: `/booking/status`; params?: Router.UnknownInputParams; } | { pathname: `/booking/summary`; params?: Router.UnknownInputParams; } | { pathname: `/booking/transaction-details`; params?: Router.UnknownInputParams; } | { pathname: `/booking/write-review`; params?: Router.UnknownInputParams; } | { pathname: `/components/CustomTabBar`; params?: Router.UnknownInputParams; } | { pathname: `/components/StickyHeader`; params?: Router.UnknownInputParams; } | { pathname: `/provider-services/create`; params?: Router.UnknownInputParams; } | { pathname: `/provider-services/edit`; params?: Router.UnknownInputParams; } | { pathname: `/+not-found`, params: Router.UnknownInputParams & {  } } | { pathname: `/chat/[channel_id]`, params: Router.UnknownInputParams & { channel_id: string | number; } };
+      hrefOutputParams: { pathname: Router.RelativePathString, params?: Router.UnknownOutputParams } | { pathname: Router.ExternalPathString, params?: Router.UnknownOutputParams } | { pathname: `/agent-profile-setup`; params?: Router.UnknownOutputParams; } | { pathname: `/application-status`; params?: Router.UnknownOutputParams; } | { pathname: `/category-detail`; params?: Router.UnknownOutputParams; } | { pathname: `/client-profile-setup`; params?: Router.UnknownOutputParams; } | { pathname: `/forgot-password`; params?: Router.UnknownOutputParams; } | { pathname: `/i18n`; params?: Router.UnknownOutputParams; } | { pathname: `/`; params?: Router.UnknownOutputParams; } | { pathname: `/login`; params?: Router.UnknownOutputParams; } | { pathname: `/mockData`; params?: Router.UnknownOutputParams; } | { pathname: `/profile-edit`; params?: Router.UnknownOutputParams; } | { pathname: `/provider-availability`; params?: Router.UnknownOutputParams; } | { pathname: `/provider-detail`; params?: Router.UnknownOutputParams; } | { pathname: `/provider-services`; params?: Router.UnknownOutputParams; } | { pathname: `/register`; params?: Router.UnknownOutputParams; } | { pathname: `/role-selection`; params?: Router.UnknownOutputParams; } | { pathname: `/search`; params?: Router.UnknownOutputParams; } | { pathname: `/service-detail`; params?: Router.UnknownOutputParams; } | { pathname: `/view-location`; params?: Router.UnknownOutputParams; } | { pathname: `/_sitemap`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/dashboard` | `/dashboard`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/home` | `/home`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/messages` | `/messages`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/my-bookings` | `/my-bookings`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/notifications` | `/notifications`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/profile` | `/profile`; params?: Router.UnknownOutputParams; } | { pathname: `${'/(tabs)'}/providers` | `/providers`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/booking-details`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/choose-location`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/payment-status`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/payment`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/reschedule`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/select-datetime`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/status`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/summary`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/transaction-details`; params?: Router.UnknownOutputParams; } | { pathname: `/booking/write-review`; params?: Router.UnknownOutputParams; } | { pathname: `/components/CustomTabBar`; params?: Router.UnknownOutputParams; } | { pathname: `/components/StickyHeader`; params?: Router.UnknownOutputParams; } | { pathname: `/provider-services/create`; params?: Router.UnknownOutputParams; } | { pathname: `/provider-services/edit`; params?: Router.UnknownOutputParams; } | { pathname: `/+not-found`, params: Router.UnknownOutputParams & {  } } | { pathname: `/chat/[channel_id]`, params: Router.UnknownOutputParams & { channel_id: string; } };
+      href: Router.RelativePathString | Router.ExternalPathString | `/agent-profile-setup${`?${string}` | `#${string}` | ''}` | `/application-status${`?${string}` | `#${string}` | ''}` | `/category-detail${`?${string}` | `#${string}` | ''}` | `/client-profile-setup${`?${string}` | `#${string}` | ''}` | `/forgot-password${`?${string}` | `#${string}` | ''}` | `/i18n${`?${string}` | `#${string}` | ''}` | `/${`?${string}` | `#${string}` | ''}` | `/login${`?${string}` | `#${string}` | ''}` | `/mockData${`?${string}` | `#${string}` | ''}` | `/profile-edit${`?${string}` | `#${string}` | ''}` | `/provider-availability${`?${string}` | `#${string}` | ''}` | `/provider-detail${`?${string}` | `#${string}` | ''}` | `/provider-services${`?${string}` | `#${string}` | ''}` | `/register${`?${string}` | `#${string}` | ''}` | `/role-selection${`?${string}` | `#${string}` | ''}` | `/search${`?${string}` | `#${string}` | ''}` | `/service-detail${`?${string}` | `#${string}` | ''}` | `/view-location${`?${string}` | `#${string}` | ''}` | `/_sitemap${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/dashboard${`?${string}` | `#${string}` | ''}` | `/dashboard${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/home${`?${string}` | `#${string}` | ''}` | `/home${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/messages${`?${string}` | `#${string}` | ''}` | `/messages${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/my-bookings${`?${string}` | `#${string}` | ''}` | `/my-bookings${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/notifications${`?${string}` | `#${string}` | ''}` | `/notifications${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/profile${`?${string}` | `#${string}` | ''}` | `/profile${`?${string}` | `#${string}` | ''}` | `${'/(tabs)'}/providers${`?${string}` | `#${string}` | ''}` | `/providers${`?${string}` | `#${string}` | ''}` | `/booking/booking-details${`?${string}` | `#${string}` | ''}` | `/booking/choose-location${`?${string}` | `#${string}` | ''}` | `/booking/payment-status${`?${string}` | `#${string}` | ''}` | `/booking/payment${`?${string}` | `#${string}` | ''}` | `/booking/reschedule${`?${string}` | `#${string}` | ''}` | `/booking/select-datetime${`?${string}` | `#${string}` | ''}` | `/booking/status${`?${string}` | `#${string}` | ''}` | `/booking/summary${`?${string}` | `#${string}` | ''}` | `/booking/transaction-details${`?${string}` | `#${string}` | ''}` | `/booking/write-review${`?${string}` | `#${string}` | ''}` | `/components/CustomTabBar${`?${string}` | `#${string}` | ''}` | `/components/StickyHeader${`?${string}` | `#${string}` | ''}` | `/provider-services/create${`?${string}` | `#${string}` | ''}` | `/provider-services/edit${`?${string}` | `#${string}` | ''}` | { pathname: Router.RelativePathString, params?: Router.UnknownInputParams } | { pathname: Router.ExternalPathString, params?: Router.UnknownInputParams } | { pathname: `/agent-profile-setup`; params?: Router.UnknownInputParams; } | { pathname: `/application-status`; params?: Router.UnknownInputParams; } | { pathname: `/category-detail`; params?: Router.UnknownInputParams; } | { pathname: `/client-profile-setup`; params?: Router.UnknownInputParams; } | { pathname: `/forgot-password`; params?: Router.UnknownInputParams; } | { pathname: `/i18n`; params?: Router.UnknownInputParams; } | { pathname: `/`; params?: Router.UnknownInputParams; } | { pathname: `/login`; params?: Router.UnknownInputParams; } | { pathname: `/mockData`; params?: Router.UnknownInputParams; } | { pathname: `/profile-edit`; params?: Router.UnknownInputParams; } | { pathname: `/provider-availability`; params?: Router.UnknownInputParams; } | { pathname: `/provider-detail`; params?: Router.UnknownInputParams; } | { pathname: `/provider-services`; params?: Router.UnknownInputParams; } | { pathname: `/register`; params?: Router.UnknownInputParams; } | { pathname: `/role-selection`; params?: Router.UnknownInputParams; } | { pathname: `/search`; params?: Router.UnknownInputParams; } | { pathname: `/service-detail`; params?: Router.UnknownInputParams; } | { pathname: `/view-location`; params?: Router.UnknownInputParams; } | { pathname: `/_sitemap`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/dashboard` | `/dashboard`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/home` | `/home`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/messages` | `/messages`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/my-bookings` | `/my-bookings`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/notifications` | `/notifications`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/profile` | `/profile`; params?: Router.UnknownInputParams; } | { pathname: `${'/(tabs)'}/providers` | `/providers`; params?: Router.UnknownInputParams; } | { pathname: `/booking/booking-details`; params?: Router.UnknownInputParams; } | { pathname: `/booking/choose-location`; params?: Router.UnknownInputParams; } | { pathname: `/booking/payment-status`; params?: Router.UnknownInputParams; } | { pathname: `/booking/payment`; params?: Router.UnknownInputParams; } | { pathname: `/booking/reschedule`; params?: Router.UnknownInputParams; } | { pathname: `/booking/select-datetime`; params?: Router.UnknownInputParams; } | { pathname: `/booking/status`; params?: Router.UnknownInputParams; } | { pathname: `/booking/summary`; params?: Router.UnknownInputParams; } | { pathname: `/booking/transaction-details`; params?: Router.UnknownInputParams; } | { pathname: `/booking/write-review`; params?: Router.UnknownInputParams; } | { pathname: `/components/CustomTabBar`; params?: Router.UnknownInputParams; } | { pathname: `/components/StickyHeader`; params?: Router.UnknownInputParams; } | { pathname: `/provider-services/create`; params?: Router.UnknownInputParams; } | { pathname: `/provider-services/edit`; params?: Router.UnknownInputParams; } | `/+not-found${`?${string}` | `#${string}` | ''}` | `/chat/${Router.SingleRoutePart<T>}${`?${string}` | `#${string}` | ''}` | { pathname: `/+not-found`, params: Router.UnknownInputParams & {  } } | { pathname: `/chat/[channel_id]`, params: Router.UnknownInputParams & { channel_id: string | number; } };
+    }
+  }
+}
+```
+
+---
+
 ## Directory: `app`
 
-### File: `app\+native-intent.tsx`
+### File: `app/+native-intent.tsx`
 
-**Size:** 117 bytes  
+**Size:** 112 bytes  
 ```tsx
 export function redirectSystemPath({
   path,
@@ -45,9 +69,9 @@ export function redirectSystemPath({
 
 ---
 
-### File: `app\+not-found.tsx`
+### File: `app/+not-found.tsx`
 
-**Size:** 840 bytes  
+**Size:** 802 bytes  
 ```tsx
 import { Link, Stack } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
@@ -91,9 +115,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\_layout.tsx`
+### File: `app/_layout.tsx`
 
-**Size:** 5171 bytes  
+**Size:** 5390 bytes  
 ```tsx
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
@@ -106,7 +130,7 @@ import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n";
 import { store } from "@/store/store";
 
-import { initializeAuth, checkTokenExpiration } from "@/store/authSlice";
+import { initializeAuth, checkTokenExpiration, setInitialized } from "@/store/authSlice";
 import { initializeLanguage } from "@/store/languageSlice";
 import { authApi } from "@/store/services/authApi";
 
@@ -165,12 +189,21 @@ function RootLayoutNav() {
 export default function RootLayout() {
   useEffect(() => {
     const initApp = async () => {
+      const timeout = setTimeout(() => {
+        console.log('Init timeout reached, forcing app ready state');
+        store.dispatch(setInitialized());
+        SplashScreen.hideAsync();
+      }, 5000);
+
       try {
-        // Initialize both auth and language
+        console.log('Starting app initialization...');
+        
         const [authResult] = await Promise.all([
           store.dispatch(initializeAuth()).unwrap(),
           store.dispatch(initializeLanguage()).unwrap(),
         ]);
+
+        clearTimeout(timeout);
 
         if (authResult) {
           console.log('Auth tokens loaded from storage, fetching user data...');
@@ -180,6 +213,8 @@ export default function RootLayout() {
         }
       } catch (error) {
         console.error('Failed to initialize app:', error);
+        clearTimeout(timeout);
+        store.dispatch(setInitialized());
       } finally {
         SplashScreen.hideAsync();
       }
@@ -224,9 +259,9 @@ export default function RootLayout() {
 
 ---
 
-### File: `app\agent-profile-setup.tsx`
+### File: `app/agent-profile-setup.tsx`
 
-**Size:** 17185 bytes  
+**Size:** 16674 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -287,7 +322,7 @@ export default function AgentProfileSetup() {
         [
           {
             text: 'Return to Home',
-            onPress: () => router.replace('/(tabs)/home'),
+            onPress: () => router.replace('/(tabs)/home' as any),
           },
         ]
       );
@@ -750,9 +785,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\application-status.tsx`
+### File: `app/application-status.tsx`
 
-**Size:** 12145 bytes  
+**Size:** 11770 bytes  
 ```tsx
 import { router, Stack } from 'expo-router';
 import React from 'react';
@@ -864,7 +899,7 @@ export default function ApplicationStatusScreen() {
             </Text>
             <TouchableOpacity
               style={styles.applyButton}
-              onPress={() => router.push('/agent-profile-setup')}
+              onPress={() => router.push('/agent-profile-setup' as any)}
             >
               <Text style={styles.applyButtonText}>Apply Now</Text>
             </TouchableOpacity>
@@ -959,7 +994,7 @@ export default function ApplicationStatusScreen() {
               <View style={styles.actionsCard}>
                 <TouchableOpacity
                   style={styles.reapplyButton}
-                  onPress={() => router.push('/agent-profile-setup')}
+                  onPress={() => router.push('/agent-profile-setup' as any)}
                 >
                   <Text style={styles.reapplyButtonText}>Reapply</Text>
                 </TouchableOpacity>
@@ -970,7 +1005,7 @@ export default function ApplicationStatusScreen() {
               <View style={styles.actionsCard}>
                 <TouchableOpacity
                   style={styles.servicesButton}
-                  onPress={() => router.push('/provider-services')}
+                  onPress={() => router.push('/provider-services' as any)}
                 >
                   <Text style={styles.servicesButtonText}>Manage Services</Text>
                 </TouchableOpacity>
@@ -1154,9 +1189,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\category-detail.tsx`
+### File: `app/category-detail.tsx`
 
-**Size:** 10402 bytes  
+**Size:** 10343 bytes  
 ```tsx
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
@@ -1174,6 +1209,7 @@ import {
   useGetCategoryByIdQuery,
   useGetCategoryServicesQuery,
 } from '@/store/services/servicesApi';
+import CustomTabBar from './components/CustomTabBar';
 
 export default function CategoryDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -1197,7 +1233,7 @@ export default function CategoryDetailScreen() {
   });
 
   const handleServicePress = (serviceId: string) => {
-    router.push(`/service-detail?id=${serviceId}`);
+    router.push(`/service-detail?id=${serviceId}` as any);
   };
 
   const isLoading = categoryLoading || servicesLoading;
@@ -1249,97 +1285,100 @@ export default function CategoryDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: category.name,
-          headerStyle: { backgroundColor: '#F4A896' },
-          headerTintColor: 'white',
-        }}
-      />
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <Stack.Screen
+          options={{
+            title: category.name,
+            headerStyle: { backgroundColor: '#F4A896' },
+            headerTintColor: 'white',
+          }}
+        />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <View style={styles.categoryIconLarge}>
-            <Text style={styles.categoryIconText}>💇</Text>
-          </View>
-          <Text style={styles.categoryTitle}>{category.name}</Text>
-          {category.description && (
-            <Text style={styles.categoryDescription}>
-              {category.description}
-            </Text>
-          )}
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
-              <Text style={styles.statValue}>{services?.length || 0}</Text>
-              <Text style={styles.statLabel}>Services</Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.header}>
+            <View style={styles.categoryIconLarge}>
+              <Text style={styles.categoryIconText}>💇</Text>
             </View>
-          </View>
-        </View>
-
-        <View style={styles.servicesSection}>
-          <Text style={styles.sectionTitle}>Available Services</Text>
-
-          {!services || services.length === 0 ? (
-            <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>
-                No services available in this category yet
+            <Text style={styles.categoryTitle}>{category.name}</Text>
+            {category.description && (
+              <Text style={styles.categoryDescription}>
+                {category.description}
               </Text>
-              <TouchableOpacity
-                style={styles.browseButton}
-                onPress={() => router.back()}
-              >
-                <Text style={styles.browseButtonText}>Browse Other Categories</Text>
-              </TouchableOpacity>
+            )}
+            <View style={styles.statsContainer}>
+              <View style={styles.statItem}>
+                <Text style={styles.statValue}>{services?.length || 0}</Text>
+                <Text style={styles.statLabel}>Services</Text>
+              </View>
             </View>
-          ) : (
-            <View style={styles.servicesContainer}>
-              {services.map((service) => (
+          </View>
+
+          <View style={styles.servicesSection}>
+            <Text style={styles.sectionTitle}>Available Servicess</Text>
+
+            {!services || services.length === 0 ? (
+              <View style={styles.emptyContainer}>
+                <Text style={styles.emptyText}>
+                  No services available in this category yet
+                </Text>
                 <TouchableOpacity
-                  key={service.id}
-                  style={styles.serviceCard}
-                  onPress={() => handleServicePress(service.id)}
+                  style={styles.browseButton}
+                  onPress={() => router.back()}
                 >
-                  <View style={styles.serviceImagePlaceholder}>
-                    <Text style={styles.serviceImageText}>💼</Text>
-                  </View>
-                  <View style={styles.serviceInfo}>
-                    <Text style={styles.serviceName}>{service.name}</Text>
-                    {service.description && (
-                      <Text style={styles.serviceDescription} numberOfLines={2}>
-                        {service.description}
-                      </Text>
-                    )}
-                    <View style={styles.serviceMeta}>
-                      <View style={styles.ratingContainer}>
-                        <Star color="#FFD700" size={16} fill="#FFD700" />
-                        <Text style={styles.rating}>
-                          {service.rating || '5.0'}
+                  <Text style={styles.browseButtonText}>Browse Other Categories</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.servicesContainer}>
+                {services.map((service) => (
+                  <TouchableOpacity
+                    key={service.id}
+                    style={styles.serviceCard}
+                    onPress={() => handleServicePress(service.id)}
+                  >
+                    <View style={styles.serviceImagePlaceholder}>
+                      <Text style={styles.serviceImageText}>💼</Text>
+                    </View>
+                    <View style={styles.serviceInfo}>
+                      <Text style={styles.serviceName}>{service.name}</Text>
+                      {service.description && (
+                        <Text style={styles.serviceDescription} numberOfLines={2}>
+                          {service.description}
+                        </Text>
+                      )}
+                      <View style={styles.serviceMeta}>
+                        <View style={styles.ratingContainer}>
+                          <Star color="#FFD700" size={16} fill="#FFD700" />
+                          <Text style={styles.rating}>
+                            {(service as any).rating || '5.0'}
+                          </Text>
+                        </View>
+                        <Text style={styles.duration}>
+                          {service.duration_minutes} min
                         </Text>
                       </View>
-                      <Text style={styles.duration}>
-                        {service.duration_minutes} min
-                      </Text>
+                      <View style={styles.serviceFooter}>
+                        <Text style={styles.price}>
+                          {service.price} {service.currency}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.bookButton}
+                          onPress={() => handleServicePress(service.id)}
+                        >
+                          <Text style={styles.bookButtonText}>Book</Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
-                    <View style={styles.serviceFooter}>
-                      <Text style={styles.price}>
-                        {service.price} {service.currency}
-                      </Text>
-                      <TouchableOpacity
-                        style={styles.bookButton}
-                        onPress={() => handleServicePress(service.id)}
-                      >
-                        <Text style={styles.bookButtonText}>Book</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -1562,9 +1601,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\client-profile-setup.tsx`
+### File: `app/client-profile-setup.tsx`
 
-**Size:** 6909 bytes  
+**Size:** 6665 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -1600,7 +1639,7 @@ export default function ClientProfileSetup() {
         [
           {
             text: 'OK',
-            onPress: () => router.replace('/(tabs)/home'),
+            onPress: () => router.replace('/(tabs)/home' as any),
           },
         ]
       );
@@ -1821,9 +1860,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\forgot-password.tsx`
+### File: `app/forgot-password.tsx`
 
-**Size:** 5684 bytes  
+**Size:** 5503 bytes  
 ```tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
@@ -1883,7 +1922,7 @@ export default function ForgotPasswordScreen() {
 
                 <Text style={styles.title}>{t('forgotPassword')}</Text>
                 <Text style={styles.subtitle}>
-                    Enter your email address and we'll send you a link to reset your password.
+                    Enter your email address and we&apos;ll send you a link to reset your password.
                 </Text>
 
                 <View style={styles.inputContainer}>
@@ -2015,9 +2054,74 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\index.tsx`
+### File: `app/i18n.ts`
 
-**Size:** 3666 bytes  
+**Size:** 1346 bytes  
+```typescript
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import { getLocales } from 'expo-localization';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import en from '../locales/en.json';
+import fr from '../locales/fr.json';
+
+const resources = {
+  en: {
+    translation: en,
+  },
+  fr: {
+    translation: fr,
+  },
+};
+
+const getDeviceLanguage = (): string => {
+  try {
+    const locales = getLocales();
+    return locales?.[0]?.languageCode || 'en';
+  } catch (error) {
+    console.log('Failed to get device language:', error);
+    return 'en';
+  }
+};
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: getDeviceLanguage(),
+    fallbackLng: 'en',
+    compatibilityJSON: 'v4',
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
+// Load stored language preference asynchronously after init
+AsyncStorage.getItem('user-language')
+  .then((storedLanguage) => {
+    if (storedLanguage && (storedLanguage === 'en' || storedLanguage === 'fr')) {
+      i18n.changeLanguage(storedLanguage);
+    }
+  })
+  .catch((error) => {
+    console.log('Failed to load stored language:', error);
+  });
+
+i18n.on('languageChanged', (lng) => {
+  AsyncStorage.setItem('user-language', lng).catch((error) => {
+    console.log('Failed to save language preference:', error);
+  });
+});
+
+export default i18n;
+```
+
+---
+
+### File: `app/index.tsx`
+
+**Size:** 3543 bytes  
 ```tsx
 import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -2035,10 +2139,10 @@ export default function SplashScreen() {
       // Auth initialization is complete
       if (isAuthenticated && user) {
         // User is authenticated, navigate to tabs
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/home' as any);
       } else {
         // User is not authenticated, navigate to login
-        router.replace('/login');
+        router.replace('/login' as any);
       }
     }
   }, [isInitialized, isAuthenticated, user]);
@@ -2160,9 +2264,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\login.tsx`
+### File: `app/login.tsx`
 
-**Size:** 9278 bytes  
+**Size:** 8994 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState, useEffect, useRef } from 'react';
@@ -2197,7 +2301,7 @@ export default function LoginScreen() {
       console.log('Redirecting user to:', destination);
 
       setWaitingForUser(false);
-      router.replace(destination);
+      router.replace(destination as any);
     }
   }, [waitingForUser, user, isAuthenticated]);
 
@@ -2224,7 +2328,7 @@ export default function LoginScreen() {
       redirectTimeoutRef.current = setTimeout(() => {
         console.warn('User data fetch timeout, redirecting to home as fallback');
         setWaitingForUser(false);
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/home' as any);
       }, 5000);
     } catch (error: unknown) {
       setWaitingForUser(false);
@@ -2343,7 +2447,7 @@ export default function LoginScreen() {
 
               <TouchableOpacity
                 style={styles.registerButton}
-                onPress={() => router.push('/register')}
+                onPress={() => router.push('/register' as any)}
               >
                 <Text style={styles.registerText}>{t('noAccount')}</Text>
               </TouchableOpacity>
@@ -2473,9 +2577,168 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\profile-edit.tsx`
+### File: `app/mockData.ts`
 
-**Size:** 13699 bytes  
+**Size:** 3707 bytes  
+```typescript
+export interface Agent {
+  id: string;
+  name: string;
+  service: string;
+  rating: number;
+  price: number;
+  image: string;
+  experience: string;
+  description: string;
+  specialty: string[];
+}
+
+export interface Service {
+  id: string;
+  name: string;
+  description: string;
+  agentId: string;
+  duration: number;
+  price: number;
+}
+
+export interface Notification {
+  id: string;
+  type: 'booking' | 'payment' | 'system';
+  message: string;
+  date: string;
+  read: boolean;
+}
+
+export const mockAgents: Agent[] = [
+  {
+    id: '1',
+    name: 'Sarah Johnson',
+    service: 'Hair Styling',
+    rating: 4.8,
+    price: 75,
+    image: 'https://images.un.com/photo-1594736797933-d0401ba2fe65?w=400&h=400&fit=crop&crop=face',
+    experience: '5 years',
+    description: 'Professional hair stylist specializing in modern cuts and color treatments. I love creating unique looks that enhance your natural beauty.',
+    specialty: ['Hair Cutting', 'Hair Coloring', 'Styling']
+  },
+  {
+    id: '2',
+    name: 'Maria Rodriguez',
+    service: 'Nail Art',
+    rating: 4.9,
+    price: 45,
+    image: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=400&h=400&fit=crop&crop=face',
+    experience: '3 years',
+    description: 'Creative nail artist with expertise in intricate designs and gel manicures. Your nails will be a work of art!',
+    specialty: ['Nail Art', 'Gel Manicure', 'Pedicure']
+  },
+  {
+    id: '3',
+    name: 'Ashley Chen',
+    service: 'Makeup',
+    rating: 4.7,
+    price: 85,
+    image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop&crop=face',
+    experience: '4 years',
+    description: 'Professional makeup artist for special events, photoshoots, and everyday glam. I specialize in natural and dramatic looks.',
+    specialty: ['Bridal Makeup', 'Event Makeup', 'Photoshoot']
+  },
+  {
+    id: '4',
+    name: 'Jennifer Williams',
+    service: 'Hair Styling',
+    rating: 4.6,
+    price: 65,
+    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
+    experience: '6 years',
+    description: 'Experienced hair stylist with a passion for creating beautiful, healthy hair. Specializing in cuts, colors, and treatments.',
+    specialty: ['Hair Cutting', 'Hair Treatment', 'Styling']
+  }
+];
+
+export const mockServices: Service[] = [
+  {
+    id: '1',
+    name: 'Haircut & Style',
+    description: 'Professional haircut with styling',
+    agentId: '1',
+    duration: 90,
+    price: 75
+  },
+  {
+    id: '2',
+    name: 'Gel Manicure',
+    description: 'Long-lasting gel manicure with nail art',
+    agentId: '2',
+    duration: 60,
+    price: 45
+  },
+  {
+    id: '3',
+    name: 'Bridal Makeup',
+    description: 'Complete bridal makeup package',
+    agentId: '3',
+    duration: 120,
+    price: 85
+  }
+];
+
+export const mockNotifications: Notification[] = [
+  {
+    id: '1',
+    type: 'booking',
+    message: 'Your appointment with Sarah Johnson is confirmed for tomorrow at 2:00 PM',
+    date: '2024-01-15T10:30:00Z',
+    read: false
+  },
+  {
+    id: '2',
+    type: 'payment',
+    message: 'Payment of $75 processed successfully',
+    date: '2024-01-14T15:45:00Z',
+    read: true
+  },
+  {
+    id: '3',
+    type: 'system',
+    message: 'Welcome to Mubaku Lifestyle! Complete your profile to get started.',
+    date: '2024-01-13T09:00:00Z',
+    read: true
+  }
+];
+
+export const categories = [
+  {
+    id: '1',
+    name: 'Hair',
+    icon: '✂️',
+    color: 'bg-purple'
+  },
+  {
+    id: '2',
+    name: 'Nails',
+    icon: '💅',
+    color: 'bg-peach'
+  },
+  {
+    id: '3',
+    name: 'Makeup',
+    icon: '💄',
+    color: 'bg-purple-light'
+  }
+];
+
+export default function MockDataPlaceholder() {
+  return null;
+}
+```
+
+---
+
+### File: `app/profile-edit.tsx`
+
+**Size:** 13215 bytes  
 ```tsx
 import { router, Stack } from 'expo-router';
 import React, { useState, useEffect } from 'react';
@@ -2965,9 +3228,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\provider-availability.tsx`
+### File: `app/provider-availability.tsx`
 
-**Size:** 24506 bytes  
+**Size:** 23758 bytes  
 ```tsx
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
@@ -3721,9 +3984,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\provider-detail.tsx`
+### File: `app/provider-detail.tsx`
 
-**Size:** 15091 bytes  
+**Size:** 14634 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
@@ -3731,6 +3994,7 @@ import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Act
 import { ArrowLeft, User, Star, Phone, Mail } from 'lucide-react-native';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useGetAllServicesQuery } from '@/store/services/servicesApi';
+import CustomTabBar from './components/CustomTabBar';
 
 export default function ProviderDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -3745,7 +4009,7 @@ export default function ProviderDetailScreen() {
 
   const providerServices = React.useMemo(() => {
     if (!allServices || !provider) return [];
-    return allServices.filter(service => service.provider_details?.pkid === provider.pkid);
+    return allServices.filter(service => (service as any).provider_details?.pkid === provider.pkid);
   }, [allServices, provider]);
 
   const handleServicePress = (serviceId: string) => {
@@ -3913,8 +4177,8 @@ export default function ProviderDetailScreen() {
                   onPress={() => handleServicePress(service.id)}
                 >
                   <View style={styles.serviceImageContainer}>
-                    {service.image_url ? (
-                      <Image source={{ uri: service.image_url }} style={styles.serviceImage} />
+                    {(service as any).image_url ? (
+                      <Image source={{ uri: (service as any).image_url }} style={styles.serviceImage} />
                     ) : (
                       <View style={styles.serviceImagePlaceholder}>
                         <Text style={styles.serviceImageText}>💼</Text>
@@ -3923,7 +4187,7 @@ export default function ProviderDetailScreen() {
                   </View>
                   <View style={styles.serviceInfo}>
                     <Text style={styles.serviceName} numberOfLines={1}>{service.name}</Text>
-                    <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_details?.name || 'Service'}</Text>
+                    <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_name || 'Service'}</Text>
                     <View style={styles.serviceMeta}>
                       <Text style={styles.servicePrice}>{Math.floor(Number(service.price))} {service.currency}</Text>
                       <Text style={styles.serviceDuration}>{service.duration_minutes}min</Text>
@@ -4258,9 +4522,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\provider-services.tsx`
+### File: `app/provider-services.tsx`
 
-**Size:** 16867 bytes  
+**Size:** 16386 bytes  
 ```tsx
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
@@ -4387,7 +4651,7 @@ export default function ProviderServicesScreen() {
         />
         <TouchableOpacity 
           style={styles.addButton}
-          onPress={() => router.push('/provider-services/create')}
+          onPress={() => router.push('/provider-services/create' as any)}
         >
           <Plus color="white" size={24} />
         </TouchableOpacity>
@@ -4415,7 +4679,7 @@ export default function ProviderServicesScreen() {
             {!searchQuery && (
               <TouchableOpacity 
                 style={styles.createFirstButton}
-                onPress={() => router.push('/provider-services/create')}
+                onPress={() => router.push('/provider-services/create' as any)}
               >
                 <Plus color="white" size={20} />
                 <Text style={styles.createFirstButtonText}>Create Service</Text>
@@ -4425,7 +4689,7 @@ export default function ProviderServicesScreen() {
         ) : (
           <View style={styles.servicesContainer}>
             {filteredServices.map((service) => {
-              const hasLocation = !!(service.latitude && service.longitude);
+              const hasLocation = !!((service as any).latitude && (service as any).longitude);
               return (
               <View key={service.id} style={[
                 styles.serviceCard,
@@ -4441,7 +4705,7 @@ export default function ProviderServicesScreen() {
                   <View style={styles.serviceInfo}>
                     <Text style={styles.serviceName}>{service.name}</Text>
                     <Text style={styles.serviceCategory}>
-                      {service.category_details?.name || 'Category'}
+                      {service.category_name || 'Category'}
                     </Text>
                     {service.description && (
                       <Text style={styles.serviceDescription} numberOfLines={2}>
@@ -4471,10 +4735,10 @@ export default function ProviderServicesScreen() {
                     <DollarSign color="#666" size={16} />
                     <Text style={styles.detailText}>{service.price} {service.currency}</Text>
                   </View>
-                  {service.total_bookings !== undefined && (
+                  {(service as any).total_bookings !== undefined && (
                     <View style={styles.detailRow}>
                       <BarChart3 color="#666" size={16} />
-                      <Text style={styles.detailText}>{service.total_bookings} bookings</Text>
+                      <Text style={styles.detailText}>{(service as any).total_bookings} bookings</Text>
                     </View>
                   )}
                 </View>
@@ -4482,7 +4746,7 @@ export default function ProviderServicesScreen() {
                 {hasLocation && (
                   <TouchableOpacity
                     style={styles.viewLocationButton}
-                    onPress={() => router.push(`/view-location?latitude=${service.latitude}&longitude=${service.longitude}&locationName=${encodeURIComponent(service.location || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+                    onPress={() => router.push(`/view-location?latitude=${(service as any).latitude}&longitude=${(service as any).longitude}&locationName=${encodeURIComponent((service as any).location || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
                   >
                     <Navigation color="#2D1A46" size={16} />
                     <Text style={styles.viewLocationButtonText}>View Location</Text>
@@ -4815,9 +5079,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\register.tsx`
+### File: `app/register.tsx`
 
-**Size:** 12616 bytes  
+**Size:** 12218 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState, useRef } from 'react';
@@ -5221,9 +5485,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\role-selection.tsx`
+### File: `app/role-selection.tsx`
 
-**Size:** 4487 bytes  
+**Size:** 4306 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -5411,9 +5675,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\search.tsx`
+### File: `app/search.tsx`
 
-**Size:** 14822 bytes  
+**Size:** 14495 bytes  
 ```tsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, FlatList, Image, ActivityIndicator } from 'react-native';
@@ -5434,7 +5698,8 @@ export default function SearchScreen() {
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(500);
     const [minRating, setMinRating] = useState(0);
-    // Unused variables removed
+    const [, setAvailabilityDate] = useState('');
+    const [, setAvailabilityTime] = useState('');
 
     const [currentLocation, setCurrentLocation] = useState<Location.LocationObject | null>(null);
     const [showFilters, setShowFilters] = useState(false);
@@ -5814,15 +6079,16 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\service-detail.tsx`
+### File: `app/service-detail.tsx`
 
-**Size:** 11925 bytes  
+**Size:** 11769 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { ArrowLeft, Star, Clock, DollarSign, MapPin } from 'lucide-react-native';
 import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
+import CustomTabBar from './components/CustomTabBar';
 
 export default function ServiceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -5873,114 +6139,115 @@ export default function ServiceDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity 
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <ArrowLeft color="white" size={24} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Service Details</Text>
-          <View style={styles.placeholder} />
-        </View>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity 
+              style={styles.backButton}
+              onPress={() => router.back()}
+            >
+              <ArrowLeft color="white" size={24} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Service Details</Text>
+            <View style={styles.placeholder} />
+          </View>
 
-        {/* Service Info */}
-        <View style={styles.content}>
-          <View style={styles.serviceHeader}>
-            <Text style={styles.serviceName}>{service.name}</Text>
-            {service.rating !== undefined && service.rating > 0 && (
-              <View style={styles.ratingContainer}>
-                <Star color="#FFD700" size={20} fill="#FFD700" />
-                <Text style={styles.rating}>{service.rating.toFixed(1)}</Text>
+          {/* Service Info */}
+          <View style={styles.content}>
+            <View style={styles.serviceHeader}>
+              <Text style={styles.serviceName}>{service.name}</Text>
+              {(service as any).rating !== undefined && (service as any).rating > 0 && (
+                <View style={styles.ratingContainer}>
+                  <Star color="#FFD700" size={20} fill="#FFD700" />
+                  <Text style={styles.rating}>{(service as any).rating.toFixed(1)}</Text>
+                </View>
+              )}
+            </View>
+
+            {service.category_name && (
+              <Text style={styles.category}>{service.category_name}</Text>
+            )}
+            {service.provider_location && (
+              <Text style={styles.providerName}>By {service.provider_location.business_name || 'Provider'}</Text>
+            )}
+            {(service as any).total_bookings !== undefined && (service as any).total_bookings > 0 && (
+              <Text style={styles.bookingsCount}>{(service as any).total_bookings} bookings</Text>
+            )}
+
+            {/* Service Details Card */}
+            <View style={styles.detailsCard}>
+              <Text style={styles.cardTitle}>Service Details</Text>
+              
+              <View style={styles.detailRow}>
+                <Clock color="#666" size={20} />
+                <Text style={styles.detailText}>Duration: {durationHours}</Text>
+              </View>
+
+              <View style={styles.detailRow}>
+                <DollarSign color="#666" size={20} />
+                <Text style={styles.detailText}>Price: {service.currency} {service.price}</Text>
+              </View>
+
+              <View style={styles.statusRow}>
+                <View style={[styles.statusDot, { backgroundColor: service.is_active ? '#4CAF50' : '#F44336' }]} />
+                <Text style={styles.statusText}>{service.is_active ? 'Available' : 'Currently Unavailable'}</Text>
+              </View>
+            </View>
+
+            {/* Description */}
+            {service.description && (
+              <View style={styles.descriptionCard}>
+                <Text style={styles.cardTitle}>Description</Text>
+                <Text style={styles.description}>{service.description}</Text>
+              </View>
+            )}
+
+            {/* Location */}
+            {((service.provider_location?.latitude && service.provider_location?.longitude) || (service.provider_location?.latitude && service.provider_location?.longitude)) && (
+              <View style={styles.locationCard}>
+                <Text style={styles.cardTitle}>Location</Text>
+                <Text style={styles.locationText}>
+                  {service.provider_location?.address || service.provider_location?.city || 'Service Location'}
+                </Text>
+                <TouchableOpacity 
+                  style={styles.viewLocationButton}
+                  onPress={() => router.push(`/view-location?latitude=${service.provider_location?.latitude}&longitude=${service.provider_location?.longitude}&locationName=${encodeURIComponent(service.provider_location?.address || service.provider_location?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
+                >
+                  <MapPin color="white" size={18} />
+                  <Text style={styles.viewLocationButtonText}>View on Map</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {/* Provider Info */}
+            {service.provider_location && (
+              <View style={styles.providerCard}>
+                <Text style={styles.cardTitle}>Provider Information</Text>
+                <Text style={styles.providerInfo}>
+                  {service.provider_location.business_name || 'Provider'}
+                </Text>
+                <Text style={styles.providerContact}>{service.provider_location.city}, {service.provider_location.country}</Text>
+              </View>
+            )}
+
+            {/* Book Button */}
+            {service.is_active && (
+              <View style={styles.bookingContainer}>
+                <TouchableOpacity 
+                  style={styles.bookButton}
+                  onPress={() => router.push(`/booking/select-datetime?serviceId=${service.id}` as any)}
+                >
+                  <Text style={styles.bookButtonText}>Book Service</Text>
+                </TouchableOpacity>
               </View>
             )}
           </View>
-
-          {service.category_details && (
-            <Text style={styles.category}>{service.category_details.name}</Text>
-          )}
-          {service.provider_location && (
-            <Text style={styles.providerName}>By {service.provider_location.full_name || 'Provider'}</Text>
-          )}
-          {service.total_bookings !== undefined && service.total_bookings > 0 && (
-            <Text style={styles.bookingsCount}>{service.total_bookings} bookings</Text>
-          )}
-
-          {/* Service Details Card */}
-          <View style={styles.detailsCard}>
-            <Text style={styles.cardTitle}>Service Details</Text>
-            
-            <View style={styles.detailRow}>
-              <Clock color="#666" size={20} />
-              <Text style={styles.detailText}>Duration: {durationHours}</Text>
-            </View>
-
-            <View style={styles.detailRow}>
-              <DollarSign color="#666" size={20} />
-              <Text style={styles.detailText}>Price: {service.currency} {service.price}</Text>
-            </View>
-
-            <View style={styles.statusRow}>
-              <View style={[styles.statusDot, { backgroundColor: service.is_active ? '#4CAF50' : '#F44336' }]} />
-              <Text style={styles.statusText}>{service.is_active ? 'Available' : 'Currently Unavailable'}</Text>
-            </View>
-          </View>
-
-          {/* Description */}
-          {service.description && (
-            <View style={styles.descriptionCard}>
-              <Text style={styles.cardTitle}>Description</Text>
-              <Text style={styles.description}>{service.description}</Text>
-            </View>
-          )}
-
-          {/* Location */}
-          {((service.provider_location?.latitude && service.provider_location?.longitude) || (service.provider_location?.latitude && service.provider_location?.longitude)) && (
-            <View style={styles.locationCard}>
-              <Text style={styles.cardTitle}>Location</Text>
-              <Text style={styles.locationText}>
-                {service.provider_location?.location || service.provider_location?.location || service.provider_location?.city || 'Service Location'}
-              </Text>
-              <TouchableOpacity 
-                style={styles.viewLocationButton}
-                onPress={() => router.push(`/view-location?latitude=${service.provider_location?.latitude || service.provider_location?.latitude}&longitude=${service.provider_location?.longitude || service.provider_location?.longitude}&locationName=${encodeURIComponent(service.location || service.provider_location?.location || service.provider_location?.city || 'Service Location')}&serviceName=${encodeURIComponent(service.name)}` as any)}
-              >
-                <MapPin color="white" size={18} />
-                <Text style={styles.viewLocationButtonText}>View on Map</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
-          {/* Provider Info */}
-          {service.provider_location && (
-            <View style={styles.providerCard}>
-              <Text style={styles.cardTitle}>Provider Information</Text>
-              <Text style={styles.providerInfo}>
-                {service.provider_location.full_name || 'Provider'}
-              </Text>
-              {service.provider_location.email && (
-                <Text style={styles.providerContact}>{service.provider_location.email}</Text>
-              )}
-            </View>
-          )}
-        </View>
-      </ScrollView>
-
-      {/* Book Button */}
-      {service.is_active && (
-        <View style={styles.bookingContainer}>
-          <TouchableOpacity 
-            style={styles.bookButton}
-            onPress={() => router.push(`/booking/select-datetime?serviceId=${service.id}`)}
-          >
-            <Text style={styles.bookButtonText}>Book Service</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -6248,15 +6515,21 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\view-location.tsx`
+### File: `app/view-location.tsx`
 
-**Size:** 6412 bytes  
+**Size:** 17583 bytes  
 ```tsx
 import { router, useLocalSearchParams, Stack } from 'expo-router';
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Platform, Linking, Alert } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
-import { ArrowLeft, Navigation, ExternalLink } from 'lucide-react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Platform, Linking, Alert, ActivityIndicator } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE, Polyline } from 'react-native-maps';
+import { ArrowLeft, Navigation, ExternalLink, MapPin, Clock, Car, Footprints } from 'lucide-react-native';
+import * as Location from 'expo-location';
+
+interface Coordinate {
+  latitude: number;
+  longitude: number;
+}
 
 export default function ViewLocationScreen() {
   const params = useLocalSearchParams<{
@@ -6264,12 +6537,219 @@ export default function ViewLocationScreen() {
     longitude: string;
     locationName: string;
     serviceName?: string;
+    showRoute?: string;
   }>();
 
   const latitude = parseFloat(params.latitude || '0');
   const longitude = parseFloat(params.longitude || '0');
   const locationName = params.locationName || 'Service Location';
   const serviceName = params.serviceName || '';
+
+  const mapRef = useRef<MapView>(null);
+  const [userLocation, setUserLocation] = useState<Coordinate | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [routeCoordinates, setRouteCoordinates] = useState<Coordinate[]>([]);
+  const [distance, setDistance] = useState<number | null>(null);
+  const [duration, setDuration] = useState<number | null>(null);
+
+  const destination: Coordinate = { latitude, longitude };
+
+  useEffect(() => {
+    getUserLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getUserLocation = async () => {
+    try {
+      setIsLoadingLocation(true);
+      setLocationError(null);
+
+      if (Platform.OS === 'web') {
+        if ('geolocation' in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const userCoord = {
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+              };
+              setUserLocation(userCoord);
+              generateRoute(userCoord, destination);
+              setIsLoadingLocation(false);
+            },
+            (error) => {
+              console.log('[ViewLocation] Web geolocation error:', error.message);
+              setLocationError('Unable to get your location');
+              setIsLoadingLocation(false);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+          );
+        } else {
+          setLocationError('Geolocation not supported');
+          setIsLoadingLocation(false);
+        }
+        return;
+      }
+
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setLocationError('Location permission denied');
+        setIsLoadingLocation(false);
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+
+      const userCoord = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+
+      console.log('[ViewLocation] User location:', userCoord);
+      setUserLocation(userCoord);
+      generateRoute(userCoord, destination);
+      setIsLoadingLocation(false);
+    } catch (error) {
+      console.error('[ViewLocation] Error getting location:', error);
+      setLocationError('Failed to get your location');
+      setIsLoadingLocation(false);
+    }
+  };
+
+  const generateRoute = (origin: Coordinate, dest: Coordinate) => {
+    const numPoints = 20;
+    const points: Coordinate[] = [];
+    
+    for (let i = 0; i <= numPoints; i++) {
+      const t = i / numPoints;
+      const lat = origin.latitude + (dest.latitude - origin.latitude) * t;
+      const lng = origin.longitude + (dest.longitude - origin.longitude) * t;
+      
+      const jitter = i > 0 && i < numPoints ? (Math.random() - 0.5) * 0.001 : 0;
+      points.push({
+        latitude: lat + jitter,
+        longitude: lng + jitter,
+      });
+    }
+
+    setRouteCoordinates(points);
+
+    const dist = calculateDistance(origin, dest);
+    setDistance(dist);
+
+    const walkingSpeed = 5;
+    const drivingSpeed = 40;
+    const avgSpeed = dist > 2 ? drivingSpeed : walkingSpeed;
+    const time = (dist / avgSpeed) * 60;
+    setDuration(Math.round(time));
+
+    setTimeout(() => {
+      fitMapToRoute(origin, dest);
+    }, 500);
+  };
+
+  const calculateDistance = (start: Coordinate, end: Coordinate): number => {
+    const R = 6371;
+    const dLat = toRad(end.latitude - start.latitude);
+    const dLon = toRad(end.longitude - start.longitude);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(start.latitude)) *
+        Math.cos(toRad(end.latitude)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const toRad = (value: number): number => {
+    return (value * Math.PI) / 180;
+  };
+
+  const fitMapToRoute = (origin: Coordinate, dest: Coordinate) => {
+    if (mapRef.current) {
+      const coordinates = [origin, dest];
+      mapRef.current.fitToCoordinates(coordinates, {
+        edgePadding: { top: 100, right: 50, bottom: 200, left: 50 },
+        animated: true,
+      });
+    }
+  };
+
+  const handleStartNavigation = () => {
+    const label = encodeURIComponent(locationName);
+    
+    let url: string;
+    
+    if (Platform.OS === 'ios') {
+      url = userLocation
+        ? `maps://app?saddr=${userLocation.latitude},${userLocation.longitude}&daddr=${latitude},${longitude}`
+        : `maps://app?daddr=${latitude},${longitude}&dirflg=d`;
+    } else if (Platform.OS === 'android') {
+      url = userLocation
+        ? `google.navigation:q=${latitude},${longitude}&mode=d`
+        : `geo:${latitude},${longitude}?q=${latitude},${longitude}(${label})`;
+    } else {
+      url = userLocation
+        ? `https://www.google.com/maps/dir/${userLocation.latitude},${userLocation.longitude}/${latitude},${longitude}`
+        : `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+    }
+
+    Linking.canOpenURL(url)
+      .then((supported) => {
+        if (supported) {
+          Linking.openURL(url);
+        } else {
+          const fallbackUrl = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
+          Linking.openURL(fallbackUrl);
+        }
+      })
+      .catch(() => {
+        Alert.alert('Error', 'Unable to open maps for navigation');
+      });
+  };
+
+  const handleOpenInMaps = () => {
+    const label = encodeURIComponent(locationName);
+    const url = Platform.select({
+      ios: `maps:0,0?q=${label}@${latitude},${longitude}`,
+      android: `geo:0,0?q=${latitude},${longitude}(${label})`,
+      web: `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`,
+    });
+
+    if (url) {
+      Linking.canOpenURL(url)
+        .then((supported) => {
+          if (supported) {
+            Linking.openURL(url);
+          } else {
+            const fallbackUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+            Linking.openURL(fallbackUrl);
+          }
+        })
+        .catch(() => {
+          Alert.alert('Error', 'Unable to open maps');
+        });
+    }
+  };
+
+  const formatDistance = (km: number): string => {
+    if (km < 1) {
+      return `${Math.round(km * 1000)} m`;
+    }
+    return `${km.toFixed(1)} km`;
+  };
+
+  const formatDuration = (minutes: number): string => {
+    if (minutes < 60) {
+      return `${minutes} min`;
+    }
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}m`;
+  };
 
   if (!latitude || !longitude) {
     return (
@@ -6280,9 +6760,10 @@ export default function ViewLocationScreen() {
           }} 
         />
         <View style={styles.errorContainer}>
+          <MapPin color="#666" size={48} />
           <Text style={styles.errorText}>Location not available</Text>
           <TouchableOpacity 
-            style={styles.backButton}
+            style={styles.backButtonLarge}
             onPress={() => router.back()}
           >
             <Text style={styles.backButtonText}>Go Back</Text>
@@ -6291,30 +6772,6 @@ export default function ViewLocationScreen() {
       </SafeAreaView>
     );
   }
-
-  const handleOpenInMaps = () => {
-    const label = encodeURIComponent(locationName);
-    const url = Platform.select({
-      ios: `maps:0,0?q=${label}@${latitude},${longitude}`,
-      android: `geo:0,0?q=${latitude},${longitude}(${label})`,
-      web: `https://www.google.com/maps/search/?api=AIzaSyCl2wtzcjTd1ekKgpNNgQRNuqRjtM8qRic&query=${latitude},${longitude}`,
-    });
-
-    if (url) {
-      Linking.canOpenURL(url)
-        .then((supported) => {
-          if (supported) {
-            Linking.openURL(url);
-          } else {
-            const fallbackUrl = `https://www.google.com/maps/search/?api=AIzaSyCl2wtzcjTd1ekKgpNNgQRNuqRjtM8qRic&query=${latitude},${longitude}`;
-            Linking.openURL(fallbackUrl);
-          }
-        })
-        .catch(() => {
-          Alert.alert('Error', 'Unable to open maps');
-        });
-    }
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -6333,49 +6790,129 @@ export default function ViewLocationScreen() {
         </TouchableOpacity>
         <View style={styles.headerTitleContainer}>
           <Text style={styles.headerTitle}>{serviceName || 'Service Location'}</Text>
-          <Text style={styles.headerSubtitle}>{locationName}</Text>
+          <Text style={styles.headerSubtitle} numberOfLines={1}>{locationName}</Text>
         </View>
         <View style={styles.placeholder} />
       </View>
 
       <MapView
+        ref={mapRef}
         provider={PROVIDER_GOOGLE}
         style={styles.map}
         initialRegion={{
           latitude,
           longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
+          latitudeDelta: 0.02,
+          longitudeDelta: 0.02,
         }}
-        showsUserLocation
-        showsMyLocationButton
+        showsUserLocation={true}
+        showsMyLocationButton={true}
+        showsCompass={true}
       >
         <Marker
           coordinate={{ latitude, longitude }}
           title={serviceName || locationName}
           description={locationName}
-          pinColor="#F4A896"
-        />
+        >
+          <View style={styles.destinationMarker}>
+            <MapPin color="white" size={20} />
+          </View>
+        </Marker>
+
+        {userLocation && routeCoordinates.length > 0 && (
+          <Polyline
+            coordinates={routeCoordinates}
+            strokeColor="#2D1A46"
+            strokeWidth={4}
+            lineDashPattern={[1]}
+          />
+        )}
+
+        {userLocation && (
+          <Marker
+            coordinate={userLocation}
+            title="Your Location"
+          >
+            <View style={styles.userMarker}>
+              <View style={styles.userMarkerInner} />
+            </View>
+          </Marker>
+        )}
       </MapView>
 
+      {isLoadingLocation && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color="#2D1A46" />
+          <Text style={styles.loadingText}>Getting your location...</Text>
+        </View>
+      )}
+
       <View style={styles.bottomSheet}>
+        {userLocation && distance !== null && duration !== null && (
+          <View style={styles.routeInfo}>
+            <View style={styles.routeInfoItem}>
+              <View style={styles.routeIconContainer}>
+                {distance > 2 ? (
+                  <Car color="#2D1A46" size={20} />
+                ) : (
+                  <Footprints color="#2D1A46" size={20} />
+                )}
+              </View>
+              <View>
+                <Text style={styles.routeValue}>{formatDistance(distance)}</Text>
+                <Text style={styles.routeLabel}>Distance</Text>
+              </View>
+            </View>
+            <View style={styles.routeDivider} />
+            <View style={styles.routeInfoItem}>
+              <View style={styles.routeIconContainer}>
+                <Clock color="#2D1A46" size={20} />
+              </View>
+              <View>
+                <Text style={styles.routeValue}>{formatDuration(duration)}</Text>
+                <Text style={styles.routeLabel}>Est. Time</Text>
+              </View>
+            </View>
+          </View>
+        )}
+
+        {locationError && (
+          <View style={styles.locationErrorBanner}>
+            <Text style={styles.locationErrorText}>{locationError}</Text>
+            <TouchableOpacity onPress={getUserLocation}>
+              <Text style={styles.retryText}>Retry</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+
         <View style={styles.locationInfo}>
-          <Navigation color="#2D1A46" size={24} />
+          <View style={styles.locationIconContainer}>
+            <MapPin color="#F4A896" size={24} />
+          </View>
           <View style={styles.locationDetails}>
-            <Text style={styles.locationTitle}>{locationName}</Text>
+            <Text style={styles.locationTitle} numberOfLines={2}>{locationName}</Text>
             <Text style={styles.coordinates}>
               {latitude.toFixed(6)}, {longitude.toFixed(6)}
             </Text>
           </View>
         </View>
 
-        <TouchableOpacity 
-          style={styles.openMapsButton}
-          onPress={handleOpenInMaps}
-        >
-          <ExternalLink color="white" size={20} />
-          <Text style={styles.openMapsButtonText}>Open in Maps</Text>
-        </TouchableOpacity>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity 
+            style={styles.startNavigationButton}
+            onPress={handleStartNavigation}
+          >
+            <Navigation color="white" size={20} />
+            <Text style={styles.startNavigationText}>Start Navigation</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.openMapsButton}
+            onPress={handleOpenInMaps}
+          >
+            <ExternalLink color="#2D1A46" size={20} />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -6420,6 +6957,50 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  loadingOverlay: {
+    position: 'absolute',
+    top: '40%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    marginHorizontal: 40,
+    paddingVertical: 24,
+    borderRadius: 16,
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 14,
+    color: '#666',
+  },
+  destinationMarker: {
+    backgroundColor: '#F4A896',
+    padding: 8,
+    borderRadius: 20,
+    borderWidth: 3,
+    borderColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  userMarker: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: 'rgba(45, 26, 70, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userMarkerInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#2D1A46',
+    borderWidth: 2,
+    borderColor: 'white',
+  },
   bottomSheet: {
     backgroundColor: 'white',
     borderTopLeftRadius: 24,
@@ -6435,39 +7016,119 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 10,
   },
+  routeInfo: {
+    flexDirection: 'row',
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+  },
+  routeInfoItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  routeIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F4A896',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  routeValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#2D1A46',
+  },
+  routeLabel: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 2,
+  },
+  routeDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: '#E5E5E5',
+    marginHorizontal: 16,
+  },
+  locationErrorBanner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 12,
+  },
+  locationErrorText: {
+    fontSize: 13,
+    color: '#92400E',
+    flex: 1,
+  },
+  retryText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#2D1A46',
+    marginLeft: 12,
+  },
   locationInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+  },
+  locationIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: '#FFF5F3',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   locationDetails: {
     flex: 1,
     marginLeft: 16,
   },
   locationTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: '#2D1A46',
     marginBottom: 4,
   },
   coordinates: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#666',
-    fontFamily: Platform.select({ ios: 'Courier', android: 'monospace' }) as any,
+    fontFamily: Platform.select({ ios: 'Courier', android: 'monospace', default: 'monospace' }),
   },
-  openMapsButton: {
+  buttonRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  startNavigationButton: {
+    flex: 1,
     backgroundColor: '#2D1A46',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    paddingVertical: 14,
+    paddingVertical: 16,
     borderRadius: 12,
   },
-  openMapsButtonText: {
+  startNavigationText: {
     color: 'white',
     fontSize: 16,
     fontWeight: '600',
+  },
+  openMapsButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   errorContainer: {
     flex: 1,
@@ -6478,9 +7139,10 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 18,
     color: '#666',
+    marginTop: 16,
     marginBottom: 24,
   },
-  backButton: {
+  backButtonLarge: {
     backgroundColor: '#2D1A46',
     paddingHorizontal: 32,
     paddingVertical: 12,
@@ -6496,16 +7158,16 @@ const styles = StyleSheet.create({
 
 ---
 
-## Directory: `app\(tabs)`
+## Directory: `app/(tabs)`
 
-### File: `app\(tabs)\_layout.tsx`
+### File: `app/(tabs)/_layout.tsx`
 
-**Size:** 2940 bytes  
+**Size:** 2994 bytes  
 ```tsx
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { Platform } from 'react-native';
-import { Home, Calendar, Bell, User, Users, BarChart3 } from 'lucide-react-native';
+import { Home, Calendar, User, Users, BarChart3 } from 'lucide-react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import StickyHeader from '../components/StickyHeader';
 import { useTranslation } from 'react-i18next';
@@ -6562,23 +7224,22 @@ export default function TabLayout() {
         },
       }}
     >
-      {isProvider ? (
-        <Tabs.Screen
-          name="dashboard"
-          options={{
-            title: t('dashboard'),
-            tabBarIcon: ({ color, size }) => <BarChart3 color={color} size={size} />,
-          }}
-        />
-      ) : (
-        <Tabs.Screen
-          name="home"
-          options={{
-            title: t('home'),
-            tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
-          }}
-        />
-      )}
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: t('home'),
+          tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
+          href: isProvider ? null : '/(tabs)/home' as any,
+        }}
+      />
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: t('dashboard'),
+          tabBarIcon: ({ color, size }) => <BarChart3 color={color} size={size} />,
+          href: isProvider ? '/(tabs)/dashboard' as any : null,
+        }}
+      />
       <Tabs.Screen
         name="providers"
         options={{
@@ -6600,6 +7261,12 @@ export default function TabLayout() {
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          href: null,
+        }}
+      />
     </Tabs>
   );
 }
@@ -6607,9 +7274,9 @@ export default function TabLayout() {
 
 ---
 
-### File: `app\(tabs)\dashboard.tsx`
+### File: `app/(tabs)/dashboard.tsx`
 
-**Size:** 11420 bytes  
+**Size:** 11110 bytes  
 ```tsx
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
@@ -6735,13 +7402,13 @@ export default function ProviderDashboardScreen() {
                     <View style={styles.actionsGrid}>
                         <TouchableOpacity
                             style={styles.actionButton}
-                            onPress={() => router.push('/provider-services')}
+                            onPress={() => router.push('/provider-services' as any)}
                         >
                             <Text style={styles.actionButtonText}>{t('manageServices')}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={styles.actionButton}
-                            onPress={() => router.push('/provider-availability')}
+                            onPress={() => router.push('/provider-availability' as any)}
                         >
                             <Text style={styles.actionButtonText}>{t('updateAvailability')}</Text>
                         </TouchableOpacity>
@@ -6939,14 +7606,14 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\(tabs)\home.tsx`
+### File: `app/(tabs)/home.tsx`
 
-**Size:** 30769 bytes  
+**Size:** 21739 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { Search, X, User } from 'lucide-react-native';
+import { Search, X } from 'lucide-react-native';
 import { useGetCurrentUserQuery } from '@/store/services/authApi';
 import { useTranslation } from 'react-i18next';
 import { useGetAllServicesQuery, useGetAllCategoriesQuery } from '@/store/services/servicesApi';
@@ -6954,7 +7621,6 @@ import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useSelector, useDispatch } from 'react-redux';
 import { setLanguage } from '@/store/languageSlice';
 import type { RootState, AppDispatch } from '@/store/store';
-
 
 export default function HomeScreen() {
   const { t, i18n } = useTranslation();
@@ -6977,11 +7643,6 @@ export default function HomeScreen() {
 
   const handleServicePress = (serviceId: string) => {
     router.push(`/service-detail?id=${serviceId}` as any);
-  };
-
-  const handleProviderPress = (providerId: number) => {
-    console.log('Provider selected:', providerId);
-    router.push(`/provider-detail?id=${providerId}` as any);
   };
 
   const handleCategoryPress = (categoryId: number) => {
@@ -7007,8 +7668,6 @@ export default function HomeScreen() {
     setDebouncedSearch('');
   }, []);
 
-
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -7024,37 +7683,11 @@ export default function HomeScreen() {
     providersCount: providers?.length
   });
 
-  // Redirect providers to dashboard
   React.useEffect(() => {
     if (user?.role === 'provider') {
       router.replace('/(tabs)/dashboard' as any);
     }
   }, [user]);
-
-  // Mock personalized data - in real app, fetch from API
-  const upcomingAppointments = [
-    {
-      id: '1',
-      service: { name: 'Haircut & Styling', provider_details: { full_name: 'Beauty Studio Pro' } },
-      scheduled_for: new Date(Date.now() + 1000 * 60 * 60 * 24), // Tomorrow
-      status: 'confirmed'
-    }
-  ];
-
-  const previousBookings = [
-    {
-      provider: { pkid: 1, full_name: 'Beauty Studio Pro', city: 'Yaounde' },
-      lastService: 'Haircut & Styling',
-      lastBooked: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // 30 days ago
-    },
-    {
-      provider: { pkid: 2, full_name: 'Relax Spa Center', city: 'Douala' },
-      lastService: 'Full Body Massage',
-      lastBooked: new Date(Date.now() - 1000 * 60 * 60 * 24 * 14), // 14 days ago
-    }
-  ];
-
-  const recommendedServices = services?.slice(0, 4) || []; // Mock recommendations
 
   return (
     <SafeAreaView style={styles.container}>
@@ -7106,120 +7739,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Personalized Sections for Clients */}
-        {user?.role !== 'provider' && (
-          <>
-            {/* Upcoming Appointments */}
-            {upcomingAppointments.length > 0 && (
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>📅 Upcoming Appointments</Text>
-                </View>
-                {upcomingAppointments.map((appointment) => (
-                  <TouchableOpacity
-                    key={appointment.id}
-                    style={styles.appointmentCard}
-                    onPress={() => router.push('/(tabs)/my-bookings' as any)}
-                  >
-                    <View style={styles.appointmentInfo}>
-                      <Text style={styles.appointmentService}>{appointment.service.name}</Text>
-                      <Text style={styles.appointmentProvider}>with {appointment.service.provider_details?.full_name}</Text>
-                      <Text style={styles.appointmentDate}>
-                        {appointment.scheduled_for.toLocaleDateString('en-US', {
-                          weekday: 'long',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </Text>
-                    </View>
-                    <View style={styles.appointmentStatus}>
-                      <Text style={styles.appointmentStatusText}>Confirmed</Text>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
-
-            {/* Book Again */}
-            {previousBookings.length > 0 && (
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>🔄 Book Again</Text>
-                  <Text style={styles.sectionSubtitle}>Quick access to your favorite providers</Text>
-                </View>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  <View style={styles.bookAgainContainer}>
-                    {previousBookings.map((booking) => (
-                      <TouchableOpacity
-                        key={booking.provider.pkid}
-                        style={styles.bookAgainCard}
-                        onPress={() => handleProviderPress(booking.provider.pkid)}
-                      >
-                        <View style={styles.bookAgainAvatar}>
-                          <User color="white" size={24} />
-                        </View>
-                        <View style={styles.bookAgainInfo}>
-                          <Text style={styles.bookAgainName} numberOfLines={1}>
-                            {booking.provider.full_name}
-                          </Text>
-                          <Text style={styles.bookAgainService} numberOfLines={1}>
-                            {booking.lastService}
-                          </Text>
-                          <Text style={styles.bookAgainLocation}>
-                            📍 {booking.provider.city}
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </ScrollView>
-              </View>
-            )}
-
-            {/* Recommendations */}
-            {recommendedServices.length > 0 && (
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>✨ Recommended for You</Text>
-                  <Text style={styles.sectionSubtitle}>Popular services near you</Text>
-                </View>
-                <View style={styles.recommendationsGrid}>
-                  {recommendedServices.slice(0, 4).map((service) => (
-                    <TouchableOpacity
-                      key={service.id}
-                      style={styles.recommendationCard}
-                      onPress={() => handleServicePress(service.id)}
-                    >
-                      <View style={styles.recommendationImage}>
-                        {service.image ? (
-                          <Image source={{ uri: service.image }} style={styles.recommendationImageContent} />
-                        ) : (
-                          <View style={styles.recommendationImagePlaceholder}>
-                            <Text style={styles.recommendationImageText}>💼</Text>
-                          </View>
-                        )}
-                      </View>
-                      <View style={styles.recommendationInfo}>
-                        <Text style={styles.recommendationName} numberOfLines={1}>
-                          {service.name}
-                        </Text>
-                        <Text style={styles.recommendationProvider} numberOfLines={1}>
-                          by {service.provider_name}
-                        </Text>
-                        <Text style={styles.recommendationPrice}>
-                          {service.price_display}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              </View>
-            )}
-          </>
-        )}
-
         {/* Categories */}
         {categories && categories.length > 0 && (
           <View style={styles.section}>
@@ -7262,48 +7781,6 @@ export default function HomeScreen() {
           </View>
         )}
 
-        {/* Approved Providers */}
-        {providers && providers.length > 0 && (
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>{t('approvedProviders')}</Text>
-            </View>
-            <View style={styles.providersContainer}>
-              {providers.map((provider) => (
-                <TouchableOpacity
-                  key={provider.pkid}
-                  style={styles.providerCard}
-                  onPress={() => handleProviderPress(provider.pkid)}
-                >
-                  <View style={styles.providerImagePlaceholder}>
-                    <User color="white" size={32} />
-                  </View>
-                  <View style={styles.providerInfo}>
-                    <Text style={styles.providerName}>{provider.full_name}</Text>
-                    {provider.about_me && (
-                      <Text style={styles.providerAbout} numberOfLines={2}>
-                        {provider.about_me}
-                      </Text>
-                    )}
-                    {provider.city && (
-                      <Text style={styles.providerLocation}>📍 {provider.city}</Text>
-                    )}
-                    {provider.phone_number && (
-                      <Text style={styles.providerContact}>📞 {provider.phone_number}</Text>
-                    )}
-                  </View>
-                  <TouchableOpacity
-                    style={styles.viewProfileButton}
-                    onPress={() => handleProviderPress(provider.pkid)}
-                  >
-                    <Text style={styles.viewProfileButtonText}>{t('viewProfile')}</Text>
-                  </TouchableOpacity>
-                </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        )}
-
         {/* Top Services */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -7324,7 +7801,7 @@ export default function HomeScreen() {
                 >
                   <View style={styles.serviceImageContainer}>
                     {service.image ? (
-                      <Image source={{ uri: service.image }} style={styles.serviceImage} />
+                      <Image source={{ uri: `https://mubakulifestyle.com${service.image}` }} style={styles.serviceImage} />
                     ) : (
                       <View style={styles.serviceImagePlaceholder}>
                         <Text style={styles.serviceImageText}>💼</Text>
@@ -7333,23 +7810,23 @@ export default function HomeScreen() {
                   </View>
                   <View style={styles.serviceInfo}>
                     <View style={styles.serviceHeader}>
-                      <Text style={styles.serviceName} numberOfLines={2}>{service.name}</Text>
+                      <Text style={styles.serviceName} numberOfLines={2}>{service.name} </Text>
                       {service.is_verified_provider && (
                         <View style={styles.verifiedBadge}>
                           <Text style={styles.verifiedBadgeText}>✓</Text>
                         </View>
                       )}
                     </View>
-                    <View style={styles.providerInfo}>
+                    <View style={styles.serviceProviderInfo}>
                       <Text style={styles.providerBusiness} numberOfLines={1}>{service.provider_business}</Text>
-                      <Text style={styles.providerName} numberOfLines={1}>by {service.provider_name}</Text>
+                      <Text style={styles.serviceProviderName} numberOfLines={1}>by {service.provider_name}</Text>
                     </View>
                     <Text style={styles.serviceCategory} numberOfLines={1}>{service.category_name}</Text>
                     <View style={styles.locationRow}>
                       <Text style={styles.serviceLocation}>📍 {service.provider_location.city}</Text>
                     </View>
                     <View style={styles.serviceMeta}>
-                      <Text style={styles.servicePrice}>{service.price_display}</Text>
+                      <Text style={styles.servicePrice}>{service.price} XAF</Text>
                       <Text style={styles.serviceDuration}>{service.duration_minutes}min</Text>
                     </View>
                   </View>
@@ -7401,7 +7878,7 @@ const styles = StyleSheet.create({
   },
   greeting: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: 'white',
   },
   subGreeting: {
@@ -7421,7 +7898,7 @@ const styles = StyleSheet.create({
   },
   langButtonText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
   },
   langButtonActive: {
     backgroundColor: '#8B5CF6',
@@ -7465,7 +7942,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
   sectionSubtitle: {
@@ -7484,7 +7961,7 @@ const styles = StyleSheet.create({
   clearFilterText: {
     fontSize: 14,
     color: '#666',
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   categoriesContainer: {
     flexDirection: 'row',
@@ -7518,7 +7995,7 @@ const styles = StyleSheet.create({
   },
   categoryName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     textAlign: 'center',
   },
@@ -7557,7 +8034,7 @@ const styles = StyleSheet.create({
   },
   providerName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -7585,7 +8062,7 @@ const styles = StyleSheet.create({
   viewProfileButtonText: {
     color: 'white',
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   agentsContainer: {
     gap: 16,
@@ -7627,7 +8104,7 @@ const styles = StyleSheet.create({
   },
   agentName: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -7649,12 +8126,12 @@ const styles = StyleSheet.create({
   rating: {
     marginLeft: 4,
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#333',
   },
   price: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
   bookButton: {
@@ -7667,7 +8144,7 @@ const styles = StyleSheet.create({
   bookButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   durationContainer: {
     marginBottom: 8,
@@ -7690,7 +8167,7 @@ const styles = StyleSheet.create({
   },
   serviceLocation: {
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '700' as const,
     color: '#2D1A46',
   },
   locationRowDisabled: {
@@ -7706,7 +8183,7 @@ const styles = StyleSheet.create({
   },
   serviceLocationDisabled: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#999',
   },
   emptyContainer: {
@@ -7728,7 +8205,7 @@ const styles = StyleSheet.create({
   clearAllButtonText: {
     color: 'white',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
   },
   servicesGrid: {
     flexDirection: 'row',
@@ -7739,7 +8216,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 12,
     marginBottom: 16,
-    width: '48%', // 2 columns
+    width: '48%',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -7791,22 +8268,22 @@ const styles = StyleSheet.create({
   verifiedBadgeText: {
     color: 'white',
     fontSize: 10,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
   },
   serviceName: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
-  providerInfo: {
+  serviceProviderInfo: {
     marginBottom: 6,
   },
   providerBusiness: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
   },
-  providerName: {
+  serviceProviderName: {
     fontSize: 11,
     color: '#666',
   },
@@ -7823,7 +8300,7 @@ const styles = StyleSheet.create({
   },
   servicePrice: {
     fontSize: 13,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#2D1A46',
   },
   serviceDuration: {
@@ -7848,7 +8325,7 @@ const styles = StyleSheet.create({
   },
   appointmentService: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -7860,7 +8337,7 @@ const styles = StyleSheet.create({
   appointmentDate: {
     fontSize: 14,
     color: '#F4A896',
-    fontWeight: '500',
+    fontWeight: '500' as const,
   },
   appointmentStatus: {
     backgroundColor: '#E8F5E9',
@@ -7870,7 +8347,7 @@ const styles = StyleSheet.create({
   },
   appointmentStatusText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#4CAF50',
   },
   bookAgainContainer: {
@@ -7903,7 +8380,7 @@ const styles = StyleSheet.create({
   },
   bookAgainName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     textAlign: 'center',
     marginBottom: 4,
@@ -7962,7 +8439,7 @@ const styles = StyleSheet.create({
   },
   recommendationName: {
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '600' as const,
     color: '#2D1A46',
     marginBottom: 4,
   },
@@ -7973,7 +8450,7 @@ const styles = StyleSheet.create({
   },
   recommendationPrice: {
     fontSize: 13,
-    fontWeight: 'bold',
+    fontWeight: 'bold' as const,
     color: '#F4A896',
   },
 });
@@ -7981,316 +8458,25 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\(tabs)\messages.tsx`
+### File: `app/(tabs)/messages.tsx`
 
-**Size:** 9917 bytes  
-```tsx
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Image } from 'react-native';
-import { MessageCircle, User } from 'lucide-react-native';
-import { useTranslation } from 'react-i18next';
-import { router } from 'expo-router';
-
-export default function MessagesScreen() {
-    const { t } = useTranslation();
-
-    // Mock data - replace with actual API call
-    const conversations = [
-        {
-            id: '1',
-            provider: {
-                id: 1,
-                name: 'Beauty Studio Pro',
-                avatar: null,
-            },
-            lastMessage: {
-                content: 'Hi! I received your booking request. When would you like to schedule?',
-                timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
-                isFromProvider: true,
-                unread: true,
-            },
-        },
-        {
-            id: '2',
-            provider: {
-                id: 2,
-                name: 'Hair Masters',
-                avatar: null,
-            },
-            lastMessage: {
-                content: 'Thank you for your review! We appreciate your feedback.',
-                timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
-                isFromProvider: true,
-                unread: false,
-            },
-        },
-        {
-            id: '3',
-            provider: {
-                id: 3,
-                name: 'Relax Spa Center',
-                avatar: null,
-            },
-            lastMessage: {
-                content: 'Your appointment has been confirmed for tomorrow at 3 PM.',
-                timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
-                isFromProvider: true,
-                unread: false,
-            },
-        },
-    ];
-
-    const formatTime = (date: Date) => {
-        const now = new Date();
-        const diffInMs = now.getTime() - date.getTime();
-        const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
-        const diffInHours = Math.floor(diffInMinutes / 60);
-        const diffInDays = Math.floor(diffInHours / 24);
-
-        if (diffInMinutes < 1) return 'now';
-        if (diffInMinutes < 60) return `${diffInMinutes}m`;
-        if (diffInHours < 24) return `${diffInHours}h`;
-        if (diffInDays < 7) return `${diffInDays}d`;
-        return date.toLocaleDateString();
-    };
-
-    const handleConversationPress = (conversationId: string) => {
-        router.push(`/chat/${conversationId}` as any);
-    };
-
-    const unreadCount = conversations.filter(conv => conv.lastMessage.unread).length;
-
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.headerTitle}>{t('messages') || 'Messages'}</Text>
-                {unreadCount > 0 && (
-                    <View style={styles.unreadBadge}>
-                        <Text style={styles.unreadText}>{unreadCount}</Text>
-                    </View>
-                )}
-            </View>
-
-            <ScrollView style={styles.content}>
-                {conversations.length === 0 ? (
-                    <View style={styles.emptyContainer}>
-                        <MessageCircle color="#ccc" size={64} />
-                        <Text style={styles.emptyTitle}>{t('noMessages') || 'No messages yet'}</Text>
-                        <Text style={styles.emptyText}>
-                            {t('startConversation') || 'Start a conversation by booking a service or contacting a provider'}
-                        </Text>
-                    </View>
-                ) : (
-                    <View style={styles.conversationsList}>
-                        {conversations.map((conversation) => (
-                            <TouchableOpacity
-                                key={conversation.id}
-                                style={styles.conversationCard}
-                                onPress={() => handleConversationPress(conversation.id)}
-                            >
-                                <View style={styles.conversationLeft}>
-                                    <View style={styles.avatarContainer}>
-                                        {conversation.provider.avatar ? (
-                                            <Image source={{ uri: conversation.provider.avatar }} style={styles.avatar} />
-                                        ) : (
-                                            <View style={styles.avatarPlaceholder}>
-                                                <User color="white" size={20} />
-                                            </View>
-                                        )}
-                                    </View>
-                                    {conversation.lastMessage.unread && (
-                                        <View style={styles.unreadIndicator} />
-                                    )}
-                                </View>
-
-                                <View style={styles.conversationContent}>
-                                    <View style={styles.conversationHeader}>
-                                        <Text style={styles.providerName} numberOfLines={1}>
-                                            {conversation.provider.name}
-                                        </Text>
-                                        <Text style={styles.messageTime}>
-                                            {formatTime(conversation.lastMessage.timestamp)}
-                                        </Text>
-                                    </View>
-
-                                    <Text
-                                        style={[
-                                            styles.lastMessage,
-                                            conversation.lastMessage.unread && styles.unreadMessage
-                                        ]}
-                                        numberOfLines={1}
-                                    >
-                                        {conversation.lastMessage.isFromProvider && (
-                                            <Text style={styles.providerIndicator}></Text>
-                                        )}
-                                        {conversation.lastMessage.content}
-                                    </Text>
-                                </View>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                )}
-            </ScrollView>
-        </SafeAreaView>
-    );
-}
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#F5F5F5',
-    },
-    header: {
-        backgroundColor: '#F4A896',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 24,
-        paddingVertical: 16,
-    },
-    headerTitle: {
-        fontSize: 18,
-        fontWeight: '600',
-        color: 'white',
-    },
-    unreadBadge: {
-        position: 'absolute',
-        right: 24,
-        backgroundColor: '#FF4444',
-        borderRadius: 10,
-        minWidth: 20,
-        height: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    unreadText: {
-        color: 'white',
-        fontSize: 12,
-        fontWeight: 'bold',
-    },
-    content: {
-        flex: 1,
-    },
-    emptyContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 24,
-    },
-    emptyTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        color: '#2D1A46',
-        marginTop: 16,
-        marginBottom: 8,
-        textAlign: 'center',
-    },
-    emptyText: {
-        fontSize: 16,
-        color: '#666',
-        textAlign: 'center',
-        lineHeight: 22,
-    },
-    conversationsList: {
-        paddingHorizontal: 16,
-        paddingTop: 16,
-    },
-    conversationCard: {
-        backgroundColor: 'white',
-        borderRadius: 16,
-        padding: 16,
-        marginBottom: 12,
-        flexDirection: 'row',
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 2,
-    },
-    conversationLeft: {
-        position: 'relative',
-        marginRight: 12,
-    },
-    avatarContainer: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-    },
-    avatar: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 25,
-    },
-    avatarPlaceholder: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 25,
-        backgroundColor: '#2D1A46',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    unreadIndicator: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        width: 16,
-        height: 16,
-        borderRadius: 8,
-        backgroundColor: '#F4A896',
-        borderWidth: 2,
-        borderColor: 'white',
-    },
-    conversationContent: {
-        flex: 1,
-    },
-    conversationHeader: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 4,
-    },
-    providerName: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#2D1A46',
-        flex: 1,
-    },
-    messageTime: {
-        fontSize: 12,
-        color: '#666',
-        marginLeft: 8,
-    },
-    lastMessage: {
-        fontSize: 14,
-        color: '#666',
-        lineHeight: 18,
-    },
-    unreadMessage: {
-        fontWeight: '600',
-        color: '#2D1A46',
-    },
-    providerIndicator: {
-        fontSize: 14,
-        color: '#F4A896',
-    },
-});
-```
+**Size:** 0 bytes  
+*File is empty*
 
 ---
 
-### File: `app\(tabs)\my-bookings.tsx`
+### File: `app/(tabs)/my-bookings.tsx`
 
-**Size:** 17735 bytes  
+**Size:** 20403 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, RefreshControl } from 'react-native';
-import { Calendar, Clock, MapPin, DollarSign, X, Edit, CheckCircle, AlertTriangle } from 'lucide-react-native';
+import { Calendar, Clock, MapPin, DollarSign, X, Edit, CheckCircle, AlertTriangle, XCircle, RefreshCw } from 'lucide-react-native';
 import { useGetMyAppointmentsQuery, useCancelAppointmentMutation } from '@/store/services/appointmentApi';
 import { useTranslation } from 'react-i18next';
 
-type TabType = 'upcoming' | 'completed' | 'cancelled';
+type TabType = 'upcoming' | 'completed' | 'cancelled' | 'failed';
 
 export default function MyBookingsScreen() {
   const { t } = useTranslation();
@@ -8298,19 +8484,32 @@ export default function MyBookingsScreen() {
   const { data: allAppointments, isLoading, refetch, isFetching } = useGetMyAppointmentsQuery({});
   const [cancelAppointment, { isLoading: isCancelling }] = useCancelAppointmentMutation();
 
+  // Helper function to check if payment failed
+  const isPaymentFailed = (apt: any) => {
+    return apt.payment_status === 'failed' || apt.payment_status === 'expired';
+  };
+
   // Filter appointments based on active tab
   const appointments = React.useMemo(() => {
     if (!allAppointments) return [];
 
     switch (activeTab) {
       case 'upcoming':
+        // Exclude bookings with failed payments from upcoming
         return allAppointments.filter(apt =>
-          ['pending', 'confirmed', 'in_progress'].includes(apt.status)
+          ['pending', 'confirmed', 'in_progress'].includes(apt.status) &&
+          !isPaymentFailed(apt)
         );
       case 'completed':
-        return allAppointments.filter(apt => apt.status === 'completed');
+        // Only show completed bookings with successful payments
+        return allAppointments.filter(apt => 
+          apt.status === 'completed' && !isPaymentFailed(apt)
+        );
       case 'cancelled':
         return allAppointments.filter(apt => apt.status === 'cancelled');
+      case 'failed':
+        // Show bookings with failed or expired payments
+        return allAppointments.filter(apt => isPaymentFailed(apt));
       default:
         return allAppointments;
     }
@@ -8355,8 +8554,8 @@ export default function MyBookingsScreen() {
     );
   };
 
-  const handleReschedule = (appointmentId: string) => {
-    router.push(`/booking/reschedule?appointmentId=${appointmentId}` as any);
+  const handleViewAppointmentDetails = (appointmentId: string) => {
+    router.push(`/booking/status?appointmentId=${appointmentId}` as any);
   };
 
   const getStatusColor = (status: string) => {
@@ -8380,18 +8579,28 @@ export default function MyBookingsScreen() {
     return status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ');
   };
 
+  const failedCount = allAppointments?.filter(apt => isPaymentFailed(apt)).length || 0;
+
   const tabs: { id: TabType; label: string; icon: any; count?: number }[] = [
     {
       id: 'upcoming',
       label: t('upcoming') || 'Upcoming',
       icon: Calendar,
-      count: allAppointments?.filter(apt => ['pending', 'confirmed', 'in_progress'].includes(apt.status)).length || 0
+      count: allAppointments?.filter(apt => 
+        ['pending', 'confirmed', 'in_progress'].includes(apt.status) && !isPaymentFailed(apt)
+      ).length || 0
     },
     {
       id: 'completed',
       label: t('completed') || 'Completed',
       icon: CheckCircle,
-      count: allAppointments?.filter(apt => apt.status === 'completed').length || 0
+      count: allAppointments?.filter(apt => apt.status === 'completed' && !isPaymentFailed(apt)).length || 0
+    },
+    {
+      id: 'failed',
+      label: t('failed') || 'Failed',
+      icon: XCircle,
+      count: failedCount
     },
     {
       id: 'cancelled',
@@ -8453,17 +8662,19 @@ export default function MyBookingsScreen() {
             <Text style={styles.emptyTitle}>
               {activeTab === 'upcoming' && (t('noUpcomingBookings') || 'No upcoming bookings')}
               {activeTab === 'completed' && (t('noCompletedBookings') || 'No completed bookings')}
+              {activeTab === 'failed' && (t('noFailedBookings') || 'No failed bookings')}
               {activeTab === 'cancelled' && (t('noCancelledBookings') || 'No cancelled bookings')}
             </Text>
             <Text style={styles.emptyText}>
               {activeTab === 'upcoming' && (t('bookYourFirstService') || 'Book your first service to get started!')}
               {activeTab === 'completed' && (t('noCompletedBookingsYet') || 'No completed bookings yet.')}
+              {activeTab === 'failed' && (t('noFailedBookingsYet') || 'All your payments were successful!')}
               {activeTab === 'cancelled' && (t('noCancelledBookingsYet') || 'No cancelled bookings.')}
             </Text>
             {activeTab === 'upcoming' && (
               <TouchableOpacity
                 style={styles.browseButton}
-                onPress={() => router.push('/(tabs)/home')}
+                onPress={() => router.push('/(tabs)/home' as any)}
               >
                 <Text style={styles.browseButtonText}>{t('browseServices')}</Text>
               </TouchableOpacity>
@@ -8532,22 +8743,51 @@ export default function MyBookingsScreen() {
                   </View>
 
                   {appointment.payment_status && (
-                    <View style={styles.paymentStatus}>
-                      <Text style={styles.paymentStatusText}>
+                    <View style={[
+                      styles.paymentStatus,
+                      isPaymentFailed(appointment) && styles.paymentStatusFailed
+                    ]}>
+                      <Text style={[
+                        styles.paymentStatusText,
+                        isPaymentFailed(appointment) && styles.paymentStatusTextFailed
+                      ]}>
                         Payment: {appointment.payment_status.replace(/_/g, ' ')}
+                      </Text>
+                    </View>
+                  )}
+
+                  {isPaymentFailed(appointment) && (
+                    <View style={styles.paymentFailedBanner}>
+                      <XCircle color="#D32F2F" size={16} />
+                      <Text style={styles.paymentFailedText}>
+                        Payment failed - Please rebook this service
                       </Text>
                     </View>
                   )}
                 </View>
 
-                {(appointment.status === 'pending' || appointment.status === 'confirmed') && (
+                {/* Show rebook button for failed payments */}
+                {isPaymentFailed(appointment) && (
+                  <View style={styles.appointmentActions}>
+                    <TouchableOpacity
+                      style={styles.rebookButton}
+                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}` as any)}
+                    >
+                      <RefreshCw color="white" size={18} />
+                      <Text style={styles.rebookButtonText}>{t('rebook') || 'Rebook Service'}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {/* Only show actions for non-failed payments */}
+                {(appointment.status === 'pending' || appointment.status === 'confirmed') && !isPaymentFailed(appointment) && (
                   <View style={styles.appointmentActions}>
                     <TouchableOpacity
                       style={styles.rescheduleButton}
-                      onPress={() => handleReschedule(appointment.id)}
+                      onPress={() => handleViewAppointmentDetails(appointment.id)}
                     >
                       <Edit color="#2D1A46" size={18} />
-                      <Text style={styles.rescheduleButtonText}>{t('reschedule')}</Text>
+                      <Text style={styles.rescheduleButtonText}>{t('viewDetails')}</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -8561,7 +8801,7 @@ export default function MyBookingsScreen() {
                   </View>
                 )}
 
-                {appointment.status === 'completed' && (
+                {appointment.status === 'completed' && !isPaymentFailed(appointment) && (
                   <View style={styles.appointmentActions}>
                     <TouchableOpacity
                       style={styles.reviewButton}
@@ -8572,7 +8812,7 @@ export default function MyBookingsScreen() {
 
                     <TouchableOpacity
                       style={styles.bookAgainButton}
-                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}`)}
+                      onPress={() => router.push(`/service-detail?id=${appointment.service?.id}` as any)}
                     >
                       <Text style={styles.bookAgainButtonText}>{t('bookAgain')}</Text>
                     </TouchableOpacity>
@@ -8858,14 +9098,52 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: 'white',
   },
+  paymentStatusFailed: {
+    backgroundColor: '#FFEBEE',
+  },
+  paymentStatusTextFailed: {
+    color: '#D32F2F',
+  },
+  paymentFailedBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 12,
+    padding: 12,
+    backgroundColor: '#FFEBEE',
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#D32F2F',
+  },
+  paymentFailedText: {
+    fontSize: 13,
+    color: '#D32F2F',
+    fontWeight: '600',
+    flex: 1,
+  },
+  rebookButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: '#F4A896',
+  },
+  rebookButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: 'white',
+  },
 });
 ```
 
 ---
 
-### File: `app\(tabs)\notifications.tsx`
+### File: `app/(tabs)/notifications.tsx`
 
-**Size:** 8664 bytes  
+**Size:** 8370 bytes  
 ```tsx
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
@@ -9166,9 +9444,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\(tabs)\profile.tsx`
+### File: `app/(tabs)/profile.tsx`
 
-**Size:** 29612 bytes  
+**Size:** 28665 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState } from 'react';
@@ -9264,7 +9542,7 @@ export default function ProfileSettingsScreen() {
                         text: t('ok'),
                         onPress: () => {
                           dispatch(logoutAction());
-                          router.replace('/login');
+                          router.replace('/login' as any);
                         }
                       }
                     ]
@@ -9439,7 +9717,7 @@ export default function ProfileSettingsScreen() {
           style: 'destructive',
           onPress: () => {
             dispatch(logoutAction());
-            router.replace('/login');
+            router.replace('/login' as any);
           }
         }
       ]
@@ -9486,7 +9764,7 @@ export default function ProfileSettingsScreen() {
         {showProviderApplication && (
           <TouchableOpacity
             style={styles.providerCard}
-            onPress={() => router.push('/agent-profile-setup')}
+            onPress={() => router.push('/agent-profile-setup' as any)}
           >
             <View style={styles.providerIconContainer}>
               <Briefcase color="white" size={32} />
@@ -10142,9 +10420,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\(tabs)\providers.tsx`
+### File: `app/(tabs)/providers.tsx`
 
-**Size:** 9300 bytes  
+**Size:** 8982 bytes  
 ```tsx
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
@@ -10468,16 +10746,217 @@ const styles = StyleSheet.create({
 
 ---
 
-## Directory: `app\booking`
+## Directory: `app/booking`
 
-### File: `app\booking\choose-location.tsx`
+### File: `app/booking/booking-details.tsx`
 
-**Size:** 6286 bytes  
+**Size:** 6487 bytes  
+```tsx
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Alert } from 'react-native';
+import { ArrowLeft, CheckCircle2, Info } from 'lucide-react-native';
+import { useGetAppointmentDetailQuery } from '@/store/services/appointmentApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CustomTabBar from '../components/CustomTabBar';
+
+// Assuming your base URL is defined in your constants
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://mubakulifestyle.com/api/v1';
+
+export default function CompleteAppointmentScreen() {
+  const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
+  const { data: appointment, isLoading: appointmentLoading } = useGetAppointmentDetailQuery(appointmentId!);
+  const [isCompleting, setIsCompleting] = useState(false);
+
+  const handleCompleteAppointment = async () => {
+    Alert.alert(
+      'Confirm Completion',
+      'Are you sure you want to mark this appointment as completed? This will release the payment to the provider.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Yes, Complete',
+          onPress: async () => {
+            setIsCompleting(true);
+            try {
+              // Constructing the URL as per your requirement
+              const response = await fetch(`${BASE_URL}/appointments/${appointmentId}/complete/`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Accept-Language': (await AsyncStorage.getItem('user-language')) || 'en',
+                },
+                body: JSON.stringify({}),
+              });
+
+              if (!response.ok) {
+                throw new Error('Failed to complete appointment');
+              }
+
+              await response.json();
+
+              Alert.alert('Success', 'Appointment marked as completed!', [
+                { text: 'OK', onPress: () => {} }
+              ]);
+            } catch {
+              Alert.alert('Error', 'Could not complete the appointment. Please try again.');
+            } finally {
+              setIsCompleting(false);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  if (appointmentLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color="#2D1A46" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Complete Appointment</Text>
+          <View style={styles.placeholder} />
+        </View>
+
+        <View style={styles.content}>
+          <View style={styles.statusCard}>
+            <CheckCircle2 color="#4CAF50" size={64} strokeWidth={1.5} />
+            <Text style={styles.confirmText}>Finalize Service</Text>
+            <Text style={styles.descriptionText}>
+              Please confirm that the service for <Text style={styles.bold}>{appointment?.service?.name || 'this appointment'}</Text> has been performed.
+            </Text>
+          </View>
+
+          <View style={styles.infoBox}>
+            <Info color="#2D1A46" size={20} />
+            <View style={styles.infoTextContainer}>
+              <Text style={styles.infoLabel}>Payment Status</Text>
+              <Text style={styles.infoValue}>
+                Upon completion, {Number(appointment?.amount || 0).toFixed(2)} {appointment?.currency} will be released to {appointment?.provider?.full_name || 'the provider'}.
+              </Text>
+            </View>
+          </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.completeButton, isCompleting && styles.disabledButton]}
+              onPress={handleCompleteAppointment}
+              disabled={isCompleting}
+            >
+              {isCompleting ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.completeButtonText}>Mark as Completed</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  header: {
+    backgroundColor: '#F4A896',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  backButton: { padding: 8 },
+  headerTitle: { fontSize: 18, fontWeight: '600', color: 'white' },
+  placeholder: { width: 40 },
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  statusCard: {
+    backgroundColor: 'white',
+    width: '100%',
+    borderRadius: 24,
+    padding: 32,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 2,
+    marginBottom: 20,
+  },
+  confirmText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+    marginTop: 16,
+    marginBottom: 8,
+  },
+  descriptionText: {
+    fontSize: 15,
+    color: '#666',
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  bold: { fontWeight: 'bold', color: '#2D1A46' },
+  infoBox: {
+    flexDirection: 'row',
+    backgroundColor: '#E8E4ED',
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'flex-start',
+    width: '100%',
+  },
+  infoTextContainer: { marginLeft: 12, flex: 1 },
+  infoLabel: { fontSize: 14, fontWeight: 'bold', color: '#2D1A46', marginBottom: 2 },
+  infoValue: { fontSize: 13, color: '#4D3E63', lineHeight: 18 },
+  buttonContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  completeButton: {
+    backgroundColor: '#2D1A46',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  disabledButton: { backgroundColor: '#ccc' },
+  completeButtonText: { color: 'white', fontSize: 18, fontWeight: '600' },
+  centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+});
+```
+
+---
+
+### File: `app/booking/choose-location.tsx`
+
+**Size:** 6389 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import { ArrowLeft, Home, MapPin } from 'lucide-react-native';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function ChooseLocation() {
   const { agentId, date, time } = useLocalSearchParams();
@@ -10502,89 +10981,92 @@ export default function ChooseLocation() {
 
   const handleNext = () => {
     if (selectedLocation) {
-      router.push(`/booking/summary?agentId=${agentId}&date=${date}&time=${time}&location=${selectedLocation}`);
+      router.push(`/booking/summary?agentId=${agentId as string}&date=${date as string}&time=${time as string}&location=${selectedLocation}` as any);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Choose Location</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <View style={styles.content}>
-        <Text style={styles.subtitle}>Where would you like to receive the service?</Text>
-
-        <View style={styles.locationsContainer}>
-          {locations.map((location) => {
-            const IconComponent = location.icon;
-            return (
-              <TouchableOpacity
-                key={location.id}
-                style={[
-                  styles.locationCard,
-                  selectedLocation === location.id && styles.selectedLocationCard
-                ]}
-                onPress={() => setSelectedLocation(location.id)}
-              >
-                <View style={styles.locationHeader}>
-                  <View style={[
-                    styles.iconContainer,
-                    selectedLocation === location.id && styles.selectedIconContainer
-                  ]}>
-                    <IconComponent 
-                      color={selectedLocation === location.id ? 'white' : '#2D1A46'} 
-                      size={24} 
-                    />
-                  </View>
-                  <View style={styles.locationInfo}>
-                    <Text style={[
-                      styles.locationTitle,
-                      selectedLocation === location.id && styles.selectedLocationText
-                    ]}>
-                      {location.title}
-                    </Text>
-                    <Text style={[
-                      styles.locationDescription,
-                      selectedLocation === location.id && styles.selectedLocationDescription
-                    ]}>
-                      {location.description}
-                    </Text>
-                  </View>
-                </View>
-                <Text style={[
-                  styles.locationPrice,
-                  selectedLocation === location.id && styles.selectedLocationText
-                ]}>
-                  {location.price}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Choose Location</Text>
+          <View style={styles.placeholder} />
         </View>
-      </View>
 
-      {/* Next Button */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            !selectedLocation && styles.disabledButton
-          ]}
-          onPress={handleNext}
-          disabled={!selectedLocation}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <View style={styles.content}>
+          <Text style={styles.subtitle}>Where would you like to receive the service?</Text>
+
+          <View style={styles.locationsContainer}>
+            {locations.map((location) => {
+              const IconComponent = location.icon;
+              return (
+                <TouchableOpacity
+                  key={location.id}
+                  style={[
+                    styles.locationCard,
+                    selectedLocation === location.id && styles.selectedLocationCard
+                  ]}
+                  onPress={() => setSelectedLocation(location.id)}
+                >
+                  <View style={styles.locationHeader}>
+                    <View style={[
+                      styles.iconContainer,
+                      selectedLocation === location.id && styles.selectedIconContainer
+                    ]}>
+                      <IconComponent 
+                        color={selectedLocation === location.id ? 'white' : '#2D1A46'} 
+                        size={24} 
+                      />
+                    </View>
+                    <View style={styles.locationInfo}>
+                      <Text style={[
+                        styles.locationTitle,
+                        selectedLocation === location.id && styles.selectedLocationText
+                      ]}>
+                        {location.title}
+                      </Text>
+                      <Text style={[
+                        styles.locationDescription,
+                        selectedLocation === location.id && styles.selectedLocationDescription
+                      ]}>
+                        {location.description}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={[
+                    styles.locationPrice,
+                    selectedLocation === location.id && styles.selectedLocationText
+                  ]}>
+                    {location.price}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* Next Button */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              !selectedLocation && styles.disabledButton
+            ]}
+            onPress={handleNext}
+            disabled={!selectedLocation}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -10712,30 +11194,58 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\booking\payment-status.tsx`
+### File: `app/booking/payment-status.tsx`
 
-**Size:** 24704 bytes  
+**Size:** 31018 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ActivityIndicator, Animated, ScrollView, Alert, Share } from 'react-native';
-import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Receipt } from 'lucide-react-native';
+import { CheckCircle, XCircle, Clock, AlertCircle, Phone, RefreshCcw, Receipt, Calendar, Navigation } from 'lucide-react-native';
 import { useLazyGetPaymentStatusQuery } from '@/store/services/paymentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
 
 export default function PaymentStatusScreen() {
-  const { frontendToken, phoneNumber } = useLocalSearchParams<{
+  const { frontendToken, phoneNumber, serviceName, locationName, latitude, longitude } = useLocalSearchParams<{
     frontendToken: string;
     phoneNumber: string;
+    serviceName?: string;
+    locationName?: string;
+    latitude?: string;
+    longitude?: string;
   }>();
   const [getPaymentStatus, { data: payment, isLoading, error }] = useLazyGetPaymentStatusQuery();
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [hasExpired, setHasExpired] = useState(false);
+  const [pollingMessage, setPollingMessage] = useState('Processing payment, please wait…');
+  const [pollAttempts, setPollAttempts] = useState(0);
+  const [finalResult, setFinalResult] = useState<{
+    status: PaymentStatus;
+    errorCode: number | string | null;
+    errorMessage: string | null;
+    locked: boolean;
+  } | null>(null);
+  const finalResultRef = useRef<{
+    status: PaymentStatus;
+    errorCode: number | string | null;
+    errorMessage: string | null;
+    locked: boolean;
+  } | null>(null);
+  const MAX_POLL_ATTEMPTS = 40;
+  const TIMEOUT_SECONDS = 120;
   const pollingIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;
+
+  const stopTimer = () => {
+    if (timerIntervalRef.current) {
+      clearInterval(timerIntervalRef.current);
+      timerIntervalRef.current = null;
+    }
+  };
 
   useEffect(() => {
     if (!frontendToken) {
@@ -10754,27 +11264,75 @@ export default function PaymentStatusScreen() {
 
       let pollCount = 0;
       pollingIntervalRef.current = setInterval(async () => {
+        // Check if status is already locked - stop immediately
+        if (finalResultRef.current?.locked) {
+          console.log('[PaymentStatus] Status already locked, stopping poll');
+          stopPolling();
+          stopTimer();
+          return;
+        }
+
         pollCount++;
+        setPollAttempts(pollCount);
         console.log(`[PaymentStatus] Poll #${pollCount}`);
 
-        if (pollCount >= 60) {
-          console.log('[PaymentStatus] Max polling attempts reached');
+        if (pollCount >= MAX_POLL_ATTEMPTS) {
+          console.log('[PaymentStatus] Max polling attempts reached (2 minutes)');
+          setHasExpired(true);
+          const result = {
+            status: 'failed' as PaymentStatus,
+            errorCode: null,
+            errorMessage: 'Payment could not be confirmed. Please try again.',
+            locked: true,
+          };
+          finalResultRef.current = result;
+          setFinalResult(result);
+          setPollingMessage('Payment could not be confirmed. Please try again.');
           stopPolling();
+          stopTimer();
           return;
         }
 
         try {
           const result = await getPaymentStatus(frontendToken);
+          const paymentData = result.data as any;
 
-          if (result.data?.polling?.stop) {
-            console.log('[PaymentStatus] Stopping polling:', result.data.polling.reason);
+          const currentStatus = paymentData?.status;
+          const errCode = paymentData?.errorCode;
+          const errMsg = paymentData?.errorMessage;
+
+          console.log(`[PaymentStatus] Poll response - status: ${currentStatus}, errorCode: ${errCode}, errorMessage: ${errMsg}`);
+
+          // If status is NOT pending, stop polling immediately
+          if (currentStatus !== 'pending') {
+            console.log(`[PaymentStatus] Status is ${currentStatus}, stopping polling`);
+            console.log(`[PaymentStatus] Locking final result - code: ${errCode}, message: ${errMsg}`);
+            
+            // Lock EVERYTHING in one atomic operation
+            const result = {
+              status: currentStatus as PaymentStatus,
+              errorCode: errCode || null,
+              errorMessage: errMsg || null,
+              locked: true,
+            };
+            
+            // Set ref FIRST (synchronous), then state
+            finalResultRef.current = result;
+            setFinalResult(result);
+            
+            if (currentStatus === 'completed' && !errCode) {
+              setPollingMessage('Payment successful. Booking confirmed!');
+            } else {
+              setPollingMessage(errMsg || 'Payment could not be completed.');
+            }
+            
             stopPolling();
+            stopTimer();
+            return;
           }
 
-          if (result.data?.status === 'completed' || result.data?.status === 'failed') {
-            console.log('[PaymentStatus] Final status reached:', result.data.status);
-            stopPolling();
-          }
+          // Status is pending - continue polling
+          console.log('[PaymentStatus] Status is pending, continuing to poll...');
         } catch (err) {
           console.error('[PaymentStatus] Polling error:', err);
         }
@@ -10787,10 +11345,20 @@ export default function PaymentStatusScreen() {
       setTimeElapsed((prev) => {
         const newTime = prev + 1;
 
-        if (newTime >= 300) {
-          console.log('[PaymentStatus] Payment timeout reached (5 minutes)');
+        if (newTime >= TIMEOUT_SECONDS && !finalResultRef.current?.locked) {
+          console.log('[PaymentStatus] Payment timeout reached (2 minutes)');
           setHasExpired(true);
+          const result = {
+            status: 'failed' as PaymentStatus,
+            errorCode: null,
+            errorMessage: 'Payment could not be confirmed. Please try again.',
+            locked: true,
+          };
+          finalResultRef.current = result;
+          setFinalResult(result);
+          setPollingMessage('Payment could not be confirmed. Please try again.');
           stopPolling();
+          stopTimer();
         }
 
         return newTime;
@@ -10799,9 +11367,7 @@ export default function PaymentStatusScreen() {
 
     return () => {
       stopPolling();
-      if (timerIntervalRef.current) {
-        clearInterval(timerIntervalRef.current);
-      }
+      stopTimer();
     };
   }, [frontendToken, getPaymentStatus]);
 
@@ -10854,7 +11420,7 @@ export default function PaymentStatusScreen() {
   };
 
   const formatTimeRemaining = (seconds: number) => {
-    const remaining = Math.max(0, 300 - seconds);
+    const remaining = Math.max(0, TIMEOUT_SECONDS - seconds);
     const mins = Math.floor(remaining / 60);
     const secs = remaining % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -10888,8 +11454,17 @@ export default function PaymentStatusScreen() {
     }
   };
 
+  const getErrorTitle = (): string => {
+    return 'Payment Failed';
+  };
+
   const getStatusTitle = (status: PaymentStatus) => {
-    if (hasExpired) return 'Payment Timeout';
+    const paymentData: any = payment;
+    if (paymentData?.errorCode || paymentData?.gateway?.error_code) {
+      return 'Payment Failed';
+    }
+
+    if (hasExpired && status !== 'completed') return 'Payment Timeout';
 
     switch (status) {
       case 'completed':
@@ -10905,12 +11480,28 @@ export default function PaymentStatusScreen() {
     }
   };
 
+  const formatAmount = () => {
+    if (!payment?.amount) return '';
+    const currency = payment.amount.currency || 'XAF';
+    const total = payment.amount.total;
+    if (total === undefined || total === null || isNaN(total)) return '';
+    return `${currency} ${Math.round(total).toLocaleString()}`;
+  };
+
   const getStatusMessage = () => {
-    if (hasExpired) {
-      return 'The payment request has expired. Please try booking again.';
+    const paymentData: any = payment;
+    const hasError = paymentData?.errorCode || paymentData?.gateway?.error_code;
+    const errMsg = paymentData?.errorMessage || paymentData?.gateway?.error_message || paymentData?.failure_details?.message;
+
+    if (hasError) {
+      return errMsg || 'Payment rejected. Please try again.';
     }
 
-    if (!payment) return 'Connecting to payment gateway...';
+    if (hasExpired && payment?.status !== 'completed') {
+      return 'Payment could not be confirmed. Please retry.';
+    }
+
+    if (!payment) return pollingMessage;
 
     if (payment.status === 'pending') {
       return `Check your phone (${phoneNumber}) for a USSD prompt. Dial the code shown on your screen to authorize the payment.`;
@@ -10920,16 +11511,19 @@ export default function PaymentStatusScreen() {
       return 'Your payment is being processed. This usually takes 30-60 seconds. Please wait...';
     }
 
-    if (payment.status === 'completed') {
-      return `Payment of ${payment.amount.currency} ${Math.round(payment.amount.total)} completed successfully! Your booking is confirmed and the provider has been notified.`;
+    if (payment.status === 'completed' && !hasError) {
+      const amount = formatAmount();
+      if (amount) {
+        return `Payment of ${amount} completed successfully! Your booking is confirmed and the provider has been notified.`;
+      }
+      return 'Payment successful. Booking confirmed!';
     }
 
     if (payment.status === 'failed') {
-      const failureMessage = payment.failure_details?.message || 'Payment could not be completed';
-      return failureMessage;
+      return errMsg || 'Payment could not be completed';
     }
 
-    return payment.instructions?.message || 'Setting up your payment...';
+    return payment.instructions?.message || pollingMessage;
   };
 
   const getStatusColor = (status: PaymentStatus) => {
@@ -10947,16 +11541,29 @@ export default function PaymentStatusScreen() {
     }
   };
 
-  const handleRetry = () => {
-    router.back();
+  const handleViewMyBookings = () => {
+    router.replace('/(tabs)/my-bookings' as any);
   };
 
-  const handleViewBooking = () => {
-    if (payment?.id) {
-      // Navigate to transaction details page instead of booking status
-      router.replace(`/booking/transaction-details?paymentId=${payment.id}` as any);
+  const handleViewRoute = () => {
+    const lat = latitude;
+    const lng = longitude;
+    const locName = locationName || 'Service Location';
+    const svcName = serviceName || payment?.appointment?.service || 'Service';
+
+    if (lat && lng) {
+      router.push({
+        pathname: '/view-location',
+        params: {
+          latitude: String(lat),
+          longitude: String(lng),
+          locationName: locName,
+          serviceName: svcName,
+          showRoute: 'true',
+        },
+      } as any);
     } else {
-      router.replace('/(tabs)/my-bookings' as any);
+      Alert.alert('Location Unavailable', 'Service location is not available for this booking.');
     }
   };
 
@@ -10968,6 +11575,10 @@ export default function PaymentStatusScreen() {
     console.log('[PaymentStatus] Contact support requested');
     console.log('[PaymentStatus] Payment ID:', payment?.id);
     console.log('[PaymentStatus] Frontend Token:', frontendToken?.substring(0, 8) + '...');
+  };
+
+  const handleRetryPayment = () => {
+    router.back();
   };
 
   const handleViewReceipt = () => {
@@ -11069,179 +11680,184 @@ Thank you for using Mu Baku Lifestyle!
     );
   }
 
-  const status = payment?.status || 'pending';
-  const isProcessing = status === 'pending' || status === 'processing';
-  const isCompleted = status === 'completed';
-  const isFailed = status === 'failed' || hasExpired;
-  const statusColor = getStatusColor(status);
+  // CRITICAL: Once locked, use ONLY the frozen finalResult - completely ignore payment object
+  const isLocked = finalResultRef.current?.locked || finalResult?.locked;
+  const frozenResult = finalResultRef.current || finalResult;
+  
+  const status: PaymentStatus = isLocked && frozenResult ? frozenResult.status : (payment?.status || 'pending');
+  const errorCode = isLocked && frozenResult ? frozenResult.errorCode : null;
+  const errorMessage = isLocked && frozenResult ? frozenResult.errorMessage : null;
+  const hasErrorCode = !!errorCode;
+  
+  const isCompleted = status === 'completed' && !hasErrorCode;
+  const isProcessing = !isLocked && (status === 'pending' || status === 'processing') && !hasExpired;
+  const isFailed = isLocked ? (status === 'failed' || hasErrorCode || hasExpired) : (status === 'failed' || (hasExpired && !isCompleted));
+  const statusColor = getStatusColor(isFailed ? 'failed' : status);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView
-        style={styles.scrollContent}
-        contentContainerStyle={styles.scrollContentContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.content}>
-          <View style={styles.iconContainer}>
-            {hasExpired ? <XCircle color="#EF4444" size={80} /> : getStatusIcon(status)}
-          </View>
-
-          <Text style={[styles.title, { color: isFailed ? '#EF4444' : '#2D1A46' }]}>
-            {getStatusTitle(status)}
-          </Text>
-
-          <Text style={styles.message}>{getStatusMessage()}</Text>
-
-          {isProcessing && !hasExpired && (
-            <>
-              <View style={styles.timerContainer}>
-                <Clock color="#666" size={20} />
-                <Text style={styles.timerText}>Elapsed: {formatTime(timeElapsed)}</Text>
-                <Text style={styles.timerDivider}>•</Text>
-                <Text style={styles.timerText}>Timeout: {formatTimeRemaining(timeElapsed)}</Text>
-              </View>
-
-              {payment?.state_machine && (
-                <View style={styles.progressContainer}>
-                  <View style={styles.progressBar}>
-                    <View
-                      style={[
-                        styles.progressFill,
-                        { width: `${payment.state_machine.progress}%`, backgroundColor: statusColor }
-                      ]}
-                    />
-                  </View>
-                  <Text style={styles.progressText}>
-                    {payment.state_machine.current.replace(/_/g, ' ').toUpperCase()}
-                  </Text>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView
+          style={styles.scrollContent}
+          contentContainerStyle={styles.scrollContentContainer}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.content}>
+            {isFailed ? (
+              <>
+                <View style={styles.iconContainer}>
+                  <XCircle color="#B91C1C" size={80} />
                 </View>
-              )}
-
-              <View style={styles.instructionCard}>
-                <View style={styles.instructionHeader}>
-                  <Phone color="#2D1A46" size={24} />
-                  <Text style={styles.instructionTitle}>
-                    {status === 'pending' ? 'Action Required' : 'Processing'}
-                  </Text>
-                </View>
-                <Text style={styles.instructionText}>
-                  {status === 'pending'
-                    ? `Look for a USSD popup on ${phoneNumber}. Enter your mobile money PIN to approve the payment.`
-                    : 'Please wait while we confirm your payment with the mobile money provider.'}
+                <Text style={[styles.title, { color: '#B91C1C' }]}>
+                  {hasExpired && !payment?.gateway?.error_code && !payment?.failure_details ? 'Payment Timeout' : 'Payment Failed'}
                 </Text>
-                {status === 'pending' && (
-                  <Text style={styles.instructionNote}>
-                    💡 Tip: If you don&apos;t see a prompt, dial *126# (MTN) or #150# (Orange) and check for pending transactions.
+
+                <View style={styles.fancyErrorCard}>
+                  <Text style={styles.fancyErrorMessageLarge}>
+                    {errorMessage || (hasExpired ? 'The request timed out while waiting for payment confirmation. Please check your balance and try again.' : 'Payment could not be completed.')}
                   </Text>
+                  {errorCode && (
+                    <View style={styles.errorCodeContainer}>
+                      <Text style={styles.errorCodeText}>
+                        ERROR CODE: {errorCode}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.failedActions}>
+                  <TouchableOpacity style={styles.retryButton} onPress={handleRetryPayment}>
+                    <RefreshCcw color="white" size={20} />
+                    <Text style={styles.retryButtonText}>Try Again</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.goHomeButton} onPress={handleGoHome}>
+                    <Text style={styles.goHomeButtonText}>Go to Home</Text>
+                  </TouchableOpacity>
+                </View>
+              </>
+            ) : (
+              <>
+                <View style={styles.iconContainer}>
+                  {getStatusIcon(status)}
+                </View>
+
+                <Text style={[styles.title, { color: '#2D1A46' }]}>
+                  {getStatusTitle(status)}
+                </Text>
+
+                <Text style={styles.message}>{getStatusMessage()}</Text>
+
+                {isProcessing && !hasExpired && (
+                  <>
+                    <View style={styles.timerContainer}>
+                      <Clock color="#666" size={20} />
+                      <Text style={styles.timerText}>Elapsed: {formatTime(timeElapsed)}</Text>
+                      <Text style={styles.timerDivider}>•</Text>
+                      <Text style={styles.timerText}>Timeout: {formatTimeRemaining(timeElapsed)}</Text>
+                    </View>
+
+                    <View style={styles.progressContainer}>
+                      <View style={styles.progressBar}>
+                        <View
+                          style={[
+                            styles.progressFill,
+                            { width: `${Math.min((pollAttempts / MAX_POLL_ATTEMPTS) * 100, 100)}%`, backgroundColor: statusColor }
+                          ]}
+                        />
+                      </View>
+                      <Text style={styles.progressText}>
+                        {payment?.state_machine?.current?.replace(/_/g, ' ').toUpperCase() || `VERIFYING (${pollAttempts}/${MAX_POLL_ATTEMPTS})`}
+                      </Text>
+                    </View>
+
+                    <View style={styles.instructionCard}>
+                      <View style={styles.instructionHeader}>
+                        <Phone color="#2D1A46" size={24} />
+                        <Text style={styles.instructionTitle}>
+                          {status === 'pending' ? 'Action Required' : 'Processing'}
+                        </Text>
+                      </View>
+                      <Text style={styles.instructionText}>
+                        {status === 'pending'
+                          ? `Look for a USSD popup on ${phoneNumber}. Enter your mobile money PIN to approve the payment.`
+                          : 'Please wait while we confirm your payment with the mobile money provider.'}
+                      </Text>
+                      {status === 'pending' && (
+                        <Text style={styles.instructionNote}>
+                          💡 Tip: If you don&apos;t see a prompt, dial *126# (MTN) or #150# (Orange) and check for pending transactions.
+                        </Text>
+                      )}
+                    </View>
+                  </>
                 )}
-              </View>
-            </>
-          )}
 
-          {isCompleted && payment?.gateway && (
-            <View style={styles.detailsCard}>
-              <Text style={styles.detailsTitle}>Payment Details</Text>
-              {payment.gateway.transaction_id && (
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>Transaction ID</Text>
-                  <Text style={styles.detailValue} numberOfLines={1}>
-                    {payment.gateway.transaction_id}
-                  </Text>
-                </View>
-              )}
-              {payment.gateway.receipt_number && (
-                <View style={styles.detailRow}>
-                  <Text style={styles.detailLabel}>Receipt Number</Text>
-                  <Text style={styles.detailValue}>{payment.gateway.receipt_number}</Text>
-                </View>
-              )}
-              <View style={styles.detailRow}>
-                <Text style={styles.detailLabel}>Amount Paid</Text>
-                <Text style={[styles.detailValue, styles.amountValue]}>
-                  {payment.amount.currency} {Math.round(payment.amount.total)}
-                </Text>
-              </View>
-              {payment.escrow && (
-                <View style={styles.escrowInfo}>
-                  <Text style={styles.escrowText}>
-                    🔒 Funds held securely in escrow until service completion
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
+                {isCompleted && payment?.gateway && (
+                  <View style={styles.detailsCard}>
+                    <Text style={styles.detailsTitle}>Payment Details</Text>
+                    {payment.gateway.transaction_id && (
+                      <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>Transaction ID</Text>
+                        <Text style={styles.detailValue} numberOfLines={1}>
+                          {payment.gateway.transaction_id}
+                        </Text>
+                      </View>
+                    )}
+                    {payment.gateway.receipt_number && (
+                      <View style={styles.detailRow}>
+                        <Text style={styles.detailLabel}>Receipt Number</Text>
+                        <Text style={styles.detailValue}>{payment.gateway.receipt_number}</Text>
+                      </View>
+                    )}
+                    <View style={styles.detailRow}>
+                      <Text style={styles.detailLabel}>Amount Paid</Text>
+                      <Text style={[styles.detailValue, styles.amountValue]}>
+                        {payment.amount.currency} {Math.round(payment.amount.total)}
+                      </Text>
+                    </View>
+                    {payment.escrow && (
+                      <View style={styles.escrowInfo}>
+                        <Text style={styles.escrowText}>
+                          🔒 Funds held securely in escrow until service completion
+                        </Text>
+                      </View>
+                    )}
+                  </View>
+                )}
 
-          {isFailed && payment?.failure_details && (
-            <View style={styles.errorCard}>
-              <View style={styles.errorHeader}>
-                <AlertCircle size={24} color="#EF4444" />
-                <Text style={styles.errorTitle}>
-                  {payment.failure_details.code.replace(/_/g, ' ')}
-                </Text>
-              </View>
-              <Text style={styles.errorMessage}>{payment.failure_details.message}</Text>
-              {payment.failure_details.retry_allowed && (
-                <Text style={styles.retryHint}>
-                  ✓ You can try again with the same or a different payment method
-                </Text>
-              )}
-            </View>
-          )}
+                {isCompleted && (
+                  <View style={styles.successActions}>
+                    <TouchableOpacity
+                      style={styles.viewBookingsButton}
+                      onPress={handleViewMyBookings}
+                    >
+                      <Calendar color="white" size={20} />
+                      <Text style={styles.viewBookingsButtonText}>View My Bookings</Text>
+                    </TouchableOpacity>
 
-          {hasExpired && (
-            <View style={styles.errorCard}>
-              <View style={styles.errorHeader}>
-                <Clock size={24} color="#EF4444" />
-                <Text style={styles.errorTitle}>Payment Expired</Text>
-              </View>
-              <Text style={styles.errorMessage}>
-                The payment request expired after 5 minutes. No charges were made to your account.
-              </Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+                    <TouchableOpacity
+                      style={styles.viewRouteButton}
+                      onPress={handleViewRoute}
+                    >
+                      <Navigation color="white" size={20} />
+                      <Text style={styles.viewRouteButtonText}>Navigate to Location</Text>
+                    </TouchableOpacity>
 
-      <View style={styles.buttonContainer}>
-        {isCompleted && (
-          <View accessible={false}>
-            <TouchableOpacity style={styles.primaryButton} onPress={handleViewBooking} accessible={true}>
-              <Text style={styles.primaryButtonText}>View My Booking</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.actionButton, styles.receiptButton]}
-              onPress={handleViewReceipt}
-              accessible={true}
-            >
-              <Receipt color="white" size={20} />
-              <Text style={styles.actionButtonText}>Receipt</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
-              <Text style={styles.secondaryButtonText}>Back to Home</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.viewReceiptButton}
+                      onPress={handleViewReceipt}
+                    >
+                      <Receipt color="#2D1A46" size={20} />
+                      <Text style={styles.viewReceiptButtonText}>View Receipt</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            )}
           </View>
-        )}
-
-        {isFailed && (
-          <View accessible={false}>
-            <TouchableOpacity style={styles.primaryButton} onPress={handleRetry} accessible={true}>
-              <Text style={styles.primaryButtonText}>Try Again</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleGoHome} accessible={true}>
-              <Text style={styles.secondaryButtonText}>Back to Home</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {isProcessing && !hasExpired && (
-          <View style={styles.waitingContainer}>
-            <ActivityIndicator size="small" color="#2D1A46" />
-            <Text style={styles.waitingText}>Please do not close this screen</Text>
-          </View>
-        )}
-      </View>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -11272,6 +11888,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 40,
     alignItems: 'center',
+    paddingBottom: 40,
   },
   iconContainer: {
     marginBottom: 24,
@@ -11420,36 +12037,50 @@ const styles = StyleSheet.create({
     color: '#10B981',
     textAlign: 'center',
   },
-  errorCard: {
+  fancyErrorCard: {
     width: '100%',
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#FFF1F2',
     borderRadius: 16,
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 24,
     borderWidth: 1,
-    borderColor: '#FCA5A5',
+    borderColor: '#FFB8BF',
   },
-  errorHeader: {
+  fancyErrorHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
-  errorTitle: {
+  fancyErrorTitle: {
     fontSize: 18,
-    color: '#DC2626',
     fontWeight: 'bold',
+    color: '#B91C1C',
     marginLeft: 12,
     textTransform: 'capitalize',
   },
-  errorMessage: {
+  fancyErrorMessage: {
     fontSize: 15,
     color: '#991B1B',
     lineHeight: 22,
-    marginBottom: 8,
+    marginBottom: 16,
   },
-  retryHint: {
-    fontSize: 13,
-    color: '#DC2626',
+  fancyErrorMessageLarge: {
+    fontSize: 18,
+    color: '#991B1B',
+    lineHeight: 28,
+    marginBottom: 16,
+    fontWeight: '500',
+  },
+  errorCodeContainer: {
+    backgroundColor: '#FEE2E2',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignSelf: 'flex-start',
+  },
+  errorCodeText: {
+    fontSize: 14,
+    color: '#991B1B',
     fontWeight: '600',
   },
   errorDetails: {
@@ -11497,41 +12128,89 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  waitingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 16,
-  },
-  waitingText: {
-    fontSize: 14,
-    color: '#666',
-    marginLeft: 12,
-    fontWeight: '500',
-  },
-  actionButtonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  successActions: {
+    width: '100%',
     gap: 12,
-    marginBottom: 12,
+    marginTop: 8,
+    marginBottom: 24,
   },
-  actionButton: {
-    flex: 1,
+  viewBookingsButton: {
+    backgroundColor: '#2D1A46',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 14,
+    gap: 10,
+    paddingVertical: 16,
     borderRadius: 12,
-    gap: 8,
   },
-  receiptButton: {
-    backgroundColor: '#10B981',
-  },
-  locationButton: {
-    backgroundColor: '#3B82F6',
-  },
-  actionButtonText: {
+  viewBookingsButtonText: {
     color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  viewRouteButton: {
+    backgroundColor: '#10B981',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  viewRouteButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  viewReceiptButton: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+  },
+  viewReceiptButtonText: {
+    color: '#2D1A46',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  failedActions: {
+    width: '100%',
+    gap: 12,
+    marginTop: 8,
+    marginBottom: 24,
+  },
+  retryButton: {
+    backgroundColor: '#2D1A46',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  goHomeButton: {
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+  },
+  goHomeButtonText: {
+    color: '#2D1A46',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -11540,16 +12219,17 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\booking\payment.tsx`
+### File: `app/booking/payment.tsx`
 
-**Size:** 34188 bytes  
+**Size:** 33585 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, ActivityIndicator, Platform, Image } from 'react-native';
 import { ArrowLeft, Smartphone, Info, AlertCircle } from 'lucide-react-native';
 import { useCreateAppointmentMutation } from '@/store/services/appointmentApi';
 import { useGetPaymentMethodsQuery, useInitiatePaymentMutation } from '@/store/services/paymentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function PaymentScreen() {
   const { serviceId, date, startTime, endTime, amount, currency } = useLocalSearchParams<{
@@ -11747,17 +12427,22 @@ export default function PaymentScreen() {
       console.log('[Payment] Payment initiated successfully');
       console.log('[Payment] Payment response:', JSON.stringify(paymentResponse, null, 2));
 
-      // Handle response structure
-      const paymentData = paymentResponse;
+      // Handle both response structures: { payment: {...} } or direct {...}
+      const paymentData = paymentResponse?.payment || paymentResponse;
 
-      if (!paymentData || !paymentData.frontend_token) {
+      // Get frontend_token from the response
+      const frontendToken = paymentData?.frontend_token;
+
+      if (!frontendToken) {
+        console.error('[Payment] Response structure:', Object.keys(paymentResponse || {}));
+        console.error('[Payment] Payment data structure:', Object.keys(paymentData || {}));
         throw new Error('Frontend token not found in payment response');
       }
 
-      console.log('[Payment] Frontend token:', paymentData.frontend_token.substring(0, 8) + '...');
+      console.log('[Payment] Frontend token:', frontendToken.substring(0, 8) + '...');
 
       // Navigate to payment status page for polling
-      router.replace(`/booking/payment-status?frontendToken=${paymentData.frontend_token}&phoneNumber=${encodeURIComponent(phoneNumber)}` as any);
+      router.replace(`/booking/payment-status?frontendToken=${frontendToken}&phoneNumber=${encodeURIComponent(phoneNumber)}` as any);
     } catch (error: any) {
       console.error('[Payment] Error:', error?.status || 'Unknown');
 
@@ -11866,283 +12551,276 @@ export default function PaymentScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Payment</Text>
-        <View style={styles.placeholder} />
-      </View>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Payment</Text>
+          <View style={styles.placeholder} />
+        </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {isLoadingMethods ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="#2D1A46" />
-            <Text style={styles.loadingText}>Loading payment methods...</Text>
-          </View>
-        ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
-          <View style={styles.errorContainer}>
-            <AlertCircle color="#EF4444" size={48} />
-            <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
-            <Text style={styles.errorMessage}>
-              Unable to load payment methods. Please check your connection and try again.
-            </Text>
-            <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
-              <Text style={styles.retryButtonText}>Retry</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.retryButton, { marginTop: 12, backgroundColor: '#666' }]} onPress={() => router.back()}>
-              <Text style={styles.retryButtonText}>Go Back</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <>
-            <View style={styles.stepIndicator}>
-              <View style={[styles.stepBadge, styles.stepBadgeActive]}>
-                <Text style={styles.stepNumber}>1</Text>
-              </View>
-              <View style={styles.stepLine} />
-              <View style={[styles.stepBadge, paymentMethod ? styles.stepBadgeActive : styles.stepBadgeInactive]}>
-                <Text style={[styles.stepNumber, !paymentMethod && styles.stepNumberInactive]}>2</Text>
-              </View>
-              <View style={styles.stepLine} />
-              <View style={[styles.stepBadge, styles.stepBadgeInactive]}>
-                <Text style={[styles.stepNumber, styles.stepNumberInactive]}>3</Text>
-              </View>
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {isLoadingMethods ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color="#2D1A46" />
+              <Text style={styles.loadingText}>Loading payment methods...</Text>
             </View>
-
-            <View style={styles.section}>
-              <View style={styles.sectionHeader}>
-                <View style={styles.stepNumberCircle}>
-                  <Text style={styles.stepNumberText}>1</Text>
+          ) : !paymentMethodsData?.methods || paymentMethodsData.methods.length === 0 ? (
+            <View style={styles.errorContainer}>
+              <AlertCircle color="#EF4444" size={48} />
+              <Text style={styles.errorTitle}>Payment Methods Unavailable</Text>
+              <Text style={styles.errorMessage}>
+                Unable to load payment methods. Please check your connection and try again.
+              </Text>
+              <TouchableOpacity style={styles.retryButton} onPress={() => refetch()}>
+                <Text style={styles.retryButtonText}>Retry</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.retryButton, { marginTop: 12, backgroundColor: '#666' }]} onPress={() => router.back()}>
+                <Text style={styles.retryButtonText}>Go Back</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <>
+              <View style={styles.stepIndicator}>
+                <View style={[styles.stepBadge, styles.stepBadgeActive]}>
+                  <Text style={styles.stepNumber}>1</Text>
                 </View>
-                <View style={styles.sectionTitleContainer}>
-                  <Text style={styles.sectionTitle}>Choose Payment Method</Text>
-                  <Text style={styles.sectionSubtitle}>Select MTN or Orange Money</Text>
+                <View style={styles.stepLine} />
+                <View style={[styles.stepBadge, paymentMethod ? styles.stepBadgeActive : styles.stepBadgeInactive]}>
+                  <Text style={[styles.stepNumber, !paymentMethod && styles.stepNumberInactive]}>2</Text>
+                </View>
+                <View style={styles.stepLine} />
+                <View style={[styles.stepBadge, styles.stepBadgeInactive]}>
+                  <Text style={[styles.stepNumber, styles.stepNumberInactive]}>3</Text>
                 </View>
               </View>
 
-              <View style={styles.methodsContainer}>
-                {paymentMethodsData?.methods?.map((method) => (
-                  <TouchableOpacity
-                    key={method.method_code}
-                    style={[
-                      styles.methodCard,
-                      paymentMethod === method.method_code && styles.selectedMethodCard
-                    ]}
-                    onPress={() => {
-                      setPaymentMethod(method.method_code);
-                      setPhoneNumber('');
-                    }}
-                  >
-                    <View style={styles.methodHeader}>
-                      <View style={[
-                        styles.methodIconContainer,
-                        paymentMethod === method.method_code && styles.selectedMethodIcon
-                      ]}>
-                        <Smartphone
-                          color={paymentMethod === method.method_code ? 'white' : '#2D1A46'}
-                          size={24}
-                        />
-                      </View>
-                      <View style={styles.methodInfo}>
-                        <Text style={[
-                          styles.methodTitle,
-                          paymentMethod === method.method_code && styles.selectedMethodText
-                        ]}>
-                          {method.display_name}
-                        </Text>
-                        <Text style={[
-                          styles.methodDescription,
-                          paymentMethod === method.method_code && styles.selectedMethodDescription
-                        ]}>
-                          Mobile money payment
-                        </Text>
-                        <Text style={[
-                          styles.methodLimits,
-                          paymentMethod === method.method_code && styles.selectedMethodDescription
-                        ]}>
-                          Limit: {method.limits.currency} {Math.round(method.limits.min_amount)} - {Math.round(method.limits.max_amount)}
-                        </Text>
-                      </View>
-                      {paymentMethod === method.method_code && (
-                        <View style={styles.selectedCheckmark}>
-                          <Text style={styles.checkmarkText}>✓</Text>
-                        </View>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </View>
-
-            {paymentMethod && selectedMethodData && (
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.stepNumberCircle}>
-                    <Text style={styles.stepNumberText}>2</Text>
+                    <Text style={styles.stepNumberText}>1</Text>
                   </View>
                   <View style={styles.sectionTitleContainer}>
-                    <Text style={styles.sectionTitle}>Enter Your Mobile Number</Text>
-                    <Text style={styles.sectionSubtitle}>Enter the {selectedMethodData.display_name} number for payment</Text>
+                    <Text style={styles.sectionTitle}>Choose Payment Method</Text>
+                    <Text style={styles.sectionSubtitle}>Select MTN or Orange Money</Text>
                   </View>
                 </View>
 
-                <View style={styles.card}>
-                  <View style={styles.inputContainer}>
-                    <Text style={styles.label}>
-                      {selectedMethodData.configuration.service_number_label}
-                    </Text>
-                    <TextInput
-                      style={[
-                        styles.input,
-                        phoneError ? styles.inputError : null
-                      ]}
-                      value={phoneNumber}
-                      onChangeText={handlePhoneChange}
-                      placeholder={selectedMethodData.configuration.example}
-                      keyboardType="phone-pad"
-                      maxLength={9}
-                      autoComplete="tel"
-                      textContentType="telephoneNumber"
-                    />
-                    {phoneError ? (
-                      <View style={styles.inputErrorContainer}>
-                        <AlertCircle size={16} color="#EF4444" />
-                        <Text style={styles.errorText}>{phoneError}</Text>
-                      </View>
-                    ) : (
-                      <Text style={styles.hint}>
-                        {selectedMethodData.configuration.service_number_hint}
-                      </Text>
-                    )}
-                  </View>
-
-                  <View style={styles.infoBox}>
-                    <View style={styles.infoRow}>
-                      <Info size={20} color="#2D1A46" />
-                      <Text style={styles.infoText}>
-                        You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber ? `237${phoneNumber}` : '(your number)'}</Text>. Enter your PIN to authorize the payment.
-                      </Text>
-                    </View>
-                    <Text style={styles.processingTime}>
-                      ⏱️ Usually takes {selectedMethodData.metadata.estimated_processing_time}
-                    </Text>
-                  </View>
-
-                  <View style={styles.agreementContainer}>
+                <View style={styles.methodsContainer}>
+                  {paymentMethodsData?.methods?.map((method) => (
                     <TouchableOpacity
-                      style={styles.checkbox}
-                      onPress={() => setAgreementAccepted(!agreementAccepted)}
+                      key={method.method_code}
+                      style={[
+                        styles.methodCard,
+                        paymentMethod === method.method_code && styles.selectedMethodCard
+                      ]}
+                      onPress={() => {
+                        setPaymentMethod(method.method_code);
+                        setPhoneNumber('');
+                      }}
                     >
-                      <View style={[
-                        styles.checkboxBox,
-                        agreementAccepted && styles.checkboxBoxChecked
-                      ]}>
-                        {agreementAccepted && (
-                          <Text style={styles.checkmark}>✓</Text>
+                      <View style={styles.methodHeader}>
+                        <View style={[
+                          styles.methodIconContainer,
+                          paymentMethod === method.method_code && styles.selectedMethodIcon
+                        ]}>
+                          {method.metadata?.icon_url ? (
+                            <Image 
+                              source={{ 
+                                uri: method.metadata.icon_url.startsWith('http') 
+                                  ? method.metadata.icon_url 
+                                  : `https://mubakulifestyle.com${method.metadata.icon_url}`
+                              }} 
+                              style={{ width: 24, height: 24 }}
+                              resizeMode="contain"
+                              onError={(e) => console.log('[Payment] Image load error:', e.nativeEvent.error)}
+                            />
+                          ) : (
+                            // Fallback icon if no image URL
+                            <Smartphone 
+                              size={24} 
+                              color={paymentMethod === method.method_code ? 'white' : '#2D1A46'} 
+                            />
+                          )}
+                        </View>
+                        <View style={styles.methodInfo}>
+                          <Text style={[
+                            styles.methodTitle,
+                            paymentMethod === method.method_code && styles.selectedMethodText
+                          ]}>
+                            {method.display_name}
+                          </Text>
+                          <Text style={[
+                            styles.methodDescription,
+                            paymentMethod === method.method_code && styles.selectedMethodDescription
+                          ]}>
+                            Mobile money payment
+                          </Text>
+                          <Text style={[
+                            styles.methodLimits,
+                            paymentMethod === method.method_code && styles.selectedMethodDescription
+                          ]}>
+                            Limit: {method.limits.currency} {Math.round(method.limits.min_amount)} - {Math.round(method.limits.max_amount)}
+                          </Text>
+                        </View>
+                        {paymentMethod === method.method_code && (
+                          <View style={styles.selectedCheckmark}>
+                            <Text style={styles.checkmarkText}>✓</Text>
+                          </View>
                         )}
                       </View>
-                      <Text style={styles.checkboxLabel}>
-                        I understand that payment will be held securely until service completion
-                      </Text>
                     </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {paymentMethod && selectedMethodData && (
+                <View style={styles.section}>
+                  <View style={styles.sectionHeader}>
+                    <View style={styles.stepNumberCircle}>
+                      <Text style={styles.stepNumberText}>2</Text>
+                    </View>
+                    <View style={styles.sectionTitleContainer}>
+                      <Text style={styles.sectionTitle}>Enter Your Mobile Number</Text>
+                      <Text style={styles.sectionSubtitle}>Enter the {selectedMethodData.display_name} number for payment</Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.card}>
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.label}>
+                        {selectedMethodData.configuration.service_number_label}
+                      </Text>
+                      <TextInput
+                        style={[
+                          styles.input,
+                          phoneError ? styles.inputError : null
+                        ]}
+                        value={phoneNumber}
+                        onChangeText={handlePhoneChange}
+                        placeholder={selectedMethodData.configuration.example}
+                        keyboardType="phone-pad"
+                        maxLength={9}
+                        autoComplete="tel"
+                        textContentType="telephoneNumber"
+                      />
+                      {phoneError ? (
+                        <View style={styles.inputErrorContainer}>
+                          <AlertCircle size={16} color="#EF4444" />
+                          <Text style={styles.errorText}>{phoneError}</Text>
+                        </View>
+                      ) : (
+                        <Text style={styles.hint}>
+                          {selectedMethodData.configuration.service_number_hint}
+                        </Text>
+                      )}
+                    </View>
+
+                    <View style={styles.infoBox}>
+                      <View style={styles.infoRow}>
+                        <Info size={20} color="#2D1A46" />
+                        <Text style={styles.infoText}>
+                          You will receive a prompt on your phone <Text style={styles.phoneHighlight}>{phoneNumber ? `237${phoneNumber}` : '(your number)'}</Text>. Enter your PIN to authorize the payment.
+                        </Text>
+                      </View>
+                      <Text style={styles.processingTime}>
+                        ⏱️ Usually takes {selectedMethodData.metadata.estimated_processing_time}
+                      </Text>
+                    </View>
+
+                    <View style={styles.agreementContainer}>
+                      <TouchableOpacity
+                        style={styles.checkbox}
+                        onPress={() => setAgreementAccepted(!agreementAccepted)}
+                      >
+                        <View style={[
+                          styles.checkboxBox,
+                          agreementAccepted && styles.checkboxBoxChecked
+                        ]}>
+                          {agreementAccepted && (
+                            <Text style={styles.checkmark}>✓</Text>
+                          )}
+                        </View>
+                        <Text style={styles.checkboxLabel}>
+                          I understand that payment will be held securely until service completion
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
-            )}
-          </>
-        )}
-
-        {!isLoadingMethods && paymentMethodsData?.methods && (
-          <View style={styles.totalCard}>
-            <View style={styles.sectionHeader}>
-              <View style={styles.stepNumberCircle}>
-                <Text style={styles.stepNumberText}>3</Text>
-              </View>
-              <View style={styles.sectionTitleContainer}>
-                <Text style={styles.totalCardTitle}>Payment Summary</Text>
-              </View>
-            </View>
-            <View style={styles.totalRow}>
-              <Text style={styles.totalLabel}>Service Price</Text>
-              <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
-            </View>
-            {selectedMethodData && (
-              <>
-                <View style={styles.totalRow}>
-                  <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
-                  <Text style={styles.feeAmount}>
-                    {currency} {Math.round(calculateGatewayFee())}
-                  </Text>
-                </View>
-                <View style={styles.divider} />
-                <View style={styles.totalRow}>
-                  <Text style={styles.grandTotalLabel}>Total Amount</Text>
-                  <Text style={styles.grandTotalAmount}>
-                    {currency} {Math.round(calculateTotalAmount())}
-                  </Text>
-                </View>
-                <Text style={styles.escrowNote}>
-                  💰 Funds held securely in escrow until service completed
-                </Text>
-              </>
-            )}
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Quick Summary & Pay Button - Positioned higher for better Android UX */}
-      {paymentMethod && selectedMethodData && (
-        <View style={styles.quickSummaryContainer}>
-          <View style={styles.quickSummaryCard}>
-            <View style={styles.quickSummaryRow}>
-              <Text style={styles.quickSummaryLabel}>Service:</Text>
-              <Text style={styles.quickSummaryValue}>{amount} {currency}</Text>
-            </View>
-            <View style={styles.quickSummaryRow}>
-              <Text style={styles.quickSummaryLabel}>Gateway Fee:</Text>
-              <Text style={styles.quickSummaryValue}>{currency} {Math.round(calculateGatewayFee())}</Text>
-            </View>
-            <View style={styles.quickSummaryDivider} />
-            <View style={styles.quickSummaryRow}>
-              <Text style={styles.quickSummaryTotalLabel}>Total:</Text>
-              <Text style={styles.quickSummaryTotalValue}>{currency} {Math.round(calculateTotalAmount())}</Text>
-            </View>
-            <Text style={styles.quickSummaryNote}>
-              💰 Funds held securely in escrow until service completion
-            </Text>
-          </View>
-        </View>
-      )}
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          ref={payButtonRef}
-          style={[
-            styles.payButton,
-            (!paymentMethod || isLoading) && styles.disabledButton
-          ]}
-          onPress={handlePayment}
-          disabled={!paymentMethod || isLoading}
-          accessible={!isLoading}
-        >
-          {isLoading ? (
-            <View style={styles.loadingButtonContent}>
-              <ActivityIndicator color="white" />
-              <Text style={styles.payButtonText}>Processing...</Text>
-            </View>
-          ) : selectedMethodData ? (
-            <Text style={styles.payButtonText}>Pay {currency} {Math.round(calculateTotalAmount())}</Text>
-          ) : (
-            <Text style={styles.payButtonText}>Select Payment Method</Text>
+              )}
+            </>
           )}
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+
+          {!isLoadingMethods && paymentMethodsData?.methods && (
+            <View style={styles.totalCard}>
+              <View style={styles.sectionHeader}>
+                <View style={styles.stepNumberCircle}>
+                  <Text style={styles.stepNumberText}>3</Text>
+                </View>
+                <View style={styles.sectionTitleContainer}>
+                  <Text style={styles.totalCardTitle}>Payment Summary</Text>
+                </View>
+              </View>
+              <View style={styles.totalRow}>
+                <Text style={styles.totalLabel}>Service Price</Text>
+                <Text style={styles.totalAmount}>{currency} {Math.round(parseFloat(amount))}</Text>
+              </View>
+              {selectedMethodData && (
+                <>
+                  <View style={styles.totalRow}>
+                    <Text style={styles.feeLabel}>Gateway Fee ({selectedMethodData.fees.rate}%)</Text>
+                    <Text style={styles.feeAmount}>
+                      {currency} {Math.round(calculateGatewayFee())}
+                    </Text>
+                  </View>
+                  <View style={styles.divider} />
+                  <View style={styles.totalRow}>
+                    <Text style={styles.grandTotalLabel}>Total Amount</Text>
+                    <Text style={styles.grandTotalAmount}>
+                      {currency} {Math.round(calculateTotalAmount())}
+                    </Text>
+                  </View>
+                  <Text style={styles.escrowNote}>
+                    💰 Funds held securely in escrow until service completed
+                  </Text>
+                </>
+              )}
+            </View>
+          )}
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            ref={payButtonRef}
+            style={[
+              styles.payButton,
+              (!paymentMethod || isLoading) && styles.disabledButton
+            ]}
+            onPress={handlePayment}
+            disabled={!paymentMethod || isLoading}
+            accessible={!isLoading}
+          >
+            {isLoading ? (
+              <View style={styles.loadingButtonContent}>
+                <ActivityIndicator color="white" />
+                <Text style={styles.payButtonText}>Processing...</Text>
+              </View>
+            ) : selectedMethodData ? (
+              <Text style={styles.payButtonText}>Pay {currency} {Math.round(calculateTotalAmount())}</Text>
+            ) : (
+              <Text style={styles.payButtonText}>Select Payment Method</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -12422,200 +13100,201 @@ const styles = StyleSheet.create({
     color: '#2D1A46',
     lineHeight: 20,
   },
-});
-color: '#F4A896',
+  phoneHighlight: {
+    fontWeight: 'bold' as const,
+    color: '#F4A896',
   },
-processingTime: {
-  fontSize: 12,
+  processingTime: {
+    fontSize: 12,
     color: '#666',
-      marginTop: 8,
+    marginTop: 8,
   },
-agreementContainer: {
-  marginTop: 16,
+  agreementContainer: {
+    marginTop: 16,
   },
-checkbox: {
-  flexDirection: 'row',
+  checkbox: {
+    flexDirection: 'row',
     alignItems: 'flex-start',
   },
-checkboxBox: {
-  width: 24,
+  checkboxBox: {
+    width: 24,
     height: 24,
-      borderRadius: 6,
-        borderWidth: 2,
-          borderColor: '#2D1A46',
-            marginRight: 12,
-              justifyContent: 'center',
-                alignItems: 'center',
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#2D1A46',
+    marginRight: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-checkboxBoxChecked: {
-  backgroundColor: '#2D1A46',
+  checkboxBoxChecked: {
+    backgroundColor: '#2D1A46',
   },
-checkmark: {
-  color: 'white',
+  checkmark: {
+    color: 'white',
     fontSize: 16,
-      fontWeight: 'bold',
+    fontWeight: 'bold',
   },
-checkboxLabel: {
-  flex: 1,
+  checkboxLabel: {
+    flex: 1,
     fontSize: 14,
-      color: '#2D1A46',
-        lineHeight: 20,
+    color: '#2D1A46',
+    lineHeight: 20,
   },
-feeLabel: {
-  fontSize: 14,
+  feeLabel: {
+    fontSize: 14,
     color: '#666',
   },
-feeAmount: {
-  fontSize: 14,
+  feeAmount: {
+    fontSize: 14,
     fontWeight: '600',
-      color: '#666',
+    color: '#666',
   },
-divider: {
-  height: 1,
+  divider: {
+    height: 1,
     backgroundColor: '#E5E5E5',
-      marginVertical: 12,
+    marginVertical: 12,
   },
-totalCard: {
-  backgroundColor: 'white',
+  totalCard: {
+    backgroundColor: 'white',
     borderRadius: 16,
-      padding: 20,
-        marginBottom: 20,
-          shadowColor: '#000',
-            shadowOffset: {
-    width: 0,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
       height: 2,
     },
-  shadowOpacity: 0.1,
+    shadowOpacity: 0.1,
     shadowRadius: 3.84,
-      elevation: 5,
+    elevation: 5,
   },
-totalCardTitle: {
-  fontSize: 18,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-grandTotalLabel: {
-  fontSize: 18,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-grandTotalAmount: {
-  fontSize: 24,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-escrowNote: {
-  fontSize: 12,
-    color: '#10B981',
-      marginTop: 12,
-        textAlign: 'center',
-  },
-loadingButtonContent: {
-  flexDirection: 'row',
-    alignItems: 'center',
-      gap: 12,
-  },
-totalRow: {
-  flexDirection: 'row',
-    justifyContent: 'space-between',
-      alignItems: 'center',
-  },
-totalLabel: {
-  fontSize: 18,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-totalAmount: {
-  fontSize: 24,
-    fontWeight: 'bold',
-      color: '#2D1A46',
-  },
-buttonContainer: {
-  paddingHorizontal: 24,
-    paddingVertical: 20,
-      paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
-        backgroundColor: 'white',
-          borderTopWidth: 1,
-            borderTopColor: '#E5E5E5',
-  },
-payButton: {
-  backgroundColor: '#2D1A46',
-    paddingVertical: 16,
-      borderRadius: 12,
-        alignItems: 'center',
-  },
-disabledButton: {
-  backgroundColor: '#ccc',
-  },
-payButtonText: {
-  color: 'white',
+  totalCardTitle: {
     fontSize: 18,
-      fontWeight: '600',
+    fontWeight: 'bold',
+    color: '#2D1A46',
   },
-quickSummaryContainer: {
-  backgroundColor: 'white',
-    borderTopWidth: 1,
-      borderTopColor: '#E5E5E5',
-        paddingHorizontal: 24,
-          paddingVertical: 16,
+  grandTotalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
   },
-quickSummaryCard: {
-  backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-      padding: 16,
-        borderWidth: 1,
-          borderColor: '#E5E5E5',
+  grandTotalAmount: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2D1A46',
   },
-quickSummaryRow: {
-  flexDirection: 'row',
+  escrowNote: {
+    fontSize: 12,
+    color: '#10B981',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  loadingButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  totalRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
-      alignItems: 'center',
-        marginBottom: 8,
+    alignItems: 'center',
   },
-quickSummaryLabel: {
-  fontSize: 14,
+  totalLabel: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  totalAmount: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#2D1A46',
+  },
+  buttonContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+  },
+  payButton: {
+    backgroundColor: '#2D1A46',
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  payButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  quickSummaryContainer: {
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+  },
+  quickSummaryCard: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+  },
+  quickSummaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  quickSummaryLabel: {
+    fontSize: 14,
     color: '#666',
   },
-quickSummaryValue: {
-  fontSize: 14,
+  quickSummaryValue: {
+    fontSize: 14,
     fontWeight: '600',
-      color: '#2D1A46',
+    color: '#2D1A46',
   },
-quickSummaryDivider: {
-  height: 1,
+  quickSummaryDivider: {
+    height: 1,
     backgroundColor: '#E5E5E5',
-      marginVertical: 8,
+    marginVertical: 8,
   },
-quickSummaryTotalLabel: {
-  fontSize: 16,
+  quickSummaryTotalLabel: {
+    fontSize: 16,
     fontWeight: 'bold',
-      color: '#2D1A46',
+    color: '#2D1A46',
   },
-quickSummaryTotalValue: {
-  fontSize: 18,
+  quickSummaryTotalValue: {
+    fontSize: 18,
     fontWeight: 'bold',
-      color: '#F4A896',
+    color: '#F4A896',
   },
-quickSummaryNote: {
-  fontSize: 12,
+  quickSummaryNote: {
+    fontSize: 12,
     color: '#10B981',
-      textAlign: 'center',
-        marginTop: 8,
+    textAlign: 'center',
+    marginTop: 8,
   },
 });
 ```
 
 ---
 
-### File: `app\booking\reschedule.tsx`
+### File: `app/booking/reschedule.tsx`
 
-**Size:** 11256 bytes  
+**Size:** 11282 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
 import { useGetAppointmentDetailQuery, useRescheduleAppointmentMutation, useGetAvailableSlotsQuery } from '@/store/services/appointmentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function RescheduleAppointmentScreen() {
   const { appointmentId } = useLocalSearchParams<{ appointmentId: string }>();
@@ -12701,129 +13380,131 @@ export default function RescheduleAppointmentScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Reschedule Appointment</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <ScrollView style={styles.content}>
-        <View style={styles.appointmentInfo}>
-          <Text style={styles.serviceName}>{appointment.service?.name}</Text>
-          <Text style={styles.currentSchedule}>
-            Current: {new Date(appointment.scheduled_for).toLocaleDateString()} at{' '}
-            {new Date(appointment.scheduled_for).toLocaleTimeString('en-US', {
-              hour: '2-digit',
-              minute: '2-digit'
-            })}
-          </Text>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Reschedule Appointment</Text>
+          <View style={styles.placeholder} />
         </View>
 
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Calendar color="#2D1A46" size={24} />
-            <Text style={styles.sectionTitle}>Choose Date</Text>
+        <ScrollView style={styles.content}>
+          <View style={styles.appointmentInfo}>
+            <Text style={styles.serviceName}>{appointment.service?.name}</Text>
+            <Text style={styles.currentSchedule}>
+              Current: {new Date(appointment.scheduled_for).toLocaleDateString()} at{' '}
+              {new Date(appointment.scheduled_for).toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </Text>
           </View>
-          
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
-            {dates.map((date) => (
-              <TouchableOpacity
-                key={date.id}
-                style={[
-                  styles.dateCard,
-                  selectedDate === date.date && styles.selectedDateCard,
-                ]}
-                onPress={() => {
-                  setSelectedDate(date.date);
-                  setSelectedTime(null);
-                }}
-              >
-                <Text style={[
-                  styles.dateDay,
-                  selectedDate === date.date && styles.selectedDateText,
-                ]}>
-                  {date.day}
-                </Text>
-                <Text style={[
-                  styles.dateNumber,
-                  selectedDate === date.date && styles.selectedDateText,
-                ]}>
-                  {new Date(date.date).getDate()}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
 
-        {selectedDate && (
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Clock color="#2D1A46" size={24} />
-              <Text style={styles.sectionTitle}>Available Times</Text>
+              <Calendar color="#2D1A46" size={24} />
+              <Text style={styles.sectionTitle}>Choose Date</Text>
             </View>
             
-            {slotsLoading ? (
-              <View style={styles.loadingContainer}>
-                <ActivityIndicator size="small" color="#2D1A46" />
-              </View>
-            ) : availableTimesForDate.length === 0 ? (
-              <View style={styles.noSlotsContainer}>
-                <Text style={styles.noSlotsText}>No available times for this date</Text>
-              </View>
-            ) : (
-              <View style={styles.timeGrid}>
-                {availableTimesForDate.map((slot, index) => {
-                  const isSelected = selectedTime?.start === slot.start_time && selectedTime?.end === slot.end_time;
-                  return (
-                    <TouchableOpacity
-                      key={index}
-                      style={[
-                        styles.timeCard,
-                        isSelected && styles.selectedTimeCard,
-                      ]}
-                      onPress={() => setSelectedTime({ start: slot.start_time, end: slot.end_time })}
-                    >
-                      <Text style={[
-                        styles.timeText,
-                        isSelected && styles.selectedTimeText,
-                      ]}>
-                        {new Date(slot.start_time).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            )}
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
+              {dates.map((date) => (
+                <TouchableOpacity
+                  key={date.id}
+                  style={[
+                    styles.dateCard,
+                    selectedDate === date.date && styles.selectedDateCard,
+                  ]}
+                  onPress={() => {
+                    setSelectedDate(date.date);
+                    setSelectedTime(null);
+                  }}
+                >
+                  <Text style={[
+                    styles.dateDay,
+                    selectedDate === date.date && styles.selectedDateText,
+                  ]}>
+                    {date.day}
+                  </Text>
+                  <Text style={[
+                    styles.dateNumber,
+                    selectedDate === date.date && styles.selectedDateText,
+                  ]}>
+                    {new Date(date.date).getDate()}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
-        )}
-      </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.rescheduleButton,
-            (!selectedDate || !selectedTime || isRescheduling) && styles.disabledButton
-          ]}
-          onPress={handleReschedule}
-          disabled={!selectedDate || !selectedTime || isRescheduling}
-        >
-          {isRescheduling ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text style={styles.rescheduleButtonText}>Confirm Reschedule</Text>
+          {selectedDate && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Clock color="#2D1A46" size={24} />
+                <Text style={styles.sectionTitle}>Available Times</Text>
+              </View>
+              
+              {slotsLoading ? (
+                <View style={styles.loadingContainer}>
+                  <ActivityIndicator size="small" color="#2D1A46" />
+                </View>
+              ) : availableTimesForDate.length === 0 ? (
+                <View style={styles.noSlotsContainer}>
+                  <Text style={styles.noSlotsText}>No available times for this date</Text>
+                </View>
+              ) : (
+                <View style={styles.timeGrid}>
+                  {availableTimesForDate.map((slot, index) => {
+                    const isSelected = selectedTime?.start === slot.start_time && selectedTime?.end === slot.end_time;
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        style={[
+                          styles.timeCard,
+                          isSelected && styles.selectedTimeCard,
+                        ]}
+                        onPress={() => setSelectedTime({ start: slot.start_time, end: slot.end_time })}
+                      >
+                        <Text style={[
+                          styles.timeText,
+                          isSelected && styles.selectedTimeText,
+                        ]}>
+                          {new Date(slot.start_time).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
+            </View>
           )}
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[
+                styles.rescheduleButton,
+                (!selectedDate || !selectedTime || isRescheduling) && styles.disabledButton
+              ]}
+              onPress={handleReschedule}
+              disabled={!selectedDate || !selectedTime || isRescheduling}
+            >
+              {isRescheduling ? (
+                <ActivityIndicator color="white" />
+              ) : (
+                <Text style={styles.rescheduleButtonText}>Confirm Reschedule</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -13007,14 +13688,15 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\booking\select-datetime.tsx`
+### File: `app/booking/select-datetime.tsx`
 
-**Size:** 8545 bytes  
+**Size:** 8584 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function SelectDateTime() {
   const { serviceId } = useLocalSearchParams<{ serviceId: string }>();
@@ -13072,109 +13754,112 @@ export default function SelectDateTime() {
       const [hours] = selectedTime.split(':');
       const endHour = parseInt(hours) + 1;
       const endTime = `${endHour.toString().padStart(2, '0')}:00:00`;
-      router.push(`/booking/summary?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedTime}&endTime=${endTime}`);
+      router.push(`/booking/summary?serviceId=${serviceId}&date=${selectedDate}&startTime=${selectedTime}&endTime=${endTime}` as any);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity 
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Select Date & Time</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <ScrollView style={styles.content}>
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Calendar color="#2D1A46" size={24} />
-            <Text style={styles.sectionTitle}>Choose Date</Text>
-          </View>
-          
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
-            {availableDates.map((date) => {
-              const dateStr = date.toISOString().split('T')[0];
-              return (
-                <TouchableOpacity
-                  key={dateStr}
-                  style={[
-                    styles.dateCard,
-                    selectedDate === dateStr && styles.selectedDateCard,
-                  ]}
-                  onPress={() => {
-                    setSelectedDate(dateStr);
-                    setSelectedTime('');
-                  }}
-                >
-                  <Text style={[
-                    styles.dateDay,
-                    selectedDate === dateStr && styles.selectedDateText,
-                  ]}>
-                    {formatDate(dateStr)}
-                  </Text>
-                  <Text style={[
-                    styles.dateNumber,
-                    selectedDate === dateStr && styles.selectedDateText,
-                  ]}>
-                    {date.getDate()}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity 
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Select Date & Time</Text>
+          <View style={styles.placeholder} />
         </View>
 
-        {selectedDate && (
+        <ScrollView style={styles.content}>
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Clock color="#2D1A46" size={24} />
-              <Text style={styles.sectionTitle}>Choose Time</Text>
+              <Calendar color="#2D1A46" size={24} />
+              <Text style={styles.sectionTitle}>Choose Date</Text>
             </View>
             
-            <View style={styles.timeGrid}>
-              {timeSlots.map((slot) => {
-                const isSelected = selectedTime === slot;
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dateScroll}>
+              {availableDates.map((date) => {
+                const dateStr = date.toISOString().split('T')[0];
                 return (
                   <TouchableOpacity
-                    key={slot}
+                    key={dateStr}
                     style={[
-                      styles.timeCard,
-                      isSelected && styles.selectedTimeCard,
+                      styles.dateCard,
+                      selectedDate === dateStr && styles.selectedDateCard,
                     ]}
-                    onPress={() => setSelectedTime(slot)}
+                    onPress={() => {
+                      setSelectedDate(dateStr);
+                      setSelectedTime('');
+                    }}
                   >
                     <Text style={[
-                      styles.timeText,
-                      isSelected && styles.selectedTimeText,
+                      styles.dateDay,
+                      selectedDate === dateStr && styles.selectedDateText,
                     ]}>
-                      {formatTime(slot)}
+                      {formatDate(dateStr)}
+                    </Text>
+                    <Text style={[
+                      styles.dateNumber,
+                      selectedDate === dateStr && styles.selectedDateText,
+                    ]}>
+                      {date.getDate()}
                     </Text>
                   </TouchableOpacity>
                 );
               })}
-            </View>
+            </ScrollView>
           </View>
-        )}
-      </ScrollView>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={[
-            styles.nextButton,
-            (!selectedDate || !selectedTime) && styles.disabledButton
-          ]}
-          onPress={handleNext}
-          disabled={!selectedDate || !selectedTime}
-        >
-          <Text style={styles.nextButtonText}>Next</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          {selectedDate && (
+            <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Clock color="#2D1A46" size={24} />
+                <Text style={styles.sectionTitle}>Choose Time</Text>
+              </View>
+              
+              <View style={styles.timeGrid}>
+                {timeSlots.map((slot) => {
+                  const isSelected = selectedTime === slot;
+                  return (
+                    <TouchableOpacity
+                      key={slot}
+                      style={[
+                        styles.timeCard,
+                        isSelected && styles.selectedTimeCard,
+                      ]}
+                      onPress={() => setSelectedTime(slot)}
+                    >
+                      <Text style={[
+                        styles.timeText,
+                        isSelected && styles.selectedTimeText,
+                      ]}>
+                        {formatTime(slot)}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          )}
+        </ScrollView>
+
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.nextButton,
+              (!selectedDate || !selectedTime) && styles.disabledButton
+            ]}
+            onPress={handleNext}
+            disabled={!selectedDate || !selectedTime}
+          >
+            <Text style={styles.nextButtonText}>Next</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -13323,15 +14008,16 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\booking\status.tsx`
+### File: `app/booking/status.tsx`
 
-**Size:** 20407 bytes  
+**Size:** 19997 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform, Alert } from 'react-native';
 import { CheckCircle, Clock, Star, Receipt, MapPin, XCircle } from 'lucide-react-native'; // Added Receipt, MapPin, XCircle
 import { useGetAppointmentDetailQuery, useCancelAppointmentMutation, useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function BookingStatus() {
   const { appointmentId, paymentSuccess, paymentMessage } = useLocalSearchParams<{
@@ -13358,7 +14044,7 @@ export default function BookingStatus() {
     console.log('Review submitted:', { rating, review, appointmentId });
     // In a real app, you would send this review to your API
     Alert.alert('Thank you!', 'Your review has been submitted.');
-    router.push('/(tabs)/home');
+    router.push('/(tabs)/home' as any);
   };
 
   const handleCompleteService = async () => {
@@ -13470,231 +14156,225 @@ export default function BookingStatus() {
   const showEscrowMessage = appointment.payment_status === 'held_in_escrow' && !isCompleted && !isCancelled;
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.content}>
-        {/* Payment Success Message */}
-        {paymentSuccess === 'true' && paymentMessage && (
-          <View style={styles.paymentSuccessContainer}>
-            <CheckCircle color="#10B981" size={48} />
-            <Text style={styles.paymentSuccessTitle}>Payment Successful!</Text>
-            <Text style={styles.paymentSuccessMessage}>{decodeURIComponent(paymentMessage)}</Text>
-          </View>
-        )}
-
-        {/* Success Message */}
-        <View style={styles.successContainer}>
-          {isCompleted ? (
-            <CheckCircle color="#4CAF50" size={64} />
-          ) : isCancelled ? (
-            <XCircle color="#EF4444" size={64} />
-          ) : (
-            <CheckCircle color="#4CAF50" size={64} />
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <ScrollView style={styles.content}>
+          {/* Payment Success Message */}
+          {paymentSuccess === 'true' && paymentMessage && (
+            <View style={styles.successContainer}>
+              <CheckCircle color="#10B981" size={48} />
+              <Text style={styles.successTitle}>Payment Successful!</Text>
+              <Text style={styles.successMessage}>{decodeURIComponent(paymentMessage)}</Text>
+            </View>
           )}
 
-          <Text style={styles.successTitle}>
-            {isCompleted ? 'Service Completed!' : isCancelled ? 'Appointment Cancelled' : 'Booking Confirmed!'}
-          </Text>
-          <Text style={styles.successMessage}>
-            {isCompleted ? 'Hope you enjoyed your service!' : isCancelled ? 'Your appointment has been cancelled as requested.' : 'Your appointment has been successfully booked.'}
-          </Text>
-        </View>
+          {/* Success Message */}
+          <View style={styles.successContainer}>
+            {isCompleted ? (
+              <CheckCircle color="#4CAF50" size={64} />
+            ) : isCancelled ? (
+              <XCircle color="#EF4444" size={64} />
+            ) : (
+              <CheckCircle color="#4CAF50" size={64} />
+            )}
 
-        {/* Receipt Card */}
-        <View style={styles.card}>
-          <View style={styles.receiptHeader}>
-            <Receipt color="#2D1A46" size={24} />
-            <Text style={styles.cardTitle}>Transaction Receipt</Text>
+            <Text style={styles.successTitle}>
+              {isCompleted ? 'Service Completed!' : isCancelled ? 'Appointment Cancelled' : 'Booking Confirmed!'}
+            </Text>
+            <Text style={styles.successMessage}>
+              {isCompleted ? 'Hope you enjoyed your service!' : isCancelled ? 'Your appointment has been cancelled as requested.' : 'Your appointment has been successfully booked.'}
+            </Text>
           </View>
 
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Service:</Text>
-            <Text style={styles.detailValue}>{appointment.service?.name || 'N/A'}</Text>
+          {/* Receipt Card */}
+          <View style={styles.card}>
+            <View style={styles.receiptHeader}>
+              <Receipt color="#2D1A46" size={24} />
+              <Text style={styles.cardTitle}>Transaction Receipt</Text>
+            </View>
+
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Service:</Text>
+              <Text style={styles.detailValue}>{appointment.service?.name || 'N/A'}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Provider:</Text>
+              <Text style={styles.detailValue}>{appointment.provider?.business_name || appointment.provider?.name || 'N/A'}</Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Date:</Text>
+              <Text style={styles.detailValue}>
+                {new Date(appointment.scheduled_for).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Time:</Text>
+              <Text style={styles.detailValue}>
+                {formatTime(appointment.scheduled_for)} - {formatTime(appointment.scheduled_until)}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Status:</Text>
+              <Text style={[styles.detailValue, styles.statusText]}>
+                {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1).replace(/_/g, ' ')}
+              </Text>
+            </View>
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Total Paid:</Text>
+              <Text style={[styles.detailValue, styles.amountValue]}>
+                {appointment.currency} {Number(appointment.amount || 0).toFixed(2)}
+              </Text>
+            </View>
+
+            {showEscrowMessage && (
+              <View style={styles.escrowInfo}>
+                <Text style={styles.escrowText}>
+                  🔒 Funds held securely in escrow until service completion
+                </Text>
+              </View>
+            )}
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Provider:</Text>
-            <Text style={styles.detailValue}>{appointment.provider?.business_name || appointment.provider?.name || 'N/A'}</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Date:</Text>
-            <Text style={styles.detailValue}>
-              {new Date(appointment.scheduled_for).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
+
+          {/* Progress Tracker */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Service Progress</Text>
+            <View style={styles.progressContainer}>
+              {statusSteps.map((step, index) => {
+                const IconComponent = step.icon;
+                return (
+                  <View key={step.id} style={styles.progressStep}>
+                    <View style={styles.stepIndicator}>
+                      <View style={[
+                        styles.stepCircle,
+                        step.completed && styles.completedStep
+                      ]}>
+                        <IconComponent
+                          color={step.completed ? 'white' : '#ccc'}
+                          size={20}
+                        />
+                      </View>
+                      {index < statusSteps.length - 1 && (
+                        <View style={[
+                          styles.stepLine,
+                          step.completed && styles.completedLine
+                        ]} />
+                      )}
+                    </View>
+                    <Text style={[
+                      styles.stepTitle,
+                      step.completed && styles.completedStepTitle
+                    ]}>
+                      {step.title}
+                    </Text>
+                  </View>
+                );
               })}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Time:</Text>
-            <Text style={styles.detailValue}>
-              {formatTime(appointment.scheduled_for)} - {formatTime(appointment.scheduled_until)}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Status:</Text>
-            <Text style={[styles.detailValue, styles.statusText]}>
-              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1).replace(/_/g, ' ')}
-            </Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Total Paid:</Text>
-            <Text style={[styles.detailValue, styles.amountValue]}>
-              {appointment.currency} {appointment.amount.toFixed(2)}
-            </Text>
+            </View>
           </View>
 
-          {showEscrowMessage && (
-            <View style={styles.escrowInfo}>
-              <Text style={styles.escrowText}>
-                🔒 Funds held securely in escrow until service completion
+          {/* Action Buttons */}
+          {(canComplete || canCancel) && (
+            <View style={styles.actionButtonsCard}>
+              {canComplete && (
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.completeButton]}
+                  onPress={handleCompleteService}
+                  disabled={isCompleting}
+                >
+                  {isCompleting ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <>
+                      <CheckCircle color="white" size={20} />
+                      <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+              {canCancel && (
+                <TouchableOpacity
+                  style={[styles.actionButton, styles.cancelButton]}
+                  onPress={handleCancelBooking}
+                  disabled={isCancelling}
+                >
+                  {isCancelling ? (
+                    <ActivityIndicator color="white" />
+                  ) : (
+                    <>
+                      <XCircle color="white" size={20} />
+                      <Text style={styles.actionButtonText}>Cancel Appointment</Text>
+                    </>
+                  )}
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
+
+          {/* View Location Button - Only shown for booked appointments with location */}
+          {appointment && !isCancelled && ((appointment as any).latitude && (appointment as any).longitude) && (
+            <View style={styles.locationCard}>
+              <TouchableOpacity
+                style={styles.viewLocationButton}
+                onPress={() => {
+                  const locationName = (appointment as any).location || `${appointment.provider?.city || 'Service'} Location`;
+                  const serviceName = appointment.service?.name || 'Service';
+                  router.push(`/view-location?latitude=${(appointment as any).latitude}&longitude=${(appointment as any).longitude}&locationName=${encodeURIComponent(locationName)}&serviceName=${encodeURIComponent(serviceName)}` as any);
+                }}
+              >
+                <MapPin color="white" size={20} />
+                <Text style={styles.viewLocationButtonText}>View Live Location & Directions</Text>
+              </TouchableOpacity>
+              <Text style={styles.locationHint}>
+                Get real-time directions to your service location
               </Text>
             </View>
           )}
-        </View>
 
-        {/* Progress Tracker */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Service Progress</Text>
-          <View style={styles.progressContainer}>
-            {statusSteps.map((step, index) => {
-              const IconComponent = step.icon;
-              return (
-                <View key={step.id} style={styles.progressStep}>
-                  <View style={styles.stepIndicator}>
-                    <View style={[
-                      styles.stepCircle,
-                      step.completed && styles.completedStep
-                    ]}>
-                      <IconComponent
-                        color={step.completed ? 'white' : '#ccc'}
-                        size={20}
-                      />
-                    </View>
-                    {index < statusSteps.length - 1 && (
-                      <View style={[
-                        styles.stepLine,
-                        step.completed && styles.completedLine
-                      ]} />
-                    )}
-                  </View>
-                  <Text style={[
-                    styles.stepTitle,
-                    step.completed && styles.completedStepTitle
-                  ]}>
-                    {step.title}
-                  </Text>
+          {/* Review Section */}
+          {isCompleted && (
+            <View style={styles.card}>
+              <Text style={styles.cardTitle}>Rate Your Experience</Text>
+
+              <View style={styles.ratingContainer}>
+                <Text style={styles.ratingLabel}>How was your service?</Text>
+                <View style={styles.starsContainer}>
+                  {renderStars()}
                 </View>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Action Buttons */}
-        {(canComplete || canCancel) && (
-          <View style={styles.actionButtonsCard}>
-            {canComplete && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.completeButton]}
-                onPress={handleCompleteService}
-                disabled={isCompleting}
-              >
-                {isCompleting ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <>
-                    <CheckCircle color="white" size={20} />
-                    <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
-            {canCancel && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.cancelButton]}
-                onPress={handleCancelBooking}
-                disabled={isCancelling}
-              >
-                {isCancelling ? (
-                  <ActivityIndicator color="white" />
-                ) : (
-                  <>
-                    <XCircle color="white" size={20} />
-                    <Text style={styles.actionButtonText}>Cancel Appointment</Text>
-                  </>
-                )}
-              </TouchableOpacity>
-            )}
-          </View>
-        )}
-
-        {/* View Location Button - Only shown for booked appointments with location */}
-        {appointment && !isCancelled && (appointment.latitude && appointment.longitude) && (
-          <View style={styles.locationCard}>
-            <TouchableOpacity
-              style={styles.viewLocationButton}
-              onPress={() => {
-                const locationName = appointment.location || `${appointment.provider?.city || 'Service'} Location`;
-                const serviceName = appointment.service?.name || 'Service';
-                router.push(`/view-location?latitude=${appointment.latitude}&longitude=${appointment.longitude}&locationName=${encodeURIComponent(locationName)}&serviceName=${encodeURIComponent(serviceName)}` as any);
-              }}
-            >
-              <MapPin color="white" size={20} />
-              <Text style={styles.viewLocationButtonText}>View Live Location & Directions</Text>
-            </TouchableOpacity>
-            <Text style={styles.locationHint}>
-              Get real-time directions to your service location
-            </Text>
-          </View>
-        )}
-
-        {/* Review Section */}
-        {isCompleted && (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Rate Your Experience</Text>
-
-            <View style={styles.ratingContainer}>
-              <Text style={styles.ratingLabel}>How was your service?</Text>
-              <View style={styles.starsContainer}>
-                {renderStars()}
               </View>
+
+              <View style={styles.reviewContainer}>
+                <Text style={styles.reviewLabel}>Write a review (optional)</Text>
+                <TextInput
+                  style={styles.reviewInput}
+                  value={review}
+                  onChangeText={setReview}
+                  placeholder="Share your experience..."
+                  multiline
+                  numberOfLines={4}
+                  textAlignVertical="top"
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.submitButton}
+                onPress={handleSubmitReview}
+              >
+                <Text style={styles.submitButtonText}>Submit Review</Text>
+              </TouchableOpacity>
             </View>
-
-            <View style={styles.reviewContainer}>
-              <Text style={styles.reviewLabel}>Write a review (optional)</Text>
-              <TextInput
-                style={styles.reviewInput}
-                value={review}
-                onChangeText={setReview}
-                placeholder="Share your experience..."
-                multiline
-                numberOfLines={4}
-                textAlignVertical="top"
-              />
-            </View>
-
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmitReview}
-            >
-              <Text style={styles.submitButtonText}>Submit Review</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </ScrollView>
-
-      {/* Home Button - Outside scroll view for proper positioning */}
-      <View style={styles.bottomButtonContainer}>
-        <TouchableOpacity
-          style={styles.homeButton}
-          onPress={() => router.push('/(tabs)/home')}
-        >
-          <Text style={styles.homeButtonText}>Back to Home</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          )}
+        </ScrollView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -13981,15 +14661,16 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\booking\summary.tsx`
+### File: `app/booking/summary.tsx`
 
-**Size:** 9762 bytes  
+**Size:** 8633 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Platform } from 'react-native';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react-native';
 import { useGetServiceByIdQuery } from '@/store/services/servicesApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function BookingSummary() {
   const { serviceId, date, startTime, endTime } = useLocalSearchParams<{
@@ -14022,7 +14703,7 @@ export default function BookingSummary() {
   const handleConfirmBooking = () => {
     if (service) {
       router.push(
-        `/booking/payment?serviceId=${serviceId}&date=${date}&startTime=${startTime}&endTime=${endTime}&amount=${service.price}&currency=${service.currency}`
+        `/booking/payment?serviceId=${serviceId}&date=${date}&startTime=${startTime}&endTime=${endTime}&amount=${service.price}&currency=${service.currency}` as any
       );
     }
   };
@@ -14048,100 +14729,82 @@ export default function BookingSummary() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <ArrowLeft color="white" size={24} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Review Your Booking</Text>
-        <View style={styles.placeholder} />
-      </View>
-
-      <ScrollView style={styles.content}>
-        {/* Service Info */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Service</Text>
-          <Text style={styles.serviceName}>{service.name}</Text>
-          <Text style={styles.categoryName}>{service.category_details?.name}</Text>
-          {service.provider_details && (
-            <Text style={styles.providerName}>By {service.provider_details.full_name}</Text>
-          )}
+    <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <ArrowLeft color="white" size={24} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Review Your Booking</Text>
+          <View style={styles.placeholder} />
         </View>
 
-        {/* Booking Details */}
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Date & Time</Text>
-
-          <View style={styles.detailRow}>
-            <Calendar color="#666" size={20} />
-            <Text style={styles.detailText}>
-              {new Date(date).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </Text>
+        <ScrollView style={styles.content}>
+          {/* Service Info */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Service</Text>
+            <Text style={styles.serviceName}>{service.name}</Text>
+            <Text style={styles.categoryName}>{service.category_name}</Text>
+            {service.provider_name && (
+              <Text style={styles.providerName}>By {service.provider_name}</Text>
+            )}
           </View>
 
-          <View style={styles.detailRow}>
-            <Clock color="#666" size={20} />
-            <Text style={styles.detailText}>
-              {formatTime(startTime)} - {formatTime(endTime)}
-            </Text>
-          </View>
+          {/* Booking Details */}
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Date & Time</Text>
 
-          {durationMinutes > 0 && (
+            <View style={styles.detailRow}>
+              <Calendar color="#666" size={20} />
+              <Text style={styles.detailText}>
+                {new Date(date).toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </Text>
+            </View>
+
             <View style={styles.detailRow}>
               <Clock color="#666" size={20} />
-              <Text style={styles.detailText}>{durationMinutes} minutes</Text>
-            </View>
-          )}
-        </View>
-
-        {/* Price Breakdown */}
-        <View style={styles.priceCard}>
-          <Text style={styles.cardTitle}>Price Breakdown</Text>
-
-          <View style={styles.priceBreakdown}>
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Service Cost</Text>
-              <Text style={styles.priceValue}>
-                {service.currency} {Number(service.price).toFixed(0)}
+              <Text style={styles.detailText}>
+                {formatTime(startTime)} - {formatTime(endTime)}
               </Text>
             </View>
 
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>App Fee</Text>
-              <Text style={styles.priceValue}>
-                {service.currency} {Math.floor(Number(service.price) * 0.05)}
-              </Text>
-            </View>
-
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Taxes</Text>
-              <Text style={styles.priceValue}>
-                {service.currency} {Math.floor(Number(service.price) * 0.18)}
-              </Text>
-            </View>
-
-            <View style={styles.priceDivider} />
-
-            <View style={styles.priceRow}>
-              <Text style={styles.totalLabel}>Total</Text>
-              <Text style={styles.totalValue}>
-                {service.currency} {Math.floor(Number(service.price) * 1.23)}
-              </Text>
-            </View>
+            {durationMinutes > 0 && (
+              <View style={styles.detailRow}>
+                <Clock color="#666" size={20} />
+                <Text style={styles.detailText}>{durationMinutes} minutes</Text>
+              </View>
+            )}
           </View>
 
-          <Text style={styles.priceNote}>
-            * Final amount may vary based on payment processing fees
-          </Text>
-        </View>
+          {/* Price Breakdown */}
+          <View style={styles.priceCard}>
+            <Text style={styles.cardTitle}>Price Breakdown</Text>
+
+            <View style={styles.priceBreakdown}>
+              <View style={styles.priceRow}>
+                <Text style={styles.priceLabel}>Service Cost</Text>
+                <Text style={styles.priceValue}>
+                  {service.currency} {Number(service.price).toFixed(0)}
+                </Text>
+              </View>
+
+              <View style={styles.priceDivider} />
+            </View>
+
+            <Text style={styles.priceNote}>
+              * Final amount may vary based on payment processing fees
+            </Text>
+          </View>
+          <View style={styles.bottomSpacing} />
+        </ScrollView>
         {/* Confirm Button - Now inside scroll view for better Android navigation */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -14151,11 +14814,9 @@ export default function BookingSummary() {
             <Text style={styles.confirmButtonText}>Continue to Payment</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Extra spacing for Android navigation */}
-        <View style={styles.bottomSpacing} />
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+      <CustomTabBar />
+    </View>
   );
 }
 
@@ -14320,7 +14981,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     paddingHorizontal: 24,
     paddingVertical: 20,
-    paddingBottom: Platform.OS === 'android' ? 40 : 20, // Extra padding for Android navigation bar
     backgroundColor: 'white',
     borderTopWidth: 1,
     borderTopColor: '#E5E5E5',
@@ -14337,28 +14997,29 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   bottomSpacing: {
-    height: Platform.OS === 'android' ? 80 : 20, // Extra spacing for Android navigation
+    height: 20,
   },
 });
 ```
 
 ---
 
-### File: `app\booking\transaction-details.tsx`
+### File: `app/booking/transaction-details.tsx`
 
-**Size:** 18410 bytes  
+**Size:** 17764 bytes  
 ```tsx
 import { router, useLocalSearchParams } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Alert, Share } from 'react-native';
-import { CheckCircle, Receipt, MapPin, Clock, AlertCircle, ArrowLeft } from 'lucide-react-native';
-import { useGetPaymentByIdQuery, useLazyGetPaymentStatusQuery } from '@/store/services/paymentApi';
+import { CheckCircle, Receipt, Clock, AlertCircle, ArrowLeft } from 'lucide-react-native';
+import { useGetPaymentByIdQuery } from '@/store/services/paymentApi';
 import { useCompleteAppointmentMutation } from '@/store/services/appointmentApi';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function TransactionDetailsScreen() {
     const { paymentId } = useLocalSearchParams<{ paymentId: string }>();
     const [completeAppointment, { isLoading: isCompleting }] = useCompleteAppointmentMutation();
-    const [getPaymentStatus] = useLazyGetPaymentStatusQuery();
+    
 
     const { data: payment, isLoading, error, refetch } = useGetPaymentByIdQuery(paymentId || '', {
         skip: !paymentId,
@@ -14485,165 +15146,150 @@ Thank you for using Mu Baku Lifestyle!
         );
     }
 
-    const isCompleted = payment.appointment?.status === 'completed';
-    const canComplete = payment.appointment?.status === 'confirmed' || payment.appointment?.status === 'in_progress';
+    const isCompleted = (payment.appointment as any)?.status === 'completed';
+    const canComplete = (payment.appointment as any)?.status === 'confirmed' || (payment.appointment as any)?.status === 'in_progress';
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => router.back()}
-                >
-                    <ArrowLeft color="white" size={24} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Transaction Details</Text>
-                <View style={styles.placeholder} />
-            </View>
-
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                {/* Success Banner */}
-                <View style={styles.successBanner}>
-                    <CheckCircle color="#10B981" size={32} />
-                    <View style={styles.successTextContainer}>
-                        <Text style={styles.successTitle}>Payment Successful!</Text>
-                        <Text style={styles.successMessage}>Your transaction has been completed successfully.</Text>
-                    </View>
+        <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.header}>
+                    <TouchableOpacity
+                        style={styles.backButton}
+                        onPress={() => router.back()}
+                    >
+                        <ArrowLeft color="white" size={24} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Transaction Details</Text>
+                    <View style={styles.placeholder} />
                 </View>
 
-                {/* Transaction Details Card */}
-                <View style={styles.card}>
-                    <View style={styles.cardHeader}>
-                        <Receipt color="#2D1A46" size={24} />
-                        <Text style={styles.cardTitle}>Payment Details</Text>
+                <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+                    {/* Success Banner */}
+                    <View style={styles.successBanner}>
+                        <CheckCircle color="#10B981" size={32} />
+                        <View style={styles.successTextContainer}>
+                            <Text style={styles.successTitle}>Payment Successful!</Text>
+                            <Text style={styles.successMessage}>Your transaction has been completed successfully.</Text>
+                        </View>
                     </View>
 
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Transaction ID</Text>
-                        <Text style={styles.detailValue} numberOfLines={1}>
-                            {payment.gateway?.transaction_id || 'N/A'}
-                        </Text>
-                    </View>
+                    {/* Transaction Details Card */}
+                    <View style={styles.card}>
+                        <View style={styles.cardHeader}>
+                            <Receipt color="#2D1A46" size={24} />
+                            <Text style={styles.cardTitle}>Payment Details</Text>
+                        </View>
 
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Receipt Number</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.gateway?.receipt_number || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Amount Paid</Text>
-                        <Text style={[styles.detailValue, styles.amountValue]}>
-                            {payment.amount.currency} {Math.round(payment.amount.total)}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Payment Method</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.payment_method?.display_name || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Payment Date</Text>
-                        <Text style={styles.detailValue}>
-                            {formatTime(payment.timestamps?.created_at)}
-                        </Text>
-                    </View>
-
-                    {payment.escrow && (
-                        <View style={styles.escrowInfo}>
-                            <Text style={styles.escrowText}>
-                                🔒 Funds held securely in escrow until service completion
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Transaction ID</Text>
+                            <Text style={styles.detailValue} numberOfLines={1}>
+                                {payment.gateway?.transaction_id || 'N/A'}
                             </Text>
                         </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Receipt Number</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.gateway?.receipt_number || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Amount Paid</Text>
+                            <Text style={[styles.detailValue, styles.amountValue]}>
+                                {payment.amount.currency} {Math.round(payment.amount.total)}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Payment Method</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.payment_method?.display_name || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Payment Date</Text>
+                            <Text style={styles.detailValue}>
+                                {formatTime(payment.timestamps?.created_at)}
+                            </Text>
+                        </View>
+
+                        {payment.escrow && (
+                            <View style={styles.escrowInfo}>
+                                <Text style={styles.escrowText}>
+                                    🔒 Funds held securely in escrow until service completion
+                                </Text>
+                            </View>
+                        )}
+                    </View>
+
+                    {/* Service Details Card */}
+                    <View style={styles.card}>
+                        <View style={styles.cardHeader}>
+                            <Clock color="#2D1A46" size={24} />
+                            <Text style={styles.cardTitle}>Service Details</Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Service</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.appointment?.service || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Provider</Text>
+                            <Text style={styles.detailValue}>
+                                {payment.appointment?.provider_name || 'N/A'}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Scheduled Date</Text>
+                            <Text style={styles.detailValue}>
+                                {formatTime(payment.appointment?.scheduled_at)}
+                            </Text>
+                        </View>
+
+                        <View style={styles.detailRow}>
+                            <Text style={styles.detailLabel}>Status</Text>
+                            <Text style={[styles.detailValue, styles.statusValue]}>
+                                {(payment.appointment as any)?.status?.charAt(0).toUpperCase() + (payment.appointment as any)?.status?.slice(1) || 'N/A'}
+                            </Text>
+                        </View>
+                    </View>
+
+                    {/* Action Buttons */}
+                    {canComplete && (
+                        <View style={styles.actionCard}>
+                            <TouchableOpacity
+                                style={[styles.actionButton, styles.completeButton]}
+                                onPress={handleCompleteService}
+                                disabled={isCompleting}
+                            >
+                                {isCompleting ? (
+                                    <ActivityIndicator color="white" />
+                                ) : (
+                                    <>
+                                        <CheckCircle color="white" size={20} />
+                                        <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
+                                    </>
+                                )}
+                            </TouchableOpacity>
+                        </View>
                     )}
-                </View>
 
-                {/* Service Details Card */}
-                <View style={styles.card}>
-                    <View style={styles.cardHeader}>
-                        <Clock color="#2D1A46" size={24} />
-                        <Text style={styles.cardTitle}>Service Details</Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Service</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.appointment?.service || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Provider</Text>
-                        <Text style={styles.detailValue}>
-                            {payment.appointment?.provider_name || 'N/A'}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Scheduled Date</Text>
-                        <Text style={styles.detailValue}>
-                            {formatTime(payment.appointment?.scheduled_at)}
-                        </Text>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                        <Text style={styles.detailLabel}>Status</Text>
-                        <Text style={[styles.detailValue, styles.statusValue]}>
-                            {payment.appointment?.status?.charAt(0).toUpperCase() + payment.appointment?.status?.slice(1) || 'N/A'}
-                        </Text>
-                    </View>
-                </View>
-
-                {/* Action Buttons */}
-                {canComplete && (
-                    <View style={styles.actionCard}>
-                        <TouchableOpacity
-                            style={[styles.actionButton, styles.completeButton]}
-                            onPress={handleCompleteService}
-                            disabled={isCompleting}
-                        >
-                            {isCompleting ? (
-                                <ActivityIndicator color="white" />
-                            ) : (
-                                <>
-                                    <CheckCircle color="white" size={20} />
-                                    <Text style={styles.actionButtonText}>Mark Service as Completed</Text>
-                                </>
-                            )}
-                        </TouchableOpacity>
-                    </View>
-                )}
-
-                {isCompleted && (
-                    <View style={styles.completedCard}>
-                        <CheckCircle color="#10B981" size={24} />
-                        <Text style={styles.completedText}>Service has been marked as completed</Text>
-                    </View>
-                )}
-            </ScrollView>
-
-            {/* Bottom Actions */}
-            <View style={styles.bottomContainer}>
-                <TouchableOpacity
-                    style={styles.secondaryButton}
-                    onPress={handleShareReceipt}
-                >
-                    <Receipt color="#2D1A46" size={20} />
-                    <Text style={styles.secondaryButtonText}>Share Receipt</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.primaryButton}
-                    onPress={handleViewBooking}
-                >
-                    <Text style={styles.primaryButtonText}>View Booking</Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+                    {isCompleted && (
+                        <View style={styles.completedCard}>
+                            <CheckCircle color="#10B981" size={24} />
+                            <Text style={styles.completedText}>Service has been marked as completed</Text>
+                        </View>
+                    )}
+                </ScrollView>
+            </SafeAreaView>
+            <CustomTabBar />
+        </View>
     );
 }
 
@@ -14886,9 +15532,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\booking\write-review.tsx`
+### File: `app/booking/write-review.tsx`
 
-**Size:** 8687 bytes  
+**Size:** 8876 bytes  
 ```tsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert, Image, ActivityIndicator } from 'react-native';
@@ -14896,6 +15542,7 @@ import { Star, Camera, X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import CustomTabBar from '../components/CustomTabBar';
 
 export default function WriteReviewScreen() {
     const { t } = useTranslation();
@@ -14963,83 +15610,86 @@ export default function WriteReviewScreen() {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>{t('writeReview')}</Text>
-                    <Text style={styles.subtitle}>{t('shareExperience')}</Text>
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('rating')}</Text>
-                    <View style={styles.starsContainer}>
-                        {[1, 2, 3, 4, 5].map((star) => (
-                            <TouchableOpacity key={star} onPress={() => handleStarPress(star)}>
-                                <Star
-                                    size={32}
-                                    color={star <= rating ? '#FFD700' : '#E0E0E0'}
-                                    fill={star <= rating ? '#FFD700' : 'transparent'}
-                                />
-                            </TouchableOpacity>
-                        ))}
+        <View style={{ flex: 1, backgroundColor: '#F5F5F5' }}>
+            <SafeAreaView style={styles.container}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <View style={styles.header}>
+                        <Text style={styles.title}>{t('writeReview')}</Text>
+                        <Text style={styles.subtitle}>{t('shareExperience')}</Text>
                     </View>
-                    {rating > 0 && (
-                        <Text style={styles.ratingText}>
-                            {rating} {rating === 1 ? 'star' : 'stars'}
-                        </Text>
-                    )}
-                </View>
 
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('review')}</Text>
-                    <TextInput
-                        style={styles.reviewInput}
-                        multiline
-                        numberOfLines={6}
-                        placeholder={t('writeReviewPlaceholder')}
-                        value={review}
-                        onChangeText={setReview}
-                        textAlignVertical="top"
-                    />
-                </View>
-
-                <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>{t('photos')} ({t('optional')})</Text>
-                    <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
-                        <Camera size={24} color="#666" />
-                        <Text style={styles.addPhotoText}>{t('addPhoto')}</Text>
-                    </TouchableOpacity>
-
-                    {photos.length > 0 && (
-                        <View style={styles.photosContainer}>
-                            {photos.map((photo, index) => (
-                                <View key={index} style={styles.photoWrapper}>
-                                    <Image source={{ uri: photo }} style={styles.photo} />
-                                    <TouchableOpacity
-                                        style={styles.removePhotoButton}
-                                        onPress={() => removePhoto(index)}
-                                    >
-                                        <X size={16} color="white" />
-                                    </TouchableOpacity>
-                                </View>
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>{t('rating')}</Text>
+                        <View style={styles.starsContainer}>
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <TouchableOpacity key={star} onPress={() => handleStarPress(star)}>
+                                    <Star
+                                        size={32}
+                                        color={star <= rating ? '#FFD700' : '#E0E0E0'}
+                                        fill={star <= rating ? '#FFD700' : 'transparent'}
+                                    />
+                                </TouchableOpacity>
                             ))}
                         </View>
-                    )}
-                </View>
+                        {rating > 0 && (
+                            <Text style={styles.ratingText}>
+                                {rating} {rating === 1 ? 'star' : 'stars'}
+                            </Text>
+                        )}
+                    </View>
 
-                <TouchableOpacity
-                    style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
-                    onPress={handleSubmit}
-                    disabled={isSubmitting}
-                >
-                    {isSubmitting ? (
-                        <ActivityIndicator color="white" />
-                    ) : (
-                        <Text style={styles.submitButtonText}>{t('submitReview')}</Text>
-                    )}
-                </TouchableOpacity>
-            </ScrollView>
-        </SafeAreaView>
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>{t('review')}</Text>
+                        <TextInput
+                            style={styles.reviewInput}
+                            multiline
+                            numberOfLines={6}
+                            placeholder={t('writeReviewPlaceholder')}
+                            value={review}
+                            onChangeText={setReview}
+                            textAlignVertical="top"
+                        />
+                    </View>
+
+                    <View style={styles.section}>
+                        <Text style={styles.sectionTitle}>{t('photos')} ({t('optional')})</Text>
+                        <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
+                            <Camera size={24} color="#666" />
+                            <Text style={styles.addPhotoText}>{t('addPhoto')}</Text>
+                        </TouchableOpacity>
+
+                        {photos.length > 0 && (
+                            <View style={styles.photosContainer}>
+                                {photos.map((photo, index) => (
+                                    <View key={index} style={styles.photoWrapper}>
+                                        <Image source={{ uri: photo }} style={styles.photo} />
+                                        <TouchableOpacity
+                                            style={styles.removePhotoButton}
+                                            onPress={() => removePhoto(index)}
+                                        >
+                                            <X size={16} color="white" />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                            </View>
+                        )}
+                    </View>
+
+                    <TouchableOpacity
+                        style={[styles.submitButton, isSubmitting && styles.submitButtonDisabled]}
+                        onPress={handleSubmit}
+                        disabled={isSubmitting}
+                    >
+                        {isSubmitting ? (
+                            <ActivityIndicator color="white" />
+                        ) : (
+                            <Text style={styles.submitButtonText}>{t('submitReview')}</Text>
+                        )}
+                    </TouchableOpacity>
+                </ScrollView>
+            </SafeAreaView>
+            <CustomTabBar />
+        </View>
     );
 }
 
@@ -15156,11 +15806,11 @@ const styles = StyleSheet.create({
 
 ---
 
-## Directory: `app\chat`
+## Directory: `app/chat`
 
-### File: `app\chat\[channel_id].tsx`
+### File: `app/chat/[channel_id].tsx`
 
-**Size:** 13415 bytes  
+**Size:** 13012 bytes  
 ```tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, FlatList, KeyboardAvoidingView, Platform, Image } from 'react-native';
@@ -15569,11 +16219,119 @@ const styles = StyleSheet.create({
 
 ---
 
-## Directory: `app\components`
+## Directory: `app/components`
 
-### File: `app\components\StickyHeader.tsx`
+### File: `app/components/CustomTabBar.tsx`
 
-**Size:** 8919 bytes  
+**Size:** 2718 bytes  
+```tsx
+import React from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native';
+import { useRouter, usePathname } from 'expo-router';
+import { Home, Calendar, Users, User } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
+
+interface TabItem {
+  name: string;
+  icon: React.ComponentType<{ color: string; size: number }>;
+  route: string;
+  label: string;
+}
+
+export default function CustomTabBar() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
+
+  const tabs: TabItem[] = [
+    { name: 'home', icon: Home, route: '/(tabs)/home', label: t('home') },
+    { name: 'providers', icon: Users, route: '/(tabs)/providers', label: t('providers') },
+    { name: 'my-bookings', icon: Calendar, route: '/(tabs)/my-bookings', label: t('bookings') },
+    { name: 'profile', icon: User, route: '/(tabs)/profile', label: t('profile') },
+  ];
+
+  const isActiveTab = (route: string) => {
+    return pathname.includes(route.replace('/(tabs)', ''));
+  };
+
+  const handleTabPress = (route: string) => {
+    router.push(route as any);
+  };
+
+  const tabBarPaddingBottom = Platform.select({
+    ios: Math.max(insets.bottom, 8),
+    android: Math.max(insets.bottom, 8),
+    default: 8,
+  });
+
+  return (
+    <View style={[styles.container, { paddingBottom: tabBarPaddingBottom }]}>
+      {tabs.map((tab) => {
+        const isActive = isActiveTab(tab.route);
+        const IconComponent = tab.icon;
+        
+        return (
+          <TouchableOpacity
+            key={tab.name}
+            style={styles.tabItem}
+            onPress={() => handleTabPress(tab.route)}
+            activeOpacity={0.7}
+          >
+            <IconComponent
+              color={isActive ? '#2D1A46' : '#999'}
+              size={24}
+            />
+            <Text style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    borderTopWidth: 1,
+    borderTopColor: '#E5E5E5',
+    paddingTop: 8,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 4,
+  },
+  tabLabel: {
+    fontSize: 12,
+    fontWeight: '600' as const,
+    color: '#999',
+    marginTop: 4,
+  },
+  tabLabelActive: {
+    color: '#2D1A46',
+  },
+});
+```
+
+---
+
+### File: `app/components/StickyHeader.tsx`
+
+**Size:** 8606 bytes  
 ```tsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView, Platform } from 'react-native';
@@ -15614,11 +16372,11 @@ export default function StickyHeader() {
       icon: Users,
       route: '/(tabs)/providers',
     },
-    {
-      title: 'Payments & History',
-      icon: Receipt,
-      route: '/booking/payment-status', // This might need to be updated to a dedicated payments history screen
-    },
+    // {
+    //   title: 'Payments & History',
+    //   icon: Receipt,
+    //   route: '/booking/', // This might need to be updated to a dedicated payments history screen
+    // },
   ];
 
   const businessItems = [
@@ -15662,7 +16420,7 @@ export default function StickyHeader() {
         <View style={styles.rightContainer}>
           <TouchableOpacity
             style={styles.notificationButton}
-            onPress={() => router.push('/(tabs)/messages')}
+            onPress={() => router.push('/(tabs)/messages' as any)}
             accessibilityLabel="Notifications"
           >
             <Bell color="#2D1A46" size={20} />
@@ -15900,11 +16658,11 @@ const styles = StyleSheet.create({
 
 ---
 
-## Directory: `app\provider-services`
+## Directory: `app/provider-services`
 
-### File: `app\provider-services\create.tsx`
+### File: `app/provider-services/create.tsx`
 
-**Size:** 17097 bytes  
+**Size:** 16613 bytes  
 ```tsx
 import { router, Stack } from 'expo-router';
 import React, { useState } from 'react';
@@ -16033,12 +16791,12 @@ export default function CreateServiceScreen() {
       const result = await createService(payload).unwrap();
       console.log('Service created, response:', JSON.stringify(result, null, 2));
       console.log('Response location data:', {
-        latitude: result.latitude,
-        longitude: result.longitude,
-        location: result.location
+        latitude: (result as any).latitude,
+        longitude: (result as any).longitude,
+        location: (result as any).location
       });
 
-      if (result.latitude && result.longitude) {
+      if ((result as any).latitude && (result as any).longitude) {
         Alert.alert('Success', 'Service created successfully with location!', [
           { text: 'OK', onPress: () => router.back() }
         ]);
@@ -16439,9 +17197,9 @@ const styles = StyleSheet.create({
 
 ---
 
-### File: `app\provider-services\edit.tsx`
+### File: `app/provider-services/edit.tsx`
 
-**Size:** 18548 bytes  
+**Size:** 18060 bytes  
 ```tsx
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
@@ -16486,10 +17244,10 @@ export default function EditServiceScreen() {
     if (service) {
       console.log('Service loaded for editing:', JSON.stringify(service, null, 2));
       console.log('Service location fields:', {
-        latitude: service.latitude,
-        longitude: service.longitude,
-        location: service.location,
-        hasLocation: !!(service.latitude && service.longitude)
+        latitude: (service as any).latitude,
+        longitude: (service as any).longitude,
+        location: (service as any).location,
+        hasLocation: !!((service as any).latitude && (service as any).longitude)
       });
 
       setFormData({
@@ -16500,10 +17258,10 @@ export default function EditServiceScreen() {
         price: service.price.toString(),
         currency: service.currency,
         is_active: service.is_active,
-        latitude: service.latitude?.toString() || '',
-        longitude: service.longitude?.toString() || '',
-        location: service.location || '',
-        image: service.image_url || undefined,
+        latitude: (service as any).latitude?.toString() || '',
+        longitude: (service as any).longitude?.toString() || '',
+        location: (service as any).location || '',
+        image: (service as any).image_url || undefined,
       });
     }
   }, [service]);
@@ -16583,9 +17341,9 @@ export default function EditServiceScreen() {
 
       console.log('Service updated, response:', JSON.stringify(result, null, 2));
       console.log('Response location data:', {
-        latitude: result.latitude,
-        longitude: result.longitude,
-        location: result.location
+        latitude: (result as any).latitude,
+        longitude: (result as any).longitude,
+        location: (result as any).location
       });
 
       Alert.alert('Success', 'Service updated successfully', [
@@ -17045,70 +17803,9 @@ const styles = StyleSheet.create({
 
 ## Directory: `root`
 
-### File: `analysis_of_screens.md`
-
-**Size:** 3046 bytes  
-```markdown
-I am unable to perform a direct comparison with the StyleSeat mobile app as my `google_web_search` tool is not providing results for general web queries, which prevents me from gathering information about StyleSeat's features and screens.
-
-However, I have analyzed the provided project structure and identified the following screens and their probable purposes:
-
-**Core Navigation/Authentication Screens:**
-*   `index.tsx`: Likely the main entry point or a landing page.
-*   `login.tsx`: User login.
-*   `register.tsx`: User registration.
-*   `role-selection.tsx`: Allows users to select their role (e.g., client, provider, agent).
-*   `+not-found.tsx`: Error page for unmatched routes.
-
-**User Profile & Setup Screens:**
-*   `agent-profile-setup.tsx`: Setup for agent profiles.
-*   `client-profile-setup.tsx`: Setup for client profiles.
-*   `profile-edit.tsx`: Editing existing user profiles.
-*   `profile.tsx` (under `(tabs)`): Displays the user's own profile.
-
-**Service and Provider Related Screens:**
-*   `category-detail.tsx`: Details of a specific service category.
-*   `provider-detail.tsx`: Details of a specific service provider.
-*   `provider-availability.tsx`: Displays or manages a provider's availability.
-*   `provider-services.tsx`: Lists services offered by a provider.
-*   `service-detail.tsx`: Details of a specific service.
-*   `providers.tsx` (under `(tabs)`): Likely a list or directory of providers.
-
-**Booking Flow Screens (under `booking/`):**
-*   `choose-location.tsx`: For selecting a booking location.
-*   `select-datetime.tsx`: For selecting date and time for a booking.
-*   `summary.tsx`: Review of booking details before confirmation.
-*   `payment.tsx`: Payment processing for a booking.
-*   `payment-status.tsx`: Displays the status of a payment.
-*   `status.tsx`: General booking status (could be for a specific booking).
-*   `reschedule.tsx`: For rescheduling an existing booking.
-
-**Provider Service Management (under `provider-services/`):**
-*   `create.tsx`: For creating a new service by a provider.
-*   `edit.tsx`: For editing an existing service by a provider.
-
-**Other Screens:**
-*   `application-status.tsx`: General status related to an application (e.g., booking, job application).
-*   `view-location.tsx`: To view a specific location on a map or details.
-*   `my-bookings.tsx` (under `(tabs)`): Displays a user's list of bookings.
-*   `notifications.tsx` (under `(tabs)`): Displays user notifications.
-*   `home.tsx` (under `(tabs)`): Main home screen after login, likely with personalized content.
-
-**Global/Layout Components:**
-*   `_layout.tsx` (root and `(tabs)`): Define the overall layout and navigation.
-*   `+native-intent.tsx`: Might handle native app intents or deep linking.
-*   `i18n.ts`: Internationalization configuration.
-*   `mockData.ts`: Contains mock data, not a screen.
-*   `components/StickyHeader.tsx`: A reusable UI component.
-
-If you can provide a list of typical screens or features for an app like StyleSeat, I can then compare them to the screens identified in this project.
-```
-
----
-
 ### File: `API_INTEGRATION.md`
 
-**Size:** 14637 bytes  
+**Size:** 14081 bytes  
 ```markdown
 # Mubaku Lifestyle API Integration Guide
 
@@ -17672,7 +18369,7 @@ The API is now correctly configured and ready to use! 🎉
 
 ### File: `API_QUICK_REFERENCE.md`
 
-**Size:** 13875 bytes  
+**Size:** 13276 bytes  
 ```markdown
 # API Quick Reference - Common Usage Patterns
 
@@ -18279,7 +18976,7 @@ This quick reference covers the most common patterns you'll need! 🎉
 
 ### File: `API_STATUS_SUMMARY.md`
 
-**Size:** 6611 bytes  
+**Size:** 6404 bytes  
 ```markdown
 # API Configuration Status
 
@@ -18492,23 +19189,9 @@ The mobile app is properly configured to work with the backend at `https://mubak
 
 ---
 
-### File: `babel.config.js`
-
-**Size:** 154 bytes  
-```javascript
-module.exports = function (api) {
-  api.cache(true);
-  return {
-    presets: [["babel-preset-expo", { unstable_transformImportMeta: true }]],
-  };
-};
-```
-
----
-
 ### File: `BACKEND_MIGRATION_SUMMARY.md`
 
-**Size:** 4866 bytes  
+**Size:** 4714 bytes  
 ```markdown
 # Backend Migration Summary
 
@@ -18666,433 +19349,9 @@ The mobile app is now fully configured to work with the Google Cloud backend at 
 
 ---
 
-### File: `code-extract.py`
-
-**Size:** 12126 bytes  
-```python
-#!/usr/bin/env python3
-"""
-Project Code Extractor Script
-Scans through all project files and creates a single markdown file with all code.
-"""
-
-import os
-import sys
-from pathlib import Path
-import mimetypes
-import datetime
-
-
-class ProjectCodeExtractor:
-    def __init__(self, root_dir=None, output_file="payment_code.md"):
-        """
-        Initialize the code extractor.
-
-        Args:
-            root_dir: Starting directory (defaults to current directory)
-            output_file: Name of the output markdown file
-        """
-        self.root_dir = Path(root_dir) if root_dir else Path.cwd()
-        self.output_file = Path(output_file)
-
-        # Common directories to exclude
-        self.exclude_dirs = {
-            "venv",
-            "env",
-            ".venv",
-            ".env",
-            "test",
-            "__pycache__",
-            ".pytest_cache",
-            ".mypy_cache",
-            ".git",
-            ".svn",
-            ".hg",
-            "node_modules",
-            "dist",
-            "build",
-            ".idea",
-            ".vscode",
-            ".vs",
-            "coverage",
-            ".coverage",
-            "logs",
-            "log",
-            "tmp",
-            "temp",
-            ".tox",
-            ".hypothesis",
-        }
-
-        # Common files to exclude
-        self.exclude_files = {
-            self.output_file.name,  # Don't include the output file itself
-            ".gitignore",
-            ".env",
-            ".env.local",
-            "package-lock.json",
-            "yarn.lock",
-            "requirements.txt",
-            "Pipfile.lock",
-            "poetry.lock",
-            "pyproject.toml",
-            "*.pyc",
-            "*.pyo",
-            "*.pyd",
-            "*.so",
-            "*.dll",
-            "*.dylib",
-            "*.class",
-            "*.jar",
-            "*.war",
-            "*.db",
-            "*.sqlite",
-            "*.sqlite3",
-        }
-
-        # File extensions to include (empty list means include all)
-        # You can customize this if you want only specific file types
-        self.include_extensions = {
-            ".py",
-            ".js",
-            ".ts",
-            ".jsx",
-            ".tsx",
-            ".html",
-            ".htm",
-            ".css",
-            ".scss",
-            ".less",
-            ".java",
-            ".cpp",
-            ".c",
-            ".h",
-            ".hpp",
-            ".go",
-            ".rs",
-            ".rb",
-            ".php",
-            ".sql",
-            ".sh",
-            ".bash",
-            ".bat",
-            ".yml",
-            ".yaml",
-            ".json",
-            ".xml",
-            ".md",
-            ".txt",
-            ".csv",
-            ".vue",
-            ".svelte",
-        }
-
-    def should_exclude(self, path):
-        """Check if a path should be excluded."""
-        # Check if any excluded directory is in the path
-        for part in path.parts:
-            if part in self.exclude_dirs:
-                return True
-
-        # Check if file is in exclude list
-        if path.name in self.exclude_files:
-            return True
-
-        # Check file extensions
-        if path.is_file():
-            # Check if it's a binary file
-            mime_type, _ = mimetypes.guess_type(str(path))
-            if mime_type and not mime_type.startswith("text/"):
-                return True
-
-            # If we have specific extensions to include, check them
-            if self.include_extensions:
-                if path.suffix not in self.include_extensions:
-                    return True
-
-        return False
-
-    def get_file_content(self, file_path):
-        """Read file content with proper encoding handling."""
-        try:
-            with open(file_path, "r", encoding="utf-8") as f:
-                return f.read()
-        except UnicodeDecodeError:
-            # Try with different encodings
-            for encoding in ["latin-1", "iso-8859-1", "cp1252"]:
-                try:
-                    with open(file_path, "r", encoding=encoding) as f:
-                        return f.read()
-                except UnicodeDecodeError:
-                    continue
-
-            # If all fails, return empty string
-            print(f"Warning: Could not read {file_path} (binary file?)")
-            return ""
-        except Exception as e:
-            print(f"Error reading {file_path}: {e}")
-            return ""
-
-    def scan_project(self):
-        """Scan the project and collect all files."""
-        print(f"Scanning project from: {self.root_dir}")
-        print(f"Excluding directories: {', '.join(sorted(self.exclude_dirs))}")
-
-        files = []
-        total_size = 0
-
-        for file_path in self.root_dir.rglob("*"):
-            # Skip if should be excluded
-            if self.should_exclude(file_path):
-                continue
-
-            if file_path.is_file():
-                try:
-                    # Get file size
-                    size = file_path.stat().st_size
-
-                    # Skip very large files (optional - you can adjust this)
-                    if size > 10 * 1024 * 1024:  # 10MB
-                        print(
-                            f"Skipping large file: {file_path} ({size/1024/1024:.1f} MB)"
-                        )
-                        continue
-
-                    # Get relative path
-                    rel_path = file_path.relative_to(self.root_dir)
-
-                    files.append(
-                        {"path": rel_path, "full_path": file_path, "size": size}
-                    )
-
-                    total_size += size
-                except Exception as e:
-                    print(f"Error processing {file_path}: {e}")
-
-        print(f"\nFound {len(files)} files (total: {total_size/1024/1024:.2f} MB)")
-        return files
-
-    def create_markdown(self, files):
-        """Create markdown file with all code."""
-        print(f"\nCreating markdown file: {self.output_file}")
-
-        with open(self.output_file, "w", encoding="utf-8") as md_file:
-            # Write header
-            md_file.write(f"# Project Code Documentation\n\n")
-            md_file.write(f"**Project Root:** `{self.root_dir}`\n\n")
-            md_file.write(f"**Total Files:** {len(files)}\n\n")
-            md_file.write("---\n\n")
-
-            # Group files by directory for better organization
-            files_by_dir = {}
-            for file_info in files:
-                dir_path = str(file_info["path"].parent)
-                if dir_path == ".":
-                    dir_path = "root"
-
-                if dir_path not in files_by_dir:
-                    files_by_dir[dir_path] = []
-                files_by_dir[dir_path].append(file_info)
-
-            # Write files by directory
-            for dir_path in sorted(files_by_dir.keys()):
-                md_file.write(f"## Directory: `{dir_path}`\n\n")
-
-                for file_info in sorted(
-                    files_by_dir[dir_path], key=lambda x: x["path"]
-                ):
-                    file_path = file_info["path"]
-                    full_path = file_info["full_path"]
-
-                    # Get file extension for code block language
-                    extension = file_path.suffix.lower()
-                    lang_map = {
-                        ".py": "python",
-                        ".js": "javascript",
-                        ".ts": "typescript",
-                        ".jsx": "jsx",
-                        ".tsx": "tsx",
-                        ".html": "html",
-                        ".htm": "html",
-                        ".css": "css",
-                        ".scss": "scss",
-                        ".less": "less",
-                        ".java": "java",
-                        ".cpp": "cpp",
-                        ".c": "c",
-                        ".h": "c",
-                        ".go": "go",
-                        ".rs": "rust",
-                        ".rb": "ruby",
-                        ".php": "php",
-                        ".sql": "sql",
-                        ".sh": "bash",
-                        ".bash": "bash",
-                        ".yml": "yaml",
-                        ".yaml": "yaml",
-                        ".json": "json",
-                        ".xml": "xml",
-                        ".md": "markdown",
-                        ".txt": "text",
-                        ".vue": "vue",
-                        ".svelte": "html",
-                    }
-
-                    language = lang_map.get(extension, "text")
-
-                    # Write file header
-                    md_file.write(f"### File: `{file_path}`\n\n")
-                    md_file.write(f"**Size:** {file_info['size']} bytes  \n")
-
-                    # Get and write file content
-                    content = self.get_file_content(full_path)
-
-                    if content.strip():
-                        md_file.write(f"```{language}\n")
-                        md_file.write(content)
-
-                        # Ensure the file ends with newline
-                        if not content.endswith("\n"):
-                            md_file.write("\n")
-
-                        md_file.write("```\n\n")
-                    else:
-                        md_file.write("*File is empty*\n\n")
-
-                    md_file.write("---\n\n")
-
-            # Add summary
-            md_file.write("## Summary\n\n")
-            md_file.write(f"- **Project scanned from:** `{self.root_dir}`\n")
-            md_file.write(f"- **Total files extracted:** {len(files)}\n")
-            md_file.write(f"- **Output file:** `{self.output_file}`\n")
-            md_file.write(
-                f"- **Generated on:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-            )
-
-        print(f"✓ Markdown file created successfully: {self.output_file}")
-        print(f"✓ Total size: {self.output_file.stat().st_size/1024/1024:.2f} MB")
-
-    def run(self):
-        """Run the full extraction process."""
-        try:
-            files = self.scan_project()
-
-            if not files:
-                print("No files found to process!")
-                return
-
-            self.create_markdown(files)
-
-        except KeyboardInterrupt:
-            print("\n\nProcess interrupted by user.")
-            sys.exit(1)
-        except Exception as e:
-            print(f"\nError: {e}")
-            import traceback
-
-            traceback.print_exc()
-            sys.exit(1)
-
-
-def main():
-    """Main function with command line argument support."""
-    import argparse
-
-    parser = argparse.ArgumentParser(
-        description="Extract all code from a project into a single markdown file."
-    )
-    parser.add_argument(
-        "--root",
-        "-r",
-        default=".",
-        help="Root directory to start scanning (default: current directory)",
-    )
-    parser.add_argument(
-        "--output",
-        "-o",
-        default="project_code.md",
-        help="Output markdown file name (default: project_code.md)",
-    )
-    parser.add_argument(
-        "--exclude", nargs="+", default=[], help="Additional directories to exclude"
-    )
-    parser.add_argument(
-        "--include-all",
-        action="store_true",
-        help="Include all file types (not just text files)",
-    )
-
-    args = parser.parse_args()
-
-    # Create extractor
-    extractor = ProjectCodeExtractor(root_dir=args.root, output_file=args.output)
-
-    # Add additional exclusions
-    if args.exclude:
-        extractor.exclude_dirs.update(args.exclude)
-
-    # If include-all is specified, clear the extensions filter
-    if args.include_all:
-        extractor.include_extensions = set()
-
-    # Run the extraction
-    extractor.run()
-
-
-if __name__ == "__main__":
-    # Add datetime import for the template string
-    import datetime
-
-    main()
-```
-
----
-
-### File: `docker-compose.yml`
-
-**Size:** 344 bytes  
-```yaml
-version: '3.8'
-
-services:
-  frontend:
-    build: .
-    ports:
-      - "19000:19000"  # Expo Metro bundler
-      - "19001:19001"  # Expo web
-      - "19002:19002"  # Expo DevTools
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-    stdin_open: true
-    tty: true
-```
-
----
-
-### File: `eslint.config.js`
-
-**Size:** 199 bytes  
-```javascript
-const { defineConfig } = require('eslint/config');
-const expoConfig = require('eslint-config-expo/flat');
-
-module.exports = defineConfig([
-  expoConfig,
-  {
-    ignores: ["dist/*"],
-  }
-]);
-```
-
----
-
 ### File: `FIXES_SUMMARY.md`
 
-**Size:** 7477 bytes  
+**Size:** 7222 bytes  
 ```markdown
 # Mubaku Lifestyle - API Integration Fixes Summary
 
@@ -19355,7 +19614,7 @@ All API endpoints are now correctly configured and ready to use! 🎉
 
 ### File: `GEMINI_ANALYSIS.md`
 
-**Size:** 2621 bytes  
+**Size:** 2575 bytes  
 ```markdown
 # Gemini Analysis of the `ngrok` issue
 
@@ -20909,23 +21168,9 @@ environments:
 
 ---
 
-### File: `metro.config.js`
-
-**Size:** 216 bytes  
-```javascript
-const { getDefaultConfig } = require("expo/metro-config");
-const { withRorkMetro } = require("@rork-ai/toolkit-sdk/metro");
-
-const config = getDefaultConfig(__dirname);
-
-module.exports = withRorkMetro(config);
-```
-
----
-
 ### File: `MOBILE_APP_STATUS.md`
 
-**Size:** 10861 bytes  
+**Size:** 10566 bytes  
 ```markdown
 # Mubaku Lifestyle Mobile App - Implementation Status
 
@@ -21222,6 +21467,1734 @@ The mobile app is ready for:
 **Version**: 1.0.0
 **Expo SDK**: 53
 **React Native**: Latest (via Expo)
+```
+
+---
+
+### File: `PROVIDER_SERVICE_MANAGEMENT.md`
+
+**Size:** 6744 bytes  
+```markdown
+# Provider Service Management Flow
+
+## Overview
+This document outlines the complete flow for providers to create and manage their services in the application.
+
+## API Configuration
+
+### Base URL
+- **Production**: `https://mubakulifestyle.com/api/v1`
+- All API endpoints are relative to this base URL
+
+### Key Endpoints Fixed
+All endpoints now correctly use the base URL without duplication:
+- Auth: `/auth/jwt/create/`, `/auth/users/me/`
+- Services: `/services/`, `/services/create/`, `/services/{id}/update/`
+- Users: `/users/`, `/users/apply-provider/`
+- Appointments: `/appointments/`, `/appointments/availability/`
+
+## Provider Registration & Approval Flow
+
+### 1. User Registration
+- New users register as "clients" by default
+- Navigate to: Login → Register
+- Required fields: username, email, first_name, last_name, password
+
+### 2. Apply to Become a Provider
+- **Location**: Profile Tab → "Become a Service Provider" card
+- **Endpoint**: `POST /users/apply-provider/`
+- **Required Fields**:
+  - `service_categories`: Array of category IDs (selected from dropdown)
+  - `business_name`: Optional
+  - `business_address`: Optional
+  - `description`: Optional
+  - `years_of_experience`: Optional
+  - `certifications`: Optional array
+  - `portfolio_urls`: Optional array
+  - `availability_schedule`: Optional
+  - `base_price`: Optional
+  - `emergency_contact`: Optional
+  - `latitude`, `longitude`: Optional
+
+### 3. Admin Approval
+- Admins review applications in their admin dashboard
+- Endpoint: `POST /users/{id}/verify-provider/`
+- Status changes from "pending" → "approved"
+- User's role changes from "client" → "provider"
+
+### 4. Application Status Check
+- **Endpoint**: `GET /users/application-status/`
+- **Statuses**: 
+  - `pending`: Under review
+  - `approved`: Can create services
+  - `rejected`: Application denied
+  - `withdrawn`: User canceled application
+
+## Service Management for Approved Providers
+
+### Accessing Service Management
+Once approved, providers will see:
+1. **Profile Tab** → "Manage My Services" button (green card)
+2. **Navigates to**: `/provider-services`
+
+### Service Creation
+1. Navigate to Provider Services screen
+2. Tap the "+" button (top right)
+3. Fill in service details:
+   - **Name** (required): e.g., "Professional Hair Styling"
+   - **Description** (optional): Service details
+   - **Category** (required): Select from available categories
+   - **Duration** (required): In minutes (e.g., 40)
+   - **Price** (required): Service cost (e.g., 12000.00)
+   - **Currency**: Fixed to "XAF"
+   - **Status**: Auto-set to `is_active: true`
+
+4. **API Call**: `POST /services/create/`
+```json
+{
+  "name": "Professional Hair Styling",
+  "description": "Expert hair cutting, styling, and treatment",
+  "category": 3,
+  "duration_minutes": 40,
+  "price": 12000.00,
+  "currency": "XAF",
+  "is_active": true
+}
+```
+
+### Service Management Features
+**Provider Services Screen** (`/provider-services`):
+- View all your services
+- Search services by name/description
+- See service statistics:
+  - Total services
+  - Active services
+  - Total bookings
+  - Total revenue
+  - Average rating
+
+**Per Service Actions**:
+1. **Toggle Status**: Activate/deactivate service
+2. **Edit**: Modify service details (`/provider-services/edit?id={serviceId}`)
+3. **Delete**: Remove service (with confirmation)
+
+### Service Display on Home Screen
+Active services from approved providers automatically appear on:
+- **Home Tab** → "Available Services" section
+- Services can be filtered by:
+  - Category
+  - Search query
+  - Provider verification status (only verified by default)
+
+## User Interface Flow
+
+### For Approved Providers:
+```
+Login 
+  → Profile Tab
+    → See "Manage My Services" button
+    → Tap to navigate to `/provider-services`
+      → View existing services
+      → Tap "+" to create new service
+        → Fill form
+        → Submit
+        → Service appears in list
+        → Service appears on Home screen for all users
+```
+
+### For Clients/Users:
+```
+Login
+  → Home Tab
+    → See "Available Services"
+    → Tap service card
+      → View service details
+      → Book appointment
+```
+
+## Service Categories
+Categories are fetched from: `GET /services/categories/`
+- Categories are displayed as selectable chips in the create/edit form
+- Each service must belong to exactly one category
+- Categories enable filtering and organization
+
+## Key Features
+
+### Service Statistics
+Providers can track:
+- Number of services created
+- Active vs inactive services
+- Total bookings received
+- Revenue generated
+- Average customer rating
+
+### Service Visibility
+Services appear on home screen when:
+- ✅ Provider is verified/approved
+- ✅ Service `is_active = true`
+- ✅ Service has valid category
+- ✅ Service has price and duration set
+
+### Search & Filtering
+Home screen supports:
+- Text search (name/description)
+- Category filtering
+- Multiple filters simultaneously
+- Clear all filters option
+
+## Troubleshooting
+
+### "Cannot see Manage Services button"
+**Possible causes**:
+1. User role is not "provider"
+2. Application status is not "approved"
+3. User logged in as client
+
+**Solution**: Check application status in Profile tab
+
+### "Services not appearing on home screen"
+**Possible causes**:
+1. Service is inactive (`is_active = false`)
+2. Provider not verified
+3. Invalid category assigned
+
+**Solution**: 
+- Check service status in Provider Services screen
+- Ensure provider is approved
+- Verify service has valid category
+
+### "API 404 errors"
+**Cause**: Double `/api/v1` in URL
+
+**Solution**: Fixed in latest update. Base URL is now correctly set to `https://mubakulifestyle.com/api/v1` with all endpoints relative to this base.
+
+## Technical Implementation
+
+### State Management
+- **Redux Toolkit**: Authentication state, tokens
+- **RTK Query**: API calls, caching
+- **React Query**: Alternative for future optimization
+
+### API Structure
+```typescript
+// Service API endpoints
+useGetAllServicesQuery()          // Get all services (with filters)
+useGetMyServicesQuery()            // Get provider's services
+useCreateServiceMutation()         // Create new service
+useUpdateServiceMutation()         // Update existing service
+useDeleteServiceMutation()         // Delete service
+useGetMyServiceStatsQuery()        // Get provider statistics
+
+// Category API endpoints
+useGetAllCategoriesQuery()         // Get all categories
+```
+
+### Authentication Flow
+1. Login → Get JWT tokens
+2. Store tokens in Redux
+3. Add Bearer token to all API requests
+4. Auto-refresh token on 401 errors
+
+## Future Enhancements
+- Image uploads for services
+- Multiple service images
+- Service packages/bundles
+- Promotional pricing
+- Service reviews and ratings
+- Provider profile customization
+```
+
+---
+
+### File: `README.md`
+
+**Size:** 11016 bytes  
+```markdown
+# Welcome to your Rork app
+
+## Project info
+
+This is a native cross-platform mobile app created with [Rork](https://rork.com)
+
+**Platform**: Native iOS & Android app, exportable to web
+**Framework**: Expo Router + React Native
+
+## How can I edit this code?
+
+There are several ways of editing your native mobile application.
+
+### **Use Rork**
+
+Simply visit [rork.com](https://rork.com) and prompt to build your app with AI.
+
+Changes made via Rork will be committed automatically to this GitHub repo.
+
+Whenever you make a change in your local code editor and push it to GitHub, it will be also reflected in Rork.
+
+### **Use your preferred code editor**
+
+If you want to work locally using your own code editor, you can clone this repo and push changes. Pushed changes will also be reflected in Rork.
+
+If you are new to coding and unsure which editor to use, we recommend Cursor. If you're familiar with terminals, try Claude Code.
+
+The only requirement is having Node.js & Bun installed - [install Node.js with nvm](https://github.com/nvm-sh/nvm) and [install Bun](https://bun.sh/docs/installation)
+
+Follow these steps:
+
+```bash
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+bun i
+
+# Step 4: Start the instant web preview of your Rork app in your browser, with auto-reloading of your changes
+bun run start-web
+
+# Step 5: Start iOS preview
+# Option A (recommended):
+bun run start  # then press "i" in the terminal to open iOS Simulator
+# Option B (if supported by your environment):
+bun run start -- --ios
+```
+
+### **Edit a file directly in GitHub**
+
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
+
+## What technologies are used for this project?
+
+This project is built with the most popular native mobile cross-platform technical stack:
+
+- **React Native** - Cross-platform native mobile development framework created by Meta and used for Instagram, Airbnb, and lots of top apps in the App Store
+- **Expo** - Extension of React Native + platform used by Discord, Shopify, Coinbase, Telsa, Starlink, Eightsleep, and more
+- **Expo Router** - File-based routing system for React Native with support for web, server functions and SSR
+- **TypeScript** - Type-safe JavaScript
+- **React Query** - Server state management
+- **Lucide React Native** - Beautiful icons
+
+## How can I test my app?
+
+### **On your phone (Recommended)**
+
+1. **iOS**: Download the [Rork app from the App Store](https://apps.apple.com/app/rork) or [Expo Go](https://apps.apple.com/app/expo-go/id982107779)
+2. **Android**: Download the [Expo Go app from Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
+3. Run `bun run start` and scan the QR code from your development server
+
+### **In your browser**
+
+Run `bun start-web` to test in a web browser. Note: The browser preview is great for quick testing, but some native features may not be available.
+
+### **iOS Simulator / Android Emulator**
+
+You can test Rork apps in Expo Go or Rork iOS app. You don't need XCode or Android Studio for most features.
+
+**When do you need Custom Development Builds?**
+
+- Native authentication (Face ID, Touch ID, Apple Sign In)
+- In-app purchases and subscriptions
+- Push notifications
+- Custom native modules
+
+Learn more: [Expo Custom Development Builds Guide](https://docs.expo.dev/develop/development-builds/introduction/)
+
+If you have XCode (iOS) or Android Studio installed:
+
+```bash
+# iOS Simulator
+bun run start -- --ios
+
+# Android Emulator
+bun run start -- --android
+```
+
+## How can I deploy this project?
+
+### **Publish to App Store (iOS)**
+
+1. **Install EAS CLI**:
+
+   ```bash
+   bun i -g @expo/eas-cli
+   ```
+
+2. **Configure your project**:
+
+   ```bash
+   eas build:configure
+   ```
+
+3. **Build for iOS**:
+
+   ```bash
+   eas build --platform ios
+   ```
+
+4. **Submit to App Store**:
+   ```bash
+   eas submit --platform ios
+   ```
+
+For detailed instructions, visit [Expo's App Store deployment guide](https://docs.expo.dev/submit/ios/).
+
+### **Publish to Google Play (Android)**
+
+1. **Build for Android**:
+
+   ```bash
+   eas build --platform android
+   ```
+
+2. **Submit to Google Play**:
+   ```bash
+   eas submit --platform android
+   ```
+
+For detailed instructions, visit [Expo's Google Play deployment guide](https://docs.expo.dev/submit/android/).
+
+### **Publish as a Website**
+
+Your React Native app can also run on the web:
+
+1. **Build for web**:
+
+   ```bash
+   eas build --platform web
+   ```
+
+2. **Deploy with EAS Hosting**:
+   ```bash
+   eas hosting:configure
+   eas hosting:deploy
+   ```
+
+Alternative web deployment options:
+
+- **Vercel**: Deploy directly from your GitHub repository
+- **Netlify**: Connect your GitHub repo to Netlify for automatic deployments
+
+## App Features
+
+This template includes:
+
+- **Cross-platform compatibility** - Works on iOS, Android, and Web
+- **File-based routing** with Expo Router
+- **Tab navigation** with customizable tabs
+- **Modal screens** for overlays and dialogs
+- **TypeScript support** for better development experience
+- **Async storage** for local data persistence
+- **Vector icons** with Lucide React Native
+
+## Project Structure
+
+```
+├── app/                    # App screens (Expo Router)
+│   ├── (tabs)/            # Tab navigation screens
+│   │   ├── _layout.tsx    # Tab layout configuration
+│   │   └── index.tsx      # Home tab screen
+│   ├── _layout.tsx        # Root layout
+│   ├── modal.tsx          # Modal screen example
+│   └── +not-found.tsx     # 404 screen
+├── assets/                # Static assets
+│   └── images/           # App icons and images
+├── constants/            # App constants and configuration
+├── app.json             # Expo configuration
+├── package.json         # Dependencies and scripts
+└── tsconfig.json        # TypeScript configuration
+```
+
+## Custom Development Builds
+
+For advanced native features, you'll need to create a Custom Development Build instead of using Expo Go.
+
+### **When do you need a Custom Development Build?**
+
+- **Native Authentication**: Face ID, Touch ID, Apple Sign In, Google Sign In
+- **In-App Purchases**: App Store and Google Play subscriptions
+- **Advanced Native Features**: Third-party SDKs, platform-specifc features (e.g. Widgets on iOS)
+- **Background Processing**: Background tasks, location tracking
+
+### **Creating a Custom Development Build**
+
+```bash
+# Install EAS CLI
+bun i -g @expo/eas-cli
+
+# Configure your project for development builds
+eas build:configure
+
+# Create a development build for your device
+eas build --profile development --platform ios
+eas build --profile development --platform android
+
+# Install the development build on your device and start developing
+bun start --dev-client
+```
+
+**Learn more:**
+
+- [Development Builds Introduction](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Creating Development Builds](https://docs.expo.dev/develop/development-builds/create-a-build/)
+- [Installing Development Builds](https://docs.expo.dev/develop/development-builds/installation/)
+
+## Advanced Features
+
+### **Add a Database**
+
+Integrate with backend services:
+
+- **Supabase** - PostgreSQL database with real-time features
+- **Firebase** - Google's mobile development platform
+- **Custom API** - Connect to your own backend
+
+### **Add Authentication**
+
+Implement user authentication:
+
+**Basic Authentication (works in Expo Go):**
+
+- **Expo AuthSession** - OAuth providers (Google, Facebook, Apple) - [Guide](https://docs.expo.dev/guides/authentication/)
+- **Supabase Auth** - Email/password and social login - [Integration Guide](https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native)
+- **Firebase Auth** - Comprehensive authentication solution - [Setup Guide](https://docs.expo.dev/guides/using-firebase/)
+
+**Native Authentication (requires Custom Development Build):**
+
+- **Apple Sign In** - Native Apple authentication - [Implementation Guide](https://docs.expo.dev/versions/latest/sdk/apple-authentication/)
+- **Google Sign In** - Native Google authentication - [Setup Guide](https://docs.expo.dev/guides/google-authentication/)
+
+### **Add Push Notifications**
+
+Send notifications to your users:
+
+- **Expo Notifications** - Cross-platform push notifications
+- **Firebase Cloud Messaging** - Advanced notification features
+
+### **Add Payments**
+
+Monetize your app:
+
+**Web & Credit Card Payments (works in Expo Go):**
+
+- **Stripe** - Credit card payments and subscriptions - [Expo + Stripe Guide](https://docs.expo.dev/guides/using-stripe/)
+- **PayPal** - PayPal payments integration - [Setup Guide](https://developer.paypal.com/docs/checkout/mobile/react-native/)
+
+**Native In-App Purchases (requires Custom Development Build):**
+
+- **RevenueCat** - Cross-platform in-app purchases and subscriptions - [Expo Integration Guide](https://www.revenuecat.com/docs/expo)
+- **Expo In-App Purchases** - Direct App Store/Google Play integration - [Implementation Guide](https://docs.expo.dev/versions/latest/sdk/in-app-purchases/)
+
+**Paywall Optimization:**
+
+- **Superwall** - Paywall A/B testing and optimization - [React Native SDK](https://docs.superwall.com/docs/react-native)
+- **Adapty** - Mobile subscription analytics and paywalls - [Expo Integration](https://docs.adapty.io/docs/expo)
+
+## I want to use a custom domain - is that possible?
+
+For web deployments, you can use custom domains with:
+
+- **EAS Hosting** - Custom domains available on paid plans
+- **Netlify** - Free custom domain support
+- **Vercel** - Custom domains with automatic SSL
+
+For mobile apps, you'll configure your app's deep linking scheme in `app.json`.
+
+## Troubleshooting
+
+### **App not loading on device?**
+
+1. Make sure your phone and computer are on the same WiFi network
+2. Try using tunnel mode: `bun start -- --tunnel`
+3. Check if your firewall is blocking the connection
+
+### **Build failing?**
+
+1. Clear your cache: `bunx expo start --clear`
+2. Delete `node_modules` and reinstall: `rm -rf node_modules && bun install`
+3. Check [Expo's troubleshooting guide](https://docs.expo.dev/troubleshooting/build-errors/)
+
+### **Need help with native features?**
+
+- Check [Expo's documentation](https://docs.expo.dev/) for native APIs
+- Browse [React Native's documentation](https://reactnative.dev/docs/getting-started) for core components
+- Visit [Rork's FAQ](https://rork.com/faq) for platform-specific questions
+
+## About Rork
+
+Rork builds fully native mobile apps using React Native and Expo - the same technology stack used by Discord, Shopify, Coinbase, Instagram, and nearly 30% of the top 100 apps on the App Store.
+
+Your Rork app is production-ready and can be published to both the App Store and Google Play Store. You can also export your app to run on the web, making it truly cross-platform.
+```
+
+---
+
+### File: `REDUX_SETUP.md`
+
+**Size:** 6882 bytes  
+```markdown
+# Redux State Management Documentation
+
+This app uses **Redux Toolkit** with **RTK Query** for state management and API integration with your Django backend hosted on Google Cloud.
+
+## Architecture
+
+### Store Structure
+```
+store/
+├── store.ts              # Redux store configuration
+├── api.ts                # Base RTK Query API configuration
+├── authSlice.ts          # Authentication state slice
+├── hooks.ts              # Typed Redux hooks
+└── services/
+    ├── authApi.ts        # Authentication API endpoints
+    ├── profileApi.ts     # User profile API endpoints
+    └── appointmentApi.ts # Appointments & availability API endpoints
+```
+
+## Configuration
+
+### Backend URL
+Set your backend URL in the environment variable:
+```bash
+EXPO_PUBLIC_API_URL=https://mubakulifestyle.com
+```
+
+If not set, it defaults to `https://mubakulifestyle.com` (configured in `store/api.ts`).
+
+### Token Management
+- **Access tokens** are automatically added to API requests via `prepareHeaders` in `api.ts`
+- **Refresh tokens** are stored in AsyncStorage
+- Tokens persist across app sessions
+
+## API Endpoints
+
+### Authentication (`authApi.ts`)
+
+#### Login
+```typescript
+const [login, { isLoading, error }] = useLoginMutation();
+
+await login({ email: 'user@example.com', password: 'password' }).unwrap();
+// Automatically stores tokens and fetches user data
+```
+
+#### Register
+```typescript
+const [register] = useRegisterMutation();
+
+await register({
+  username: 'john_doe',
+  email: 'john@example.com',
+  first_name: 'John',
+  last_name: 'Doe',
+  password: 'securepassword'
+}).unwrap();
+```
+
+#### Get Current User
+```typescript
+const { data: user, isLoading, error } = useGetCurrentUserQuery();
+// Automatically called after login
+// Returns user object with profile data
+```
+
+### User Profiles (`profileApi.ts`)
+
+#### Get Profile
+```typescript
+const { data: profile } = useGetProfileQuery(userId);
+```
+
+#### Update Profile
+```typescript
+const [updateProfile] = useUpdateProfileMutation();
+
+await updateProfile({
+  pkid: userId,
+  data: {
+    phone_number: '+237699000111',
+    about_me: 'Software engineer',
+    city: 'Yaoundé'
+  }
+}).unwrap();
+```
+
+### Appointments (`appointmentApi.ts`)
+
+#### Get Available Slots
+```typescript
+const { data: slots } = useGetAvailableSlotsQuery({
+  serviceId: 'service-uuid',
+  startDate: '2024-01-15',
+  endDate: '2024-01-20'
+});
+```
+
+#### Create Appointment
+```typescript
+const [createAppointment] = useCreateAppointmentMutation();
+
+const appointment = await createAppointment({
+  service_id: 'service-uuid',
+  scheduled_for: '2024-01-15T09:00:00',
+  scheduled_until: '2024-01-15T09:30:00',
+  amount: 15000.00,
+  currency: 'XAF'
+}).unwrap();
+```
+
+#### Confirm Payment
+```typescript
+const [confirmPayment] = useConfirmPaymentMutation();
+
+await confirmPayment(appointmentId).unwrap();
+// Updates appointment status to 'confirmed'
+```
+
+#### Get My Appointments
+```typescript
+const { data: appointments } = useGetMyAppointmentsQuery({ status: 'confirmed' });
+```
+
+## Authentication State
+
+Access authentication state using the Redux hooks:
+
+```typescript
+import { useAppSelector, useAppDispatch } from '@/store/hooks';
+import { logout } from '@/store/authSlice';
+
+function MyComponent() {
+  const { user, isAuthenticated, accessToken } = useAppSelector(state => state.auth);
+  const dispatch = useAppDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    // Clears tokens from state and AsyncStorage
+  };
+
+  return (
+    <View>
+      <Text>{user?.full_name}</Text>
+      <Button onPress={handleLogout} title="Logout" />
+    </View>
+  );
+}
+```
+
+## Screens Updated with Redux
+
+### ✅ Login Screen (`app/login.tsx`)
+- Uses `useLoginMutation` for authentication
+- Stores JWT tokens automatically
+- Navigates to home on success
+- Shows loading state and error handling
+
+### ✅ Register Screen (`app/register.tsx`)
+- Uses `useRegisterMutation` for account creation
+- Validates all required fields
+- Redirects to login after successful registration
+- Comprehensive error handling
+
+### ✅ Home Screen (`app/home.tsx`)
+- Fetches current user data with `useGetCurrentUserQuery`
+- Displays personalized greeting
+- Shows loading state while fetching user
+- Profile button for settings
+
+### ✅ Profile Settings Screen (`app/profile-settings.tsx`)
+- Displays user profile information from Redux state
+- Logout functionality with confirmation
+- Integrated with Redux auth state
+
+### ✅ Booking Payment Screen (`app/booking/payment.tsx`)
+- Creates appointments using `useCreateAppointmentMutation`
+- Confirms payment with `useConfirmPaymentMutation`
+- Handles payment flow with proper error handling
+- Loading states during API calls
+
+## Error Handling
+
+All mutations return errors in a consistent format:
+
+```typescript
+try {
+  await mutation(data).unwrap();
+} catch (error) {
+  // error.data contains backend error response
+  // error.status contains HTTP status code
+  console.error('Error:', error);
+  Alert.alert('Error', error?.data?.detail || 'Something went wrong');
+}
+```
+
+## Next Steps
+
+1. **Backend URL Configured**: Already set to `https://mubakulifestyle.com`
+2. **Test Authentication**: Try logging in with real credentials from your backend
+3. **Add Services Endpoints**: Your backend needs endpoints for listing services/agents (not in current API docs)
+4. **Image Uploads**: Implement profile photo uploads using multipart/form-data
+5. **Token Refresh**: Implement automatic token refresh on 401 errors
+6. **Offline Support**: Consider adding RTK Query persistence for offline functionality
+
+## Backend Requirements
+
+Your backend should have these endpoints working:
+- ✅ POST `/api/v1/auth/jwt/create/` - Login
+- ✅ POST `/api/v1/auth/jwt/refresh/` - Refresh token
+- ✅ POST `/api/v1/auth/users/` - Register
+- ✅ GET `/api/v1/auth/users/me/` - Get current user
+- ✅ GET `/api/v1/profiles/{pkid}/` - Get profile
+- ✅ PATCH `/api/v1/profiles/{pkid}/` - Update profile
+- ✅ POST `/api/appointments/appointments/` - Create appointment
+- ✅ POST `/api/appointments/appointments/{id}/confirm-payment/` - Confirm payment
+- ⚠️ Missing: List services/agents endpoint for home screen
+
+## Testing the Integration
+
+1. Start your app: `npm start`
+2. Try registering a new account
+3. Login with the registered credentials
+4. Check if user data appears on home screen
+5. Try updating profile in settings
+6. Test booking flow (will need service data from backend)
+
+## Troubleshooting
+
+### CORS Issues
+Ensure your Django backend has CORS properly configured for your Expo development URL.
+
+### Token Expiration
+Tokens are stored in AsyncStorage but will expire based on your backend JWT settings. Implement token refresh logic for production.
+
+### Network Errors
+Check that your device/emulator can reach the backend URL. Use ngrok or ensure both are on the same network during development.
+```
+
+---
+
+### File: `TESTING_GUIDE.md`
+
+**Size:** 8043 bytes  
+```markdown
+# Testing Guide - Mubaku Lifestyle API Integration
+
+## 🧪 Quick Test
+
+### 1. Start the App
+```bash
+npm start
+# or
+bun start
+```
+
+### 2. Test Login Flow
+
+#### Test Credentials
+```
+Email: superuser@gmail.com
+Password: 123456789
+```
+
+#### Expected Behavior:
+1. Open the app → Should show Language Selection screen
+2. Navigate to Login screen
+3. Enter test credentials
+4. Click "Login" button
+5. Should see loading spinner
+6. Should redirect to Home screen
+7. Home screen should display:
+   - Welcome message with user's first name
+   - Categories (if available in backend)
+   - Services list (if available in backend)
+
+---
+
+## 🔍 Debugging
+
+### Check Console Logs
+
+#### Successful Login:
+```
+Login success response:
+{
+  access: "eyJ0eXAiOiJKV1QiLCJh...",
+  refresh: "eyJ0eXAiOiJKV1QiLCJh..."
+}
+
+User data fetched:
+{
+  pkid: 1,
+  username: "superuser",
+  email: "superuser@gmail.com",
+  first_name: "Super",
+  last_name: "User",
+  role: "admin",
+  ...
+}
+
+Home screen loaded:
+{
+  user: { ... },
+  servicesCount: 5,
+  categoriesCount: 3
+}
+```
+
+#### Failed Login:
+```
+Login error:
+{
+  status: 401,
+  data: { detail: "No active account found with the given credentials" }
+}
+```
+
+---
+
+## 🔗 API Endpoints Being Called
+
+### On Login:
+1. `POST https://mubakulifestyle.com/api/v1/auth/jwt/create/`
+   - Body: `{ email, password }`
+   - Response: `{ access, refresh }`
+
+2. `GET https://mubakulifestyle.com/api/v1/auth/users/me/`
+   - Headers: `Authorization: Bearer {access_token}`
+   - Response: User object
+
+### On Home Screen Load:
+1. `GET https://mubakulifestyle.com/api/v1/auth/users/me/`
+   - Get current user data
+
+2. `GET https://mubakulifestyle.com/api/v1/services/`
+   - Get all services
+
+3. `GET https://mubakulifestyle.com/api/v1/services/categories/`
+   - Get all categories
+
+---
+
+## 🐛 Common Issues & Solutions
+
+### Issue 1: 404 Not Found
+**Symptoms:**
+- Login fails with 404 error
+- URL shows double `/api/v1/api/v1/`
+
+**Solution:**
+- ✅ This has been fixed
+- Base URL is now: `https://mubakulifestyle.com`
+- All endpoints include full path: `/api/v1/...`
+
+### Issue 2: Network Request Failed
+**Symptoms:**
+- App shows "Network request failed"
+- No data loads
+
+**Possible Causes:**
+1. Backend server is down
+2. No internet connection
+3. CORS issues (Web only)
+
+**Solutions:**
+- Check if backend is up: Visit `https://mubakulifestyle.com/api/v1/` in browser
+- Check internet connection
+- For web: Ensure backend has CORS enabled
+
+### Issue 3: No Services/Categories Display
+**Symptoms:**
+- Login works
+- Home screen loads
+- Shows "No services available"
+
+**Possible Causes:**
+1. Backend has no data yet
+2. Services are marked as inactive
+
+**Solutions:**
+- Check backend admin panel
+- Create test services via Django admin
+- Verify services have `is_active=True`
+
+### Issue 4: Token Expired
+**Symptoms:**
+- Login works initially
+- After some time, API calls fail with 401
+
+**Solution:**
+- Token refresh is implemented
+- Use `useRefreshTokenMutation()` to refresh token
+- Or logout and login again
+
+---
+
+## 📱 Testing on Different Platforms
+
+### iOS Simulator
+```bash
+npm start
+# Press 'i' for iOS simulator
+```
+
+### Android Emulator
+```bash
+npm start
+# Press 'a' for Android emulator
+```
+
+### Web Browser
+```bash
+npm start
+# Press 'w' for web
+```
+
+### Physical Device (QR Code)
+```bash
+npm start
+# Scan QR code with Expo Go app
+```
+
+---
+
+## 🔐 Testing Different User Roles
+
+### Admin User (Provided)
+```
+Email: superuser@gmail.com
+Password: 123456789
+Role: admin
+```
+
+### Create Test Provider
+1. Register new account
+2. Navigate to role selection
+3. Select "Provider"
+4. Fill provider profile details
+5. Wait for admin approval (or approve via Django admin)
+
+### Create Test Client
+1. Register new account
+2. Navigate to role selection
+3. Select "Client"
+4. Fill client profile details
+
+---
+
+## 🧪 API Testing with Postman/Thunder Client
+
+### Get JWT Token
+```http
+POST https://mubakulifestyle.com/api/v1/auth/jwt/create/
+Content-Type: application/json
+
+{
+  "email": "superuser@gmail.com",
+  "password": "123456789"
+}
+```
+
+### Get Current User
+```http
+GET https://mubakulifestyle.com/api/v1/auth/users/me/
+Authorization: Bearer {your_access_token}
+```
+
+### Get All Services
+```http
+GET https://mubakulifestyle.com/api/v1/services/
+Authorization: Bearer {your_access_token}
+```
+
+### Create Service (Provider only)
+```http
+POST https://mubakulifestyle.com/api/v1/services/create/
+Authorization: Bearer {your_access_token}
+Content-Type: application/json
+
+{
+  "category": "category-uuid",
+  "name": "Women's Haircut",
+  "description": "Professional haircut and styling",
+  "duration_minutes": 60,
+  "price": 15000,
+  "currency": "XAF"
+}
+```
+
+---
+
+## 📊 Expected API Responses
+
+### Successful Login Response
+```json
+{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+}
+```
+
+### User Data Response
+```json
+{
+  "pkid": 1,
+  "username": "superuser",
+  "email": "superuser@gmail.com",
+  "first_name": "Super",
+  "last_name": "User",
+  "full_name": "Super User",
+  "gender": "Male",
+  "phone_number": "+237670000000",
+  "profile_photo": "/media/profiles/default.png",
+  "country": "CM",
+  "city": "Douala",
+  "role": "admin",
+  "is_active": true,
+  "is_verified_provider": false
+}
+```
+
+### Services Response
+```json
+[
+  {
+    "id": "uuid",
+    "provider": "provider-uuid",
+    "category": "category-uuid",
+    "name": "Women's Haircut",
+    "description": "Professional haircut",
+    "duration_minutes": 60,
+    "price": 15000,
+    "currency": "XAF",
+    "is_active": true,
+    "rating": 4.5,
+    "total_bookings": 10,
+    "category_details": {
+      "id": "uuid",
+      "name": "Hair Styling",
+      "description": "..."
+    }
+  }
+]
+```
+
+---
+
+## ✅ Testing Checklist
+
+### Authentication
+- [ ] Can register new user
+- [ ] Can login with credentials
+- [ ] Token is stored in AsyncStorage
+- [ ] Token is sent with API requests
+- [ ] Can logout (token is cleared)
+- [ ] Can change password
+- [ ] Can request password reset
+
+### Home Screen
+- [ ] User data displays correctly
+- [ ] Services list loads from API
+- [ ] Categories list loads from API
+- [ ] Empty state shows when no services
+- [ ] Can click on service to view details
+- [ ] Loading spinner shows while fetching
+
+### Profile
+- [ ] Can view own profile
+- [ ] Can update profile information
+- [ ] Profile photo placeholder works
+- [ ] Can apply to become provider
+- [ ] Can check application status
+
+### Services (Provider)
+- [ ] Provider can create services
+- [ ] Provider can view own services
+- [ ] Provider can update services
+- [ ] Provider can delete services
+- [ ] Provider can view service stats
+
+### Appointments
+- [ ] Can view available time slots
+- [ ] Can create appointment
+- [ ] Can confirm payment
+- [ ] Can view my appointments
+- [ ] Can cancel appointment
+- [ ] Can reschedule appointment
+
+---
+
+## 🚨 Known Limitations
+
+1. **Image Upload Not Implemented**
+   - Profile photos currently use placeholders
+   - Need to implement image picker and upload
+
+2. **Payment Integration Not Complete**
+   - Payment confirmation is API call only
+   - No actual payment gateway integration
+
+3. **Real-time Notifications Not Implemented**
+   - Notifications screen uses mock data
+   - Need to implement push notifications
+
+4. **Search Functionality Not Active**
+   - Search bar in home screen is UI only
+   - Need to implement search API call
+
+---
+
+## 📞 Support
+
+If tests fail:
+1. Check console logs in Metro bundler
+2. Check network requests in React Native Debugger
+3. Verify backend is running
+4. Check API endpoints in browser
+5. Refer to `API_INTEGRATION.md` for endpoint details
+6. Refer to `FIXES_SUMMARY.md` for what was fixed
+
+---
+
+## ✨ Success Indicators
+
+Your API integration is working correctly if:
+- ✅ Login redirects to home screen
+- ✅ Home screen shows user's first name
+- ✅ Services list loads (or shows empty state)
+- ✅ Categories load (or shows nothing if empty)
+- ✅ No 404 errors in console
+- ✅ No TypeScript errors
+- ✅ JWT token is in AsyncStorage
+
+Happy Testing! 🎉
+```
+
+---
+
+### File: `analysis_of_screens.md`
+
+**Size:** 3046 bytes  
+```markdown
+I am unable to perform a direct comparison with the StyleSeat mobile app as my `google_web_search` tool is not providing results for general web queries, which prevents me from gathering information about StyleSeat's features and screens.
+
+However, I have analyzed the provided project structure and identified the following screens and their probable purposes:
+
+**Core Navigation/Authentication Screens:**
+*   `index.tsx`: Likely the main entry point or a landing page.
+*   `login.tsx`: User login.
+*   `register.tsx`: User registration.
+*   `role-selection.tsx`: Allows users to select their role (e.g., client, provider, agent).
+*   `+not-found.tsx`: Error page for unmatched routes.
+
+**User Profile & Setup Screens:**
+*   `agent-profile-setup.tsx`: Setup for agent profiles.
+*   `client-profile-setup.tsx`: Setup for client profiles.
+*   `profile-edit.tsx`: Editing existing user profiles.
+*   `profile.tsx` (under `(tabs)`): Displays the user's own profile.
+
+**Service and Provider Related Screens:**
+*   `category-detail.tsx`: Details of a specific service category.
+*   `provider-detail.tsx`: Details of a specific service provider.
+*   `provider-availability.tsx`: Displays or manages a provider's availability.
+*   `provider-services.tsx`: Lists services offered by a provider.
+*   `service-detail.tsx`: Details of a specific service.
+*   `providers.tsx` (under `(tabs)`): Likely a list or directory of providers.
+
+**Booking Flow Screens (under `booking/`):**
+*   `choose-location.tsx`: For selecting a booking location.
+*   `select-datetime.tsx`: For selecting date and time for a booking.
+*   `summary.tsx`: Review of booking details before confirmation.
+*   `payment.tsx`: Payment processing for a booking.
+*   `payment-status.tsx`: Displays the status of a payment.
+*   `status.tsx`: General booking status (could be for a specific booking).
+*   `reschedule.tsx`: For rescheduling an existing booking.
+
+**Provider Service Management (under `provider-services/`):**
+*   `create.tsx`: For creating a new service by a provider.
+*   `edit.tsx`: For editing an existing service by a provider.
+
+**Other Screens:**
+*   `application-status.tsx`: General status related to an application (e.g., booking, job application).
+*   `view-location.tsx`: To view a specific location on a map or details.
+*   `my-bookings.tsx` (under `(tabs)`): Displays a user's list of bookings.
+*   `notifications.tsx` (under `(tabs)`): Displays user notifications.
+*   `home.tsx` (under `(tabs)`): Main home screen after login, likely with personalized content.
+
+**Global/Layout Components:**
+*   `_layout.tsx` (root and `(tabs)`): Define the overall layout and navigation.
+*   `+native-intent.tsx`: Might handle native app intents or deep linking.
+*   `i18n.ts`: Internationalization configuration.
+*   `mockData.ts`: Contains mock data, not a screen.
+*   `components/StickyHeader.tsx`: A reusable UI component.
+
+If you can provide a list of typical screens or features for an app like StyleSeat, I can then compare them to the screens identified in this project.
+```
+
+---
+
+### File: `babel.config.js`
+
+**Size:** 149 bytes  
+```javascript
+module.exports = function (api) {
+  api.cache(true);
+  return {
+    presets: [["babel-preset-expo", { unstable_transformImportMeta: true }]],
+  };
+};
+```
+
+---
+
+### File: `code-extract.py`
+
+**Size:** 11752 bytes  
+```python
+#!/usr/bin/env python3
+"""
+Project Code Extractor Script
+Scans through all project files and creates a single markdown file with all code.
+"""
+
+import os
+import sys
+from pathlib import Path
+import mimetypes
+import datetime
+
+
+class ProjectCodeExtractor:
+    def __init__(self, root_dir=None, output_file="payment_code.md"):
+        """
+        Initialize the code extractor.
+
+        Args:
+            root_dir: Starting directory (defaults to current directory)
+            output_file: Name of the output markdown file
+        """
+        self.root_dir = Path(root_dir) if root_dir else Path.cwd()
+        self.output_file = Path(output_file)
+
+        # Common directories to exclude
+        self.exclude_dirs = {
+            "venv",
+            "env",
+            ".venv",
+            ".env",
+            "test",
+            "__pycache__",
+            ".pytest_cache",
+            ".mypy_cache",
+            ".git",
+            ".svn",
+            ".hg",
+            "node_modules",
+            "dist",
+            "build",
+            ".idea",
+            ".vscode",
+            ".vs",
+            "coverage",
+            ".coverage",
+            "logs",
+            "log",
+            "tmp",
+            "temp",
+            ".tox",
+            ".hypothesis",
+        }
+
+        # Common files to exclude
+        self.exclude_files = {
+            self.output_file.name,  # Don't include the output file itself
+            ".gitignore",
+            ".env",
+            ".env.local",
+            "package-lock.json",
+            "yarn.lock",
+            "requirements.txt",
+            "Pipfile.lock",
+            "poetry.lock",
+            "pyproject.toml",
+            "*.pyc",
+            "*.pyo",
+            "*.pyd",
+            "*.so",
+            "*.dll",
+            "*.dylib",
+            "*.class",
+            "*.jar",
+            "*.war",
+            "*.db",
+            "*.sqlite",
+            "*.sqlite3",
+        }
+
+        # File extensions to include (empty list means include all)
+        # You can customize this if you want only specific file types
+        self.include_extensions = {
+            ".py",
+            ".js",
+            ".ts",
+            ".jsx",
+            ".tsx",
+            ".html",
+            ".htm",
+            ".css",
+            ".scss",
+            ".less",
+            ".java",
+            ".cpp",
+            ".c",
+            ".h",
+            ".hpp",
+            ".go",
+            ".rs",
+            ".rb",
+            ".php",
+            ".sql",
+            ".sh",
+            ".bash",
+            ".bat",
+            ".yml",
+            ".yaml",
+            ".json",
+            ".xml",
+            ".md",
+            ".txt",
+            ".csv",
+            ".vue",
+            ".svelte",
+        }
+
+    def should_exclude(self, path):
+        """Check if a path should be excluded."""
+        # Check if any excluded directory is in the path
+        for part in path.parts:
+            if part in self.exclude_dirs:
+                return True
+
+        # Check if file is in exclude list
+        if path.name in self.exclude_files:
+            return True
+
+        # Check file extensions
+        if path.is_file():
+            # Check if it's a binary file
+            mime_type, _ = mimetypes.guess_type(str(path))
+            if mime_type and not mime_type.startswith("text/"):
+                return True
+
+            # If we have specific extensions to include, check them
+            if self.include_extensions:
+                if path.suffix not in self.include_extensions:
+                    return True
+
+        return False
+
+    def get_file_content(self, file_path):
+        """Read file content with proper encoding handling."""
+        try:
+            with open(file_path, "r", encoding="utf-8") as f:
+                return f.read()
+        except UnicodeDecodeError:
+            # Try with different encodings
+            for encoding in ["latin-1", "iso-8859-1", "cp1252"]:
+                try:
+                    with open(file_path, "r", encoding=encoding) as f:
+                        return f.read()
+                except UnicodeDecodeError:
+                    continue
+
+            # If all fails, return empty string
+            print(f"Warning: Could not read {file_path} (binary file?)")
+            return ""
+        except Exception as e:
+            print(f"Error reading {file_path}: {e}")
+            return ""
+
+    def scan_project(self):
+        """Scan the project and collect all files."""
+        print(f"Scanning project from: {self.root_dir}")
+        print(f"Excluding directories: {', '.join(sorted(self.exclude_dirs))}")
+
+        files = []
+        total_size = 0
+
+        for file_path in self.root_dir.rglob("*"):
+            # Skip if should be excluded
+            if self.should_exclude(file_path):
+                continue
+
+            if file_path.is_file():
+                try:
+                    # Get file size
+                    size = file_path.stat().st_size
+
+                    # Skip very large files (optional - you can adjust this)
+                    if size > 10 * 1024 * 1024:  # 10MB
+                        print(
+                            f"Skipping large file: {file_path} ({size/1024/1024:.1f} MB)"
+                        )
+                        continue
+
+                    # Get relative path
+                    rel_path = file_path.relative_to(self.root_dir)
+
+                    files.append(
+                        {"path": rel_path, "full_path": file_path, "size": size}
+                    )
+
+                    total_size += size
+                except Exception as e:
+                    print(f"Error processing {file_path}: {e}")
+
+        print(f"\nFound {len(files)} files (total: {total_size/1024/1024:.2f} MB)")
+        return files
+
+    def create_markdown(self, files):
+        """Create markdown file with all code."""
+        print(f"\nCreating markdown file: {self.output_file}")
+
+        with open(self.output_file, "w", encoding="utf-8") as md_file:
+            # Write header
+            md_file.write(f"# Project Code Documentation\n\n")
+            md_file.write(f"**Project Root:** `{self.root_dir}`\n\n")
+            md_file.write(f"**Total Files:** {len(files)}\n\n")
+            md_file.write("---\n\n")
+
+            # Group files by directory for better organization
+            files_by_dir = {}
+            for file_info in files:
+                dir_path = str(file_info["path"].parent)
+                if dir_path == ".":
+                    dir_path = "root"
+
+                if dir_path not in files_by_dir:
+                    files_by_dir[dir_path] = []
+                files_by_dir[dir_path].append(file_info)
+
+            # Write files by directory
+            for dir_path in sorted(files_by_dir.keys()):
+                md_file.write(f"## Directory: `{dir_path}`\n\n")
+
+                for file_info in sorted(
+                    files_by_dir[dir_path], key=lambda x: x["path"]
+                ):
+                    file_path = file_info["path"]
+                    full_path = file_info["full_path"]
+
+                    # Get file extension for code block language
+                    extension = file_path.suffix.lower()
+                    lang_map = {
+                        ".py": "python",
+                        ".js": "javascript",
+                        ".ts": "typescript",
+                        ".jsx": "jsx",
+                        ".tsx": "tsx",
+                        ".html": "html",
+                        ".htm": "html",
+                        ".css": "css",
+                        ".scss": "scss",
+                        ".less": "less",
+                        ".java": "java",
+                        ".cpp": "cpp",
+                        ".c": "c",
+                        ".h": "c",
+                        ".go": "go",
+                        ".rs": "rust",
+                        ".rb": "ruby",
+                        ".php": "php",
+                        ".sql": "sql",
+                        ".sh": "bash",
+                        ".bash": "bash",
+                        ".yml": "yaml",
+                        ".yaml": "yaml",
+                        ".json": "json",
+                        ".xml": "xml",
+                        ".md": "markdown",
+                        ".txt": "text",
+                        ".vue": "vue",
+                        ".svelte": "html",
+                    }
+
+                    language = lang_map.get(extension, "text")
+
+                    # Write file header
+                    md_file.write(f"### File: `{file_path}`\n\n")
+                    md_file.write(f"**Size:** {file_info['size']} bytes  \n")
+
+                    # Get and write file content
+                    content = self.get_file_content(full_path)
+
+                    if content.strip():
+                        md_file.write(f"```{language}\n")
+                        md_file.write(content)
+
+                        # Ensure the file ends with newline
+                        if not content.endswith("\n"):
+                            md_file.write("\n")
+
+                        md_file.write("```\n\n")
+                    else:
+                        md_file.write("*File is empty*\n\n")
+
+                    md_file.write("---\n\n")
+
+            # Add summary
+            md_file.write("## Summary\n\n")
+            md_file.write(f"- **Project scanned from:** `{self.root_dir}`\n")
+            md_file.write(f"- **Total files extracted:** {len(files)}\n")
+            md_file.write(f"- **Output file:** `{self.output_file}`\n")
+            md_file.write(
+                f"- **Generated on:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+            )
+
+        print(f"✓ Markdown file created successfully: {self.output_file}")
+        print(f"✓ Total size: {self.output_file.stat().st_size/1024/1024:.2f} MB")
+
+    def run(self):
+        """Run the full extraction process."""
+        try:
+            files = self.scan_project()
+
+            if not files:
+                print("No files found to process!")
+                return
+
+            self.create_markdown(files)
+
+        except KeyboardInterrupt:
+            print("\n\nProcess interrupted by user.")
+            sys.exit(1)
+        except Exception as e:
+            print(f"\nError: {e}")
+            import traceback
+
+            traceback.print_exc()
+            sys.exit(1)
+
+
+def main():
+    """Main function with command line argument support."""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Extract all code from a project into a single markdown file."
+    )
+    parser.add_argument(
+        "--root",
+        "-r",
+        default=".",
+        help="Root directory to start scanning (default: current directory)",
+    )
+    parser.add_argument(
+        "--output",
+        "-o",
+        default="project_code.md",
+        help="Output markdown file name (default: project_code.md)",
+    )
+    parser.add_argument(
+        "--exclude", nargs="+", default=[], help="Additional directories to exclude"
+    )
+    parser.add_argument(
+        "--include-all",
+        action="store_true",
+        help="Include all file types (not just text files)",
+    )
+
+    args = parser.parse_args()
+
+    # Create extractor
+    extractor = ProjectCodeExtractor(root_dir=args.root, output_file=args.output)
+
+    # Add additional exclusions
+    if args.exclude:
+        extractor.exclude_dirs.update(args.exclude)
+
+    # If include-all is specified, clear the extensions filter
+    if args.include_all:
+        extractor.include_extensions = set()
+
+    # Run the extraction
+    extractor.run()
+
+
+if __name__ == "__main__":
+    # Add datetime import for the template string
+    import datetime
+
+    main()
+```
+
+---
+
+### File: `docker-compose.yml`
+
+**Size:** 329 bytes  
+```yaml
+version: '3.8'
+
+services:
+  frontend:
+    build: .
+    ports:
+      - "19000:19000"  # Expo Metro bundler
+      - "19001:19001"  # Expo web
+      - "19002:19002"  # Expo DevTools
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+    stdin_open: true
+    tty: true
+```
+
+---
+
+### File: `eslint.config.js`
+
+**Size:** 190 bytes  
+```javascript
+const { defineConfig } = require('eslint/config');
+const expoConfig = require('eslint-config-expo/flat');
+
+module.exports = defineConfig([
+  expoConfig,
+  {
+    ignores: ["dist/*"],
+  }
+]);
+```
+
+---
+
+### File: `expo-env.d.ts`
+
+**Size:** 110 bytes  
+```typescript
+/// <reference types="expo/types" />
+
+// NOTE: This file should not be edited and should be in your git ignore
+```
+
+---
+
+### File: `metro.config.js`
+
+**Size:** 210 bytes  
+```javascript
+const { getDefaultConfig } = require("expo/metro-config");
+const { withRorkMetro } = require("@rork-ai/toolkit-sdk/metro");
+
+const config = getDefaultConfig(__dirname);
+
+module.exports = withRorkMetro(config);
 ```
 
 ---
@@ -22066,815 +24039,9 @@ async function handlePaymentError(error) {
 
 ---
 
-### File: `PROVIDER_SERVICE_MANAGEMENT.md`
-
-**Size:** 6971 bytes  
-```markdown
-# Provider Service Management Flow
-
-## Overview
-This document outlines the complete flow for providers to create and manage their services in the application.
-
-## API Configuration
-
-### Base URL
-- **Production**: `https://mubakulifestyle.com/api/v1`
-- All API endpoints are relative to this base URL
-
-### Key Endpoints Fixed
-All endpoints now correctly use the base URL without duplication:
-- Auth: `/auth/jwt/create/`, `/auth/users/me/`
-- Services: `/services/`, `/services/create/`, `/services/{id}/update/`
-- Users: `/users/`, `/users/apply-provider/`
-- Appointments: `/appointments/`, `/appointments/availability/`
-
-## Provider Registration & Approval Flow
-
-### 1. User Registration
-- New users register as "clients" by default
-- Navigate to: Login → Register
-- Required fields: username, email, first_name, last_name, password
-
-### 2. Apply to Become a Provider
-- **Location**: Profile Tab → "Become a Service Provider" card
-- **Endpoint**: `POST /users/apply-provider/`
-- **Required Fields**:
-  - `service_categories`: Array of category IDs (selected from dropdown)
-  - `business_name`: Optional
-  - `business_address`: Optional
-  - `description`: Optional
-  - `years_of_experience`: Optional
-  - `certifications`: Optional array
-  - `portfolio_urls`: Optional array
-  - `availability_schedule`: Optional
-  - `base_price`: Optional
-  - `emergency_contact`: Optional
-  - `latitude`, `longitude`: Optional
-
-### 3. Admin Approval
-- Admins review applications in their admin dashboard
-- Endpoint: `POST /users/{id}/verify-provider/`
-- Status changes from "pending" → "approved"
-- User's role changes from "client" → "provider"
-
-### 4. Application Status Check
-- **Endpoint**: `GET /users/application-status/`
-- **Statuses**: 
-  - `pending`: Under review
-  - `approved`: Can create services
-  - `rejected`: Application denied
-  - `withdrawn`: User canceled application
-
-## Service Management for Approved Providers
-
-### Accessing Service Management
-Once approved, providers will see:
-1. **Profile Tab** → "Manage My Services" button (green card)
-2. **Navigates to**: `/provider-services`
-
-### Service Creation
-1. Navigate to Provider Services screen
-2. Tap the "+" button (top right)
-3. Fill in service details:
-   - **Name** (required): e.g., "Professional Hair Styling"
-   - **Description** (optional): Service details
-   - **Category** (required): Select from available categories
-   - **Duration** (required): In minutes (e.g., 40)
-   - **Price** (required): Service cost (e.g., 12000.00)
-   - **Currency**: Fixed to "XAF"
-   - **Status**: Auto-set to `is_active: true`
-
-4. **API Call**: `POST /services/create/`
-```json
-{
-  "name": "Professional Hair Styling",
-  "description": "Expert hair cutting, styling, and treatment",
-  "category": 3,
-  "duration_minutes": 40,
-  "price": 12000.00,
-  "currency": "XAF",
-  "is_active": true
-}
-```
-
-### Service Management Features
-**Provider Services Screen** (`/provider-services`):
-- View all your services
-- Search services by name/description
-- See service statistics:
-  - Total services
-  - Active services
-  - Total bookings
-  - Total revenue
-  - Average rating
-
-**Per Service Actions**:
-1. **Toggle Status**: Activate/deactivate service
-2. **Edit**: Modify service details (`/provider-services/edit?id={serviceId}`)
-3. **Delete**: Remove service (with confirmation)
-
-### Service Display on Home Screen
-Active services from approved providers automatically appear on:
-- **Home Tab** → "Available Services" section
-- Services can be filtered by:
-  - Category
-  - Search query
-  - Provider verification status (only verified by default)
-
-## User Interface Flow
-
-### For Approved Providers:
-```
-Login 
-  → Profile Tab
-    → See "Manage My Services" button
-    → Tap to navigate to `/provider-services`
-      → View existing services
-      → Tap "+" to create new service
-        → Fill form
-        → Submit
-        → Service appears in list
-        → Service appears on Home screen for all users
-```
-
-### For Clients/Users:
-```
-Login
-  → Home Tab
-    → See "Available Services"
-    → Tap service card
-      → View service details
-      → Book appointment
-```
-
-## Service Categories
-Categories are fetched from: `GET /services/categories/`
-- Categories are displayed as selectable chips in the create/edit form
-- Each service must belong to exactly one category
-- Categories enable filtering and organization
-
-## Key Features
-
-### Service Statistics
-Providers can track:
-- Number of services created
-- Active vs inactive services
-- Total bookings received
-- Revenue generated
-- Average customer rating
-
-### Service Visibility
-Services appear on home screen when:
-- ✅ Provider is verified/approved
-- ✅ Service `is_active = true`
-- ✅ Service has valid category
-- ✅ Service has price and duration set
-
-### Search & Filtering
-Home screen supports:
-- Text search (name/description)
-- Category filtering
-- Multiple filters simultaneously
-- Clear all filters option
-
-## Troubleshooting
-
-### "Cannot see Manage Services button"
-**Possible causes**:
-1. User role is not "provider"
-2. Application status is not "approved"
-3. User logged in as client
-
-**Solution**: Check application status in Profile tab
-
-### "Services not appearing on home screen"
-**Possible causes**:
-1. Service is inactive (`is_active = false`)
-2. Provider not verified
-3. Invalid category assigned
-
-**Solution**: 
-- Check service status in Provider Services screen
-- Ensure provider is approved
-- Verify service has valid category
-
-### "API 404 errors"
-**Cause**: Double `/api/v1` in URL
-
-**Solution**: Fixed in latest update. Base URL is now correctly set to `https://mubakulifestyle.com/api/v1` with all endpoints relative to this base.
-
-## Technical Implementation
-
-### State Management
-- **Redux Toolkit**: Authentication state, tokens
-- **RTK Query**: API calls, caching
-- **React Query**: Alternative for future optimization
-
-### API Structure
-```typescript
-// Service API endpoints
-useGetAllServicesQuery()          // Get all services (with filters)
-useGetMyServicesQuery()            // Get provider's services
-useCreateServiceMutation()         // Create new service
-useUpdateServiceMutation()         // Update existing service
-useDeleteServiceMutation()         // Delete service
-useGetMyServiceStatsQuery()        // Get provider statistics
-
-// Category API endpoints
-useGetAllCategoriesQuery()         // Get all categories
-```
-
-### Authentication Flow
-1. Login → Get JWT tokens
-2. Store tokens in Redux
-3. Add Bearer token to all API requests
-4. Auto-refresh token on 401 errors
-
-## Future Enhancements
-- Image uploads for services
-- Multiple service images
-- Service packages/bundles
-- Promotional pricing
-- Service reviews and ratings
-- Provider profile customization
-```
-
----
-
-### File: `README.md`
-
-**Size:** 11334 bytes  
-```markdown
-# Welcome to your Rork app
-
-## Project info
-
-This is a native cross-platform mobile app created with [Rork](https://rork.com)
-
-**Platform**: Native iOS & Android app, exportable to web
-**Framework**: Expo Router + React Native
-
-## How can I edit this code?
-
-There are several ways of editing your native mobile application.
-
-### **Use Rork**
-
-Simply visit [rork.com](https://rork.com) and prompt to build your app with AI.
-
-Changes made via Rork will be committed automatically to this GitHub repo.
-
-Whenever you make a change in your local code editor and push it to GitHub, it will be also reflected in Rork.
-
-### **Use your preferred code editor**
-
-If you want to work locally using your own code editor, you can clone this repo and push changes. Pushed changes will also be reflected in Rork.
-
-If you are new to coding and unsure which editor to use, we recommend Cursor. If you're familiar with terminals, try Claude Code.
-
-The only requirement is having Node.js & Bun installed - [install Node.js with nvm](https://github.com/nvm-sh/nvm) and [install Bun](https://bun.sh/docs/installation)
-
-Follow these steps:
-
-```bash
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-bun i
-
-# Step 4: Start the instant web preview of your Rork app in your browser, with auto-reloading of your changes
-bun run start-web
-
-# Step 5: Start iOS preview
-# Option A (recommended):
-bun run start  # then press "i" in the terminal to open iOS Simulator
-# Option B (if supported by your environment):
-bun run start -- --ios
-```
-
-### **Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-## What technologies are used for this project?
-
-This project is built with the most popular native mobile cross-platform technical stack:
-
-- **React Native** - Cross-platform native mobile development framework created by Meta and used for Instagram, Airbnb, and lots of top apps in the App Store
-- **Expo** - Extension of React Native + platform used by Discord, Shopify, Coinbase, Telsa, Starlink, Eightsleep, and more
-- **Expo Router** - File-based routing system for React Native with support for web, server functions and SSR
-- **TypeScript** - Type-safe JavaScript
-- **React Query** - Server state management
-- **Lucide React Native** - Beautiful icons
-
-## How can I test my app?
-
-### **On your phone (Recommended)**
-
-1. **iOS**: Download the [Rork app from the App Store](https://apps.apple.com/app/rork) or [Expo Go](https://apps.apple.com/app/expo-go/id982107779)
-2. **Android**: Download the [Expo Go app from Google Play](https://play.google.com/store/apps/details?id=host.exp.exponent)
-3. Run `bun run start` and scan the QR code from your development server
-
-### **In your browser**
-
-Run `bun start-web` to test in a web browser. Note: The browser preview is great for quick testing, but some native features may not be available.
-
-### **iOS Simulator / Android Emulator**
-
-You can test Rork apps in Expo Go or Rork iOS app. You don't need XCode or Android Studio for most features.
-
-**When do you need Custom Development Builds?**
-
-- Native authentication (Face ID, Touch ID, Apple Sign In)
-- In-app purchases and subscriptions
-- Push notifications
-- Custom native modules
-
-Learn more: [Expo Custom Development Builds Guide](https://docs.expo.dev/develop/development-builds/introduction/)
-
-If you have XCode (iOS) or Android Studio installed:
-
-```bash
-# iOS Simulator
-bun run start -- --ios
-
-# Android Emulator
-bun run start -- --android
-```
-
-## How can I deploy this project?
-
-### **Publish to App Store (iOS)**
-
-1. **Install EAS CLI**:
-
-   ```bash
-   bun i -g @expo/eas-cli
-   ```
-
-2. **Configure your project**:
-
-   ```bash
-   eas build:configure
-   ```
-
-3. **Build for iOS**:
-
-   ```bash
-   eas build --platform ios
-   ```
-
-4. **Submit to App Store**:
-   ```bash
-   eas submit --platform ios
-   ```
-
-For detailed instructions, visit [Expo's App Store deployment guide](https://docs.expo.dev/submit/ios/).
-
-### **Publish to Google Play (Android)**
-
-1. **Build for Android**:
-
-   ```bash
-   eas build --platform android
-   ```
-
-2. **Submit to Google Play**:
-   ```bash
-   eas submit --platform android
-   ```
-
-For detailed instructions, visit [Expo's Google Play deployment guide](https://docs.expo.dev/submit/android/).
-
-### **Publish as a Website**
-
-Your React Native app can also run on the web:
-
-1. **Build for web**:
-
-   ```bash
-   eas build --platform web
-   ```
-
-2. **Deploy with EAS Hosting**:
-   ```bash
-   eas hosting:configure
-   eas hosting:deploy
-   ```
-
-Alternative web deployment options:
-
-- **Vercel**: Deploy directly from your GitHub repository
-- **Netlify**: Connect your GitHub repo to Netlify for automatic deployments
-
-## App Features
-
-This template includes:
-
-- **Cross-platform compatibility** - Works on iOS, Android, and Web
-- **File-based routing** with Expo Router
-- **Tab navigation** with customizable tabs
-- **Modal screens** for overlays and dialogs
-- **TypeScript support** for better development experience
-- **Async storage** for local data persistence
-- **Vector icons** with Lucide React Native
-
-## Project Structure
-
-```
-├── app/                    # App screens (Expo Router)
-│   ├── (tabs)/            # Tab navigation screens
-│   │   ├── _layout.tsx    # Tab layout configuration
-│   │   └── index.tsx      # Home tab screen
-│   ├── _layout.tsx        # Root layout
-│   ├── modal.tsx          # Modal screen example
-│   └── +not-found.tsx     # 404 screen
-├── assets/                # Static assets
-│   └── images/           # App icons and images
-├── constants/            # App constants and configuration
-├── app.json             # Expo configuration
-├── package.json         # Dependencies and scripts
-└── tsconfig.json        # TypeScript configuration
-```
-
-## Custom Development Builds
-
-For advanced native features, you'll need to create a Custom Development Build instead of using Expo Go.
-
-### **When do you need a Custom Development Build?**
-
-- **Native Authentication**: Face ID, Touch ID, Apple Sign In, Google Sign In
-- **In-App Purchases**: App Store and Google Play subscriptions
-- **Advanced Native Features**: Third-party SDKs, platform-specifc features (e.g. Widgets on iOS)
-- **Background Processing**: Background tasks, location tracking
-
-### **Creating a Custom Development Build**
-
-```bash
-# Install EAS CLI
-bun i -g @expo/eas-cli
-
-# Configure your project for development builds
-eas build:configure
-
-# Create a development build for your device
-eas build --profile development --platform ios
-eas build --profile development --platform android
-
-# Install the development build on your device and start developing
-bun start --dev-client
-```
-
-**Learn more:**
-
-- [Development Builds Introduction](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Creating Development Builds](https://docs.expo.dev/develop/development-builds/create-a-build/)
-- [Installing Development Builds](https://docs.expo.dev/develop/development-builds/installation/)
-
-## Advanced Features
-
-### **Add a Database**
-
-Integrate with backend services:
-
-- **Supabase** - PostgreSQL database with real-time features
-- **Firebase** - Google's mobile development platform
-- **Custom API** - Connect to your own backend
-
-### **Add Authentication**
-
-Implement user authentication:
-
-**Basic Authentication (works in Expo Go):**
-
-- **Expo AuthSession** - OAuth providers (Google, Facebook, Apple) - [Guide](https://docs.expo.dev/guides/authentication/)
-- **Supabase Auth** - Email/password and social login - [Integration Guide](https://supabase.com/docs/guides/getting-started/tutorials/with-expo-react-native)
-- **Firebase Auth** - Comprehensive authentication solution - [Setup Guide](https://docs.expo.dev/guides/using-firebase/)
-
-**Native Authentication (requires Custom Development Build):**
-
-- **Apple Sign In** - Native Apple authentication - [Implementation Guide](https://docs.expo.dev/versions/latest/sdk/apple-authentication/)
-- **Google Sign In** - Native Google authentication - [Setup Guide](https://docs.expo.dev/guides/google-authentication/)
-
-### **Add Push Notifications**
-
-Send notifications to your users:
-
-- **Expo Notifications** - Cross-platform push notifications
-- **Firebase Cloud Messaging** - Advanced notification features
-
-### **Add Payments**
-
-Monetize your app:
-
-**Web & Credit Card Payments (works in Expo Go):**
-
-- **Stripe** - Credit card payments and subscriptions - [Expo + Stripe Guide](https://docs.expo.dev/guides/using-stripe/)
-- **PayPal** - PayPal payments integration - [Setup Guide](https://developer.paypal.com/docs/checkout/mobile/react-native/)
-
-**Native In-App Purchases (requires Custom Development Build):**
-
-- **RevenueCat** - Cross-platform in-app purchases and subscriptions - [Expo Integration Guide](https://www.revenuecat.com/docs/expo)
-- **Expo In-App Purchases** - Direct App Store/Google Play integration - [Implementation Guide](https://docs.expo.dev/versions/latest/sdk/in-app-purchases/)
-
-**Paywall Optimization:**
-
-- **Superwall** - Paywall A/B testing and optimization - [React Native SDK](https://docs.superwall.com/docs/react-native)
-- **Adapty** - Mobile subscription analytics and paywalls - [Expo Integration](https://docs.adapty.io/docs/expo)
-
-## I want to use a custom domain - is that possible?
-
-For web deployments, you can use custom domains with:
-
-- **EAS Hosting** - Custom domains available on paid plans
-- **Netlify** - Free custom domain support
-- **Vercel** - Custom domains with automatic SSL
-
-For mobile apps, you'll configure your app's deep linking scheme in `app.json`.
-
-## Troubleshooting
-
-### **App not loading on device?**
-
-1. Make sure your phone and computer are on the same WiFi network
-2. Try using tunnel mode: `bun start -- --tunnel`
-3. Check if your firewall is blocking the connection
-
-### **Build failing?**
-
-1. Clear your cache: `bunx expo start --clear`
-2. Delete `node_modules` and reinstall: `rm -rf node_modules && bun install`
-3. Check [Expo's troubleshooting guide](https://docs.expo.dev/troubleshooting/build-errors/)
-
-### **Need help with native features?**
-
-- Check [Expo's documentation](https://docs.expo.dev/) for native APIs
-- Browse [React Native's documentation](https://reactnative.dev/docs/getting-started) for core components
-- Visit [Rork's FAQ](https://rork.com/faq) for platform-specific questions
-
-## About Rork
-
-Rork builds fully native mobile apps using React Native and Expo - the same technology stack used by Discord, Shopify, Coinbase, Instagram, and nearly 30% of the top 100 apps on the App Store.
-
-Your Rork app is production-ready and can be published to both the App Store and Google Play Store. You can also export your app to run on the web, making it truly cross-platform.
-```
-
----
-
-### File: `REDUX_SETUP.md`
-
-**Size:** 7119 bytes  
-```markdown
-# Redux State Management Documentation
-
-This app uses **Redux Toolkit** with **RTK Query** for state management and API integration with your Django backend hosted on Google Cloud.
-
-## Architecture
-
-### Store Structure
-```
-store/
-├── store.ts              # Redux store configuration
-├── api.ts                # Base RTK Query API configuration
-├── authSlice.ts          # Authentication state slice
-├── hooks.ts              # Typed Redux hooks
-└── services/
-    ├── authApi.ts        # Authentication API endpoints
-    ├── profileApi.ts     # User profile API endpoints
-    └── appointmentApi.ts # Appointments & availability API endpoints
-```
-
-## Configuration
-
-### Backend URL
-Set your backend URL in the environment variable:
-```bash
-EXPO_PUBLIC_API_URL=https://mubakulifestyle.com
-```
-
-If not set, it defaults to `https://mubakulifestyle.com` (configured in `store/api.ts`).
-
-### Token Management
-- **Access tokens** are automatically added to API requests via `prepareHeaders` in `api.ts`
-- **Refresh tokens** are stored in AsyncStorage
-- Tokens persist across app sessions
-
-## API Endpoints
-
-### Authentication (`authApi.ts`)
-
-#### Login
-```typescript
-const [login, { isLoading, error }] = useLoginMutation();
-
-await login({ email: 'user@example.com', password: 'password' }).unwrap();
-// Automatically stores tokens and fetches user data
-```
-
-#### Register
-```typescript
-const [register] = useRegisterMutation();
-
-await register({
-  username: 'john_doe',
-  email: 'john@example.com',
-  first_name: 'John',
-  last_name: 'Doe',
-  password: 'securepassword'
-}).unwrap();
-```
-
-#### Get Current User
-```typescript
-const { data: user, isLoading, error } = useGetCurrentUserQuery();
-// Automatically called after login
-// Returns user object with profile data
-```
-
-### User Profiles (`profileApi.ts`)
-
-#### Get Profile
-```typescript
-const { data: profile } = useGetProfileQuery(userId);
-```
-
-#### Update Profile
-```typescript
-const [updateProfile] = useUpdateProfileMutation();
-
-await updateProfile({
-  pkid: userId,
-  data: {
-    phone_number: '+237699000111',
-    about_me: 'Software engineer',
-    city: 'Yaoundé'
-  }
-}).unwrap();
-```
-
-### Appointments (`appointmentApi.ts`)
-
-#### Get Available Slots
-```typescript
-const { data: slots } = useGetAvailableSlotsQuery({
-  serviceId: 'service-uuid',
-  startDate: '2024-01-15',
-  endDate: '2024-01-20'
-});
-```
-
-#### Create Appointment
-```typescript
-const [createAppointment] = useCreateAppointmentMutation();
-
-const appointment = await createAppointment({
-  service_id: 'service-uuid',
-  scheduled_for: '2024-01-15T09:00:00',
-  scheduled_until: '2024-01-15T09:30:00',
-  amount: 15000.00,
-  currency: 'XAF'
-}).unwrap();
-```
-
-#### Confirm Payment
-```typescript
-const [confirmPayment] = useConfirmPaymentMutation();
-
-await confirmPayment(appointmentId).unwrap();
-// Updates appointment status to 'confirmed'
-```
-
-#### Get My Appointments
-```typescript
-const { data: appointments } = useGetMyAppointmentsQuery({ status: 'confirmed' });
-```
-
-## Authentication State
-
-Access authentication state using the Redux hooks:
-
-```typescript
-import { useAppSelector, useAppDispatch } from '@/store/hooks';
-import { logout } from '@/store/authSlice';
-
-function MyComponent() {
-  const { user, isAuthenticated, accessToken } = useAppSelector(state => state.auth);
-  const dispatch = useAppDispatch();
-
-  const handleLogout = () => {
-    dispatch(logout());
-    // Clears tokens from state and AsyncStorage
-  };
-
-  return (
-    <View>
-      <Text>{user?.full_name}</Text>
-      <Button onPress={handleLogout} title="Logout" />
-    </View>
-  );
-}
-```
-
-## Screens Updated with Redux
-
-### ✅ Login Screen (`app/login.tsx`)
-- Uses `useLoginMutation` for authentication
-- Stores JWT tokens automatically
-- Navigates to home on success
-- Shows loading state and error handling
-
-### ✅ Register Screen (`app/register.tsx`)
-- Uses `useRegisterMutation` for account creation
-- Validates all required fields
-- Redirects to login after successful registration
-- Comprehensive error handling
-
-### ✅ Home Screen (`app/home.tsx`)
-- Fetches current user data with `useGetCurrentUserQuery`
-- Displays personalized greeting
-- Shows loading state while fetching user
-- Profile button for settings
-
-### ✅ Profile Settings Screen (`app/profile-settings.tsx`)
-- Displays user profile information from Redux state
-- Logout functionality with confirmation
-- Integrated with Redux auth state
-
-### ✅ Booking Payment Screen (`app/booking/payment.tsx`)
-- Creates appointments using `useCreateAppointmentMutation`
-- Confirms payment with `useConfirmPaymentMutation`
-- Handles payment flow with proper error handling
-- Loading states during API calls
-
-## Error Handling
-
-All mutations return errors in a consistent format:
-
-```typescript
-try {
-  await mutation(data).unwrap();
-} catch (error) {
-  // error.data contains backend error response
-  // error.status contains HTTP status code
-  console.error('Error:', error);
-  Alert.alert('Error', error?.data?.detail || 'Something went wrong');
-}
-```
-
-## Next Steps
-
-1. **Backend URL Configured**: Already set to `https://mubakulifestyle.com`
-2. **Test Authentication**: Try logging in with real credentials from your backend
-3. **Add Services Endpoints**: Your backend needs endpoints for listing services/agents (not in current API docs)
-4. **Image Uploads**: Implement profile photo uploads using multipart/form-data
-5. **Token Refresh**: Implement automatic token refresh on 401 errors
-6. **Offline Support**: Consider adding RTK Query persistence for offline functionality
-
-## Backend Requirements
-
-Your backend should have these endpoints working:
-- ✅ POST `/api/v1/auth/jwt/create/` - Login
-- ✅ POST `/api/v1/auth/jwt/refresh/` - Refresh token
-- ✅ POST `/api/v1/auth/users/` - Register
-- ✅ GET `/api/v1/auth/users/me/` - Get current user
-- ✅ GET `/api/v1/profiles/{pkid}/` - Get profile
-- ✅ PATCH `/api/v1/profiles/{pkid}/` - Update profile
-- ✅ POST `/api/appointments/appointments/` - Create appointment
-- ✅ POST `/api/appointments/appointments/{id}/confirm-payment/` - Confirm payment
-- ⚠️ Missing: List services/agents endpoint for home screen
-
-## Testing the Integration
-
-1. Start your app: `npm start`
-2. Try registering a new account
-3. Login with the registered credentials
-4. Check if user data appears on home screen
-5. Try updating profile in settings
-6. Test booking flow (will need service data from backend)
-
-## Troubleshooting
-
-### CORS Issues
-Ensure your Django backend has CORS properly configured for your Expo development URL.
-
-### Token Expiration
-Tokens are stored in AsyncStorage but will expire based on your backend JWT settings. Implement token refresh logic for production.
-
-### Network Errors
-Check that your device/emulator can reach the backend URL. Use ngrok or ensure both are on the same network during development.
-```
-
----
-
 ### File: `tailwind.config.js`
 
-**Size:** 415 bytes  
+**Size:** 398 bytes  
 ```javascript
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -22898,400 +24065,1559 @@ module.exports = {
 
 ---
 
-### File: `TESTING_GUIDE.md`
+## Directory: `store`
 
-**Size:** 8433 bytes  
-```markdown
-# Testing Guide - Mubaku Lifestyle API Integration
+### File: `store/api.ts`
 
-## 🧪 Quick Test
+**Size:** 2259 bytes  
+```typescript
+import { createApi, fetchBaseQuery, FetchArgs, BaseQueryApi } from '@reduxjs/toolkit/query/react';
+import type { RootState } from './store';
+import { updateAccessToken, logout } from './authSlice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-### 1. Start the App
-```bash
-npm start
-# or
-bun start
-```
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'https://mubakulifestyle.com/api/v1';
 
-### 2. Test Login Flow
+console.log('API Base URL:', API_BASE_URL);
 
-#### Test Credentials
-```
-Email: superuser@gmail.com
-Password: 123456789
-```
+const baseQuery = fetchBaseQuery({
+  baseUrl: API_BASE_URL,
+  prepareHeaders: async (headers, { getState }) => {
+    const token = (getState() as RootState).auth.accessToken;
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    
+    const language = await AsyncStorage.getItem('user-language');
+    headers.set('Accept-Language', language || 'en');
+    
+    return headers;
+  },
+}); 
 
-#### Expected Behavior:
-1. Open the app → Should show Language Selection screen
-2. Navigate to Login screen
-3. Enter test credentials
-4. Click "Login" button
-5. Should see loading spinner
-6. Should redirect to Home screen
-7. Home screen should display:
-   - Welcome message with user's first name
-   - Categories (if available in backend)
-   - Services list (if available in backend)
+const baseQueryWithReauth = async (
+  args: string | FetchArgs,
+  api: BaseQueryApi,
+  extraOptions: Record<string, unknown>
+) => {
+  let result = await baseQuery(args, api, extraOptions);
 
----
+  if (result.error && result.error.status === 401) {
+    const state = api.getState() as RootState;
+    const refreshToken = state.auth.refreshToken;
 
-## 🔍 Debugging
+    if (refreshToken) {
+      console.log('Access token expired, attempting refresh...');
+      
+      const refreshResult = await baseQuery(
+        {
+          url: '/auth/jwt/refresh/',
+          method: 'POST',
+          body: { refresh: refreshToken },
+        },
+        api,
+        extraOptions
+      );
 
-### Check Console Logs
-
-#### Successful Login:
-```
-Login success response:
-{
-  access: "eyJ0eXAiOiJKV1QiLCJh...",
-  refresh: "eyJ0eXAiOiJKV1QiLCJh..."
-}
-
-User data fetched:
-{
-  pkid: 1,
-  username: "superuser",
-  email: "superuser@gmail.com",
-  first_name: "Super",
-  last_name: "User",
-  role: "admin",
-  ...
-}
-
-Home screen loaded:
-{
-  user: { ... },
-  servicesCount: 5,
-  categoriesCount: 3
-}
-```
-
-#### Failed Login:
-```
-Login error:
-{
-  status: 401,
-  data: { detail: "No active account found with the given credentials" }
-}
-```
-
----
-
-## 🔗 API Endpoints Being Called
-
-### On Login:
-1. `POST https://mubakulifestyle.com/api/v1/auth/jwt/create/`
-   - Body: `{ email, password }`
-   - Response: `{ access, refresh }`
-
-2. `GET https://mubakulifestyle.com/api/v1/auth/users/me/`
-   - Headers: `Authorization: Bearer {access_token}`
-   - Response: User object
-
-### On Home Screen Load:
-1. `GET https://mubakulifestyle.com/api/v1/auth/users/me/`
-   - Get current user data
-
-2. `GET https://mubakulifestyle.com/api/v1/services/`
-   - Get all services
-
-3. `GET https://mubakulifestyle.com/api/v1/services/categories/`
-   - Get all categories
-
----
-
-## 🐛 Common Issues & Solutions
-
-### Issue 1: 404 Not Found
-**Symptoms:**
-- Login fails with 404 error
-- URL shows double `/api/v1/api/v1/`
-
-**Solution:**
-- ✅ This has been fixed
-- Base URL is now: `https://mubakulifestyle.com`
-- All endpoints include full path: `/api/v1/...`
-
-### Issue 2: Network Request Failed
-**Symptoms:**
-- App shows "Network request failed"
-- No data loads
-
-**Possible Causes:**
-1. Backend server is down
-2. No internet connection
-3. CORS issues (Web only)
-
-**Solutions:**
-- Check if backend is up: Visit `https://mubakulifestyle.com/api/v1/` in browser
-- Check internet connection
-- For web: Ensure backend has CORS enabled
-
-### Issue 3: No Services/Categories Display
-**Symptoms:**
-- Login works
-- Home screen loads
-- Shows "No services available"
-
-**Possible Causes:**
-1. Backend has no data yet
-2. Services are marked as inactive
-
-**Solutions:**
-- Check backend admin panel
-- Create test services via Django admin
-- Verify services have `is_active=True`
-
-### Issue 4: Token Expired
-**Symptoms:**
-- Login works initially
-- After some time, API calls fail with 401
-
-**Solution:**
-- Token refresh is implemented
-- Use `useRefreshTokenMutation()` to refresh token
-- Or logout and login again
-
----
-
-## 📱 Testing on Different Platforms
-
-### iOS Simulator
-```bash
-npm start
-# Press 'i' for iOS simulator
-```
-
-### Android Emulator
-```bash
-npm start
-# Press 'a' for Android emulator
-```
-
-### Web Browser
-```bash
-npm start
-# Press 'w' for web
-```
-
-### Physical Device (QR Code)
-```bash
-npm start
-# Scan QR code with Expo Go app
-```
-
----
-
-## 🔐 Testing Different User Roles
-
-### Admin User (Provided)
-```
-Email: superuser@gmail.com
-Password: 123456789
-Role: admin
-```
-
-### Create Test Provider
-1. Register new account
-2. Navigate to role selection
-3. Select "Provider"
-4. Fill provider profile details
-5. Wait for admin approval (or approve via Django admin)
-
-### Create Test Client
-1. Register new account
-2. Navigate to role selection
-3. Select "Client"
-4. Fill client profile details
-
----
-
-## 🧪 API Testing with Postman/Thunder Client
-
-### Get JWT Token
-```http
-POST https://mubakulifestyle.com/api/v1/auth/jwt/create/
-Content-Type: application/json
-
-{
-  "email": "superuser@gmail.com",
-  "password": "123456789"
-}
-```
-
-### Get Current User
-```http
-GET https://mubakulifestyle.com/api/v1/auth/users/me/
-Authorization: Bearer {your_access_token}
-```
-
-### Get All Services
-```http
-GET https://mubakulifestyle.com/api/v1/services/
-Authorization: Bearer {your_access_token}
-```
-
-### Create Service (Provider only)
-```http
-POST https://mubakulifestyle.com/api/v1/services/create/
-Authorization: Bearer {your_access_token}
-Content-Type: application/json
-
-{
-  "category": "category-uuid",
-  "name": "Women's Haircut",
-  "description": "Professional haircut and styling",
-  "duration_minutes": 60,
-  "price": 15000,
-  "currency": "XAF"
-}
-```
-
----
-
-## 📊 Expected API Responses
-
-### Successful Login Response
-```json
-{
-  "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
-}
-```
-
-### User Data Response
-```json
-{
-  "pkid": 1,
-  "username": "superuser",
-  "email": "superuser@gmail.com",
-  "first_name": "Super",
-  "last_name": "User",
-  "full_name": "Super User",
-  "gender": "Male",
-  "phone_number": "+237670000000",
-  "profile_photo": "/media/profiles/default.png",
-  "country": "CM",
-  "city": "Douala",
-  "role": "admin",
-  "is_active": true,
-  "is_verified_provider": false
-}
-```
-
-### Services Response
-```json
-[
-  {
-    "id": "uuid",
-    "provider": "provider-uuid",
-    "category": "category-uuid",
-    "name": "Women's Haircut",
-    "description": "Professional haircut",
-    "duration_minutes": 60,
-    "price": 15000,
-    "currency": "XAF",
-    "is_active": true,
-    "rating": 4.5,
-    "total_bookings": 10,
-    "category_details": {
-      "id": "uuid",
-      "name": "Hair Styling",
-      "description": "..."
+      if (refreshResult.data) {
+        const data = refreshResult.data as { access: string };
+        api.dispatch(updateAccessToken(data.access));
+        
+        console.log('Token refreshed successfully, retrying original request...');
+        result = await baseQuery(args, api, extraOptions);
+      } else {
+        console.error('Token refresh failed, logging out user');
+        api.dispatch(logout());
+      }
+    } else {
+      console.error('No refresh token available, logging out user');
+      api.dispatch(logout());
     }
   }
-]
+
+  return result;
+};
+
+export const api = createApi({
+  reducerPath: 'api',
+  baseQuery: baseQueryWithReauth,
+  tagTypes: ['User', 'Profile', 'Appointment', 'Availability', 'Service', 'Notification', 'Payment'],
+  endpoints: () => ({}),
+});
 ```
 
 ---
 
-## ✅ Testing Checklist
+### File: `store/authSlice.ts`
 
-### Authentication
-- [ ] Can register new user
-- [ ] Can login with credentials
-- [ ] Token is stored in AsyncStorage
-- [ ] Token is sent with API requests
-- [ ] Can logout (token is cleared)
-- [ ] Can change password
-- [ ] Can request password reset
+**Size:** 6302 bytes  
+```typescript
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-### Home Screen
-- [ ] User data displays correctly
-- [ ] Services list loads from API
-- [ ] Categories list loads from API
-- [ ] Empty state shows when no services
-- [ ] Can click on service to view details
-- [ ] Loading spinner shows while fetching
+// Constants for token expiration (10 days in milliseconds)
+const TOKEN_EXPIRATION_MS = 10 * 24 * 60 * 60 * 1000; // 10 days
 
-### Profile
-- [ ] Can view own profile
-- [ ] Can update profile information
-- [ ] Profile photo placeholder works
-- [ ] Can apply to become provider
-- [ ] Can check application status
+// Simple encryption/decryption for tokens (basic security layer)
+const TOKEN_ENCRYPTION_KEY = 'rork-mubaku-secure-key-2024';
 
-### Services (Provider)
-- [ ] Provider can create services
-- [ ] Provider can view own services
-- [ ] Provider can update services
-- [ ] Provider can delete services
-- [ ] Provider can view service stats
+// Simple XOR encryption for basic security (not for production use without proper crypto)
+const simpleEncrypt = (text: string): string => {
+  let result = '';
+  for (let i = 0; i < text.length; i++) {
+    result += String.fromCharCode(text.charCodeAt(i) ^ TOKEN_ENCRYPTION_KEY.charCodeAt(i % TOKEN_ENCRYPTION_KEY.length));
+  }
+  return btoa(result); // Base64 encode
+};
 
-### Appointments
-- [ ] Can view available time slots
-- [ ] Can create appointment
-- [ ] Can confirm payment
-- [ ] Can view my appointments
-- [ ] Can cancel appointment
-- [ ] Can reschedule appointment
+const simpleDecrypt = (encryptedText: string): string => {
+  try {
+    const decoded = atob(encryptedText); // Base64 decode
+    let result = '';
+    for (let i = 0; i < decoded.length; i++) {
+      result += String.fromCharCode(decoded.charCodeAt(i) ^ TOKEN_ENCRYPTION_KEY.charCodeAt(i % TOKEN_ENCRYPTION_KEY.length));
+    }
+    return result;
+  } catch (error) {
+    console.error('Failed to decrypt token:', error);
+    return '';
+  }
+};
+
+// Utility function to check if tokens are expired
+const areTokensExpired = (tokenCreatedAt: number): boolean => {
+  const now = Date.now();
+  const timeDiff = now - tokenCreatedAt;
+  return timeDiff >= TOKEN_EXPIRATION_MS;
+};
+
+interface User {
+  pkid: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  gender?: string;
+  phone_number?: string;
+  profile_photo?: string;
+  country?: string;
+  city?: string;
+  role: 'client' | 'provider';
+  language?: string;
+}
+
+interface AuthState {
+  accessToken: string | null;
+  refreshToken: string | null;
+  tokenCreatedAt: number | null; // UTC timestamp when tokens were created
+  user: User | null;
+  isAuthenticated: boolean;
+  isInitialized: boolean;
+}
+
+const initialState: AuthState = {
+  accessToken: null,
+  refreshToken: null,
+  tokenCreatedAt: null,
+  user: null,
+  isAuthenticated: false,
+  isInitialized: false,
+};
+
+export const initializeAuth = createAsyncThunk(
+  'auth/initialize',
+  async () => {
+    try {
+      const encryptedAccessToken = await AsyncStorage.getItem('accessToken');
+      const encryptedRefreshToken = await AsyncStorage.getItem('refreshToken');
+      const tokenCreatedAtStr = await AsyncStorage.getItem('tokenCreatedAt');
+
+      if (encryptedAccessToken && encryptedRefreshToken && tokenCreatedAtStr) {
+        const tokenCreatedAt = parseInt(tokenCreatedAtStr, 10);
+
+        // Check if tokens are expired
+        if (areTokensExpired(tokenCreatedAt)) {
+          console.log('Tokens are expired (10+ days old), clearing stored tokens');
+          // Clear expired tokens
+          await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'tokenCreatedAt']);
+          return null;
+        }
+
+        // Decrypt tokens
+        const accessToken = simpleDecrypt(encryptedAccessToken);
+        const refreshToken = simpleDecrypt(encryptedRefreshToken);
+
+        if (!accessToken || !refreshToken) {
+          console.error('Failed to decrypt tokens, clearing stored data');
+          await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'tokenCreatedAt']);
+          return null;
+        }
+
+        return { accessToken, refreshToken, tokenCreatedAt };
+      }
+      return null;
+    } catch (error) {
+      console.error('Failed to load auth tokens:', error);
+      return null;
+    }
+  }
+);
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    setCredentials: (state, action: PayloadAction<{ accessToken: string; refreshToken: string; user?: User }>) => {
+      const now = Date.now(); // UTC timestamp in milliseconds
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
+      state.tokenCreatedAt = now;
+      if (action.payload.user) {
+        state.user = action.payload.user;
+      }
+      state.isAuthenticated = true;
+
+      // Store encrypted tokens
+      AsyncStorage.setItem('accessToken', simpleEncrypt(action.payload.accessToken));
+      AsyncStorage.setItem('refreshToken', simpleEncrypt(action.payload.refreshToken));
+      AsyncStorage.setItem('tokenCreatedAt', now.toString());
+    },
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload;
+    },
+    updateAccessToken: (state, action: PayloadAction<string>) => {
+      state.accessToken = action.payload;
+      AsyncStorage.setItem('accessToken', simpleEncrypt(action.payload));
+    },
+    logout: (state) => {
+      state.accessToken = null;
+      state.refreshToken = null;
+      state.tokenCreatedAt = null;
+      state.user = null;
+      state.isAuthenticated = false;
+
+      AsyncStorage.removeItem('accessToken');
+      AsyncStorage.removeItem('refreshToken');
+      AsyncStorage.removeItem('tokenCreatedAt');
+    },
+    setInitialized: (state) => {
+      state.isInitialized = true;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        if (action.payload) {
+          state.accessToken = action.payload.accessToken;
+          state.refreshToken = action.payload.refreshToken;
+          state.tokenCreatedAt = action.payload.tokenCreatedAt || null;
+          state.isAuthenticated = true;
+        }
+        state.isInitialized = true;
+      })
+      .addCase(initializeAuth.rejected, (state) => {
+        state.isInitialized = true;
+      });
+  },
+});
+
+// Action to check token expiration and logout if expired
+export const checkTokenExpiration = createAsyncThunk(
+  'auth/checkExpiration',
+  async (_, { getState, dispatch }) => {
+    const state = getState() as { auth: AuthState };
+
+    if (state.auth.tokenCreatedAt && areTokensExpired(state.auth.tokenCreatedAt)) {
+      console.log('Token expiration check: tokens are expired, logging out');
+      dispatch(logout());
+      return true; // Tokens were expired and user was logged out
+    }
+
+    return false; // Tokens are still valid
+  }
+);
+
+export const { setCredentials, setUser, updateAccessToken, logout, setInitialized } = authSlice.actions;
+export default authSlice.reducer;
+export type { User };
+```
 
 ---
 
-## 🚨 Known Limitations
+### File: `store/hooks.ts`
 
-1. **Image Upload Not Implemented**
-   - Profile photos currently use placeholders
-   - Need to implement image picker and upload
+**Size:** 246 bytes  
+```typescript
+import { useDispatch, useSelector } from 'react-redux';
+import type { RootState, AppDispatch } from './store';
 
-2. **Payment Integration Not Complete**
-   - Payment confirmation is API call only
-   - No actual payment gateway integration
-
-3. **Real-time Notifications Not Implemented**
-   - Notifications screen uses mock data
-   - Need to implement push notifications
-
-4. **Search Functionality Not Active**
-   - Search bar in home screen is UI only
-   - Need to implement search API call
+export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
+export const useAppSelector = useSelector.withTypes<RootState>();
+```
 
 ---
 
-## 📞 Support
+### File: `store/languageSlice.ts`
 
-If tests fail:
-1. Check console logs in Metro bundler
-2. Check network requests in React Native Debugger
-3. Verify backend is running
-4. Check API endpoints in browser
-5. Refer to `API_INTEGRATION.md` for endpoint details
-6. Refer to `FIXES_SUMMARY.md` for what was fixed
+**Size:** 1708 bytes  
+```typescript
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getLocales } from 'expo-localization';
+
+export type Language = 'en' | 'fr';
+
+interface LanguageState {
+    currentLanguage: Language;
+    isInitialized: boolean;
+}
+
+const initialState: LanguageState = {
+    currentLanguage: 'en',
+    isInitialized: false,
+};
+
+export const initializeLanguage = createAsyncThunk(
+    'language/initialize',
+    async () => {
+        try {
+            const storedLanguage = await AsyncStorage.getItem('user-language');
+            const deviceLanguage = getLocales()[0]?.languageCode as Language;
+            const language = (storedLanguage as Language) || deviceLanguage || 'en';
+            return language;
+        } catch (error) {
+            console.error('Failed to load language from storage:', error);
+            return 'en';
+        }
+    }
+);
+
+const languageSlice = createSlice({
+    name: 'language',
+    initialState,
+    reducers: {
+        setLanguage: (state, action: PayloadAction<Language>) => {
+            state.currentLanguage = action.payload;
+            AsyncStorage.setItem('user-language', action.payload);
+        },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(initializeLanguage.fulfilled, (state, action) => {
+                state.currentLanguage = action.payload;
+                state.isInitialized = true;
+            })
+            .addCase(initializeLanguage.rejected, (state) => {
+                state.isInitialized = true;
+            });
+    },
+});
+
+export const { setLanguage } = languageSlice.actions;
+export default languageSlice.reducer;
+```
 
 ---
 
-## ✨ Success Indicators
+### File: `store/store.ts`
 
-Your API integration is working correctly if:
-- ✅ Login redirects to home screen
-- ✅ Home screen shows user's first name
-- ✅ Services list loads (or shows empty state)
-- ✅ Categories load (or shows nothing if empty)
-- ✅ No 404 errors in console
-- ✅ No TypeScript errors
-- ✅ JWT token is in AsyncStorage
+**Size:** 607 bytes  
+```typescript
+import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
+import { api } from './api';
+import authReducer from './authSlice';
+import languageReducer from './languageSlice';
 
-Happy Testing! 🎉
+export const store = configureStore({
+  reducer: {
+    [api.reducerPath]: api.reducer,
+    auth: authReducer,
+    language: languageReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(api.middleware),
+});
+
+setupListeners(store.dispatch);
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+```
+
+---
+
+## Directory: `store/services`
+
+### File: `store/services/appointmentApi.ts`
+
+**Size:** 7389 bytes  
+```typescript
+import { api } from '../api';
+
+interface TimeSlot {
+  start_time: string;
+  end_time: string;
+  date: string;
+  duration_minutes: number;
+}
+
+interface Appointment {
+  id: string;
+  service_id: string;
+  scheduled_for: string;
+  scheduled_until: string;
+  amount: number;
+  currency: string;
+  status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+  payment_status?: 'pending' | 'held_in_escrow' | 'released' | 'refunded' | 'failed' | 'expired';
+  client?: any;
+  provider?: any;
+  service?: any;
+}
+
+interface CreateAppointmentRequest {
+  service_id: string;
+  scheduled_for: string;
+  scheduled_until: string;
+  amount: number;
+  currency: string;
+}
+
+interface RescheduleRequest {
+  scheduled_for: string;
+  scheduled_until: string;
+}
+
+interface Availability {
+  id: string;
+  provider: string;
+  day_of_week: number;
+  day_of_week_display: string;
+  start_time: string;
+  end_time: string;
+  is_available: boolean;
+}
+
+interface AvailabilityException {
+  id?: string;
+  exception_date: string;
+  exception_type: 'unavailable' | 'modified_hours';
+  start_time?: string;
+  end_time?: string;
+  reason?: string;
+}
+
+interface DayAvailability {
+  date: string;
+  status: 'full' | 'limited' | 'unavailable';
+  availability_level: 'full' | 'limited' | 'unavailable';
+}
+
+export const appointmentApi = api.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (builder) => ({
+    getAvailableSlots: builder.query<TimeSlot[], { serviceId: string; startDate: string; endDate: string }>({
+      query: ({ serviceId, startDate, endDate }) => ({
+        url: `/appointments/services/${serviceId}/slots/`,
+        params: { start_date: startDate, end_date: endDate },
+      }),
+      providesTags: (result, error, { serviceId }) => [
+        { type: 'Availability', id: serviceId },
+      ],
+    }),
+
+    createAppointment: builder.mutation<Appointment, CreateAppointmentRequest>({
+      query: (data) => ({
+        url: '/appointments/',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Appointment'],
+    }),
+
+    confirmPayment: builder.mutation<Appointment, string>({
+      query: (appointmentId) => ({
+        url: `/appointments/${appointmentId}/confirm-payment/`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, appointmentId) => [
+        { type: 'Appointment', id: appointmentId },
+        'Appointment',
+      ],
+    }),
+
+    getMyAppointments: builder.query<Appointment[], { status?: string }>({
+      query: ({ status }) => ({
+        url: '/appointments/my/',
+        params: status ? { status } : {},
+      }),
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: 'Appointment' as const, id })),
+            'Appointment',
+          ]
+          : ['Appointment'],
+    }),
+
+    getAppointmentDetail: builder.query<Appointment, string>({
+      query: (appointmentId) => `/appointments/${appointmentId}/`,
+      providesTags: (result, error, appointmentId) => [{ type: 'Appointment', id: appointmentId }],
+    }),
+
+    cancelAppointment: builder.mutation<Appointment, { appointmentId: string; reason: string }>({
+      query: ({ appointmentId, reason }) => ({
+        url: `/appointments/${appointmentId}/cancel/`,
+        method: 'POST',
+        body: { reason },
+      }),
+      invalidatesTags: (result, error, { appointmentId }) => [
+        { type: 'Appointment', id: appointmentId },
+        'Appointment',
+      ],
+    }),
+
+    rescheduleAppointment: builder.mutation<Appointment, { appointmentId: string } & RescheduleRequest>({
+      query: ({ appointmentId, ...data }) => ({
+        url: `/appointments/${appointmentId}/reschedule/`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { appointmentId }) => [
+        { type: 'Appointment', id: appointmentId },
+        'Appointment',
+        'Availability',
+      ],
+    }),
+
+    completeAppointment: builder.mutation<Appointment, string>({
+      query: (appointmentId) => ({
+        url: `/appointments/${appointmentId}/complete/`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, appointmentId) => [
+        { type: 'Appointment', id: appointmentId },
+        'Appointment',
+        'Availability',
+      ],
+    }),
+
+    getProviderAvailability: builder.query<Availability[], void>({
+      query: () => '/appointments/availability/',
+      providesTags: ['Availability'],
+    }),
+
+    setProviderAvailability: builder.mutation<Availability, Omit<Availability, 'id' | 'provider' | 'day_of_week_display'>>({
+      query: (data) => ({
+        url: '/appointments/availability/',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    updateProviderAvailability: builder.mutation<Availability, { id: string } & Partial<Omit<Availability, 'id' | 'provider' | 'day_of_week_display'>>>({
+      query: ({ id, ...data }) => ({
+        url: `/appointments/availability/${id}/`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    deleteProviderAvailability: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/appointments/availability/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    getAvailabilityExceptions: builder.query<AvailabilityException[], void>({
+      query: () => '/appointments/availability/exceptions/',
+      providesTags: ['Availability'],
+    }),
+
+    createAvailabilityException: builder.mutation<AvailabilityException, Omit<AvailabilityException, 'id'>>({
+      query: (data) => ({
+        url: '/appointments/availability/exceptions/',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    deleteAvailabilityException: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `/appointments/availability/exceptions/${id}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Availability'],
+    }),
+
+    getMonthlyCalendar: builder.query<DayAvailability[], { providerId: string; year: number; month: number }>({
+      query: ({ providerId, year, month }) => `/appointments/providers/${providerId}/calendar/${year}/${month}/`,
+      providesTags: (result, error, { providerId }) => [
+        { type: 'Availability', id: providerId },
+      ],
+    }),
+
+    getDailyDetails: builder.query<any, { providerId: string; year: number; month: number; day: number }>({
+      query: ({ providerId, year, month, day }) =>
+        `/appointments/providers/${providerId}/calendar/${year}/${month}/${day}/`,
+      providesTags: (result, error, { providerId }) => [
+        { type: 'Availability', id: `${providerId}-daily` },
+      ],
+    }),
+  }),
+});
+
+export const {
+  useGetAvailableSlotsQuery,
+  useCreateAppointmentMutation,
+  useConfirmPaymentMutation,
+  useGetMyAppointmentsQuery,
+  useGetAppointmentDetailQuery,
+  useCancelAppointmentMutation,
+  useRescheduleAppointmentMutation,
+  useGetProviderAvailabilityQuery,
+  useSetProviderAvailabilityMutation,
+  useUpdateProviderAvailabilityMutation,
+  useDeleteProviderAvailabilityMutation,
+  useGetAvailabilityExceptionsQuery,
+  useCreateAvailabilityExceptionMutation,
+  useDeleteAvailabilityExceptionMutation,
+  useGetMonthlyCalendarQuery,
+  useGetDailyDetailsQuery,
+  useCompleteAppointmentMutation,
+} = appointmentApi;
+```
+
+---
+
+### File: `store/services/authApi.ts`
+
+**Size:** 3506 bytes  
+```typescript
+import { api } from '../api';
+import { setCredentials, setUser, updateAccessToken } from '../authSlice';
+
+interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+interface LoginResponse {
+  access: string;
+  refresh: string;
+}
+
+interface RegisterRequest {
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+}
+
+interface User {
+  pkid: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  gender?: string;
+  phone_number?: string;
+  profile_photo?: string;
+  country?: string;
+  city?: string;
+  role: 'client' | 'provider';
+  language?: string;
+}
+
+interface RefreshTokenRequest {
+  refresh: string;
+}
+
+interface RefreshTokenResponse {
+  access: string;
+}
+
+export const authApi = api.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (builder) => ({
+    login: builder.mutation<LoginResponse, LoginRequest>({
+      query: (credentials) => ({
+        url: '/auth/jwt/create/',
+        method: 'POST',
+        body: credentials,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(
+            setCredentials({
+              accessToken: data.access,
+              refreshToken: data.refresh,
+            })
+          );
+          dispatch(authApi.endpoints.getCurrentUser.initiate());
+        } catch (error) {
+          console.error('Login failed:', error);
+        }
+      },
+    }),
+
+    register: builder.mutation<User, RegisterRequest>({
+      query: (userData) => ({
+        url: '/auth/users/',
+        method: 'POST',
+        body: userData,
+      }),
+    }),
+
+    getCurrentUser: builder.query<User, void>({
+      query: () => '/auth/users/me/',
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setUser(data));
+        } catch (error) {
+          console.error('Get current user failed:', error);
+        }
+      },
+      providesTags: ['User'],
+    }),
+
+    refreshToken: builder.mutation<RefreshTokenResponse, RefreshTokenRequest>({
+      query: (body) => ({
+        url: '/auth/jwt/refresh/',
+        method: 'POST',
+        body,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(updateAccessToken(data.access));
+        } catch (error) {
+          console.error('Token refresh failed:', error);
+        }
+      },
+    }),
+
+    changePassword: builder.mutation<void, { current_password: string; new_password: string; re_new_password?: string }>({
+      query: (body) => ({
+        url: '/auth/users/set_password/',
+        method: 'POST',
+        body: {
+          ...body,
+          re_new_password: body.new_password,
+        },
+      }),
+    }),
+
+    requestPasswordReset: builder.mutation<void, { email: string }>({
+      query: (body) => ({
+        url: '/auth/users/reset_password/',
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    deleteAccount: builder.mutation<void, { current_password: string }>({
+      query: (body) => ({
+        url: '/auth/users/me/',
+        method: 'DELETE',
+        body,
+      }),
+    }),
+  }),
+});
+
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetCurrentUserQuery,
+  useRefreshTokenMutation,
+  useChangePasswordMutation,
+  useRequestPasswordResetMutation,
+  useDeleteAccountMutation,
+} = authApi;
+```
+
+---
+
+### File: `store/services/notificationsApi.ts`
+
+**Size:** 1678 bytes  
+```typescript
+import { api } from '../api';
+
+interface Notification {
+  id: string;
+  user: string;
+  title: string;
+  message: string;
+  notification_type: string;
+  is_read: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+interface GetNotificationsParams {
+  is_read?: boolean;
+  notification_type?: string;
+  page?: number;
+  page_size?: number;
+}
+
+export const notificationsApi = api.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (builder) => ({
+    getNotifications: builder.query<Notification[], GetNotificationsParams | void>({
+      query: (params = {}) => ({
+        url: '/notifications/',
+        params: params || {},
+      }),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: 'Notification' as const, id })),
+              'Notification',
+            ]
+          : ['Notification'],
+    }),
+
+    markAsRead: builder.mutation<Notification, string>({
+      query: (notificationId) => ({
+        url: `/notifications/${notificationId}/read/`,
+        method: 'PATCH',
+      }),
+      invalidatesTags: (result, error, notificationId) => [
+        { type: 'Notification', id: notificationId },
+        'Notification',
+      ],
+    }),
+
+    deleteNotification: builder.mutation<void, string>({
+      query: (notificationId) => ({
+        url: `/notifications/${notificationId}/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, notificationId) => [
+        { type: 'Notification', id: notificationId },
+        'Notification',
+      ],
+    }),
+  }),
+});
+
+export const {
+  useGetNotificationsQuery,
+  useMarkAsReadMutation,
+  useDeleteNotificationMutation,
+} = notificationsApi;
+```
+
+---
+
+### File: `store/services/paymentApi.ts`
+
+**Size:** 6559 bytes  
+```typescript
+import { api } from '../api';
+
+
+
+interface PaymentMethodApiResponse {
+  id: string;
+  name: string;
+  method_code: string;
+  icon_url: string;
+  min_amount: string;
+  max_amount: string;
+  instructions: string;
+  requires_service_number: boolean;
+  service_number_label: string;
+  service_number_hint: string;
+  validation_regex: string;
+  gateway: {
+    name: string;
+    type: string;
+  };
+}
+
+type PaymentMethodsResponse = PaymentMethodApiResponse[];
+
+interface AmountBreakdown {
+  service_amount: number;
+  platform_fee: number;
+  gateway_fee: number;
+  provider_payout: number;
+}
+
+interface PaymentAmount {
+  total: number;
+  currency: string;
+  breakdown: AmountBreakdown;
+  percentages: {
+    platform_fee: number;
+    gateway_fee: number;
+    provider_payout: number;
+  };
+}
+
+interface PaymentAppointment {
+  id: string;
+  service: string;
+  scheduled_at: string;
+  provider_name: string;
+}
+
+interface PaymentMethodInfo {
+  code: string;
+  display_name: string;
+  instructions: string;
+  authorization_required: boolean;
+}
+
+interface NextAction {
+  type: string;
+  description: string;
+  expected_timeout: number;
+  polling_interval: number;
+}
+
+interface PollingInfo {
+  endpoint: string;
+  recommended_interval: number;
+  max_attempts: number;
+  stop?: boolean;
+  reason?: string;
+  next_poll_after?: number;
+  poll_count?: number;
+  max_polls_remaining?: number;
+}
+
+interface GatewayInfo {
+  reference: string;
+  transaction_id: string | null;
+  status: string;
+  last_check?: string;
+  receipt_number?: string;
+  verification_code?: string;
+  confirmation_time?: string;
+  error_code?: string;
+  error_message?: string;
+  failure_time?: string;
+}
+
+interface EscrowInfo {
+  status: string;
+  release_trigger: string;
+  auto_release_date: string;
+  available_balance: number;
+}
+
+interface PaymentAction {
+  type: string;
+  endpoint: string;
+  method: string;
+  payload?: any;
+  payload_template?: any;
+}
+
+interface NextSteps {
+  user_action: string;
+  message: string;
+  actions: PaymentAction[];
+}
+
+interface StateMachine {
+  current: string;
+  next?: string;
+  progress: number;
+  final?: boolean;
+  estimated_remaining?: number;
+  error_state?: string;
+}
+
+interface FailureDetails {
+  code: string;
+  message: string;
+  recoverable: boolean;
+  retry_allowed: boolean;
+  suggested_action: string;
+}
+
+interface InstructionsInfo {
+  user_action_required: boolean;
+  message: string;
+  action_type: string;
+  timeout_warning: string;
+}
+
+interface Payment {
+  id: string;
+  frontend_token: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
+  amount: PaymentAmount;
+  appointment: PaymentAppointment;
+  payment_method: PaymentMethodInfo;
+  gateway_reference: string;
+  requires_action: boolean;
+  next_action?: NextAction;
+  timestamps: {
+    created_at: string;
+    expires_at?: string;
+    estimated_completion?: string;
+    last_updated?: string;
+    elapsed_seconds?: number;
+    completed_at?: string;
+    processing_duration?: number;
+    failed_at?: string;
+    failure_duration?: number;
+  };
+  polling: PollingInfo;
+  state_machine?: StateMachine;
+  gateway?: GatewayInfo;
+  escrow?: EscrowInfo;
+  next_steps?: NextSteps;
+  failure_details?: FailureDetails;
+  instructions?: InstructionsInfo;
+  errorCode?: number | string;
+  errorMessage?: string;
+}
+
+interface InitiatePaymentRequest {
+  appointment_id: string;
+  payment_method: string;
+  customer_phone: string;
+  customer_email?: string;
+  metadata?: {
+    device_info?: string;
+    ip_address?: string;
+    user_agent?: string;
+    session_id?: string;
+  };
+}
+
+interface InitiatePaymentResponse {
+  success: boolean;
+  payment: Payment;
+}
+
+type PaymentStatusResponse = Payment;
+
+interface PaymentHistoryItem {
+  id: string;
+  frontend_token: string;
+  status: string;
+  amount: {
+    total: number;
+    currency: string;
+    breakdown: {
+      service_amount: number;
+      platform_fee: number;
+      gateway_fee: number;
+    };
+  };
+  appointment: {
+    id: string;
+    service_name: string;
+    provider_name: string;
+    scheduled_at: string;
+    status: string;
+  };
+  payment_method: {
+    code: string;
+    display_name: string;
+    icon_url: string;
+  };
+  gateway: {
+    transaction_id: string;
+    receipt_number: string;
+    completed_at: string;
+  };
+  escrow: {
+    status: string;
+    auto_release_date: string;
+  };
+  timestamps: {
+    created_at: string;
+    completed_at: string;
+  };
+  actions: {
+    view_receipt: string;
+    view_appointment: string;
+  };
+}
+
+interface PaymentHistoryResponse {
+  success: boolean;
+  pagination: {
+    page: number;
+    page_size: number;
+    total_items: number;
+    total_pages: number;
+    has_next: boolean;
+    has_previous: boolean;
+    next_page: string | null;
+    previous_page: string | null;
+  };
+  summary: {
+    total_amount: number;
+    total_fees: number;
+    completed_count: number;
+    failed_count: number;
+    refunded_count: number;
+  };
+  payments: PaymentHistoryItem[];
+}
+
+export const paymentApi = api.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (builder) => ({
+    getPaymentMethods: builder.query<PaymentMethodsResponse, void>({
+      query: () => '/payments/methods',
+      providesTags: ['Payment'],
+    }),
+
+    initiatePayment: builder.mutation<InitiatePaymentResponse, InitiatePaymentRequest>({
+      query: (data) => ({
+        url: '/payments/initiate/',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Payment', 'Appointment'],
+    }),
+
+    getPaymentStatus: builder.query<PaymentStatusResponse, string>({
+      query: (frontendToken) => `/payments/status/${frontendToken}/`,
+      providesTags: (result, error, frontendToken) => [
+        { type: 'Payment', id: frontendToken },
+      ],
+    }),
+
+    getPaymentById: builder.query<PaymentStatusResponse, string>({
+      query: (paymentId) => `/payments/${paymentId}/`,
+      providesTags: (result, error, paymentId) => [
+        { type: 'Payment', id: paymentId },
+      ],
+    }),
+
+    getPaymentHistory: builder.query<PaymentHistoryResponse, {
+      status?: string;
+      page?: number;
+      page_size?: number;
+      date_from?: string;
+      date_to?: string;
+      currency?: string;
+      payment_method?: string;
+    }>({
+      query: (params) => ({
+        url: '/payments/history/',
+        params,
+      }),
+      providesTags: ['Payment'],
+    }),
+  }),
+});
+
+export const {
+  useGetPaymentMethodsQuery,
+  useInitiatePaymentMutation,
+  useGetPaymentStatusQuery,
+  useLazyGetPaymentStatusQuery,
+  useGetPaymentByIdQuery,
+  useGetPaymentHistoryQuery,
+} = paymentApi;
+```
+
+---
+
+### File: `store/services/profileApi.ts`
+
+**Size:** 4250 bytes  
+```typescript
+import { api } from '../api';
+
+interface Profile {
+  id: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  full_name: string;
+  country?: string;
+  address?: string;
+  about_me?: string;
+  city?: string;
+  gender?: string;
+  phone_number?: string;
+  profile_photo?: string;
+  joined_date: string;
+  last_login: string;
+  membership_duration: string;
+  role: 'client' | 'provider' | 'admin';
+  is_verified_provider?: boolean;
+  provider_application_status?: string;
+  language?: string;
+}
+
+interface UnifiedProfile {
+  pkid: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  full_name: string;
+  gender?: string;
+  phone_number?: string;
+  profile_photo?: string;
+  country?: string;
+  city?: string;
+  address?: string;
+  about_me?: string;
+  role: 'client' | 'provider' | 'admin';
+  is_verified_provider: boolean;
+  provider_application_status?: string;
+  language?: string;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
+}
+
+interface UpdateProfileRequest {
+  phone_number?: string;
+  profile_photo?: string;
+  about_me?: string;
+  gender?: string;
+  country?: string;
+  city?: string;
+  address?: string;
+  language?: string;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
+}
+
+interface ProviderApplicationRequest {
+  business_name?: string;
+  business_address?: string;
+  description?: string;
+  service_categories?: number[];
+  years_of_experience?: number;
+  certifications?: string[];
+  portfolio_urls?: string[];
+  availability_schedule?: string;
+  base_price?: number;
+  emergency_contact?: string;
+  latitude?: number;
+  longitude?: number;
+}
+
+export const profileApi = api.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (builder) => ({
+    getProfile: builder.query<Profile, string>({
+      query: (id) => `/users/${id}/`,
+      providesTags: (result, error, id) => [{ type: 'Profile', id }],
+    }),
+
+    getMyProfile: builder.query<UnifiedProfile, void>({
+      query: () => '/users/me/',
+      providesTags: ['User', 'Profile'],
+    }),
+
+    getUnifiedProfile: builder.query<UnifiedProfile, void>({
+      query: () => '/users/me/unified/',
+      providesTags: ['User', 'Profile'],
+    }),
+
+    updateProfile: builder.mutation<Profile, { id: string; data: UpdateProfileRequest }>({
+      query: ({ id, data }) => ({
+        url: `/users/${id}/update/`,
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        { type: 'Profile', id },
+        'User',
+      ],
+    }),
+
+    updateUnifiedProfile: builder.mutation<UnifiedProfile, UpdateProfileRequest>({
+      query: (data) => ({
+        url: '/users/me/unified/',
+        method: 'PATCH',
+        body: data,
+      }),
+      invalidatesTags: ['User', 'Profile'],
+    }),
+
+    applyForProvider: builder.mutation<any, ProviderApplicationRequest>({
+      query: (data) => ({
+        url: '/users/apply-provider/',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['User', 'Profile'],
+    }),
+
+    getApplicationStatus: builder.query<any, void>({
+      query: () => '/users/application-status/',
+      providesTags: ['User'],
+    }),
+
+    withdrawApplication: builder.mutation<void, void>({
+      query: () => ({
+        url: '/users/withdraw-application/',
+        method: 'POST',
+      }),
+      invalidatesTags: ['User', 'Profile'],
+    }),
+
+    verifyProvider: builder.mutation<any, string>({
+      query: (id) => ({
+        url: `/users/${id}/verify-provider/`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: 'Profile', id },
+        'User',
+      ],
+    }),
+
+    getApprovedProviders: builder.query<UnifiedProfile[], void>({
+      query: () => ({
+        url: '/users/',
+        params: { role: 'provider', is_verified_provider: 'true' }
+      }),
+      providesTags: ['Profile'],
+    }),
+  }),
+});
+
+export const {
+  useGetProfileQuery,
+  useGetMyProfileQuery,
+  useGetUnifiedProfileQuery,
+  useUpdateProfileMutation,
+  useUpdateUnifiedProfileMutation,
+  useApplyForProviderMutation,
+  useGetApplicationStatusQuery,
+  useWithdrawApplicationMutation,
+  useVerifyProviderMutation,
+  useGetApprovedProvidersQuery,
+} = profileApi;
+```
+
+---
+
+### File: `store/services/servicesApi.ts`
+
+**Size:** 5121 bytes  
+```typescript
+import { api } from '../api';
+
+interface ServiceCategory {
+  id: string;
+  pkid: number;
+  name: string;
+  description?: string;
+  icon?: string;
+  image_url?: string;
+  is_active: boolean;
+  service_count?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Service {
+  id: string;
+  pkid: number;
+  name: string;
+  description?: string;
+  category: number;
+  category_name: string;
+  provider: number;
+  provider_name: string;
+  provider_business: string;
+  is_verified_provider: boolean;
+  duration: string;
+  duration_minutes: number;
+  price: string;
+  image: string;
+  currency: string;
+  price_display: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  provider_location: {
+    address: string;
+    city: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+    business_name: string;
+    map_embed: string;
+    static_map?: string;
+    google_maps_link: string;
+    is_verified_provider: boolean;
+  };
+  provider_map: string;
+  provider_static_map?: string;
+}
+
+interface CreateServiceRequest {
+  category: number;
+  name: string;
+  description?: string;
+  duration_minutes: number;
+  price: number;
+  currency: string;
+  is_active: boolean;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
+}
+
+interface UpdateServiceRequest {
+  category?: number;
+  name?: string;
+  description?: string;
+  duration_minutes?: number;
+  price?: number;
+  currency?: string;
+  is_active?: boolean;
+  latitude?: number;
+  longitude?: number;
+  location?: string;
+}
+
+interface ServiceStats {
+  total_services: number;
+  active_services: number;
+  total_bookings: number;
+  total_revenue: number;
+  average_rating: number;
+}
+
+export const servicesApi = api.injectEndpoints({
+  overrideExisting: true,
+  endpoints: (builder) => ({
+    getAllServices: builder.query<Service[], { category?: string; provider?: string; search?: string; verified_only?: boolean }>({
+      query: (params) => ({
+        url: '/services/',
+        params: { ...params, verified_only: params?.verified_only !== false },
+      }),
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: 'Service' as const, id })),
+            'Service',
+          ]
+          : ['Service'],
+    }),
+
+    getServiceById: builder.query<Service, string>({
+      query: (serviceId) => `/services/${serviceId}/`,
+      providesTags: (result, error, serviceId) => [{ type: 'Service', id: serviceId }],
+    }),
+
+    getMyServices: builder.query<Service[], void>({
+      query: () => '/services/my-services/',
+      providesTags: (result) =>
+        result
+          ? [
+            ...result.map(({ id }) => ({ type: 'Service' as const, id })),
+            'Service',
+          ]
+          : ['Service'],
+    }),
+
+    getProviderServices: builder.query<Service[], string>({
+      query: (providerId) => `/services/provider/${providerId}/`,
+      providesTags: (result, error, providerId) => [
+        { type: 'Service', id: `provider-${providerId}` },
+      ],
+    }),
+
+    createService: builder.mutation<Service, CreateServiceRequest>({
+      query: (data) => ({
+        url: '/services/create/',
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Service'],
+    }),
+
+    updateService: builder.mutation<Service, { serviceId: string; data: UpdateServiceRequest }>({
+      query: ({ serviceId, data }) => ({
+        url: `/services/${serviceId}/update/`,
+        method: 'PUT',
+        body: data,
+      }),
+      invalidatesTags: (result, error, { serviceId }) => [
+        { type: 'Service', id: serviceId },
+        'Service',
+      ],
+    }),
+
+    deleteService: builder.mutation<void, string>({
+      query: (serviceId) => ({
+        url: `/services/${serviceId}/delete/`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, serviceId) => [
+        { type: 'Service', id: serviceId },
+        'Service',
+      ],
+    }),
+
+    getMyServiceStats: builder.query<ServiceStats, void>({
+      query: () => '/services/my-stats/',
+      providesTags: ['Service'],
+    }),
+
+    getAllCategories: builder.query<ServiceCategory[], void>({
+      query: () => '/services/categories/',
+      providesTags: ['Service'],
+    }),
+
+    getCategoryById: builder.query<ServiceCategory, string>({
+      query: (categoryId) => `/services/categories/${categoryId}/`,
+      providesTags: (result, error, categoryId) => [
+        { type: 'Service', id: `category-${categoryId}` },
+      ],
+    }),
+
+    getCategoryServices: builder.query<Service[], string>({
+      query: (categoryId) => `/services/categories/${categoryId}/services/`,
+      providesTags: (result, error, categoryId) => [
+        { type: 'Service', id: `category-${categoryId}-services` },
+      ],
+    }),
+  }),
+});
+
+export const {
+  useGetAllServicesQuery,
+  useGetServiceByIdQuery,
+  useGetMyServicesQuery,
+  useGetProviderServicesQuery,
+  useCreateServiceMutation,
+  useUpdateServiceMutation,
+  useDeleteServiceMutation,
+  useGetMyServiceStatsQuery,
+  useGetAllCategoriesQuery,
+  useGetCategoryByIdQuery,
+  useGetCategoryServicesQuery,
+} = servicesApi;
 ```
 
 ---
@@ -23299,6 +25625,6 @@ Happy Testing! 🎉
 ## Summary
 
 - **Project scanned from:** `.`
-- **Total files extracted:** 61
+- **Total files extracted:** 78
 - **Output file:** `project_code.md`
-- **Generated on:** 2026-01-08 12:38:10
+- **Generated on:** 2026-04-22 09:08:55
