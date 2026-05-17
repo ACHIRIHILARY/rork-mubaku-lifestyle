@@ -77,15 +77,15 @@ export default function StickyHeader() {
         </TouchableOpacity>
 
         {/* Center: Brand Wordmark */}
-        <View style={styles.brandContainer}>
+        {/* <View style={styles.brandContainer}>
           <Text style={styles.brandText}>Mubaku Lifestyle</Text>
-        </View>
+        </View> */}
 
         {/* Right: Notification and CTA */}
         <View style={styles.rightContainer}>
           <TouchableOpacity
             style={styles.notificationButton}
-            onPress={() => router.push('/(tabs)/messages' as any)}
+            // onPress={() => router.push('/(tabs)/messages' as any)}
             accessibilityLabel="Notifications"
           >
             <Bell color="#2D1A46" size={20} />
