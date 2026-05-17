@@ -44,17 +44,17 @@ export default function ProviderDashboardScreen() {
                     <View style={styles.earningsGrid}>
                         <View style={styles.earningCard}>
                             <DollarSign color="#4CAF50" size={24} />
-                            <Text style={styles.earningAmount}>${earnings.daily}</Text>
+                            <Text style={styles.earningAmount}>XAF{earnings.daily}</Text>
                             <Text style={styles.earningLabel}>{t('today')}</Text>
                         </View>
                         <View style={styles.earningCard}>
                             <DollarSign color="#2196F3" size={24} />
-                            <Text style={styles.earningAmount}>${earnings.weekly}</Text>
+                            <Text style={styles.earningAmount}>XAF{earnings.weekly}</Text>
                             <Text style={styles.earningLabel}>{t('thisWeek')}</Text>
                         </View>
                         <View style={styles.earningCard}>
                             <DollarSign color="#9C27B0" size={24} />
-                            <Text style={styles.earningAmount}>${earnings.monthly}</Text>
+                            <Text style={styles.earningAmount}>XAF{earnings.monthly}</Text>
                             <Text style={styles.earningLabel}>{t('thisMonth')}</Text>
                         </View>
                     </View>
