@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, ActivityIndicator, Image } from 'react-native';
-import { Search, X, User, Star, MessageCircle } from 'lucide-react-native';
+import { Search, X, User, Star } from 'lucide-react-native';
 import { useGetApprovedProvidersQuery } from '@/store/services/profileApi';
 import { useTranslation } from 'react-i18next';
 
@@ -14,11 +14,6 @@ export default function ProvidersScreen() {
 
   const handleProviderPress = (providerId: number) => {
     router.push(`/provider-detail?id=${providerId}` as any);
-  };
-
-  const handleChatPress = (providerId: number, providerName: string) => {
-    // For now, we'll navigate to messages. In a real app, this would start/create a conversation
-    router.push('/(tabs)/messages' as any);
   };
 
   const handleClearSearch = useCallback(() => {
@@ -114,12 +109,6 @@ export default function ProvidersScreen() {
                         <Text style={styles.ratingText}>4.8</Text>
                       </View>
                     </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.chatButton}
-                    onPress={() => handleChatPress(provider.pkid, provider.full_name)}
-                  >
-                    <MessageCircle color="white" size={16} />
                   </TouchableOpacity>
                 </View>
               ))}

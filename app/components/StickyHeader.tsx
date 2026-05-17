@@ -85,7 +85,7 @@ export default function StickyHeader() {
         <View style={styles.rightContainer}>
           <TouchableOpacity
             style={styles.notificationButton}
-            onPress={() => router.push('/(tabs)/messages' as any)}
+            onPress={() => router.push('/(tabs)/notifications' as any)}
             accessibilityLabel="Notifications"
           >
             <Bell color="#2D1A46" size={20} />
